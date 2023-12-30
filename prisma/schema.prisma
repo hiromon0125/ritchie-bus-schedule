@@ -11,12 +11,78 @@ generator client {
     provider = "prisma-client-js"
 }
 
+model Bus {
+    id          Int      @id @default(autoincrement())
+    name        String
+    description String?
+    routes      Routes[]
+    favUsers    FavoriteBus[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Stops {
+    id          Int      @id @default(autoincrement())
+    name        String?
+    latitude    Float
+    longitude   Float
+    favUsers    FavoriteStop[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    inbounds    Connections[] @relation("inbounds")
+    outbounds   Connections[] @relation("outbounds")
+    routes      Routes[]
+}
 
-    @@index([name])
+model Connections {
+    id          Int      @id @default(autoincrement())
+    toStop      Stops    @relation("inbounds", fields: [toStopId], references: [id])
+    toStopId    Int
+    fromStop    Stops    @relation("outbounds", fields: [fromStopId], references: [id])
+    fromStopId  Int
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([toStopId])
+    @@index([fromStopId])
+}
+
+model Routes {
+    id          Int      @id @default(autoincrement())
+    bus         Bus      @relation(fields: [busId], references: [id])
+    busId       Int
+    stop        Stops    @relation(fields: [stopId], references: [id])
+    stopId      Int
+    index       Int 
+    deptTime    DateTime?
+    arriTime    DateTime?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([busId])
+    @@index([stopId])
+}
+
+model FavoriteStop {
+    id          Int      @id @default(autoincrement())
+    userId      String
+    stop        Stops    @relation(fields: [stopId], references: [id])
+    stopId      Int
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([userId])
+    @@index([stopId])
+}
+
+model FavoriteBus {
+    id          Int      @id @default(autoincrement())
+    userId      String
+    bus         Bus      @relation(fields: [busId], references: [id])
+    busId       Int
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([userId])
+    @@index([busId])
 }
