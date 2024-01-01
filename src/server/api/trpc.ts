@@ -31,7 +31,7 @@ export const createTRPCContext = async (opts: {
   req?: NextRequest;
 }) => {
   const { req } = opts;
-  const user = req ? getAuth(req) : null;
+  const user = req ? getAuth(req) : undefined;
 
   return {
     db,
@@ -85,12 +85,13 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 const enforceUserIdAuthed = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.session) {
+  if (ctx.session == undefined || !ctx.session) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });
   }
-  return next({ ctx });
+  const ctx2 = ctx as typeof ctx & { session: ReturnType<typeof getAuth> };
+  return next({ ctx: ctx2 });
 });
 
 export const privateProcedure = t.procedure.use(enforceUserIdAuthed);
