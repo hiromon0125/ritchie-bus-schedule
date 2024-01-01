@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const routesRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.db.routes.findMany()),
@@ -29,4 +33,21 @@ export const routesRouter = createTRPCRouter({
         },
       }),
     ),
+  addRoutes: privateProcedure
+    .input(
+      z.array(
+        z.object({
+          busId: z.number(),
+          stopId: z.number(),
+          index: z.number(),
+          deptTime: z.date(),
+          arriTime: z.date().optional(),
+        }),
+      ),
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.db.routes.createMany({
+        data: input,
+      });
+    }),
 });
