@@ -28,10 +28,10 @@ import { db } from "~/server/db";
  */
 export const createTRPCContext = async (opts: {
   headers: Headers;
-  req: NextRequest;
+  req?: NextRequest;
 }) => {
   const { req } = opts;
-  const user = getAuth(req);
+  const user = req ? getAuth(req) : null;
 
   return {
     db,
