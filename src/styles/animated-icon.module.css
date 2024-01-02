@@ -1,0 +1,69 @@
+.moving {
+  animation: moving 1.5s infinite alternate;
+  mix-blend-mode: multiply;
+}
+
+@keyframes moving {
+  0% {
+    transform: translateX(-1px) rotate(0deg);
+  }
+  25% {
+    transform: translateX(1px) rotate(-2pxdeg);
+  }
+  50% {
+    transform: translateX(-2px) rotate(2deg);
+  }
+  75% {
+    transform: translateX(-1px) rotate(-3deg);
+  }
+  100% {
+    transform: translateX(2px) rotate(2deg);
+  }
+}
+
+.stopped {
+  mix-blend-mode: multiply;
+
+}
+
+.out {
+  mix-blend-mode: multiply;
+}
+
+.outAfter {
+  position: absolute;
+  top: 36px;
+  right: 10px;
+  font-size: large;
+}
+
+.outAfter::after {
+  content: "Z";
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  animation: z 2s infinite linear;
+}
+
+.outAfter::before {
+  content: "Z";
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  animation: z 2s 1s infinite linear;
+}
+
+@keyframes z {
+  0% {
+    transform: scale(0.3) translate(-25px, 10px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(0.7) translate(-5px, -3px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translate(0px, -15px);
+    opacity: 0;
+  }
+}

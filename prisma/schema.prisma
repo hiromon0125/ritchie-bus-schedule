@@ -15,6 +15,7 @@ model Bus {
     id          Int      @id @default(autoincrement())
     name        String
     description String?
+    color       String?
     routes      Routes[]
     favUsers    FavoriteBus[]
     createdAt   DateTime @default(now())

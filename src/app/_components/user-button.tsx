@@ -1,11 +1,10 @@
-"use client";
-import { SignInButton, SignOutButton, useAuth } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, auth } from "@clerk/nextjs";
 
 export default function UserButton() {
-  const { isSignedIn } = useAuth();
+  const { userId } = auth();
   return (
-    <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-      {isSignedIn ? <SignOutButton /> : <SignInButton />}
+    <div className="flex flex-none flex-row justify-end p-6 text-lg">
+      {userId ? <SignOutButton /> : <SignInButton />}
     </div>
   );
 }

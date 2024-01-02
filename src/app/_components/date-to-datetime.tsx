@@ -2,16 +2,12 @@
 import _ from "lodash";
 import { useState } from "react";
 import { api } from "~/trpc/react";
+import { type RouterInputs } from "../../trpc/shared";
 
-interface RouteObj {
-  busId: number;
-  stopId: number;
-  index: number;
-  deptTime: Date;
-  arriTime?: Date;
-}
+type RouteObj = RouterInputs["routes"]["addRoutes"][0];
+type RoutesArr = RouterInputs["routes"]["addRoutes"];
 
-function createNewRoute(stops: number[], input: RouteObj[]) {
+function createNewRoute(stops: number[], input: RoutesArr) {
   const newRoute = {
     ...(input[input.length - 1] ?? {
       busId: 0,

@@ -1,13 +1,19 @@
-import UserButton from "./_components/user-button";
+import { api } from "../trpc/server";
+import BusInfo from "./_components/bus-status";
+import Header from "./_components/header";
 
-export default function Home() {
-  // const hello = await api.post.hello.query({ text: "from tRPC" });
+export default async function Home() {
+  const buses = await api.bus.getAll.query();
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <UserButton />
+    <main className=" flex min-h-screen w-full flex-col items-center bg-slate-100 text-black">
+      <Header />
+      <div className=" w-4/5 min-w-80">
+        {buses?.map((bus) => (
+          <div className=" w-full py-3">
+            <BusInfo bus={bus} />
+          </div>
+        ))}
       </div>
-      {/* <DateToDateTime /> */}
     </main>
   );
 }
