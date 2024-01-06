@@ -108,8 +108,8 @@ function getIndexOfCurrentLocation(routes: BusRoute[]): number {
     return -2;
   }
   // check if it's both a weekday or both a weekend
+  const isWknd = isWeekend(new Date()); // use local time to determine if it's a weekend as dates are not correct for UTC
   const nowUTC = getNowInUTC();
-  const isWknd = isWeekend(nowUTC);
   if (isWeekend(routes[0]!.deptTime) != isWknd) {
     return -2;
   }
