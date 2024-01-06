@@ -7,7 +7,7 @@ export default async function Home() {
   return (
     <main className=" flex min-h-screen w-full flex-col items-center bg-slate-100 text-black">
       <Header />
-      <div className=" w-4/5 min-w-80">
+      <div className=" w-11/12 min-w-80">
         {buses?.map((bus) => (
           <div className=" w-full py-3">
             <BusInfo bus={bus} />

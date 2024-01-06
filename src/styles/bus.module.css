@@ -1,0 +1,85 @@
+
+.stopNode {
+  background-color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+}
+.activeStopNode {
+  background-color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: pulse 2s infinite;
+}
+.nodeWrapper {
+  position: absolute;
+  top: 50%;
+  left: -42px;
+  transform: translate(-50%, -50%);
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 1);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+}
+
+.downArrowWrapper {
+  position: absolute;
+  top: calc(50% - 35px);
+  left: -42px;
+  transform: translate(-50%, -50%);
+  animation: alternate downMotion 1s infinite;
+}
+.downArrow {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+.downArrow::after {
+  content: "";
+  position: absolute;
+  top: 5.5px;
+  left: -5.5px;
+  width: 20px;
+  height: 5px;
+  transform: rotate(45deg);
+  background-color: white;
+}
+.downArrow::before {
+  content: "";
+  position: absolute;
+  top: 5.5px;
+  left: 5.5px;
+  width: 20px;
+  height: 5px;
+  transform: rotate(-45deg);
+  background-color: white;
+}
+
+.downArrowWrapper:nth-child(1) {
+  animation-delay: 0.1s;
+  transform: translate(-50%, -50%) translateY(-10px);
+}
+.downArrowWrapper:nth-child(2) {
+  animation-delay: 0.4s;
+}
+.downArrowWrapper:nth-child(3) {
+  animation-delay: 0.7s;
+  transform: translate(-50%, -50%) translateY(10px);
+}
+
+@keyframes downMotion {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -50,4 +50,33 @@ export const routesRouter = createTRPCRouter({
         data: input,
       });
     }),
+  getCurrentRouteOfBus: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const nowNotUTC = new Date();
+      const now = new Date(
+        nowNotUTC.getTime() - nowNotUTC.getTimezoneOffset() * 60000,
+      );
+      const firstRoute = await ctx.db.routes.findFirst({
+        where: {
+          busId: input.busId,
+        },
+      });
+      if (!firstRoute) return null;
+      now.setFullYear(firstRoute.deptTime.getFullYear());
+      now.setMonth(firstRoute.deptTime.getMonth());
+      now.setDate(firstRoute.deptTime.getDate());
+      return ctx.db.routes.findFirst({
+        where: {
+          busId: input.busId,
+          deptTime: {
+            gt: now,
+          },
+        },
+      });
+    }),
 });

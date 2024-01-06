@@ -55,7 +55,7 @@ model Routes {
     stop        Stops    @relation(fields: [stopId], references: [id])
     stopId      Int
     index       Int 
-    deptTime    DateTime?
+    deptTime    DateTime
     arriTime    DateTime?
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
