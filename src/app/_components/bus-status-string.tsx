@@ -29,6 +29,7 @@ export default function BusStatusString({
           alt={"Bus " + (isMoving ? "moving" : "stopped")}
           width={96}
           height={96}
+          priority
           className={
             level === 1
               ? iconStyles.moving

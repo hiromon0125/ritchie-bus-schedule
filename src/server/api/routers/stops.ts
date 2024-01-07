@@ -16,4 +16,28 @@ export const stopsRouter = createTRPCRouter({
         },
       }),
     ),
+  getStopsByBusID: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const routes = await ctx.db.routes.findMany({
+        where: {
+          busId: input.busId,
+        },
+        distinct: ["stopId"],
+        select: {
+          stopId: true,
+        },
+      });
+      return ctx.db.stops.findMany({
+        where: {
+          id: {
+            in: routes.map((route) => route.stopId),
+          },
+        },
+      });
+    }),
 });

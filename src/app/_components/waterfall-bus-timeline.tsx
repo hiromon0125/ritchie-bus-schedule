@@ -1,7 +1,6 @@
 "use client";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import style from "~/styles/bus.module.css";
 import { type RouterOutputs } from "../../trpc/shared";
 import { type BusRoute } from "./types";
@@ -13,11 +12,12 @@ interface Props {
   routes: RouterOutputs["routes"]["getAllByBusId"];
   stops: RouterOutputs["stops"]["getOneByID"][];
   status: ReturnType<typeof getStopStatus>;
-  busColor: string;
+  upIcon: React.ReactNode;
+  downIcon: React.ReactNode;
 }
 
 function WaterfallBusTimeline(props: Props) {
-  const { routes, stops, status, busColor } = props;
+  const { routes, stops, status, upIcon, downIcon } = props;
   const firstBusIndex = Math.ceil(status.index);
   const [stopIndex, setStopIndex] = useState(
     firstBusIndex > 0 ? firstBusIndex : 0,
@@ -49,16 +49,13 @@ function WaterfallBusTimeline(props: Props) {
       <li className=" absolute top-[-70px] flex w-full flex-row justify-center">
         <button
           className={
-            " rounded-full border-[3px] border-black" +
+            " overflow-hidden rounded-full border-[3px] border-black" +
             (stopIndex === 0 ? " opacity-25" : "")
           }
-          style={{ backgroundColor: busColor }}
           onClick={goUp}
           disabled={stopIndex === 0}
         >
-          <div className=" mb-[2px] mt-[-2px]">
-            <IoIosArrowUp size={48} />
-          </div>
+          {upIcon}
         </button>
       </li>
       {routes.slice(stopIndex, stopIndex + stops.length).map((route, i) => (
@@ -74,16 +71,13 @@ function WaterfallBusTimeline(props: Props) {
       <li className=" absolute bottom-[-70px] flex w-full flex-row justify-center">
         <button
           className={
-            " rounded-full border-[3px] border-black" +
+            " relative overflow-hidden rounded-full border-[3px] border-black" +
             (stopIndex === routes.length - stops.length ? " opacity-25" : "")
           }
           onClick={goDown}
           disabled={stopIndex === routes.length - stops.length}
-          style={{ backgroundColor: busColor }}
         >
-          <div className=" mb-[-2px] mt-[2px]">
-            <IoIosArrowDown size={48} />
-          </div>
+          {downIcon}
         </button>
       </li>
     </>
