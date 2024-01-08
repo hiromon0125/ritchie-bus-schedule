@@ -95,21 +95,20 @@ export function getArriTime(current: BusRoute, prev?: BusRoute) {
  */
 export function getTimeToUpdateNext(status: string | undefined) {
   if (!status) return 5 * 60 * 1000;
-  if (status.includes("seconds")) {
+  if (status.includes("second")) {
     return 1000;
-  } else if (status.includes("minutes")) {
+  } else if (status.includes("minute")) {
     return 60 * 1000;
   }
   return 5 * 60 * 1000;
 }
 
-function getIndexOfCurrentLocation(routes: BusRoute[]): number {
+function getIndexOfCurrentLocation(routes: BusRoute[], nowUTC: Date): number {
   if (routes.length === 0) {
     return -2;
   }
   // check if it's both a weekday or both a weekend
   const isWknd = isWeekend(new Date()); // use local time to determine if it's a weekend as dates are not correct for UTC
-  const nowUTC = getNowInUTC();
   if (isWeekend(routes[0]!.deptTime) != isWknd) {
     return -2;
   }
@@ -125,7 +124,7 @@ function getIndexOfCurrentLocation(routes: BusRoute[]): number {
 }
 
 export function getStopStatus(routes: BusRoute[], now: Date) {
-  const index = getIndexOfCurrentLocation(routes);
+  const index = getIndexOfCurrentLocation(routes, now);
   if (index === -2) {
     return {
       statusMessage: "Out of service",
@@ -151,7 +150,10 @@ export function getStopStatus(routes: BusRoute[], now: Date) {
   }
   const currentLocation = routes[Math.floor(index)]!;
   const deptTime = fixDate(currentLocation.deptTime);
-  const departingMessage = `Departing ${getRelative(now, deptTime)}`;
+  const departingMessage = `Departing ${getRelative(
+    now,
+    deptTime,
+  )} • ${DateTime.fromJSDate(deptTime).toUTC().toFormat("h:mm a")}`;
   return {
     statusMessage: departingMessage,
     location: currentLocation,

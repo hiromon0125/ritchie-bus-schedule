@@ -10,7 +10,7 @@
   border-radius: 50%;
   width: 16px;
   height: 16px;
-  animation: pulse 2s infinite;
+  animation: pulse 2s infinite linear;
 }
 .nodeWrapper {
   position: absolute;
@@ -36,6 +36,7 @@
   left: -42px;
   transform: translate(-50%, -50%);
   animation: alternate downMotion 1s infinite;
+  z-index: 20000;
 }
 .downArrow {
   position: relative;
