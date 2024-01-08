@@ -38,11 +38,11 @@ async function layout({
             </div>
             <div className=" sticky top-0 -z-20">
               <div
-                className=" -z-40 ml-8 mt-[-80px] h-20 w-16"
+                className=" ml-8 mt-[-80px] h-20 w-16"
                 style={{ backgroundColor: busColor }}
               />
               <ol
-                className=" relative ml-8 border-l-[64px]"
+                className=" relative ml-8 border-l-[64px] py-6"
                 style={{ borderColor: busColor }}
               >
                 {waterfall}
