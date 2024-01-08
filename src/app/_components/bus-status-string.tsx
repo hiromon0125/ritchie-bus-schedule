@@ -60,7 +60,7 @@ export function BusStatusBig({
     <>
       <h2 className=" text-4xl font-bold">Status</h2>
       {!!location && (
-        <p className=" mb-8 text-xl">
+        <p className=" text-xl">
           {(isMoving &&
             `Next stop: ${
               stops.find((stop) => stop?.id === location?.stopId)?.name ??

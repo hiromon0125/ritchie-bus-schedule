@@ -32,12 +32,22 @@ export const stopsRouter = createTRPCRouter({
           stopId: true,
         },
       });
-      return ctx.db.stops.findMany({
-        where: {
-          id: {
-            in: routes.map((route) => route.stopId),
+      return ctx.db.stops
+        .findMany({
+          where: {
+            id: {
+              in: routes.map((route) => route.stopId),
+            },
           },
-        },
-      });
+        })
+        .then((stops) => {
+          return routes.map((route) => {
+            const stop = stops.find((stop) => stop.id === route.stopId);
+            if (!stop) {
+              throw new Error("Stop not found");
+            }
+            return stop;
+          });
+        });
     }),
 });

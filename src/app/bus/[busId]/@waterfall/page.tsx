@@ -5,7 +5,7 @@ import { api } from "../../../../trpc/server";
 import { getNowInUTC, getStopStatus } from "../../../_components/util";
 import WaterfallBusTimeline from "../../../_components/waterfall-bus-timeline";
 
-async function Waterfall({ params }: { params: { busId: string } }) {
+async function page({ params }: { params: { busId: string } }) {
   const busId = parseInt(params.busId);
   if (_.isNaN(busId)) {
     throw TRPCClientError.from(
@@ -45,4 +45,4 @@ async function Waterfall({ params }: { params: { busId: string } }) {
   );
 }
 
-export default Waterfall;
+export default page;

@@ -95,9 +95,9 @@ export function getArriTime(current: BusRoute, prev?: BusRoute) {
  */
 export function getTimeToUpdateNext(status: string | undefined) {
   if (!status) return 5 * 60 * 1000;
-  if (status.endsWith("seconds")) {
+  if (status.includes("seconds")) {
     return 1000;
-  } else if (status.endsWith("minutes")) {
+  } else if (status.includes("minutes")) {
     return 60 * 1000;
   }
   return 5 * 60 * 1000;
