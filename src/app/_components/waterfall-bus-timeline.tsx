@@ -1,5 +1,6 @@
 "use client";
 import { DateTime } from "luxon";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import style from "~/styles/bus.module.css";
 import { type RouterOutputs } from "../../trpc/shared";
@@ -18,6 +19,7 @@ interface Props {
 
 function WaterfallBusTimeline(props: Props) {
   const { routes, stops, status, upIcon, downIcon } = props;
+  const router = useRouter();
   const firstBusIndex = Math.ceil(status.index);
   const [stopIndex, setStopIndex] = useState(
     firstBusIndex > 0 ? firstBusIndex : 0,
@@ -59,7 +61,11 @@ function WaterfallBusTimeline(props: Props) {
         </button>
       </li>
       {routes.slice(stopIndex, stopIndex + stops.length).map((route, i) => (
-        <li key={route.id} className=" p-3">
+        <li
+          key={route.id}
+          className=" p-3"
+          onClick={() => router.push(`/stop/${route.stopId}`)}
+        >
           <Route
             status={status}
             route={route}
