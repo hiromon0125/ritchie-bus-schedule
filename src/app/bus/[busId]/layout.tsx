@@ -56,7 +56,7 @@ async function layout({
             </div>
           </div>
           <div
-            className=" flex-2 z-0 min-w-96 border-t-[64px] p-4"
+            className=" z-0 min-w-96 flex-1 border-t-[64px] p-4"
             style={{ borderColor: busColor }}
           >
             {children}
