@@ -19,11 +19,11 @@ export default async function Page({ params }: { params: { busId: string } }) {
   const stops = await api.stops.getStopsByBusID.query({ busId });
   return (
     <>
+      <ScrollToTopButton color={bus.color} />
       <BusStatusBig routes={routes} stops={stops} />
       <h2 className=" mb-2 text-4xl font-bold">Description</h2>
       <p className=" mb-8 text-xl">{bus.description}</p>
       <StopInfo routes={routes} stops={stops} bus={bus} />
-      <ScrollToTopButton color={bus.color} />
     </>
   );
 }
