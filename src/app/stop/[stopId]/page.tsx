@@ -1,6 +1,19 @@
+import Link from "next/link";
+import Header from "../../_components/header";
+
 function Page({ params }: { params: { stopId: string } }) {
   const stopId = parseInt(params.stopId);
-  return <div>{stopId}</div>;
+  return (
+    <div className=" flex min-h-screen flex-col items-center">
+      <Header />
+      <div>
+        <h1>Stop {stopId}</h1>
+        <p>This is the stop page.</p>
+        <p>Coming soon!</p>
+        <Link href="/">Back to home</Link>
+      </div>
+    </div>
+  );
 }
 
 export default Page;
