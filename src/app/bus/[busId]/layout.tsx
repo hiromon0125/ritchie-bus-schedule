@@ -23,13 +23,13 @@ async function layout({
     <div>
       <Header />
       <div className=" relative">
-        <div className=" max-w-full overflow-scroll">
+        <div className=" m-auto w-full max-w-screen-lg overflow-scroll">
           <h2 className=" my-8 whitespace-nowrap pl-4 text-4xl font-extrabold">
             {bus.name}
           </h2>
         </div>
         <div className=" flex flex-row-reverse flex-wrap justify-end">
-          <div className=" z-10 min-w-[360px] max-w-2xl flex-1">
+          <div className=" z-10 min-w-[360px] flex-1">
             <div className=" z-20 w-24 bg-white">
               <div
                 className=" h-4 w-4 rounded-tr-full border-r-[64px] border-t-[64px] p-4"
@@ -56,10 +56,10 @@ async function layout({
             </div>
           </div>
           <div
-            className=" z-0 min-w-96 flex-1 border-t-[64px] p-4"
+            className=" z-0 flex min-w-96 flex-1 flex-col items-center border-t-[64px] p-4 md:items-end"
             style={{ borderColor: busColor }}
           >
-            {children}
+            <div className=" max-w-md">{children}</div>
           </div>
         </div>
         <div className=" h-16" />

@@ -87,3 +87,8 @@ model FavoriteBus {
     @@index([userId])
     @@index([busId])
 }
+
+model Manager {
+    id          Int     @id @default(autoincrement())
+    userId      String
+}

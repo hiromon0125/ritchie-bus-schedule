@@ -6,7 +6,7 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { getAuth } from "@clerk/nextjs/server";
+import { currentUser, getAuth } from "@clerk/nextjs/server";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type NextRequest } from "next/server";
 import superjson from "superjson";
@@ -85,13 +85,13 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 const enforceUserIdAuthed = t.middleware(async ({ ctx, next }) => {
-  if (ctx.session == undefined || !ctx.session) {
+  const user = await currentUser();
+  if (!user) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
     });
   }
-  const ctx2 = ctx as typeof ctx & { session: ReturnType<typeof getAuth> };
-  return next({ ctx: ctx2 });
+  return next({ ctx: { ...ctx, user: user } });
 });
 
 export const privateProcedure = t.procedure.use(enforceUserIdAuthed);

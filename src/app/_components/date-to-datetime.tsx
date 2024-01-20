@@ -22,7 +22,6 @@ function createNewRoute(stops: number[], input: RoutesArr) {
   let nextStop = stops[indStop + 1];
   newRoute.stopId = nextStop ?? stops[0] ?? 0;
   if (!nextStop && indStop !== stops.length - 1) {
-    console.log("no next stop");
     return newRoute;
   } else if (indStop === stops.length - 1) {
     nextStop = stops[0];
@@ -32,7 +31,6 @@ function createNewRoute(stops: number[], input: RoutesArr) {
     (route) => route.stopId === nextStop,
   );
   if (lastInstance === -1 || lastInstance === 0) {
-    console.log("no last instance");
     return newRoute;
   }
   const timeDiff =
@@ -96,15 +94,17 @@ function DateToDateTime() {
         <div className=" max-w-3xl overflow-scroll">
           {stops.map((bus, index) => (
             <input
-              key={bus}
+              key={index}
               type="number"
-              className="w-20 bg-slate-700"
-              placeholder="Bus ID"
+              className="w-20 "
+              placeholder="Stop ID"
               value={bus}
               onChange={(e) => {
-                const newBuses = [...stops];
-                newBuses[index] = parseInt(e.target.value);
-                setStops(newBuses);
+                setStops((stops) => {
+                  const newStops = [...stops];
+                  newStops[index] = parseInt(e.target.value);
+                  return newStops;
+                });
               }}
             />
           ))}
@@ -122,6 +122,13 @@ function DateToDateTime() {
       </div>
       <br />
       <div className="flex flex-col gap-3 overflow-scroll bg-slate-200">
+        <div className=" flex max-w-3xl flex-row gap-3 ">
+          <p className=" w-20">Bus ID</p>
+          <p className=" w-20">Stop ID</p>
+          <p className=" w-20">Index</p>
+          <p className=" w-52">Arrival Time</p>
+          <p>Departure Time</p>
+        </div>
         {input.map((route, index) => (
           <div
             key={index}
@@ -129,7 +136,7 @@ function DateToDateTime() {
           >
             <input
               type="number"
-              className="w-20 bg-slate-700"
+              className="w-20 "
               placeholder="Bus ID"
               value={route.busId}
               onChange={(e) => {
@@ -140,7 +147,7 @@ function DateToDateTime() {
             />
             <input
               type="number"
-              className="w-20 bg-slate-700"
+              className="w-20 "
               placeholder="Stop ID"
               value={route.stopId}
               onChange={(e) => {
@@ -151,7 +158,7 @@ function DateToDateTime() {
             />
             <input
               type="number"
-              className=" w-20 bg-slate-700"
+              className=" w-20 "
               placeholder="Index"
               value={route.index}
               onChange={(e) => {
@@ -162,20 +169,7 @@ function DateToDateTime() {
             />
             <input
               type="datetime-local"
-              className="flex-grow-1 bg-slate-700"
-              placeholder="Departure Time"
-              value={route.deptTime.toISOString().slice(0, -5)}
-              onChange={(e) => {
-                const newInput = [...input];
-                newInput[index]!.deptTime = new Date(
-                  `${e.target.value}:00.000Z`,
-                );
-                setInput(newInput);
-              }}
-            />
-            <input
-              type="datetime-local"
-              className="flex-grow-1 bg-slate-700"
+              className="flex-grow-1 "
               placeholder="Arrival Time"
               value={route.arriTime?.toISOString().slice(0, -5)}
               onChange={(e) => {
@@ -183,7 +177,19 @@ function DateToDateTime() {
                 newInput[index]!.arriTime = new Date(
                   `${e.target.value}:00.000Z`,
                 );
-                console.log(e.target.value);
+                setInput(newInput);
+              }}
+            />
+            <input
+              type="datetime-local"
+              className="flex-grow-1 "
+              placeholder="Departure Time"
+              value={route.deptTime.toISOString().slice(0, -5)}
+              onChange={(e) => {
+                const newInput = [...input];
+                newInput[index]!.deptTime = new Date(
+                  `${e.target.value}:00.000Z`,
+                );
                 setInput(newInput);
               }}
             />
