@@ -29,7 +29,7 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
         <div className=" relative flex w-full flex-row flex-wrap justify-between">
           <div className=" mr-1 flex w-full min-w-56 flex-1 flex-row items-center p-4">
             <h2 className=" w-full overflow-hidden text-ellipsis text-nowrap text-xl font-bold">
-              {busObj?.name}
+              {busObj.id} | {busObj?.name}
             </h2>
           </div>
           <BusStatusString routes={routes} />

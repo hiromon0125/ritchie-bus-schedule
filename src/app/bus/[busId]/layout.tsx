@@ -25,7 +25,7 @@ async function layout({
       <div className=" relative">
         <div className=" m-auto w-full max-w-screen-lg overflow-scroll">
           <h2 className=" my-8 whitespace-nowrap pl-4 text-4xl font-extrabold">
-            {bus.name}
+            {bus.id} | {bus.name}
           </h2>
         </div>
         <div className=" flex flex-row-reverse flex-wrap justify-end">

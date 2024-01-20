@@ -3,10 +3,9 @@ import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
 export const favoriteRouter = createTRPCRouter({
   getAllBus: privateProcedure.query(async ({ ctx }) => {
-    const session = ctx.session;
     return ctx.db.favoriteBus.findMany({
       where: {
-        userId: session.userId!,
+        userId: ctx.user.id,
       },
     });
   }),
@@ -17,19 +16,17 @@ export const favoriteRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      const session = ctx.session;
       return ctx.db.favoriteBus.create({
         data: {
-          userId: session.userId!,
+          userId: ctx.user.id,
           busId: input.busId,
         },
       });
     }),
   getAllStop: privateProcedure.query(async ({ ctx }) => {
-    const session = ctx.session;
     return ctx.db.favoriteStop.findMany({
       where: {
-        userId: session.userId!,
+        userId: ctx.user.id,
       },
     });
   }),
@@ -40,10 +37,9 @@ export const favoriteRouter = createTRPCRouter({
       }),
     )
     .mutation(({ ctx, input }) => {
-      const session = ctx.session;
       return ctx.db.favoriteStop.create({
         data: {
-          userId: session.userId!,
+          userId: ctx.user.id,
           stopId: input.stopId,
         },
       });
