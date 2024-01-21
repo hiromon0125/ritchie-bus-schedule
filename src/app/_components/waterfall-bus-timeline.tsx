@@ -105,6 +105,8 @@ function Route(prop: {
   const isArriving = index + 0.5 === routeToShow.index;
   const isDeparting = index === routeToShow.index;
   const arriTime = getArriTime(routeToShow, prevRoute);
+  console.log("statusIndex", index, routeToShow.index);
+
   return (
     <div className=" relative">
       {isArriving && <DownArrow />}
