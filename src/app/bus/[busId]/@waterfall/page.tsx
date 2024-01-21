@@ -2,7 +2,6 @@ import { TRPCClientError } from "@trpc/client";
 import _ from "lodash";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { api } from "../../../../trpc/server";
-import { getNowInUTC, getStopStatus } from "../../../_components/util";
 import WaterfallBusTimeline from "../../../_components/waterfall-bus-timeline";
 
 async function page({ params }: { params: { busId: string } }) {
@@ -18,12 +17,10 @@ async function page({ params }: { params: { busId: string } }) {
   }
   const routes = await api.routes.getAllByBusId.query({ busId });
   const stops = await api.stops.getStopsByBusID.query({ busId });
-  const status = getStopStatus(routes, getNowInUTC());
   return (
     <WaterfallBusTimeline
       routes={routes}
       stops={stops}
-      status={status}
       upIcon={
         <div style={{ backgroundColor: bus.color ?? "white" }}>
           <div className=" translate-y-[-2px]">

@@ -1,38 +1,30 @@
 "use client";
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import style from "~/styles/bus.module.css";
 import { type RouterOutputs } from "../../trpc/shared";
+import { useBusStatus } from "./hooks";
 import { type BusRoute } from "./types";
-import { getArriTime, getNowInUTC, getStopStatus } from "./util";
+import { getArriTime, type getStopStatus } from "./util";
 
 type BusStop = RouterOutputs["stops"]["getOneByID"];
 
 interface Props {
   routes: RouterOutputs["routes"]["getAllByBusId"];
   stops: RouterOutputs["stops"]["getOneByID"][];
-  status: ReturnType<typeof getStopStatus>;
   upIcon: React.ReactNode;
   downIcon: React.ReactNode;
 }
 
 function WaterfallBusTimeline(props: Props) {
-  const { routes, stops, status, upIcon, downIcon } = props;
+  const { routes, stops, upIcon, downIcon } = props;
   const router = useRouter();
+  const status = useBusStatus(routes);
   const firstBusIndex = Math.ceil(status.index);
   const [stopIndex, setStopIndex] = useState(
     firstBusIndex > 0 ? firstBusIndex : 0,
   );
-  const [busStatus, setBusStatus] = useState(status);
-
-  useEffect(() => {
-    const nextUpdate = setTimeout(() => {
-      const newStatus = getStopStatus(routes, getNowInUTC());
-      setBusStatus(newStatus);
-    }, busStatus.nextUpdate);
-    return () => clearTimeout(nextUpdate);
-  }, [busStatus]);
 
   function goDown() {
     setStopIndex((i) => {
@@ -105,7 +97,6 @@ function Route(prop: {
   const isArriving = index + 0.5 === routeToShow.index;
   const isDeparting = index === routeToShow.index;
   const arriTime = getArriTime(routeToShow, prevRoute);
-  console.log("statusIndex", index, routeToShow.index);
 
   return (
     <div className=" relative">
