@@ -43,29 +43,29 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "favicon.ico",
+        url: "/favicon.ico",
         sizes: "64x64",
         type: "image/x-icon",
       },
       {
-        url: "icons/bus-192x192.png",
+        url: "/icons/bus-192x192.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        url: "icons/bus-512x512.png",
+        url: "/icons/bus-512x512.png",
         sizes: "512x512",
         type: "image/png",
       },
     ],
     apple: [
       {
-        url: "apple-touch-icon.png",
+        url: "/apple-touch-icon.png",
         sizes: "180x180",
         type: "image/png",
       },
       {
-        url: "icons/sm-apple-touch-icon.png",
+        url: "/icons/sm-apple-touch-icon.png",
         sizes: "120x120",
         type: "image/png",
       },
