@@ -18,7 +18,7 @@ function StopInfo(params: StopParams) {
     : [];
   return (
     <>
-      <h2 className=" mb-2 text-4xl font-bold">Stops Info</h2>
+      <h2 className=" text-2xl font-bold sm:mb-2 sm:text-4xl">Stops Info</h2>
       <p className=" mb-2 text-lg">
         Select the stop to see the time of arrival and departure
       </p>
@@ -26,7 +26,7 @@ function StopInfo(params: StopParams) {
         {stops.map((stop, i) => (
           <li className=" w-full" key={i}>
             <button
-              className=" flex w-full flex-row items-center gap-4 p-2"
+              className=" flex w-full flex-row items-center gap-4 p-2 text-left"
               onClick={() => setSelectedStop(stop)}
             >
               <div

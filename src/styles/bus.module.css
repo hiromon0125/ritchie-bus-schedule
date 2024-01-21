@@ -15,7 +15,7 @@
 .nodeWrapper {
   position: absolute;
   top: 50%;
-  left: -42px;
+  left: -27px;
   transform: translate(-50%, -50%);
 }
 @keyframes pulse {
@@ -33,10 +33,16 @@
 .downArrowWrapper {
   position: absolute;
   top: calc(50% - 35px);
-  left: -42px;
+  left: -27px;
   transform: translate(-50%, -50%);
   animation: alternate downMotion 1s infinite;
   z-index: 20000;
+}
+@media (min-width: 620px) {
+  .nodeWrapper,
+  .downArrowWrapper {
+    left: -42px;
+  }
 }
 .downArrow {
   position: relative;

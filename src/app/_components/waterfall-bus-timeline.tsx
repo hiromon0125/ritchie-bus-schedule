@@ -48,7 +48,7 @@ function WaterfallBusTimeline(props: Props) {
   }
   return (
     <>
-      <li className=" absolute top-[-70px] flex w-full flex-row justify-center">
+      <li className=" absolute top-[-35px] flex w-full scale-75 flex-row justify-center sm:top-[-70px] sm:scale-100">
         <button
           className={
             " overflow-hidden rounded-full border-[3px] border-black" +
@@ -74,7 +74,7 @@ function WaterfallBusTimeline(props: Props) {
           />
         </li>
       ))}
-      <li className=" absolute bottom-[-70px] flex w-full flex-row justify-center">
+      <li className=" absolute bottom-[-35px] flex w-full scale-75 flex-row justify-center sm:bottom-[-70px] sm:scale-100">
         <button
           className={
             " relative overflow-hidden rounded-full border-[3px] border-black" +

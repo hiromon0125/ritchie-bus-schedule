@@ -24,7 +24,7 @@ async function layout({
       <Header />
       <div className=" relative">
         <div className=" m-auto w-full max-w-screen-lg overflow-scroll">
-          <h2 className=" my-8 whitespace-nowrap pl-4 text-4xl font-extrabold">
+          <h2 className=" my-4 whitespace-nowrap pl-4 text-2xl font-extrabold sm:my-8 sm:text-4xl">
             {bus.id} | {bus.name}
           </h2>
         </div>
@@ -32,24 +32,24 @@ async function layout({
           <div className=" z-10 min-w-[360px] flex-1">
             <div className=" z-20 w-24 bg-white">
               <div
-                className=" h-4 w-4 rounded-tr-full border-r-[64px] border-t-[64px] p-4"
+                className=" h-11 w-11 rounded-tr-full border-r-[32px] border-t-[32px] sm:h-24 sm:w-24 sm:border-r-[64px] sm:border-t-[64px]"
                 style={{ borderColor: busColor }}
               />
             </div>
             <div className=" sticky top-0 -z-20">
               <div
-                className=" ml-8 mt-[-80px] h-20 w-16"
+                className=" ml-3 mt-[-40px] h-[40px] w-8 border-black sm:ml-8 sm:mt-[-80px] sm:h-20 sm:w-16"
                 style={{ backgroundColor: busColor }}
               />
               <ol
-                className=" relative ml-8 border-l-[64px] py-6"
+                className=" relative ml-3 border-l-[32px] pt-3 sm:ml-8 sm:border-l-[64px] sm:py-6"
                 style={{ borderColor: busColor }}
               >
                 {waterfall}
               </ol>
               <div className=" z-0 mb-[-64px] bg-white">
                 <div
-                  className=" ml-8 rounded-bl-full border-b-[64px] border-l-[64px]  p-12"
+                  className=" ml-3 rounded-bl-full border-b-[32px] border-l-[32px] p-6 sm:ml-8 sm:border-b-[64px]  sm:border-l-[64px] sm:p-12"
                   style={{ borderColor: busColor }}
                 />
               </div>

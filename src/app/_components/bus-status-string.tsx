@@ -58,7 +58,7 @@ export function BusStatusBig({
   const { isMoving, statusMessage, location } = useBusStatus(routes);
   return (
     <>
-      <h2 className=" text-4xl font-bold">Status</h2>
+      <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
       {!!location && (
         <p className=" text-xl">
           {(isMoving &&
@@ -73,7 +73,7 @@ export function BusStatusBig({
               }`)}
         </p>
       )}
-      <p className=" mb-8 text-xl">{statusMessage}</p>
+      <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">{statusMessage}</p>
     </>
   );
 }

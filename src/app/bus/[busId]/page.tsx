@@ -21,8 +21,8 @@ export default async function Page({ params }: { params: { busId: string } }) {
     <>
       <ScrollToTopButton color={bus.color} />
       <BusStatusBig routes={routes} stops={stops} />
-      <h2 className=" mb-2 text-4xl font-bold">Description</h2>
-      <p className=" mb-8 text-xl">{bus.description}</p>
+      <h2 className=" text-2xl font-bold sm:mb-2 sm:text-4xl">Description</h2>
+      <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">{bus.description}</p>
       <StopInfo routes={routes} stops={stops} bus={bus} />
     </>
   );

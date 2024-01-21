@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <div className=" mt-8 min-h-60 w-full bg-slate-800">
+    <div className=" min-h-60 w-full bg-slate-800">
       <div className=" m-auto flex min-h-60 w-full max-w-screen-lg flex-col justify-between pb-16 sm:flex-row sm:gap-0 sm:pb-0">
         <div className=" flex flex-col gap-4 p-4">
           <h1 className=" text-3xl text-slate-200">Ritchie Bus Schedule</h1>

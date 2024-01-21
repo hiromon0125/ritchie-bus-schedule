@@ -25,7 +25,7 @@ async function page({ params }: { params: { busId: string } }) {
       stops={stops}
       status={status}
       upIcon={
-        <div style={{ backgroundColor: bus.color ?? "black" }}>
+        <div style={{ backgroundColor: bus.color ?? "white" }}>
           <div className=" translate-y-[-2px]">
             <IoIosArrowUp size={48} />
           </div>
@@ -33,7 +33,7 @@ async function page({ params }: { params: { busId: string } }) {
       }
       downIcon={
         <div
-          style={{ backgroundColor: bus.color ?? "black" }}
+          style={{ backgroundColor: bus.color ?? "white" }}
           className=" h-full w-full"
         >
           <div className=" translate-y-[2px]">
