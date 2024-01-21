@@ -2,14 +2,14 @@
 .stopNode {
   background-color: white;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
 }
 .activeStopNode {
   background-color: white;
   border-radius: 50%;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   animation: pulse 2s infinite linear;
 }
 .nodeWrapper {
@@ -39,6 +39,11 @@
   z-index: 20000;
 }
 @media (min-width: 620px) {
+  .stopNode,
+  .activeStopNode {
+    width: 16px;
+    height: 16px;
+  }
   .nodeWrapper,
   .downArrowWrapper {
     left: -42px;
