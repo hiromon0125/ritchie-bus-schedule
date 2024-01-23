@@ -13,6 +13,25 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`font-sans ${inter.variable}`}>
+          <TRPCReactProvider cookies={cookies().toString()}>
+            {children}
+            <Footer />
+          </TRPCReactProvider>
+        </body>
+      </html>
+    </ClerkProvider>
+  );
+}
+
 export const metadata: Metadata = {
   title: "Ritchie's Bus Schedule",
   description:
@@ -72,22 +91,3 @@ export const metadata: Metadata = {
     ],
   },
 };
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={`font-sans ${inter.variable}`}>
-          <TRPCReactProvider cookies={cookies().toString()}>
-            {children}
-            <Footer />
-          </TRPCReactProvider>
-        </body>
-      </html>
-    </ClerkProvider>
-  );
-}

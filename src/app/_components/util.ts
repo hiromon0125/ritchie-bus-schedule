@@ -55,14 +55,6 @@ export function fixDate(date: Date): Date {
     day: dateToCorrectTo.getDate(),
   });
 }
-/**
- * returns a date that is 5 minutes before the given date
- * @param date date to offset
- * @returns date that is 5 minutes before the given date
- */
-export function offSetByMinutes(date: Date, min = 5): Date {
-  return new Date(date.getTime() - min * 60 * 1000);
-}
 
 export function getNowInUTC() {
   const now = new Date();
@@ -74,9 +66,19 @@ export function getRelative(now: Date, time: Date) {
   });
 }
 
+const DEFAULT_OFFSET = 2 * 60 * 1000;
+/**
+ * returns a date that is 2 minutes before the given date
+ * @param date date to offset
+ * @returns date that is 2 minutes before the given date
+ */
+export function offSetByMinutes(date: Date, offset?: number): Date {
+  return new Date(date.getTime() - (offset ?? DEFAULT_OFFSET));
+}
+
 export function getArriTime(current: BusRoute, prev?: BusRoute) {
   if (current.arriTime) {
-    return offSetByMinutes(fixDate(current.arriTime));
+    return fixDate(current.arriTime);
   } else if (!prev) {
     return offSetByMinutes(fixDate(current.deptTime));
   }
@@ -84,7 +86,7 @@ export function getArriTime(current: BusRoute, prev?: BusRoute) {
   const currentDeptTime = current.deptTime;
   const diff = currentDeptTime.getTime() - prevDeptTime.getTime();
 
-  if (diff < 5 * 60 * 1000) {
+  if (diff < DEFAULT_OFFSET) {
     return fixDate(currentDeptTime);
   }
   return offSetByMinutes(fixDate(currentDeptTime));

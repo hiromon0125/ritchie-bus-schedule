@@ -94,8 +94,8 @@ function Route(prop: {
     prevRoute,
     stop,
   } = prop;
-  const isArriving = index + 0.5 === routeToShow.index;
-  const isDeparting = index === routeToShow.index;
+  const isArriving = index + 1.5 === routeToShow.index;
+  const isDeparting = index + 1 === routeToShow.index;
   const arriTime = getArriTime(routeToShow, prevRoute);
 
   return (
