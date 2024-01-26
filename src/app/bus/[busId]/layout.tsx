@@ -42,7 +42,7 @@ async function layout({
                 style={{ backgroundColor: busColor }}
               />
               <ol
-                className=" relative ml-3 border-l-[32px] pt-3 sm:ml-8 sm:border-l-[64px] sm:py-6"
+                className=" relative ml-3 border-l-[32px] pt-6 sm:ml-8 sm:border-l-[64px] sm:pb-6"
                 style={{ borderColor: busColor }}
               >
                 {waterfall}

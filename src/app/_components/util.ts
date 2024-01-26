@@ -139,6 +139,15 @@ export function getStopStatus(routes: BusRoute[], now: Date) {
     const nextLocation = routes[index === -0.5 ? 0 : Math.floor(index + 1)]!;
     const nextNextLocation = routes[index === -0.5 ? 1 : Math.floor(index + 2)];
     const arriTime = getArriTime(nextLocation, nextNextLocation);
+    if (arriTime.getTime() - now.getTime() >= 60 * 60 * 1000) {
+      return {
+        statusMessage: "Out of service",
+        location: undefined,
+        isMoving: false,
+        index: -2,
+        nextUpdate: 5 * 60 * 1000,
+      };
+    }
     const arrivalMessage = `Arriving ${getRelative(now, arriTime)}`;
     return {
       statusMessage: `${arrivalMessage} • ${DateTime.fromJSDate(arriTime)
