@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "../../trpc/server";
 import { type RouterOutputs } from "../../trpc/shared";
-import BusStatusString from "./bus-status-string";
+import BusStatusString from "./busStatusString";
 
 type BusStatusProps =
   | {

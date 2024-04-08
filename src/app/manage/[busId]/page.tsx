@@ -1,9 +1,10 @@
-import EditBusList from "@/editBusList";
+import EditBusRoute from "@/editBusRoute";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { api } from "t/server";
+import { z } from "zod";
 
-async function Page() {
+async function Page({ params }: { params: { busId: string } }) {
   const { userId } = auth();
   if (!userId) {
     redirect("/");
@@ -13,7 +14,9 @@ async function Page() {
     redirect("/");
   }
 
-  return <EditBusList />;
+  const busIdNumber = z.coerce.number().parse(params.busId);
+
+  return <EditBusRoute busId={busIdNumber} />;
 }
 
 export default Page;

@@ -1,4 +1,4 @@
-import ManageButton from "./manage";
+import ManageButton from "./manageBtn";
 import UserButton from "./user-button";
 
 function Header() {

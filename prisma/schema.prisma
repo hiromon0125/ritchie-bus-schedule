@@ -1,94 +1,91 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
-    relationMode = "prisma"
+generator client {
+  provider = "prisma-client-js"
 }
 
-generator client {
-    provider = "prisma-client-js"
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Bus {
-    id          Int      @id @default(autoincrement())
-    name        String
-    description String?
-    color       String?
-    routes      Routes[]
-    favUsers    FavoriteBus[]
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+  id          Int           @id @default(autoincrement())
+  name        String
+  description String?
+  color       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  favUsers    FavoriteBus[]
+  routes      Routes[]
 }
 
 model Stops {
-    id          Int      @id @default(autoincrement())
-    name        String?
-    latitude    Float
-    longitude   Float
-    favUsers    FavoriteStop[]
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
-    inbounds    Connections[] @relation("inbounds")
-    outbounds   Connections[] @relation("outbounds")
-    routes      Routes[]
+  id        Int            @id @default(autoincrement())
+  name      String?
+  latitude  Float
+  longitude Float
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  outbounds Connections[]  @relation("outbounds")
+  inbounds  Connections[]  @relation("inbounds")
+  favUsers  FavoriteStop[]
+  routes    Routes[]
 }
 
 model Connections {
-    id          Int      @id @default(autoincrement())
-    toStop      Stops    @relation("inbounds", fields: [toStopId], references: [id])
-    toStopId    Int
-    fromStop    Stops    @relation("outbounds", fields: [fromStopId], references: [id])
-    fromStopId  Int
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+  id         Int      @id @default(autoincrement())
+  toStopId   Int
+  fromStopId Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  fromStop   Stops    @relation("outbounds", fields: [fromStopId], references: [id])
+  toStop     Stops    @relation("inbounds", fields: [toStopId], references: [id])
 
-    @@index([toStopId])
-    @@index([fromStopId])
+  @@index([toStopId])
+  @@index([fromStopId])
 }
 
 model Routes {
-    id          Int      @id @default(autoincrement())
-    bus         Bus      @relation(fields: [busId], references: [id])
-    busId       Int
-    stop        Stops    @relation(fields: [stopId], references: [id])
-    stopId      Int
-    index       Int 
-    deptTime    DateTime
-    arriTime    DateTime?
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  busId     Int
+  stopId    Int
+  index     Int
+  deptTime  DateTime
+  arriTime  DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bus       Bus       @relation(fields: [busId], references: [id])
+  stop      Stops     @relation(fields: [stopId], references: [id])
 
-    @@index([busId])
-    @@index([stopId])
+  @@index([busId])
+  @@index([stopId])
 }
 
 model FavoriteStop {
-    id          Int      @id @default(autoincrement())
-    userId      String
-    stop        Stops    @relation(fields: [stopId], references: [id])
-    stopId      Int
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  userId    String
+  stopId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  stop      Stops    @relation(fields: [stopId], references: [id])
 
-    @@index([userId])
-    @@index([stopId])
+  @@index([userId])
+  @@index([stopId])
 }
 
 model FavoriteBus {
-    id          Int      @id @default(autoincrement())
-    userId      String
-    bus         Bus      @relation(fields: [busId], references: [id])
-    busId       Int
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  userId    String
+  busId     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bus       Bus      @relation(fields: [busId], references: [id])
 
-    @@index([userId])
-    @@index([busId])
+  @@index([userId])
+  @@index([busId])
 }
 
 model Manager {
-    id          Int     @id @default(autoincrement())
-    userId      String
+  id     Int    @id @default(autoincrement())
+  userId String
 }

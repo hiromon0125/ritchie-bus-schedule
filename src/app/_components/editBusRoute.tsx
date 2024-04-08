@@ -7,13 +7,22 @@ import { type RouterInputs } from "../../trpc/shared";
 type RouteObj = RouterInputs["routes"]["addRoutes"][0];
 type RoutesArr = RouterInputs["routes"]["addRoutes"];
 
+function createNewDate(): Date {
+  const date = new Date();
+  date.setFullYear(2024);
+  date.setMonth(1);
+  date.setDate(1);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
 function createNewRoute(stops: number[], input: RoutesArr) {
   const newRoute = {
     ...(input[input.length - 1] ?? {
       busId: 0,
       stopId: stops[0] ?? 0,
       index: 0,
-      deptTime: new Date("2024-01-01T00:00:00.000Z"),
+      deptTime: createNewDate(),
     }),
   };
   newRoute.index += 1;
@@ -53,7 +62,7 @@ function createNewRoute(stops: number[], input: RoutesArr) {
   return newRoute;
 }
 
-function DateToDateTime() {
+function EditBusRoute({ busId }: { busId: number }) {
   const { mutate } = api.routes.addRoutes.useMutation();
   const [stops, setStops] = useState<number[]>([]);
   const [input, setInput] = useState<RouteObj[]>([]);
@@ -89,8 +98,9 @@ function DateToDateTime() {
   };
 
   return (
-    <div>
+    <div className=" w-full max-w-screen-lg">
       <div>
+        <h1>Bus Stops</h1>
         <div className=" max-w-3xl overflow-scroll">
           {stops.map((bus, index) => (
             <input
@@ -224,4 +234,4 @@ function DateToDateTime() {
   );
 }
 
-export default DateToDateTime;
+export default EditBusRoute;

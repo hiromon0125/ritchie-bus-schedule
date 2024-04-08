@@ -1,8 +1,8 @@
 import { TRPCClientError } from "@trpc/client";
 import { api } from "../../../trpc/server";
-import { BusStatusBig } from "../../_components/bus-status-string";
+import { BusStatusBig } from "../../_components/busStatusString";
 import ScrollToTopButton from "../../_components/scrollToTopBtn";
-import StopInfo from "../../_components/stop-info";
+import StopInfo from "../../_components/stopInfo";
 
 export default async function Page({ params }: { params: { busId: string } }) {
   const busId = parseInt(params.busId);

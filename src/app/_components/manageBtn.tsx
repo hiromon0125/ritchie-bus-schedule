@@ -6,6 +6,8 @@ import { api } from "../../trpc/react";
 function ManageButton() {
   const router = useRouter();
   const { user } = useUser();
+  console.log(`userId: ${user?.id}`);
+
   const { data } = api.manager.isManager.useQuery({ userId: user?.id ?? "" });
   if (!data) {
     return null;
