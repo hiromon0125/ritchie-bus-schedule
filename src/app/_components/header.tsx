@@ -3,7 +3,7 @@ import UserButton from "./user-button";
 
 function Header() {
   return (
-    <div className=" container top-0 flex min-w-full flex-row justify-between bg-slate-400">
+    <div className=" container top-0 flex min-w-full flex-row justify-between bg-slate-400 px-6">
       <div className=" top-0 m-auto flex w-full max-w-screen-lg flex-row justify-between px-4 sm:px-0">
         <a href="/">
           <div className=" py-6">

@@ -98,9 +98,8 @@ function EditBusRoute({ busId }: { busId: number }) {
   };
 
   return (
-    <div className=" w-full max-w-screen-lg">
+    <>
       <div>
-        <h1>Bus Stops</h1>
         <div className=" max-w-3xl overflow-scroll">
           {stops.map((bus, index) => (
             <input
@@ -230,7 +229,7 @@ function EditBusRoute({ busId }: { busId: number }) {
       >
         remove
       </button>
-    </div>
+    </>
   );
 }
 
