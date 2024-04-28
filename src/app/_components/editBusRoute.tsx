@@ -99,7 +99,7 @@ function EditBusRoute({ busId }: { busId: number }) {
 
   return (
     <>
-      <div>
+      <div className=" mt-4">
         <div className=" max-w-3xl overflow-scroll">
           {stops.map((bus, index) => (
             <input

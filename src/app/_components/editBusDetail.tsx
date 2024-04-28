@@ -40,8 +40,8 @@ export default function EditBusDetail({ busId }: { busId: number }) {
   }
 
   return (
-    <div className=" w-full max-w-screen-lg">
-      <div className=" relative flex h-[85px] w-full flex-row gap-2 py-2 pl-0">
+    <div className=" flex w-full max-w-screen-lg flex-col gap-3">
+      <div className=" relative flex h-[85px] w-full flex-row gap-5 py-2 pl-0">
         <label htmlFor="color" className=" flex h-full flex-col gap-1">
           <p>Color</p>
           <input
@@ -51,7 +51,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
               newData && handleInput({ ...newData, color: e.target.value })
             }
             type="color"
-            className=" h-full rounded-md border-2 border-black bg-transparent text-xl"
+            className=" h-full rounded-md border-2 border-black bg-white text-xl"
           />
         </label>
         <label htmlFor="name" className=" flex flex-1 flex-col gap-1">
@@ -62,7 +62,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
             onChange={(e) =>
               newData && handleInput({ ...newData, name: e.target.value })
             }
-            className=" flex-1 rounded-md border-2 border-black bg-transparent p-2 text-xl"
+            className=" flex-1 rounded-md border-2 border-black bg-white p-2 text-xl"
           />
         </label>
       </div>
@@ -73,7 +73,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
           onChange={(e) =>
             newData && handleInput({ ...newData, description: e.target.value })
           }
-          className=" text-md h-32 w-full resize-none rounded-md border-2 border-black bg-transparent p-2"
+          className=" text-md h-32 w-full resize-none rounded-md border-2 border-black bg-white p-2"
         />
       </label>
     </div>

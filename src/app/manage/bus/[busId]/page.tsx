@@ -21,10 +21,13 @@ async function Page({ params }: { params: { busId: string } }) {
   return (
     <div className=" w-full max-w-screen-lg px-6">
       <div className=" flex flex-row items-center gap-3">
-        <h1>Edit Bus Route</h1>
+        <h1>Edit Bus Detail</h1>
         <SaveStatus />
       </div>
       <EditBusDetail busId={busIdNumber} />
+      <div className=" mt-12">
+        <h1>Edit Bus Route</h1>
+      </div>
       <EditBusRoute busId={busIdNumber} />
     </div>
   );

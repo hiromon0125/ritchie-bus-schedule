@@ -50,10 +50,9 @@ function EditBusList() {
   }, [data]);
 
   return (
-    <div className=" w-full max-w-screen-lg">
-      <h1>Edit Bus</h1>
-      <div className=" flex w-full flex-row gap-2 bg-transparent">
-        <div className=" flex flex-row items-center gap-3 rounded-md border-2 border-black bg-transparent px-4 py-2 ">
+    <>
+      <div className=" flex w-full flex-row flex-wrap gap-2 bg-transparent">
+        <div className=" flex flex-row items-center gap-3 rounded-md border-2 border-black bg-transparent px-4 py-2">
           <p>Color</p>
           <input
             className=" "
@@ -83,7 +82,7 @@ function EditBusList() {
           disabled={loading}
         />
         <input
-          className=" rounded-md border-2 border-black bg-transparent px-4 py-2 "
+          className=" grow-2 rounded-md border-2 border-black bg-transparent px-4 py-2"
           type="text"
           placeholder="Name"
           value={newBus.name}
@@ -96,7 +95,7 @@ function EditBusList() {
           disabled={loading}
         />
         <input
-          className=" flex-1 rounded-md border-2 border-black bg-transparent px-4 py-2"
+          className=" grow-4 min-w-80 rounded-md border-2 border-black bg-transparent px-4 py-2"
           type="text"
           placeholder="Description"
           value={newBus.description}
@@ -142,7 +141,7 @@ function EditBusList() {
                 {bus.id} {bus.name}
               </p>
               <button
-                onClick={() => router.push(`/manage/${bus.id}`)}
+                onClick={() => router.push(`/manage/bus/${bus.id}`)}
                 className=" m-2 h-full px-2 hover:bg-slate-300"
               >
                 Edit
@@ -160,7 +159,7 @@ function EditBusList() {
           </>
         ))}
       </div>
-    </div>
+    </>
   );
 }
 
