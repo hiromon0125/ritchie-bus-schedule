@@ -5,7 +5,7 @@ function Footer() {
         <div className=" flex flex-col gap-4 p-4">
           <h2 className=" text-3xl text-slate-200">Ritchie Bus Schedule</h2>
           <p className=" text-slate-200">
-            This is a project by{" "}
+            This is a project made by{" "}
             <a
               className=" text-slate-200 underline"
               href="https://github.com/hiromon0125"
@@ -14,7 +14,6 @@ function Footer() {
             </a>
             .<br />
             <br />
-            The code will be open source soon!
           </p>
         </div>
         <div className=" flex-1 sm:pl-16">
