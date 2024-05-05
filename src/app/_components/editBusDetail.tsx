@@ -65,6 +65,19 @@ export default function EditBusDetail({ busId }: { busId: number }) {
             className=" flex-1 rounded-md border-2 border-black bg-white p-2 text-xl"
           />
         </label>
+        <label htmlFor="isWeekday" className="">
+          <p>Is Weekend</p>
+          <button
+            className=" rounded-md border-2 border-black bg-white p-2"
+            style={{
+              backgroundColor: newData?.isWeekend ? "black" : "white",
+            }}
+            onClick={() =>
+              newData &&
+              handleInput({ ...newData, isWeekend: !newData.isWeekend })
+            }
+          />
+        </label>
       </div>
       <label htmlFor="description" className=" flex flex-col gap-1">
         <p>Description</p>

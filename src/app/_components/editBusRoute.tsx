@@ -1,11 +1,14 @@
 "use client";
 import _ from "lodash";
 import { useState } from "react";
-import { api } from "~/trpc/react";
-import { type RouterInputs } from "../../trpc/shared";
+import "react-datepicker/dist/react-datepicker.css";
+import { api } from "t/react";
+import { type RouterInputs } from "t/shared";
+import { z } from "zod";
 
-type RouteObj = RouterInputs["routes"]["addRoutes"][0];
-type RoutesArr = RouterInputs["routes"]["addRoutes"];
+type RouteObj = RouterInputs["routes"]["updateRoutes"][0];
+type RouteInput = Partial<RouteObj> & Pick<RouteObj, "index" | "busId">;
+type RoutesArr = RouteInput[];
 
 function createNewDate(): Date {
   const date = new Date();
@@ -16,10 +19,10 @@ function createNewDate(): Date {
   return date;
 }
 
-function createNewRoute(stops: number[], input: RoutesArr) {
+function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   const newRoute = {
     ...(input[input.length - 1] ?? {
-      busId: 0,
+      busId,
       stopId: stops[0] ?? 0,
       index: 0,
       deptTime: createNewDate(),
@@ -27,7 +30,7 @@ function createNewRoute(stops: number[], input: RoutesArr) {
   };
   newRoute.index += 1;
   newRoute.arriTime = undefined;
-  const indStop = stops.indexOf(newRoute.stopId);
+  const indStop = newRoute.stopId ? stops.indexOf(newRoute.stopId) : -1;
   let nextStop = stops[indStop + 1];
   newRoute.stopId = nextStop ?? stops[0] ?? 0;
   if (!nextStop && indStop !== stops.length - 1) {
@@ -43,9 +46,9 @@ function createNewRoute(stops: number[], input: RoutesArr) {
     return newRoute;
   }
   const timeDiff =
-    input[lastInstance]!.deptTime.getTime() -
-    input[lastInstance - 1]!.deptTime.getTime();
-  newRoute.deptTime = new Date(newRoute.deptTime.getTime() + timeDiff);
+    (input[lastInstance]!.deptTime?.getTime() ?? 0) -
+    (input[lastInstance - 1]!.deptTime?.getTime() ?? 0);
+  newRoute.deptTime = new Date((newRoute.deptTime?.getTime() ?? 0) + timeDiff);
   if (
     input[lastInstance]!.arriTime &&
     lastInstance - stops.length > 0 &&
@@ -63,39 +66,57 @@ function createNewRoute(stops: number[], input: RoutesArr) {
 }
 
 function EditBusRoute({ busId }: { busId: number }) {
-  const { mutate } = api.routes.addRoutes.useMutation();
+  const { data } = api.routes.getAllByBusId.useQuery({ busId });
+  const { mutate } = api.routes.updateRoutes.useMutation();
   const [stops, setStops] = useState<number[]>([]);
-  const [input, setInput] = useState<RouteObj[]>([]);
+  const [input, setInput] = useState<RoutesArr>(
+    () =>
+      data?.map(
+        (route) =>
+          ({
+            ...route,
+            arriTime: route.arriTime ?? undefined,
+          }) as RouteInput,
+      ) ?? [],
+  );
 
   const handleSubmit = () => {
-    mutate(input);
-    setInput(new Array<RouteObj>());
+    try {
+      const definedInput = z
+        .array(
+          z.object({
+            busId: z.number(),
+            stopId: z.number(),
+            index: z.number(),
+            deptTime: z.date(),
+            arriTime: z.date().optional(),
+          }),
+        )
+        .parse(input);
+      mutate(definedInput);
+      setInput(new Array<RouteObj>());
+    } catch (e) {
+      // catch if the input is invalid or attribute is missing
+      console.error(e);
+    }
   };
 
-  const addNewRoute = () => {
-    const newRoute = createNewRoute(stops, input);
-    setInput([...input, newRoute]);
-  };
+  const addNewRoute = () =>
+    setInput([...input, createNewRoute(stops, input, busId)]);
 
   const addMultipleRoutes = () => {
     const currInput = [...input];
-    stops.forEach((_) => {
-      const newRoute = createNewRoute(stops, currInput);
-      currInput.push(newRoute);
-    });
+    stops.forEach((_) =>
+      currInput.push(createNewRoute(stops, currInput, busId)),
+    );
     setInput(currInput);
   };
 
-  const rmRoute = () => {
-    setInput(input.slice(0, -1));
-  };
+  const rmRoute = () => setInput(input.slice(0, -1));
 
-  const addNewStop = () => {
-    setStops([...stops, 0]);
-  };
-  const rmStop = () => {
-    setStops(stops.slice(0, -1));
-  };
+  const addNewStop = () => setStops([...stops, 0]);
+
+  const rmStop = () => setStops(stops.slice(0, -1));
 
   return (
     <>
@@ -111,7 +132,7 @@ function EditBusRoute({ busId }: { busId: number }) {
               onChange={(e) => {
                 setStops((stops) => {
                   const newStops = [...stops];
-                  newStops[index] = parseInt(e.target.value);
+                  newStops[index] = e.target.valueAsNumber ?? 0;
                   return newStops;
                 });
               }}
@@ -121,114 +142,127 @@ function EditBusRoute({ busId }: { busId: number }) {
         <br />
         <button
           onClick={addNewStop}
-          className=" mr-3 bg-slate-200 p-3 text-slate-800"
+          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
         >
           add
         </button>
-        <button onClick={rmStop} className=" bg-slate-200 p-3 text-slate-800">
+        <button
+          onClick={rmStop}
+          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+        >
           remove
         </button>
       </div>
       <br />
-      <div className="flex flex-col gap-3 overflow-scroll bg-slate-200">
-        <div className=" flex max-w-3xl flex-row gap-3 ">
-          <p className=" w-20">Bus ID</p>
+      <div className=" relative flex flex-col overflow-scroll rounded-lg border-2 border-black bg-slate-200">
+        <div className=" flex w-full flex-row gap-1 border-x-2 p-1 pt-2">
           <p className=" w-20">Stop ID</p>
           <p className=" w-20">Index</p>
-          <p className=" w-52">Arrival Time</p>
-          <p>Departure Time</p>
+          <p className=" flex-1">Arrival Time</p>
+          <p className=" flex-1">Departure Time</p>
         </div>
-        {input.map((route, index) => (
-          <div
-            key={index}
-            className="flex max-w-3xl flex-row gap-3 overflow-scroll bg-slate-200"
-          >
-            <input
-              type="number"
-              className="w-20 "
-              placeholder="Bus ID"
-              value={route.busId}
-              onChange={(e) => {
-                const newInput = [...input];
-                newInput[index]!.busId = parseInt(e.target.value);
-                setInput(newInput);
-              }}
-            />
-            <input
-              type="number"
-              className="w-20 "
-              placeholder="Stop ID"
-              value={route.stopId}
-              onChange={(e) => {
-                const newInput = [...input];
-                newInput[index]!.stopId = parseInt(e.target.value);
-                setInput(newInput);
-              }}
-            />
-            <input
-              type="number"
-              className=" w-20 "
-              placeholder="Index"
-              value={route.index}
-              onChange={(e) => {
-                const newInput = [...input];
-                newInput[index]!.index = parseInt(e.target.value);
-                setInput(newInput);
-              }}
-            />
-            <input
-              type="datetime-local"
-              className="flex-grow-1 "
-              placeholder="Arrival Time"
-              value={route.arriTime?.toISOString().slice(0, -5)}
-              onChange={(e) => {
-                const newInput = [...input];
-                newInput[index]!.arriTime = new Date(
-                  `${e.target.value}:00.000Z`,
-                );
-                setInput(newInput);
-              }}
-            />
-            <input
-              type="datetime-local"
-              className="flex-grow-1 "
-              placeholder="Departure Time"
-              value={route.deptTime.toISOString().slice(0, -5)}
-              onChange={(e) => {
-                const newInput = [...input];
-                newInput[index]!.deptTime = new Date(
-                  `${e.target.value}:00.000Z`,
-                );
-                setInput(newInput);
-              }}
-            />
+        <div className=" border-t-2 border-black bg-slate-300 p-1">
+          <div className=" flex flex-col gap-1 overflow-hidden rounded-b-sm">
+            {input.length == 0 ? (
+              <div className=" p-2">No recorded stops</div>
+            ) : (
+              input.map((route, index) => (
+                <div
+                  key={index}
+                  className="flex w-full flex-row gap-1 overflow-scroll "
+                >
+                  <input
+                    type="number"
+                    className="w-20 p-1"
+                    placeholder="Stop ID"
+                    value={route.stopId ?? 0}
+                    onChange={(e) => {
+                      const newInput = [...input];
+                      newInput[index]!.stopId = e.target.valueAsNumber;
+                      setInput(newInput);
+                    }}
+                  />
+                  <input
+                    type="number"
+                    className=" w-20 p-1"
+                    placeholder="Index"
+                    value={route.index}
+                    onChange={(e) => {
+                      const newInput = [...input];
+                      newInput[index]!.index = e.target.valueAsNumber;
+                      setInput(newInput);
+                    }}
+                  />
+                  <div className=" flex flex-1 flex-row gap-1 bg-white">
+                    <input
+                      type="time"
+                      className=" flex-1 p-1"
+                      id={`arr-${index}`}
+                      onChange={(e) => {
+                        if (e.target.valueAsDate === null) return;
+                        const newInput = [...input];
+                        newInput[index]!.arriTime = e.target.valueAsDate;
+                        setInput(newInput);
+                      }}
+                    />
+                    <button
+                      className=" pr-2"
+                      onClick={(_) => {
+                        const newInput = [...input];
+                        newInput[index]!.arriTime = undefined;
+                        setInput(newInput);
+                        const inputElement = document.getElementById(
+                          `arr-${index}`,
+                        ) as HTMLInputElement;
+                        inputElement.value = "";
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
+                  <input
+                    type="time"
+                    className="flex-1 p-1"
+                    onChange={(e) => {
+                      console.log(e.target.valueAsDate);
+                      if (e.target.valueAsDate === null) return;
+                      const newInput = [...input];
+                      newInput[index]!.deptTime = e.target.valueAsDate;
+                      setInput(newInput);
+                    }}
+                  />
+                </div>
+              ))
+            )}
           </div>
-        ))}
+        </div>
       </div>
-      <button
-        onClick={handleSubmit}
-        className=" mr-3 bg-slate-200 p-3 text-slate-800"
-      >
-        Submit
-      </button>
-      <button
-        onClick={addNewRoute}
-        className=" mr-3 bg-slate-200 p-3 text-slate-800"
-      >
-        add
-      </button>
-      <button
-        onClick={addMultipleRoutes}
-        className=" mr-3 bg-slate-200 p-3 text-slate-800"
-      >
-        add multiple
-      </button>
-      <button
-        onClick={rmRoute}
-        className=" mr-3 bg-slate-200 p-3 text-slate-800"
-      >
-        remove
-      </button>
+      <div className=" pt-2">
+        <button
+          onClick={handleSubmit}
+          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+        >
+          Submit
+        </button>
+        <button
+          onClick={addNewRoute}
+          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+        >
+          Add
+        </button>
+        <button
+          onClick={addMultipleRoutes}
+          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+        >
+          Add multiple
+        </button>
+        <button
+          onClick={rmRoute}
+          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+        >
+          Remove
+        </button>
+      </div>
     </>
   );
 }

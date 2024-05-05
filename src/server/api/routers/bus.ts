@@ -47,6 +47,7 @@ export const busRouter = createTRPCRouter({
         name: z.string(),
         description: z.string(),
         color: z.string(),
+        isWeekend: z.boolean(),
       }),
     )
     .mutation(({ ctx, input }) =>

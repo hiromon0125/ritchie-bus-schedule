@@ -15,6 +15,7 @@ model Bus {
   color       String        @default("#000000")
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+  isWeekend   Boolean       @default(false)
   favUsers    FavoriteBus[]
   routes      Routes[]
 }

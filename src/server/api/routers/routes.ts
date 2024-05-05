@@ -33,10 +33,11 @@ export const routesRouter = createTRPCRouter({
         },
       }),
     ),
-  addRoutes: privateProcedure
+  updateRoutes: privateProcedure
     .input(
       z.array(
         z.object({
+          id: z.number().optional(),
           busId: z.number(),
           stopId: z.number(),
           index: z.number(),
@@ -45,10 +46,19 @@ export const routesRouter = createTRPCRouter({
         }),
       ),
     )
-    .mutation(({ ctx, input }) => {
-      return ctx.db.routes.createMany({
-        data: input,
-      });
+    .mutation(async ({ ctx, input }) => {
+      return Promise.all(
+        input.map((route) =>
+          route.id
+            ? ctx.db.routes.update({
+                where: { id: route.id },
+                data: route,
+              })
+            : ctx.db.routes.create({
+                data: route,
+              }),
+        ),
+      );
     }),
   getCurrentRouteOfBus: publicProcedure
     .input(
