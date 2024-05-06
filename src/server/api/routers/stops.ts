@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const stopsRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.db.stops.findMany()),
@@ -49,5 +53,28 @@ export const stopsRouter = createTRPCRouter({
             return stop;
           });
         });
+    }),
+  addBusStop: privateProcedure
+    .input(
+      z.object({
+        id: z.number().optional(),
+        name: z.string(),
+        latitude: z.number().optional(),
+        longitude: z.number().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (input.id) {
+        return ctx.db.stops.update({
+          where: {
+            id: input.id,
+          },
+          data: input,
+        });
+      } else {
+        await ctx.db.stops.create({
+          data: input,
+        });
+      }
     }),
 });

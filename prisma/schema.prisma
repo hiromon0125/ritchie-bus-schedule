@@ -23,8 +23,8 @@ model Bus {
 model Stops {
   id        Int            @id @default(autoincrement())
   name      String?
-  latitude  Float
-  longitude Float
+  latitude  Float          @default(0)
+  longitude Float          @default(0)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
   outbounds Connections[]  @relation("outbounds")
