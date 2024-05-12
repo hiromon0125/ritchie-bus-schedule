@@ -2,7 +2,13 @@
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useState } from "react";
-import { MdInfoOutline } from "react-icons/md";
+import { IoMdSave, IoMdTrash } from "react-icons/io";
+import {
+  MdAddBox,
+  MdAddToPhotos,
+  MdInfoOutline,
+  MdOutlineClear,
+} from "react-icons/md";
 import Select, { type StylesConfig } from "react-select";
 import { Tooltip } from "react-tooltip";
 import { api } from "t/react";
@@ -73,7 +79,14 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
 }
 
 function EditBusRoute({ busId }: { busId: number }) {
-  const { data } = api.routes.getAllByBusId.useQuery({ busId });
+  const { data } = api.routes.getAllByBusId.useQuery(
+    { busId },
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    },
+  );
   const { data: stops } = api.stops.getAll.useQuery();
   const { mutate } = api.routes.updateRoutes.useMutation();
   const [selectedStops, setStops] = useState<number[]>([]);
@@ -169,7 +182,9 @@ function EditBusRoute({ busId }: { busId: number }) {
                   key={index}
                   className="flex w-full flex-row gap-1 overflow-scroll "
                 >
-                  <p className=" w-20 p-1">{input.at(index)?.index}</p>
+                  <div className=" flex w-20 flex-col justify-center bg-slate-200 p-1">
+                    <p>{input.at(index)?.index}</p>
+                  </div>
                   <input
                     type="number"
                     className="w-20 p-1"
@@ -214,7 +229,7 @@ function EditBusRoute({ busId }: { busId: number }) {
                         inputElement.value = "";
                       }}
                     >
-                      X
+                      <MdOutlineClear />
                     </button>
                   </div>
                   <input
@@ -242,29 +257,33 @@ function EditBusRoute({ busId }: { busId: number }) {
           </div>
         </div>
       </div>
-      <div className=" pt-2">
+      <div className=" mb-8 flex flex-row pt-2">
         <button
           onClick={handleSubmit}
-          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
         >
-          Submit
+          <IoMdSave />
+          Save
         </button>
         <button
           onClick={addNewRoute}
-          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
         >
+          <MdAddBox />
           Add
         </button>
         <button
           onClick={addMultipleRoutes}
-          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
         >
+          <MdAddToPhotos />
           Add multiple
         </button>
         <button
           onClick={rmRoute}
-          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
         >
+          <IoMdTrash color="rgb(239 68 68 / var(--tw-border-opacity))" />
           Remove
         </button>
       </div>
