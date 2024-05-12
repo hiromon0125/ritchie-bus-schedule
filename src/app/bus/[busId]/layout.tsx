@@ -1,7 +1,7 @@
+import Header from "@/header";
 import { TRPCClientError } from "@trpc/client";
 import React from "react";
-import { api } from "../../../trpc/server";
-import Header from "../../_components/header";
+import { api } from "t/server";
 
 async function layout({
   children,

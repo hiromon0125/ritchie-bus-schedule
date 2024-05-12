@@ -1,6 +1,6 @@
 import SaveStatus from "@/SaveStatus";
-import EditBusDetail from "@/editBusDetail";
-import EditBusRoute from "@/editBusRoute";
+import EditBusDetail from "@/editors/editBusDetail";
+import EditBusRoute from "@/editors/editBusRoute";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { api } from "t/server";

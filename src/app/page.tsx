@@ -1,6 +1,6 @@
+import BusList, { BusListSkeleton } from "@/busStatus";
+import Header from "@/header";
 import { Suspense } from "react";
-import BusList, { BusListSkeleton } from "./_components/busStatus";
-import Header from "./_components/header";
 
 export default async function Home() {
   return (

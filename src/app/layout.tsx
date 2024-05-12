@@ -3,10 +3,10 @@ import "~/styles/globals.css";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
+import Footer from "@/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
-import { TRPCReactProvider } from "~/trpc/react";
-import Footer from "./_components/footer";
+import { TRPCReactProvider } from "t/react";
 
 const inter = Inter({
   subsets: ["latin"],

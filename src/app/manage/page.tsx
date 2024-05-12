@@ -1,8 +1,8 @@
-import EditBusList from "@/editBusList";
+import EditBusList from "@/editors/editBusList";
+import EditStopList from "@/editors/editStopList";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { api } from "t/server";
-import EditStopList from "../_components/editStopList";
 
 async function Page() {
   const { userId } = auth();

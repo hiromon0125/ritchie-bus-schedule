@@ -1,5 +1,5 @@
+import Header from "@/header";
 import Link from "next/link";
-import Header from "../../_components/header";
 
 function Page({ params }: { params: { stopId: string } }) {
   const stopId = parseInt(params.stopId);

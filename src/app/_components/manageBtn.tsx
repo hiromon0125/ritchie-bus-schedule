@@ -1,7 +1,7 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { api } from "../../trpc/react";
+import { api } from "t/react";
 
 function ManageButton() {
   const router = useRouter();

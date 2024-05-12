@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { api } from "../../trpc/server";
-import { type RouterOutputs } from "../../trpc/shared";
+import { api } from "t/server";
+import { type RouterOutputs } from "t/shared";
 import BusStatusString from "./busStatusString";
 import { type Bus } from "./types";
 

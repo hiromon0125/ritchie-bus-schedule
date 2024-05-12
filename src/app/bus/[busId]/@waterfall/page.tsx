@@ -1,8 +1,8 @@
+import WaterfallBusTimeline from "@/waterfall-bus-timeline";
 import { TRPCClientError } from "@trpc/client";
 import _ from "lodash";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { api } from "../../../../trpc/server";
-import WaterfallBusTimeline from "../../../_components/waterfall-bus-timeline";
+import { api } from "t/server";
 
 async function page({ params }: { params: { busId: string } }) {
   const busId = parseInt(params.busId);

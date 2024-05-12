@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
+import { api } from "t/react";
 import iconStyles from "~/styles/animated-icon.module.css";
-import { api } from "../../trpc/react";
 import { useBusStatus } from "./hooks";
 import { type Bus, type BusRoute, type BusStop } from "./types";
 
