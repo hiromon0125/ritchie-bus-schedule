@@ -77,4 +77,15 @@ export const stopsRouter = createTRPCRouter({
         });
       }
     }),
+  deleteBusStop: privateProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
+    .mutation(({ ctx, input }) =>
+      ctx.db.stops.delete({
+        where: input,
+      }),
+    ),
 });

@@ -1,6 +1,7 @@
 "use client";
 import _ from "lodash";
 import { useEffect, useState } from "react";
+import { FaTrash } from "react-icons/fa";
 import { api } from "t/react";
 import type { RouterOutputs } from "t/shared";
 
@@ -12,9 +13,31 @@ type InputStop = Partial<RouterOutputs["stops"]["getAll"][0]> & {
 export default function EditStopList() {
   const { data: savedList, refetch } = api.stops.getAll.useQuery();
   const { mutateAsync: save, isLoading } = api.stops.addBusStop.useMutation();
+  const { mutateAsync: deleteStop } = api.stops.deleteBusStop.useMutation();
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [onUserFocused, setOnUserFocused] = useState(false);
   const [list, setList] = useState<InputStop[]>(
     savedList?.map((o) => ({ ...o, name: o.name ?? "", saved: true })) ?? [],
   );
+
+  let focusTimeout: NodeJS.Timeout | null = null;
+  function focusOnLastInput() {
+    if (focusTimeout) {
+      clearTimeout(focusTimeout);
+    }
+    const focus = () => {
+      const inputs = document.getElementsByClassName(
+        "stop-input",
+      ) as HTMLCollectionOf<HTMLInputElement>;
+      const input = inputs[inputs.length - 1];
+      if (!input) {
+        focusTimeout = setTimeout(focus, 1);
+        return;
+      }
+      input.focus();
+    };
+    focus();
+  }
 
   const addNewStop = () => {
     const newStop = {
@@ -22,6 +45,7 @@ export default function EditStopList() {
       saved: false,
     };
     setList((ls) => [...ls, newStop]);
+    focusOnLastInput();
   };
 
   const saveStops = async () => {
@@ -31,13 +55,28 @@ export default function EditStopList() {
     await refetch();
   };
 
+  const onDelete = async (index: number) => {
+    let stop;
+    if ((stop = list.at(index))?.saved && stop.id) {
+      // delete from db
+      await deleteStop({ id: stop.id });
+      await refetch();
+    } else {
+      setList((ls) => {
+        const newList = [...ls];
+        newList.splice(index, 1);
+        return newList;
+      });
+    }
+  };
+
   useEffect(() => {
     if (savedList) {
       setList((ls) => {
         const unsavedList = _.filter(ls, { saved: false });
         return [
-          ...unsavedList,
           ...savedList.map((o) => ({ ...o, name: o.name ?? "", saved: true })),
+          ...unsavedList,
         ];
       });
     }
@@ -65,12 +104,17 @@ export default function EditStopList() {
           <div className=" p-2 pl-0">No Stops</div>
         ) : (
           list.map((stop, index) => (
-            <div className=" flex w-full flex-row">
+            <div
+              className=" flex w-full flex-row even:bg-slate-200"
+              key={index}
+              onMouseEnter={() => !onUserFocused && setHoveredIndex(index)}
+              onMouseLeave={() => !onUserFocused && setHoveredIndex(null)}
+            >
               <p className=" w-12 border-r-2 border-black py-1">
                 {stop.id ?? "--"}
               </p>
               <input
-                className=" flex-1 bg-transparent py-1 pl-3"
+                className=" stop-input flex-1 bg-transparent py-1 pl-3"
                 value={stop.name}
                 onChange={(e) =>
                   setList((ls) => {
@@ -79,7 +123,22 @@ export default function EditStopList() {
                     return newList;
                   })
                 }
+                onFocus={() => {
+                  setOnUserFocused(true);
+                  setHoveredIndex(index);
+                }}
+                onBlur={() => setOnUserFocused(false)}
+                onKeyDown={(e) => e.key === "Enter" && addNewStop()}
               />
+              {hoveredIndex !== index ? null : (
+                <button
+                  className=" mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-red-600 bg-white px-1 text-red-600"
+                  onClick={() => onDelete(index)}
+                >
+                  <FaTrash color="red" />
+                  Delete
+                </button>
+              )}
             </div>
           ))
         )}

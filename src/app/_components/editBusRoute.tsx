@@ -1,7 +1,10 @@
 "use client";
 import _ from "lodash";
+import { DateTime } from "luxon";
 import { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
+import { MdInfoOutline } from "react-icons/md";
+import Select, { type StylesConfig } from "react-select";
+import { Tooltip } from "react-tooltip";
 import { api } from "t/react";
 import { type RouterInputs } from "t/shared";
 import { z } from "zod";
@@ -10,14 +13,18 @@ type RouteObj = RouterInputs["routes"]["updateRoutes"][0];
 type RouteInput = Partial<RouteObj> & Pick<RouteObj, "index" | "busId">;
 type RoutesArr = RouteInput[];
 
-function createNewDate(): Date {
-  const date = new Date();
-  date.setFullYear(2024);
-  date.setMonth(1);
-  date.setDate(1);
-  date.setHours(0, 0, 0, 0);
-  return date;
-}
+const selectStyles: StylesConfig<{ value: number }, true> = {
+  control: (styles) => ({
+    ...styles,
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderColor: "black",
+    ":hover": {
+      borderColor: "black",
+      backgroundColor: "rgb(226 232 240 / var(--tw-bg-opacity))",
+    },
+  }),
+};
 
 function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   const newRoute = {
@@ -25,7 +32,7 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
       busId,
       stopId: stops[0] ?? 0,
       index: 0,
-      deptTime: createNewDate(),
+      deptTime: new Date(),
     }),
   };
   newRoute.index += 1;
@@ -67,8 +74,9 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
 
 function EditBusRoute({ busId }: { busId: number }) {
   const { data } = api.routes.getAllByBusId.useQuery({ busId });
+  const { data: stops } = api.stops.getAll.useQuery();
   const { mutate } = api.routes.updateRoutes.useMutation();
-  const [stops, setStops] = useState<number[]>([]);
+  const [selectedStops, setStops] = useState<number[]>([]);
   const [input, setInput] = useState<RoutesArr>(
     () =>
       data?.map(
@@ -102,58 +110,46 @@ function EditBusRoute({ busId }: { busId: number }) {
   };
 
   const addNewRoute = () =>
-    setInput([...input, createNewRoute(stops, input, busId)]);
+    setInput([...input, createNewRoute(selectedStops, input, busId)]);
 
   const addMultipleRoutes = () => {
     const currInput = [...input];
-    stops.forEach((_) =>
-      currInput.push(createNewRoute(stops, currInput, busId)),
+    selectedStops.forEach((_) =>
+      currInput.push(createNewRoute(selectedStops, currInput, busId)),
     );
     setInput(currInput);
   };
 
   const rmRoute = () => setInput(input.slice(0, -1));
 
-  const addNewStop = () => setStops([...stops, 0]);
-
-  const rmStop = () => setStops(stops.slice(0, -1));
-
   return (
     <>
-      <div className=" mt-4">
-        <div className=" max-w-3xl overflow-scroll">
-          {stops.map((bus, index) => (
-            <input
-              key={index}
-              type="number"
-              className="w-20 "
-              placeholder="Stop ID"
-              value={bus}
-              onChange={(e) => {
-                setStops((stops) => {
-                  const newStops = [...stops];
-                  newStops[index] = e.target.valueAsNumber ?? 0;
-                  return newStops;
-                });
-              }}
-            />
-          ))}
+      <div className=" mt-4 flex flex-col gap-2">
+        <div className=" flex flex-row items-center gap-1">
+          <p className=" text-lg">Bus Stop List </p>
+          <a
+            data-tooltip-id="bus-list-info"
+            data-tooltip-content="This selection will be used to auto fill stops for the bus route."
+            data-tooltip-place="top"
+          >
+            <MdInfoOutline />
+          </a>
+          <Tooltip id="bus-list-info" />
         </div>
-        <br />
-        <button
-          onClick={addNewStop}
-          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
-        >
-          add
-        </button>
-        <button
-          onClick={rmStop}
-          className=" mr-3 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
-        >
-          remove
-        </button>
+        <Select
+          isMulti
+          closeMenuOnSelect={false}
+          options={stops?.map((stop) => ({
+            value: stop.id,
+            label: `${stop.id} ${stop.name}`,
+          }))}
+          onChange={(selection) => setStops(selection.map((s) => s.value))}
+          styles={selectStyles}
+          placeholder="Select stops..."
+        />
       </div>
       <br />
+      <p className=" mb-2 text-lg">Bus Route</p>
       <div className=" relative flex flex-col overflow-scroll rounded-lg border-2 border-black bg-slate-200">
         <div className=" flex w-full flex-row gap-1 border-x-2 p-1 pt-2">
           <p className=" w-20">Stop ID</p>
@@ -198,10 +194,19 @@ function EditBusRoute({ busId }: { busId: number }) {
                       type="time"
                       className=" flex-1 p-1"
                       id={`arr-${index}`}
+                      value={
+                        input[index]!.arriTime != undefined
+                          ? DateTime.fromJSDate(
+                              input[index]!.arriTime!,
+                            ).toFormat("HH:mm")
+                          : ""
+                      }
                       onChange={(e) => {
                         if (e.target.valueAsDate === null) return;
                         const newInput = [...input];
-                        newInput[index]!.arriTime = e.target.valueAsDate;
+                        newInput[index]!.arriTime = new Date(
+                          `01/01/1970 ${e.target.value}`,
+                        );
                         setInput(newInput);
                       }}
                     />
@@ -223,11 +228,19 @@ function EditBusRoute({ busId }: { busId: number }) {
                   <input
                     type="time"
                     className="flex-1 p-1"
+                    value={
+                      input[index]!.deptTime != undefined
+                        ? DateTime.fromJSDate(input[index]!.deptTime!).toFormat(
+                            "HH:mm",
+                          )
+                        : ""
+                    }
                     onChange={(e) => {
-                      console.log(e.target.valueAsDate);
-                      if (e.target.valueAsDate === null) return;
+                      if (e.target.value === null) return;
                       const newInput = [...input];
-                      newInput[index]!.deptTime = e.target.valueAsDate;
+                      newInput[index]!.deptTime = new Date(
+                        `01/01/1970 ${e.target.value}`,
+                      );
                       setInput(newInput);
                     }}
                   />
