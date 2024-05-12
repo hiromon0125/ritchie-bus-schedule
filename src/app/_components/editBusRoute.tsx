@@ -78,14 +78,16 @@ function EditBusRoute({ busId }: { busId: number }) {
   const { mutate } = api.routes.updateRoutes.useMutation();
   const [selectedStops, setStops] = useState<number[]>([]);
   const [input, setInput] = useState<RoutesArr>(
-    () =>
+    _.sortBy(
       data?.map(
         (route) =>
           ({
             ...route,
             arriTime: route.arriTime ?? undefined,
           }) as RouteInput,
-      ) ?? [],
+      ),
+      "index",
+    ) ?? [],
   );
 
   const handleSubmit = () => {
@@ -152,8 +154,8 @@ function EditBusRoute({ busId }: { busId: number }) {
       <p className=" mb-2 text-lg">Bus Route</p>
       <div className=" relative flex flex-col overflow-scroll rounded-lg border-2 border-black bg-slate-200">
         <div className=" flex w-full flex-row gap-1 border-x-2 p-1 pt-2">
-          <p className=" w-20">Stop ID</p>
           <p className=" w-20">Index</p>
+          <p className=" w-20">Stop ID</p>
           <p className=" flex-1">Arrival Time</p>
           <p className=" flex-1">Departure Time</p>
         </div>
@@ -167,6 +169,7 @@ function EditBusRoute({ busId }: { busId: number }) {
                   key={index}
                   className="flex w-full flex-row gap-1 overflow-scroll "
                 >
+                  <p className=" w-20 p-1">{input.at(index)?.index}</p>
                   <input
                     type="number"
                     className="w-20 p-1"
@@ -175,17 +178,6 @@ function EditBusRoute({ busId }: { busId: number }) {
                     onChange={(e) => {
                       const newInput = [...input];
                       newInput[index]!.stopId = e.target.valueAsNumber;
-                      setInput(newInput);
-                    }}
-                  />
-                  <input
-                    type="number"
-                    className=" w-20 p-1"
-                    placeholder="Index"
-                    value={route.index}
-                    onChange={(e) => {
-                      const newInput = [...input];
-                      newInput[index]!.index = e.target.valueAsNumber;
                       setInput(newInput);
                     }}
                   />
