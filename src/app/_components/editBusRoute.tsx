@@ -88,7 +88,7 @@ function EditBusRoute({ busId }: { busId: number }) {
     },
   );
   const { data: stops } = api.stops.getAll.useQuery();
-  const { mutate } = api.routes.updateRoutes.useMutation();
+  const { mutate, status: savingState } = api.routes.updateRoutes.useMutation();
   const [selectedStops, setStops] = useState<number[]>([]);
   const [input, setInput] = useState<RoutesArr>(
     _.sortBy(
@@ -260,7 +260,8 @@ function EditBusRoute({ busId }: { busId: number }) {
       <div className=" mb-8 flex flex-row pt-2">
         <button
           onClick={handleSubmit}
-          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800 disabled:opacity-50"
+          disabled={savingState === "loading"}
         >
           <IoMdSave />
           Save
