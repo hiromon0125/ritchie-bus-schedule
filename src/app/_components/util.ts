@@ -63,7 +63,20 @@ function getIndexOfCurrentLocation(routes: BusRoute[], now: Date): number {
   return (index + 1) / 2 - 1;
 }
 
-export function getStopStatus(routes: BusRoute[], now: Date) {
+export function getStopStatus(
+  routes: BusRoute[],
+  now: Date,
+  weekendBus: boolean,
+) {
+  if ((now.getDay() === 0 || now.getDay() === 6) && !weekendBus)
+    return {
+      statusMessage: "Out of service",
+      location: undefined,
+      isMoving: false,
+      index: -2,
+      nextUpdate: 5 * 60 * 1000,
+    };
+  // fix the date to 1970
   now.setDate(1);
   now.setFullYear(1970);
   now.setMonth(0);

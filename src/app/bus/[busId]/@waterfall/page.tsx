@@ -21,6 +21,7 @@ async function page({ params }: { params: { busId: string } }) {
     <WaterfallBusTimeline
       routes={routes}
       stops={stops}
+      bus={bus}
       upIcon={
         <div style={{ backgroundColor: bus.color ?? "white" }}>
           <div className=" translate-y-[-2px]">

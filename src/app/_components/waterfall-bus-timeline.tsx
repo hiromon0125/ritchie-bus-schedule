@@ -3,24 +3,22 @@ import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import style from "~/styles/bus.module.css";
-import { type RouterOutputs } from "../../trpc/shared";
 import { useBusStatus } from "./hooks";
-import { type BusRoute } from "./types";
+import { type Bus, type BusRoute, type BusStop } from "./types";
 import { getArriTime, type getStopStatus } from "./util";
 
-type BusStop = RouterOutputs["stops"]["getOneByID"];
-
 interface Props {
-  routes: RouterOutputs["routes"]["getAllByBusId"];
-  stops: RouterOutputs["stops"]["getOneByID"][];
+  routes: BusRoute[];
+  stops: BusStop[];
+  bus: Bus;
   upIcon: React.ReactNode; // serverside loaded buttons
   downIcon: React.ReactNode; // serverside loaded buttons
 }
 
 function WaterfallBusTimeline(props: Props) {
-  const { routes, stops, upIcon, downIcon } = props;
+  const { routes, stops, bus, upIcon, downIcon } = props;
   const router = useRouter();
-  const status = useBusStatus(routes);
+  const status = useBusStatus(routes, bus);
   const firstBusIndex = Math.ceil(status.index);
   const [stopIndex, setStopIndex] = useState(
     firstBusIndex > 0 ? firstBusIndex : 0,
