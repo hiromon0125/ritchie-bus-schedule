@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { api } from "../../trpc/server";
 import { type RouterOutputs } from "../../trpc/shared";
 import BusStatusString from "./busStatusString";
+import { type Bus } from "./types";
 
 type BusStatusProps =
   | {
@@ -10,7 +11,7 @@ type BusStatusProps =
       bus?: never;
     }
   | {
-      bus: RouterOutputs["bus"]["getByID"];
+      bus: Bus;
       busID?: never;
     };
 
@@ -32,7 +33,7 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
               {busObj.id} | {busObj?.name}
             </h2>
           </div>
-          <BusStatusString routes={routes} />
+          <BusStatusString routes={routes} bus={bus ?? null} />
         </div>
       </div>
     </Link>

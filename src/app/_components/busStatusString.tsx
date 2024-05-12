@@ -2,15 +2,17 @@
 import Image from "next/image";
 import iconStyles from "~/styles/animated-icon.module.css";
 import { api } from "../../trpc/react";
-import { type RouterOutputs } from "../../trpc/shared";
 import { useBusStatus } from "./hooks";
+import { type Bus, type BusRoute, type BusStop } from "./types";
 
 export default function BusStatusString({
   routes,
+  bus,
 }: {
-  routes: RouterOutputs["routes"]["getAllByBusId"];
+  routes: BusRoute[];
+  bus: Bus;
 }) {
-  const { isMoving, statusMessage, location } = useBusStatus(routes);
+  const { isMoving, statusMessage, location } = useBusStatus(routes, bus);
   const { data: stop } = api.stops.getOneByID.useQuery({
     id: location?.stopId ?? 0,
   });
@@ -51,11 +53,13 @@ export default function BusStatusString({
 export function BusStatusBig({
   routes,
   stops,
+  bus,
 }: {
-  routes: RouterOutputs["routes"]["getAllByBusId"];
-  stops: RouterOutputs["stops"]["getOneByID"][];
+  routes: BusRoute[];
+  stops: BusStop[];
+  bus: Bus;
 }) {
-  const { isMoving, statusMessage, location } = useBusStatus(routes);
+  const { isMoving, statusMessage, location } = useBusStatus(routes, bus);
   return (
     <>
       <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>

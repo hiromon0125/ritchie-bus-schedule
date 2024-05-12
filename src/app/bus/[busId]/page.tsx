@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { busId: string } }) {
   return (
     <>
       <ScrollToTopButton color={bus.color} />
-      <BusStatusBig routes={routes} stops={stops} />
+      <BusStatusBig routes={routes} stops={stops} bus={bus} />
       <h2 className=" text-2xl font-bold sm:mb-2 sm:text-4xl">Description</h2>
       <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">{bus.description}</p>
       <StopInfo routes={routes} stops={stops} bus={bus} />

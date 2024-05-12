@@ -77,10 +77,12 @@ export function getStopStatus(
       nextUpdate: 5 * 60 * 1000,
     };
   // fix the date to 1970
-  now.setDate(1);
-  now.setFullYear(1970);
-  now.setMonth(0);
-  const index = getIndexOfCurrentLocation(routes, now);
+  const currTime = new Date(now.getTime());
+  currTime.setDate(1);
+  currTime.setFullYear(1970);
+  currTime.setMonth(0);
+  const index = getIndexOfCurrentLocation(routes, currTime);
+
   if (index === -2) {
     return {
       statusMessage: "Out of service",
@@ -93,7 +95,7 @@ export function getStopStatus(
     const nextLocation = routes[index === -0.5 ? 0 : Math.floor(index + 1)]!;
     const nextNextLocation = routes[index === -0.5 ? 1 : Math.floor(index + 2)];
     const arriTime = getArriTime(nextLocation, nextNextLocation);
-    if (arriTime.getTime() - now.getTime() >= 60 * 60 * 1000) {
+    if (arriTime.getTime() - currTime.getTime() >= 60 * 60 * 1000) {
       return {
         statusMessage: "Out of service",
         location: undefined,
@@ -102,26 +104,26 @@ export function getStopStatus(
         nextUpdate: 5 * 60 * 1000,
       };
     }
-    const arrivalMessage = `Arriving ${getRelative(now, arriTime)}`;
+    const offsetTime = getRelative(currTime, arriTime);
     const arriDT = DateTime.fromJSDate(arriTime);
     return {
-      statusMessage: `${arrivalMessage} • ${arriDT.toFormat("h:mm a")}`,
+      statusMessage: `Arriving ${offsetTime} • ${arriDT.toFormat("h:mm a")}`,
       location: nextLocation,
       isMoving: true,
       index,
-      nextUpdate: getTimeToUpdateNext(arrivalMessage),
+      nextUpdate: getTimeToUpdateNext(offsetTime ?? "minutes"),
     };
   }
   const currentLocation = routes[Math.floor(index)]!;
   const deptTime = currentLocation.deptTime;
   const deptDT = DateTime.fromJSDate(deptTime);
-  const offsetTime = getRelative(now, deptTime);
+  const offsetTime = getRelative(currTime, deptTime);
   const departingMessage = `Departing ${offsetTime} • ${deptDT.toFormat("h:mm a")}`;
   return {
     statusMessage: departingMessage,
     location: currentLocation,
     isMoving: false,
     index,
-    nextUpdate: getTimeToUpdateNext(departingMessage),
+    nextUpdate: getTimeToUpdateNext(offsetTime ?? "minutes"), // default to update every minute
   };
 }
