@@ -1,65 +1,6 @@
 import { DateTime } from "luxon";
 import { type BusRoute } from "./types";
 
-function getNextSaturday(): Date {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() + (day === 0 ? 6 : 6 - day); // adjust when day is sunday
-  return new Date(now.setDate(diff));
-}
-function getNextMonday(): Date {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() + (day === 0 ? 1 : 8 - day); // adjust when day is sunday
-  return new Date(now.setDate(diff));
-}
-function editDate(
-  date: Date,
-  { year, month, day }: { year?: number; month?: number; day?: number },
-): Date {
-  const newDate = new Date(date);
-  if (year) {
-    newDate.setFullYear(year);
-  }
-  if (month) {
-    newDate.setMonth(month);
-  }
-  if (day) {
-    newDate.setDate(day);
-  }
-  return newDate;
-}
-export function isWeekend(date: Date): boolean {
-  return [0, 6].includes(date.getDay());
-}
-/**
- * - Returns a date that today's date with the time of the given date.
- * - If given date is not a weekend and today is a weekend, the date will be the next Monday.
- * - If given date is a weekend and today is not a weekend, the date will be the next Saturday.
- * @param date date to fix
- * @returns date that follows the rules above
- */
-export function fixDate(date: Date): Date {
-  const now = new Date();
-  const isDateWeekend = isWeekend(date);
-  const isNowWeekend = isWeekend(now);
-  const dateToCorrectTo =
-    isDateWeekend && !isNowWeekend
-      ? getNextSaturday()
-      : isNowWeekend && !isDateWeekend
-        ? getNextMonday()
-        : now;
-  return editDate(date, {
-    year: dateToCorrectTo.getFullYear(),
-    month: dateToCorrectTo.getMonth(),
-    day: dateToCorrectTo.getDate(),
-  });
-}
-
-export function getNowInUTC() {
-  const now = new Date();
-  return new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-}
 export function getRelative(now: Date, time: Date) {
   return DateTime.fromJSDate(time).toRelative({
     base: DateTime.fromJSDate(now),
@@ -78,18 +19,18 @@ export function offSetByMinutes(date: Date, offset?: number): Date {
 
 export function getArriTime(current: BusRoute, prev?: BusRoute) {
   if (current.arriTime) {
-    return fixDate(current.arriTime);
+    return current.arriTime;
   } else if (!prev) {
-    return offSetByMinutes(fixDate(current.deptTime));
+    return offSetByMinutes(current.deptTime);
   }
   const prevDeptTime = prev.deptTime;
   const currentDeptTime = current.deptTime;
   const diff = currentDeptTime.getTime() - prevDeptTime.getTime();
 
   if (diff < DEFAULT_OFFSET) {
-    return fixDate(currentDeptTime);
+    return currentDeptTime;
   }
-  return offSetByMinutes(fixDate(currentDeptTime));
+  return offSetByMinutes(currentDeptTime);
 }
 
 /**
@@ -105,20 +46,17 @@ export function getTimeToUpdateNext(status: string | undefined) {
   return 5 * 60 * 1000;
 }
 
-function getIndexOfCurrentLocation(routes: BusRoute[], nowUTC: Date): number {
+function getIndexOfCurrentLocation(routes: BusRoute[], now: Date): number {
   if (routes.length === 0) {
+    console.log("No routes found");
     return -2;
   }
-  // check if it's both a weekday or both a weekend
-  const isWknd = isWeekend(new Date()); // use local time to determine if it's a weekend as dates are not correct for UTC
-  if (isWeekend(routes[0]!.deptTime) != isWknd) {
-    return -2;
-  }
-  const stops = routes.map((route, i) => {
-    return [getArriTime(route, routes[i - 1]), fixDate(route.deptTime)];
-  });
+  const stops = routes.map((route, i) => [
+    getArriTime(route, routes[i - 1]),
+    route.deptTime,
+  ]);
   const listOfTimes = stops.flat();
-  const index = listOfTimes.findIndex((time) => time > nowUTC);
+  const index = listOfTimes.findIndex((time) => time > now);
   if (index === -1) {
     return -2;
   }
@@ -126,6 +64,9 @@ function getIndexOfCurrentLocation(routes: BusRoute[], nowUTC: Date): number {
 }
 
 export function getStopStatus(routes: BusRoute[], now: Date) {
+  now.setDate(1);
+  now.setFullYear(1970);
+  now.setMonth(0);
   const index = getIndexOfCurrentLocation(routes, now);
   if (index === -2) {
     return {
@@ -149,10 +90,9 @@ export function getStopStatus(routes: BusRoute[], now: Date) {
       };
     }
     const arrivalMessage = `Arriving ${getRelative(now, arriTime)}`;
+    const arriDT = DateTime.fromJSDate(arriTime);
     return {
-      statusMessage: `${arrivalMessage} • ${DateTime.fromJSDate(arriTime)
-        .toUTC()
-        .toFormat("h:mm a")}`,
+      statusMessage: `${arrivalMessage} • ${arriDT.toFormat("h:mm a")}`,
       location: nextLocation,
       isMoving: true,
       index,
@@ -160,11 +100,10 @@ export function getStopStatus(routes: BusRoute[], now: Date) {
     };
   }
   const currentLocation = routes[Math.floor(index)]!;
-  const deptTime = fixDate(currentLocation.deptTime);
-  const departingMessage = `Departing ${getRelative(
-    now,
-    deptTime,
-  )} • ${DateTime.fromJSDate(deptTime).toUTC().toFormat("h:mm a")}`;
+  const deptTime = currentLocation.deptTime;
+  const deptDT = DateTime.fromJSDate(deptTime);
+  const offsetTime = getRelative(now, deptTime);
+  const departingMessage = `Departing ${offsetTime} • ${deptDT.toFormat("h:mm a")}`;
   return {
     statusMessage: departingMessage,
     location: currentLocation,

@@ -14,7 +14,7 @@ function StopInfo(params: StopParams) {
   const { routes, stops, bus } = params;
   const [selectedStop, setSelectedStop] = useState<BusStop>();
   const selectedRoutes = selectedStop
-    ? _.filter(routes, { stopId: selectedStop.id })
+    ? _.sortBy(_.filter(routes, { stopId: selectedStop.id }), "index")
     : [];
   return (
     <>
@@ -53,7 +53,7 @@ function StopInfo(params: StopParams) {
               .flat()
               .map((date, i) => {
                 const formattedDate = date
-                  ? DateTime.fromJSDate(date).toUTC()
+                  ? DateTime.fromJSDate(date)
                   : undefined;
                 return (
                   <p

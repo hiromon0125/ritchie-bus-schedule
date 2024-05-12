@@ -18,6 +18,9 @@ export const routesRouter = createTRPCRouter({
         where: {
           busId: input.busId,
         },
+        orderBy: {
+          index: "asc",
+        },
       }),
     ),
   getAllByStopId: publicProcedure

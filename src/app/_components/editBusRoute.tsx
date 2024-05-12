@@ -87,7 +87,14 @@ function EditBusRoute({ busId }: { busId: number }) {
       refetchOnReconnect: false,
     },
   );
-  const { data: stops } = api.stops.getAll.useQuery();
+  const { data: stops, refetch: refecthData } = api.stops.getAll.useQuery(
+    undefined,
+    {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    },
+  );
   const { mutate, status: savingState } = api.routes.updateRoutes.useMutation();
   const [selectedStops, setStops] = useState<number[]>([]);
   const [input, setInput] = useState<RoutesArr>(
@@ -103,7 +110,7 @@ function EditBusRoute({ busId }: { busId: number }) {
     ) ?? [],
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
       const definedInput = z
         .array(
@@ -117,7 +124,7 @@ function EditBusRoute({ busId }: { busId: number }) {
         )
         .parse(input);
       mutate(definedInput);
-      setInput(new Array<RouteObj>());
+      await refecthData();
     } catch (e) {
       // catch if the input is invalid or attribute is missing
       console.error(e);

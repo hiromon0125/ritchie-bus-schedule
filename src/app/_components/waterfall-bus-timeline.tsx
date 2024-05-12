@@ -13,8 +13,8 @@ type BusStop = RouterOutputs["stops"]["getOneByID"];
 interface Props {
   routes: RouterOutputs["routes"]["getAllByBusId"];
   stops: RouterOutputs["stops"]["getOneByID"][];
-  upIcon: React.ReactNode;
-  downIcon: React.ReactNode;
+  upIcon: React.ReactNode; // serverside loaded buttons
+  downIcon: React.ReactNode; // serverside loaded buttons
 }
 
 function WaterfallBusTimeline(props: Props) {
@@ -105,8 +105,8 @@ function Route(prop: {
         <div className={isDeparting ? style.activeStopNode : style.stopNode} />
       </div>
       <p>
-        {DateTime.fromJSDate(arriTime).toUTC().toFormat("h:mm a")} -{" "}
-        {DateTime.fromJSDate(routeToShow.deptTime).toUTC().toFormat("h:mm a")}
+        {DateTime.fromJSDate(arriTime).toFormat("h:mm a")} -{" "}
+        {DateTime.fromJSDate(routeToShow.deptTime).toFormat("h:mm a")}
       </p>
       <p className=" text-xl">{stop?.name}</p>
     </div>
