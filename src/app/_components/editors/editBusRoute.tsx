@@ -1,7 +1,7 @@
 "use client";
 import _ from "lodash";
 import { DateTime } from "luxon";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdSave, IoMdTrash } from "react-icons/io";
 import {
   MdAddBox,
@@ -107,8 +107,23 @@ function EditBusRoute({ busId }: { busId: number }) {
           }) as RouteInput,
       ),
       "index",
-    ) ?? [],
+    ),
   );
+
+  useEffect(() => {
+    setInput(
+      _.sortBy(
+        data?.map(
+          (route) =>
+            ({
+              ...route,
+              arriTime: route.arriTime ?? undefined,
+            }) as RouteInput,
+        ),
+        "index",
+      ),
+    );
+  }, [data]);
 
   const handleSubmit = async () => {
     try {
