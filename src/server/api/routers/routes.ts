@@ -51,16 +51,24 @@ export const routesRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       return Promise.all(
-        input.map((route) =>
-          route.id
-            ? ctx.db.routes.update({
-                where: { id: route.id },
-                data: route,
-              })
-            : ctx.db.routes.create({
-                data: route,
-              }),
-        ),
+        input.map(async (route) => {
+          if (route.id != undefined) {
+            return ctx.db.routes.update({
+              where: { id: route.id },
+              data: route,
+            });
+          } else {
+            await ctx.db.routes.deleteMany({
+              where: {
+                busId: route.busId,
+                index: route.index,
+              },
+            });
+            return ctx.db.routes.create({
+              data: route,
+            });
+          }
+        }),
       );
     }),
   getCurrentRouteOfBus: publicProcedure
