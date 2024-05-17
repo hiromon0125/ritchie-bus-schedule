@@ -114,6 +114,7 @@ export default function EditStopList() {
                 {stop.id ?? "--"}
               </p>
               <input
+                placeholder="Stop Name"
                 className=" stop-input flex-1 bg-transparent py-1 pl-3"
                 value={stop.name}
                 onChange={(e) =>

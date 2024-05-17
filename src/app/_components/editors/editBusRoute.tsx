@@ -223,6 +223,7 @@ function EditBusRoute({ busId }: { busId: number }) {
                       type="time"
                       className=" flex-1 p-1"
                       id={`arr-${index}`}
+                      placeholder="--:--"
                       value={
                         input[index]!.arriTime != undefined
                           ? DateTime.fromJSDate(
@@ -240,6 +241,7 @@ function EditBusRoute({ busId }: { busId: number }) {
                       }}
                     />
                     <button
+                      title="Clear Arrival Time"
                       className=" pr-2"
                       onClick={(_) => {
                         const newInput = [...input];
@@ -255,6 +257,7 @@ function EditBusRoute({ busId }: { busId: number }) {
                     </button>
                   </div>
                   <input
+                    placeholder="--:--"
                     type="time"
                     className="flex-1 p-1"
                     value={
