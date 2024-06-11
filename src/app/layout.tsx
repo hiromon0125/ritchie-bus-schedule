@@ -1,12 +1,13 @@
 import "~/styles/globals.css";
 
+import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
+import Footer from "@/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
-import { TRPCReactProvider } from "~/trpc/react";
-import Footer from "./_components/footer";
+import { TRPCReactProvider } from "t/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
           </TRPCReactProvider>
         </body>
       </html>
+      <Analytics />
     </ClerkProvider>
   );
 }
@@ -35,7 +37,7 @@ export default function RootLayout({
 export const metadata: Metadata = {
   title: "Ritchie's Bus Schedule",
   description:
-    "Best application to check the Rochester Institute of Technology transportation schedule",
+    "Best application to check the Rochester Institute of Technology Bus Schedule",
   applicationName: "Ritchie's Bus Schedule",
   appleWebApp: true,
   themeColor: "#93A3B8",

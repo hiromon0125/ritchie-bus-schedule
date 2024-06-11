@@ -1,10 +1,32 @@
+import { BusStatusBig } from "@/busStatusString";
+import ScrollToTopButton from "@/scrollToTopBtn";
+import StopInfo from "@/stopInfo";
 import { TRPCClientError } from "@trpc/client";
-import { api } from "../../../trpc/server";
-import { BusStatusBig } from "../../_components/busStatusString";
-import ScrollToTopButton from "../../_components/scrollToTopBtn";
-import StopInfo from "../../_components/stopInfo";
+import { track } from "@vercel/analytics/server";
+import { type Metadata } from "next";
+import { api } from "t/server";
 
-export default async function Page({ params }: { params: { busId: string } }) {
+type Props = { params: { busId: string } };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const busId = parseInt(params.busId);
+  if (Number.isNaN(busId)) {
+    throw TRPCClientError.from(
+      Error(`Bus not found (bus id: ${params.busId})`),
+    );
+  }
+  const bus = await api.bus.getByID.query({ id: busId });
+  if (!bus) {
+    throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
+  }
+  await track("Bus Page Viewed", { busId: bus.id });
+  return {
+    title: `Ritche's Bus Schedule | ${bus.id} ${bus.name}`,
+    description: bus.description,
+  };
+}
+
+export default async function Page({ params }: Props) {
   const busId = parseInt(params.busId);
   if (Number.isNaN(busId)) {
     throw TRPCClientError.from(
