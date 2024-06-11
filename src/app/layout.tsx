@@ -41,16 +41,22 @@ export const metadata: Metadata = {
   applicationName: "Ritchie's Bus Schedule",
   appleWebApp: true,
   themeColor: "#93A3B8",
-  authors: {
-    name: "Hiroto Takeuchi",
-    url: "https://github.com/hiromon0125",
-  },
+  authors: [
+    {
+      name: "Hiroto Takeuchi",
+      url: "https://github.com/hiromon0125",
+    },
+    {
+      name: "Sam Ruan",
+      url: "https://github.com/0SMA0",
+    },
+  ],
   keywords: ["RIT", "Bus", "Schedule", "Ritchie", "RIT Bus Schedule"],
-  robots: "index,follow",
+  robots: "index, follow",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://ritchie-bus-schedule.vercel.app",
+    url: "https://rit-bus.app",
     siteName: "Ritchie's Bus Schedule",
     images: [
       {

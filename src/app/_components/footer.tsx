@@ -1,3 +1,5 @@
+import Coffee from "@/buymecoffee";
+
 function Footer() {
   return (
     <div className=" min-h-60 w-full bg-slate-800">
@@ -10,11 +12,20 @@ function Footer() {
               className=" text-slate-200 underline"
               href="https://github.com/hiromon0125"
             >
+              {" "}
               Hiroto Takeuchi
+            </a>{" "}
+            and{" "}
+            <a
+              className=" text-slate-200 underline"
+              href="https://github.com/0SMA0"
+            >
+              Sam Ruan
             </a>
             .<br />
             <br />
           </p>
+          <Coffee />
         </div>
         <div className=" flex-1 sm:pl-16">
           <div className=" flex flex-col gap-4 p-4">
