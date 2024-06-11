@@ -1,7 +1,6 @@
 "use client";
 import _ from "lodash";
 import { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
 import { api } from "t/react";
 import { type RouterInputs } from "t/shared";
 import { z } from "zod";
