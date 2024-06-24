@@ -60,9 +60,10 @@ export const metadata: Metadata = {
     siteName: "Ritchie's Bus Schedule",
     images: [
       {
-        url: "/og-bus.jpg",
-        width: 1024,
-        height: 768,
+        url: "/icons/bus-512x512.png",
+        secureUrl: "/icons/bus-512x512.png",
+        width: 512,
+        height: 512,
         alt: "RIT Bus Schedule",
       },
     ],
