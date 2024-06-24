@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { createTRPCRouter, privateProcedure } from "../trpc";
+import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 
 export const manageRouter = createTRPCRouter({
-  isManager: privateProcedure
+  isManager: publicProcedure
     .input(
       z.object({
         userId: z.string(),

@@ -35,12 +35,12 @@ export default function RootLayout({
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rit-bus.app"),
   title: "Ritchie's Bus Schedule",
   description:
     "Best application to check the Rochester Institute of Technology Bus Schedule",
   applicationName: "Ritchie's Bus Schedule",
   appleWebApp: true,
-  themeColor: "#93A3B8",
   authors: [
     {
       name: "Hiroto Takeuchi",
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://rit-bus.app",
+    url: "/",
     siteName: "Ritchie's Bus Schedule",
     images: [
       {
