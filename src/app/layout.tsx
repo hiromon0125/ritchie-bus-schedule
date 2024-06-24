@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/icons/bus-512x512.png",
-        secureUrl: "/icons/bus-512x512.png",
+        secureUrl: "/ritches-bus-schedule-banner.png",
         width: 200,
         height: 200,
         alt: "RIT Bus Schedule",
