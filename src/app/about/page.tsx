@@ -70,33 +70,81 @@ async function Page() {
         </div>
       </div>
       <div className="z-10 w-screen bg-[#2A609B] text-white">
-        <div className=" m-auto max-w-screen-lg">
-          <p className=" text-lg">
-            <strong>Key Features</strong>
-          </p>
-          <p>
-            Ritchie&#39;s Bus Schedule offers a range of features to enhance
-            your bus-riding experience:
-          </p>
-          <ul>
-            <li>
-              <strong>Unified Status Page:</strong> View the status of all RIT
-              buses at a glance on a single page.
-            </li>
-            <li>
-              <strong>Detailed Bus Pages:</strong> Access detailed breakdowns of
-              individual bus statuses.
-            </li>
-            <li>
-              <strong>Stop Page:</strong> Find out which bus is coming next at a
-              particular stop.
-            </li>
-            <li>
-              <strong>Customization:</strong> Plans to allow users to customize
-              their favorite buses and stops, displaying them prominently on the
-              homepage for quick access.
-            </li>
-          </ul>
+        <div className=" m-auto max-w-screen-lg translate-y-[-5rem]">
+          <Subtitle white>Key Features</Subtitle>
+          <div className=" mx-6 flex flex-col gap-4 lg:flex-row">
+            <div className=" flex flex-1 flex-col gap-4">
+              <div className=" flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md">
+                <div className=" relative m-auto">
+                  <Image
+                    src="/images/feature-1.png"
+                    alt="Unified Status Page"
+                    width={504}
+                    height={300}
+                  />
+                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-gradient-to-t from-[#3374BBFF] to-[#3374BB00]" />
+                </div>
+                <div className=" h-24 bg-gradient-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
+                  <p className=" text-lg font-bold">Unified Status Page</p>
+                  <p>
+                    View the status of all RIT buses at a glance on a single
+                    page.
+                  </p>
+                </div>
+              </div>
+              <div className=" flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md">
+                <div className=" relative m-auto">
+                  <Image
+                    src="/images/feature-2.png"
+                    alt="Unified Status Page"
+                    width={504}
+                    height={300}
+                  />
+                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-gradient-to-t from-[#3374BBFF] to-[#3374BB00]" />
+                </div>
+                <div className=" h-24 bg-gradient-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
+                  <p className=" text-lg font-bold">Detailed Bus Pages</p>
+                  <p>Access detailed breakdowns of individual bus statuses.</p>
+                </div>
+              </div>
+            </div>
+            <div className=" flex flex-1 flex-col gap-4">
+              <div className=" flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md">
+                <div className=" relative m-auto">
+                  <Image
+                    src="/images/feature-coming.png"
+                    alt="Unified Status Page"
+                    width={504}
+                    height={300}
+                  />
+                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-gradient-to-t from-[#3374BBFF] to-[#3374BB00]" />
+                </div>
+                <div className=" h-24 bg-gradient-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
+                  <p className=" text-lg font-bold">Stop Page</p>
+                  <p>Find out which bus is coming next at a particular stop.</p>
+                </div>
+              </div>
+              <div className=" flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md">
+                <div className=" relative m-auto">
+                  <Image
+                    src="/images/feature-coming.png"
+                    alt="Unified Status Page"
+                    width={504}
+                    height={300}
+                  />
+                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-gradient-to-t from-[#3374BBFF] to-[#3374BB00]" />
+                </div>
+                <div className=" h-24 bg-gradient-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
+                  <p className=" text-lg font-bold">Customization</p>
+                  <p>
+                    Favorite buses and stops to display on the top of the
+                    homepage for quick access.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul></ul>
           <p className=" mt-4 text-lg">
             <strong>Development Journey</strong>
           </p>
