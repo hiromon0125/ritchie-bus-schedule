@@ -70,7 +70,7 @@ async function Page() {
         </div>
       </div>
       <div className="z-10 w-screen bg-[#2A609B] text-white">
-        <div className=" m-auto max-w-screen-lg translate-y-[-5rem]">
+        <div className=" m-auto mb-[-5rem] max-w-screen-lg translate-y-[-5rem]">
           <Subtitle white>Key Features</Subtitle>
           <div className=" mx-6 flex flex-col gap-4 lg:flex-row">
             <div className=" flex flex-1 flex-col gap-4">
@@ -144,31 +144,98 @@ async function Page() {
               </div>
             </div>
           </div>
-          <ul></ul>
-          <p className=" mt-4 text-lg">
-            <strong>Development Journey</strong>
-          </p>
-          <p>
-            The project began in December 2023, and since then, it has seen
-            significant progress. Initially developed by Hiroto Takeuchi, the
-            team has recently expanded to include another developer, Sam Ruan.
-            Hiroto leads the project and maintains the app, while Sam
-            contributes to the development of new features.
-          </p>
-          <p className=" mt-4 text-lg">
-            <strong>Technologies Used</strong>
-          </p>
-          <p>
-            Ritchie&#39;s Bus Schedule leverages the powerful t3 tech stack,
-            which includes Next.js, React, and Tailwind for the frontend, tRPC
-            for remote procedure calls, Drizzle ORM for database interactions,
-            Vercel for API and hosting, and Supabase as the database. This
-            modern stack ensures a robust and scalable application.
-          </p>
-          <p className=" mt-4 text-lg">
-            <strong>Challenges and Solutions</strong>
-          </p>
-          <p>
+          <div className=" mt-12">
+            <Subtitle white>Development Journey</Subtitle>
+          </div>
+          <div className=" flex flex-col gap-6 px-6">
+            <p className=" text-lg">
+              The project began in December 2023, and since then, it has seen
+              significant progress. Initially developed by Hiroto Takeuchi, the
+              team has recently expanded to include another developer, Sam Ruan.
+            </p>
+          </div>
+        </div>
+        <div className=" mb-3 mt-6 bg-slate-800">
+          <div className=" relative m-auto flex max-w-screen-lg flex-row flex-wrap justify-around gap-6 py-8">
+            <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center rounded-lg">
+              <Image
+                className=" h-[40px]"
+                src="/logo/nextjs.svg"
+                alt="next js"
+                width={(394 / 80) * 150}
+                height={150}
+              />
+            </div>
+            <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
+              <Image
+                className=" h-[50px]"
+                src="/logo/react.svg"
+                alt="react js"
+                width={150}
+                height={150}
+              />
+            </div>
+            <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
+              <Image
+                className=" h-[50px]"
+                src="/logo/tailwindtype.svg"
+                alt="tailwind"
+                width={(263 / 34) * 150}
+                height={150}
+              />
+            </div>
+            <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
+              <Image
+                className=" h-[50px]"
+                src="/logo/supabase.svg"
+                alt="supabase"
+                width={(581 / 113) * 150}
+                height={150}
+              />
+            </div>
+            <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center pt-[6px]">
+              <Image
+                className=" h-[50px]"
+                src="/logo/drizzle.svg"
+                alt="drizzle"
+                width={(732 / 80) * 150}
+                height={150}
+              />
+            </div>
+            <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
+              <Image
+                className=" h-[50px]"
+                src="/logo/trpc.svg"
+                alt="trpc"
+                width={(429 / 128) * 150}
+                height={150}
+              />
+            </div>
+            <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
+              <Image
+                className=" h-[45px]"
+                src="/logo/vercel.svg"
+                alt="vercel"
+                width={(4438 / 1000) * 150}
+                height={150}
+              />
+            </div>
+          </div>
+        </div>
+        <div className=" m-auto max-w-screen-lg">
+          <div className=" px-6">
+            <p className=" text-lg">
+              Ritchie's Bus Schedule leverages the powerful t3 tech stack, which
+              includes Next.js, React, and Tailwind for the frontend, tRPC for
+              remote procedure calls, Drizzle ORM for database interactions,
+              Vercel for API and hosting, and Supabase as the database. This
+              modern stack ensures a robust and scalable application.
+            </p>
+          </div>
+          <div className=" mt-6">
+            <Subtitle white>Challenges</Subtitle>
+          </div>
+          <p className=" px-6 text-lg">
             The development process was not without its challenges. The steep
             learning curve associated with the new technologies required
             extensive consultation of documentation. Additionally, a recent
@@ -177,64 +244,72 @@ async function Page() {
             and a commitment to overcoming obstacles, the team has made
             significant progress.
           </p>
-          <p className=" mt-4 text-lg">
-            <strong>Unique Aspects</strong>
-          </p>
-          <p>
+          <div className=" mt-6">
+            <Subtitle white>Unique Aspects</Subtitle>
+          </div>
+          <p className=" px-6 text-lg">
             One unique aspect of Ritchie&#39;s Bus Schedule is its approach to
             bus status tracking. Instead of relying on real-time data, the app
             uses the provided bus schedules to make educated guesses about bus
             locations. This approach ensures that the app remains functional and
             reliable, even with limited resources.
           </p>
-          <p className=" mt-4 text-lg">
-            <strong>Future Plans</strong>
-          </p>
-          <p>
+          <div className=" mt-6">
+            <Subtitle white>Future Plans</Subtitle>
+          </div>
+          <p className=" px-6 text-lg">
             Looking ahead, the team plans to expand the app to include more
             buses and implement a rating system for buses based on their
             reliability. These features aim to further improve the user
             experience and provide more accurate information about the bus
             system.
           </p>
-          <p className=" mt-4 text-lg">
-            <strong>Security and Privacy</strong>
-          </p>
-          <p>
+          <div className=" mt-6">
+            <Subtitle white>Security and Privacy</Subtitle>
+          </div>
+          <p className=" px-6 text-lg">
             User security and privacy are paramount. The app uses{" "}
-            <a href="https://clerk.com/">Clerk</a> for authentication,
-            simplifying the authentication process and ensuring user data
-            remains secure. Additionally, the app does not track user locations,
-            reducing complexity and enhancing privacy.
+            <a
+              className=" underline underline-offset-2"
+              href="https://clerk.com/"
+            >
+              Clerk
+            </a>{" "}
+            for authentication, simplifying the authentication process and
+            ensuring user data remains secure. Additionally, the app does not
+            track user locations, reducing complexity and enhancing privacy.
           </p>
-          <p className=" mt-4 text-lg">
-            <strong>User Feedback and Community</strong>
-          </p>
-          <p>
+          <div className=" mt-6">
+            <Subtitle white>User Feedback and Community</Subtitle>
+          </div>
+          <p className=" px-6 text-lg">
             While a final form of feedback system is not yet in place, the team
             is eager to receive feedback from users. As the app is released for
             the public, user input will be invaluable in shaping future updates
-            and features.
-          </p>
-          <p>
-            Temporary feedback can be provided through the{" "}
-            <a href="https://github.com/hiromon0125/ritchie-bus-schedule/issues">
+            and features. Temporary feedback can be provided through the{" "}
+            <a
+              className=" underline underline-offset-2"
+              href="https://github.com/hiromon0125/ritchie-bus-schedule/issues"
+            >
               GitHub repository
             </a>
             , where users can submit issues and feature requests. The team is
             committed to fostering a community-driven development process and
             welcomes contributions from users.
           </p>
-          <p className=" mt-4 text-lg">
-            <strong>Conclusion</strong>
-          </p>
-          <p>
+          <div className=" mt-6">
+            <Subtitle white>Conclusion</Subtitle>
+          </div>
+          <p className=" px-6 text-lg">
             Ritchie&#39;s Bus Schedule is a testament to the power of innovation
             driven by personal need and community benefit. As the app continues
             to evolve, it promises to make navigating the RIT bus system easier
             and more efficient for all students. Thank you for visiting, and we
             hope you find the app as useful and transformative as we do.
           </p>
+          <div className=" mt-12 px-6 pb-12 text-lg font-bold">
+            Published 7/31/2024 By Hiroto Takeuchi
+          </div>
         </div>
       </div>
     </>
