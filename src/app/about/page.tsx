@@ -29,7 +29,7 @@ async function Page() {
             />
           </div>
           <div className=" flex-1">
-            <div className=" rounded-md ">
+            <div className=" rounded-md">
               <Subtitle>Welcome!</Subtitle>
               <p className=" text-xl">
                 Welcome to Ritchie&#39;s Bus Schedule! <br /> This web app is
@@ -43,7 +43,9 @@ async function Page() {
           </div>
         </div>
         <div className=" my-8 flex h-[60vh] max-h-96 flex-col items-center justify-center">
-          <div className=" rounded-2xl border-2 bg-white p-8 drop-shadow-2xl">
+          <div
+            className={` ${aboutStyles.card} rounded-2xl border-2 bg-white p-8 drop-shadow-2xl`}
+          >
             <Subtitle>Purpose and Motivation</Subtitle>
             <p className=" text-xl">
               The primary goal of Ritchie&#39;s Bus Schedule is to provide a
@@ -74,7 +76,9 @@ async function Page() {
           <Subtitle white>Key Features</Subtitle>
           <div className=" mx-6 flex flex-col gap-4 lg:flex-row">
             <div className=" flex flex-1 flex-col gap-4">
-              <div className=" flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md">
+              <div
+                className={`${aboutStyles.card} flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md`}
+              >
                 <div className=" relative m-auto">
                   <Image
                     src="/images/feature-1.png"
@@ -92,7 +96,9 @@ async function Page() {
                   </p>
                 </div>
               </div>
-              <div className=" flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md">
+              <div
+                className={`${aboutStyles.card} flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md`}
+              >
                 <div className=" relative m-auto">
                   <Image
                     src="/images/feature-2.png"
@@ -109,7 +115,9 @@ async function Page() {
               </div>
             </div>
             <div className=" flex flex-1 flex-col gap-4">
-              <div className=" flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md">
+              <div
+                className={`${aboutStyles.card} ${aboutStyles.cardSlow} flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md`}
+              >
                 <div className=" relative m-auto">
                   <Image
                     src="/images/feature-coming.png"
@@ -124,7 +132,9 @@ async function Page() {
                   <p>Find out which bus is coming next at a particular stop.</p>
                 </div>
               </div>
-              <div className=" flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md">
+              <div
+                className={`${aboutStyles.card} ${aboutStyles.cardSlow} flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md`}
+              >
                 <div className=" relative m-auto">
                   <Image
                     src="/images/feature-coming.png"

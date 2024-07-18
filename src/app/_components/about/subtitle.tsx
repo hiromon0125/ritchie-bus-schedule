@@ -24,7 +24,14 @@ export default function Subtitle({
         />
         <div
           className=" absolute left-0 top-0 h-full w-full"
-          style={white ? { backdropFilter: "invert(1)" } : undefined}
+          style={
+            white
+              ? {
+                  backdropFilter: "invert(1)",
+                  WebkitBackdropFilter: "invert(1)",
+                }
+              : undefined
+          }
         />
       </div>
       <h2

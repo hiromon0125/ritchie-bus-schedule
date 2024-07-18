@@ -4,21 +4,54 @@
   transform: translate(80vw, -13.5vh);
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      animation: appear linear both 0s;
+      animation: bus-crossing linear both 0s;
       animation-timeline: view(-30rem 0);
       animation-range: contain;
-      animation-duration: 1ms; /*Firefox requires this to apply the animation */
+      animation-duration: 1ms;
     }
   }
-  /* view-timeline-name: --busReveal;
-  animation-timeline: --busReveal; */
 }
 
-@keyframes appear {
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .card {
+      opacity: 0.3;
+      transform: scale(0.8);
+      animation: fade-in ease-out forwards;
+      animation-timeline: view(90vh 0vh);
+      animation-duration: 1ms;
+
+      @supports (animation-range: 10%) {
+        animation-range: contain;
+        animation-range-start: -5%;
+        animation-range-end: 15%;
+      }
+    }
+    .cardSlow {
+      @supports (animation-range: 10%) {
+        animation-range-start: 0%;
+        animation-range-end: 20%;
+      }
+    }
+  }
+}
+
+@keyframes bus-crossing {
   from {
     transform: translate(-15vw, -13.5vh);
   }
   to {
     transform: translate(120vw, -13.5vh);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0.3;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
