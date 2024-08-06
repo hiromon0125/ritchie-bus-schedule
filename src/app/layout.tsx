@@ -67,6 +67,20 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    site: "@ritbus",
+    card: "summary_large_image",
+    creator: "@takeuchi_hiroto",
+    title: "Ritchie's Bus Schedule",
+    description:
+      "Best application to check the Rochester Institute of Technology Bus Schedule",
+    images: [
+      {
+        url: "/ritches-bus-schedule-banner.png",
+        alt: "RIT Bus Schedule",
+      },
+    ],
+  },
   icons: {
     icon: [
       {
