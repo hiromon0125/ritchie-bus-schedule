@@ -1,12 +1,13 @@
 import "~/styles/globals.css";
 
+import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
+import Footer from "@/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
-import { TRPCReactProvider } from "~/trpc/react";
-import Footer from "./_components/footer";
+import { TRPCReactProvider } from "t/react";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,33 +29,52 @@ export default function RootLayout({
           </TRPCReactProvider>
         </body>
       </html>
+      <Analytics />
     </ClerkProvider>
   );
 }
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://rit-bus.app"),
   title: "Ritchie's Bus Schedule",
   description:
-    "Best application to check the Rochester Institute of Technology transportation schedule",
+    "Best application to check the Rochester Institute of Technology Bus Schedule",
   applicationName: "Ritchie's Bus Schedule",
   appleWebApp: true,
-  themeColor: "#93A3B8",
-  authors: {
-    name: "Hiroto Takeuchi",
-    url: "https://github.com/hiromon0125",
-  },
+  authors: [
+    {
+      name: "Hiroto Takeuchi",
+      url: "https://github.com/hiromon0125",
+    },
+    {
+      name: "Sam Ruan",
+      url: "https://github.com/0SMA0",
+    },
+  ],
   keywords: ["RIT", "Bus", "Schedule", "Ritchie", "RIT Bus Schedule"],
-  robots: "index,follow",
+  robots: "index, follow",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://ritchie-bus-schedule.vercel.app",
+    url: "/",
     siteName: "Ritchie's Bus Schedule",
     images: [
       {
-        url: "/og-bus.jpg",
-        width: 1024,
-        height: 768,
+        url: "/ritches-bus-schedule-banner.png",
+        alt: "RIT Bus Schedule",
+      },
+    ],
+  },
+  twitter: {
+    site: "@ritbus",
+    card: "summary_large_image",
+    creator: "@takeuchi_hiroto",
+    title: "Ritchie's Bus Schedule",
+    description:
+      "Best application to check the Rochester Institute of Technology Bus Schedule",
+    images: [
+      {
+        url: "/ritches-bus-schedule-banner.png",
         alt: "RIT Bus Schedule",
       },
     ],

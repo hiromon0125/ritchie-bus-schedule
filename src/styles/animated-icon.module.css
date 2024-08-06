@@ -1,6 +1,7 @@
 .moving {
   animation: moving 1.5s infinite alternate;
   mix-blend-mode: multiply;
+  border-radius: 50%;
 }
 
 @keyframes moving {
@@ -23,7 +24,6 @@
 
 .stopped {
   mix-blend-mode: multiply;
-
 }
 
 .out {
