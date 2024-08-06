@@ -33,7 +33,9 @@
   width: 100%;
   overflow-y: hidden;
   position: relative;
-  height: 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       opacity: 0;
@@ -45,11 +47,13 @@
 }
 
 .scrollTitle > p {
-  position: absolute;
-  bottom: 0;
   opacity: 0;
-  transform: translateY(-72px);
+  transform: translateY(-150%);
   animation: paralax 10s infinite;
+  margin: 0 0 -48px 0;
+  @media (min-width: 768px) {
+    margin: 0 0 -72px 0;
+  }
 }
 
 .scrollTitle > p:nth-child(1) {
@@ -156,7 +160,7 @@
 
 @keyframes paralax {
   0% {
-    transform: translateY(-72px);
+    transform: translateY(-150%);
     opacity: 0;
   }
   5% {
@@ -168,7 +172,7 @@
     opacity: 1;
   }
   20% {
-    transform: translateY(72px);
+    transform: translateY(150%);
     opacity: 0;
   }
 }

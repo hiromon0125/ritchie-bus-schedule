@@ -6,7 +6,7 @@ import Subtitle from "../_components/about/subtitle";
 
 function KeyScrollTitle() {
   return (
-    <div className={`${aboutStyles.scrollTitle} text-7xl`}>
+    <div className={`${aboutStyles.scrollTitle} text-5xl md:text-7xl`}>
       <p>KEY</p>
       <p>RELIABILITY</p>
       <p>USABILITY</p>
@@ -20,7 +20,7 @@ async function Page() {
   return (
     <>
       <Header />
-      <div className=" flex h-[70vh] max-h-[600px] w-screen flex-col items-center justify-center overflow-hidden bg-[#E1ECF7]">
+      <div className=" flex h-[30vh] max-h-[600px] w-screen flex-col items-center justify-center overflow-hidden bg-[#E1ECF7] md:h-[70vh]">
         <Image
           src="/ritches-bus-schedule-banner.png"
           alt="Ritche's Bus Schedule"
@@ -31,7 +31,7 @@ async function Page() {
       </div>
       <div className=" m-auto flex max-w-screen-lg flex-col gap-3 pb-8">
         <div className=" flex flex-row-reverse gap-8 p-3">
-          <div className=" flex flex-1 items-center justify-center p-3">
+          <div className=" hidden flex-1 items-center justify-center p-3 md:flex ">
             <Image
               src="/images/station-stations.gif"
               className=" m-6 aspect-square w-[25vw] max-w-[480px]"
@@ -44,7 +44,7 @@ async function Page() {
           <div className=" flex-1">
             <div className=" rounded-md">
               <Subtitle>Welcome!</Subtitle>
-              <p className=" text-xl">
+              <p className=" md:text-xl">
                 Welcome to Ritchie&#39;s Bus Schedule! <br /> This web app is
                 dedicated to helping students at Rochester Institute of
                 Technology (RIT) navigate the campus bus system more
@@ -55,12 +55,12 @@ async function Page() {
             </div>
           </div>
         </div>
-        <div className=" my-8 flex h-[60vh] max-h-96 flex-col items-center justify-center">
+        <div className=" flex flex-col items-center justify-center md:my-8 md:h-[60vh] md:max-h-96">
           <div
-            className={` ${aboutStyles.card} rounded-2xl border-2 bg-white p-8 drop-shadow-2xl`}
+            className={` ${aboutStyles.card} rounded-2xl bg-white p-3 md:border-2 md:p-8 md:drop-shadow-2xl`}
           >
             <Subtitle>Purpose and Motivation</Subtitle>
-            <p className=" text-xl">
+            <p className=" md:text-xl">
               The primary goal of Ritchie&#39;s Bus Schedule is to provide a
               convenient and user-friendly way for students to determine the
               current status of RIT buses based on the time schedule provided by
@@ -73,8 +73,8 @@ async function Page() {
           </div>
         </div>
       </div>
-      <div className=" h-[80vh] max-h-[400px] w-screen overflow-clip pb-10">
-        <div className="z-0 h-[200vh] w-[150vw] translate-x-[-30vw] translate-y-60 rotate-12 bg-[#2A609B]">
+      <div className=" -mt-32 h-[80vh] max-h-[400px] w-screen overflow-clip pb-10 md:mt-0">
+        <div className="z-0 h-[200vh] w-[150vw] translate-x-[-70vw] translate-y-60 rotate-12 bg-[#2A609B] md:translate-x-[-30vw]">
           <Image
             className={aboutStyles.bus}
             src="/images/bus-moving.png"
@@ -256,21 +256,21 @@ async function Page() {
           <div className=" relative m-auto max-w-screen-lg px-6 py-8">
             <div>
               <div className={aboutStyles.parallaxTitleWrapper}>
-                <p className=" text-4xl">THE APP'S</p>
+                <p className=" text-2xl md:text-4xl">THE APP'S</p>
               </div>
               <div className={aboutStyles.parallaxTitleWrapper}>
-                <p className=" text-9xl">SIMPLICITY</p>
+                <p className=" text-6xl md:text-9xl">SIMPLICITY</p>
               </div>
-              <div className=" flex flex-row gap-8">
+              <div className=" relative flex h-12 flex-row gap-2 md:h-20 md:gap-8">
                 <div className={aboutStyles.parallaxTitleWrapper}>
-                  <p className=" ml-24 text-4xl">is</p>
+                  <p className=" ml-24 text-2xl md:text-4xl">is</p>
                 </div>
                 <KeyScrollTitle />
               </div>
             </div>
-            <div className=" ml-24 mt-6 flex flex-col gap-6">
+            <div className=" relative ml-24 mt-6 flex flex-col gap-6">
               <p className={aboutStyles.fadeInText}>
-                While we could have shown the busses on the map like our
+                While we could have shown the buses on the map like our
                 competitors, we decided to go on a different approach. Instead
                 of relying on real-time data, the app uses the provided bus
                 times table to make educated guesses about bus locations. This
@@ -305,6 +305,7 @@ async function Page() {
                 a community-driven development process and welcomes
                 contributions from users.
               </p>
+              <div className=" absolute -bottom-16 -left-[95px] h-[calc(100%-460px)] min-h-12 border-l-[52px] border-[#21CF33]"></div>
             </div>
             <div className=" absolute top-80 z-20">
               <div className=" flex flex-col gap-0">
@@ -350,17 +351,17 @@ async function Page() {
             </svg>
             <div className=" relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-28">
               <p className=" text-4xl">Try the App!</p>
-              <p className=" text-xl">
+              <p className=" md:text-xl">
                 Ritchie's Bus Schedule is a testament to the power of innovation
                 driven by personal need and community benefit. As the app
                 continues to evolve, it promises to make navigating the RIT bus
                 system easier and more efficient for all students. We hope you
                 find the app as useful and transformative as we do.
               </p>
-              <div className=" absolute bottom-2 right-32 flex flex-row items-center gap-4">
+              <div className=" absolute bottom-2 right-6 flex flex-row items-center gap-4 md:right-32">
                 <Link
                   href="/"
-                  className=" rounded-bl-full rounded-tr-full bg-red-500 p-4 px-12 text-2xl text-white duration-300 ease-in-out before:absolute before:block before:h-20 before:w-5 before:-translate-x-20 before:-translate-y-6 before:-rotate-[20deg] before:bg-white before:opacity-50 before:duration-500 before:ease-in-out after:absolute after:block after:h-20 after:w-3 after:-translate-x-[6.5rem] after:-translate-y-14 after:-rotate-[20deg] after:bg-white after:opacity-50 after:duration-500 after:ease-in-out hover:scale-105 hover:bg-red-400 hover:before:translate-x-[14.5rem] hover:after:translate-x-52 active:bg-red-600"
+                  className=" rounded-bl-full rounded-tr-full bg-red-500 p-2 px-6 text-lg text-white duration-300 ease-in-out before:absolute before:block before:h-20 before:w-5 before:-translate-x-20 before:-translate-y-6 before:-rotate-[20deg] before:bg-white before:opacity-50 before:duration-500 before:ease-in-out after:absolute after:block after:h-20 after:w-3 after:-translate-x-[6.5rem] after:-translate-y-14 after:-rotate-[20deg] after:bg-white after:opacity-50 after:duration-500 after:ease-in-out hover:scale-105 hover:bg-red-400 hover:before:translate-x-[14.5rem] hover:after:translate-x-52 active:bg-red-600 md:p-4 md:px-12 md:text-2xl"
                 >
                   Use the App &gt;
                 </Link>
