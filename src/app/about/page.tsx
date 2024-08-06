@@ -189,7 +189,7 @@ async function Page() {
           <div className=" relative m-auto flex max-w-screen-lg flex-row flex-wrap justify-around gap-6 py-8">
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center rounded-lg">
               <Image
-                className=" h-[40px]"
+                className={` ${aboutStyles.logo} h-[40px]`}
                 src="/logo/nextjs.svg"
                 alt="next js"
                 width={(394 / 80) * 150}
@@ -198,7 +198,7 @@ async function Page() {
             </div>
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className=" h-[50px]"
+                className={` ${aboutStyles.logo} h-[50px]`}
                 src="/logo/react.svg"
                 alt="react js"
                 width={150}
@@ -207,7 +207,7 @@ async function Page() {
             </div>
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className=" h-[50px]"
+                className={` ${aboutStyles.logo} h-[50px]`}
                 src="/logo/tailwindtype.svg"
                 alt="tailwind"
                 width={(263 / 34) * 150}
@@ -216,7 +216,7 @@ async function Page() {
             </div>
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className=" h-[50px]"
+                className={` ${aboutStyles.logo} h-[50px]`}
                 src="/logo/supabase.svg"
                 alt="supabase"
                 width={(581 / 113) * 150}
@@ -225,7 +225,7 @@ async function Page() {
             </div>
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center pt-[6px]">
               <Image
-                className=" h-[50px]"
+                className={` ${aboutStyles.logo} h-[50px]`}
                 src="/logo/drizzle.svg"
                 alt="drizzle"
                 width={(732 / 80) * 150}
@@ -234,7 +234,7 @@ async function Page() {
             </div>
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className=" h-[50px]"
+                className={` ${aboutStyles.logo} h-[50px]`}
                 src="/logo/trpc.svg"
                 alt="trpc"
                 width={(429 / 128) * 150}
@@ -243,7 +243,7 @@ async function Page() {
             </div>
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className=" h-[45px]"
+                className={` ${aboutStyles.logo} h-[45px]`}
                 src="/logo/vercel.svg"
                 alt="vercel"
                 width={(4438 / 1000) * 150}
@@ -255,32 +255,47 @@ async function Page() {
         <div className=" text-blac relative overflow-clip bg-white pt-6 text-black">
           <div className=" relative m-auto max-w-screen-lg px-6 py-8">
             <div>
-              <p className=" text-4xl">THE APP'S</p>
-              <p className=" text-9xl">SIMPLICITY</p>
+              <div className={aboutStyles.parallaxTitleWrapper}>
+                <p className=" text-4xl">THE APP'S</p>
+              </div>
+              <div className={aboutStyles.parallaxTitleWrapper}>
+                <p className=" text-9xl">SIMPLICITY</p>
+              </div>
               <div className=" flex flex-row gap-8">
-                <p className=" ml-24 text-4xl">is</p>
+                <div className={aboutStyles.parallaxTitleWrapper}>
+                  <p className=" ml-24 text-4xl">is</p>
+                </div>
                 <KeyScrollTitle />
               </div>
             </div>
             <div className=" ml-24 mt-6 flex flex-col gap-6">
-              <p>
-                While we could try to show the busses on the map like our
-                competitors, we decided to go on a different route. Instead of
-                relying on real-time data, the app uses the provided bus times
-                table to make educated guesses about bus locations. This
+              <p className={aboutStyles.fadeInText}>
+                While we could have shown the busses on the map like our
+                competitors, we decided to go on a different approach. Instead
+                of relying on real-time data, the app uses the provided bus
+                times table to make educated guesses about bus locations. This
                 approach ensures that the app remains functional and reliable,
                 even with limited resources, thus reducing downtime. Instead of
-                showing on the map the bus locations, we try to highlight the
-                most important information, like the time until next stop.
+                showing the bus locations on the map, we try to highlight the
+                most important information, like the time until next stop. This
+                makes the app more user-friendly and accessible to all students.
               </p>
-              <p>
+              <p className={aboutStyles.fadeInText}>
+                This does come with the downside of not accurately being able to
+                show the delayed busses, but that is reflected on our
+                transportation system is not something we as students can
+                control. However, there are plans to implement a feedback system
+                to report real-time data to the app, which could improve the
+                accuracy of the app and is under development.
+              </p>
+              <p className={aboutStyles.fadeInTextEarly}>
                 User security and privacy are paramount. The app uses Clerk for
                 authentication, simplifying the authentication process and
                 ensuring user data remains secure. Additionally, the app does
                 not track user locations, reducing complexity and enhancing
                 privacy.
               </p>
-              <p>
+              <p className={aboutStyles.fadeInTextEarly}>
                 While a final form of feedback system is not yet in place, the
                 team is eager to receive feedback from users. As the app is
                 released for the public, user input will be invaluable in
@@ -318,7 +333,7 @@ async function Page() {
               />
             </svg>
             <svg
-              className=" absolute mt-20 translate-x-[1px]"
+              className=" absolute mt-10 translate-x-[1px]"
               width="920"
               height="635"
               viewBox="0 0 920 635"
@@ -326,14 +341,14 @@ async function Page() {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                d="M26.2266 26.1802V389.822C26.2266 418.54 49.5078 441.822 78.2266 441.822H841.448C870.167 441.822 893.448 465.103 893.448 493.822V649.642"
+                d="M26.2266 26.1802V435.136C26.2266 463.855 49.5078 487.136 78.2266 487.136H841.448C870.167 487.136 893.448 510.417 893.448 539.136V857.462"
                 stroke="#21CF33"
                 stroke-width="52"
                 stroke-linecap="round"
               />
-              <circle cx="28" cy="28" r="18" fill="black" />
+              <circle cx="27" cy="300" r="18" fill="white" />
             </svg>
-            <div className=" relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-32">
+            <div className=" relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-28">
               <p className=" text-4xl">Try the App!</p>
               <p className=" text-xl">
                 Ritchie's Bus Schedule is a testament to the power of innovation
@@ -350,10 +365,18 @@ async function Page() {
                   Use the App &gt;
                 </Link>
               </div>
+              <div className=" absolute -bottom-[57px] right-40 flex flex-row items-end gap-12">
+                <div className=" flex translate-y-7 -rotate-90 flex-col gap-0">
+                  <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                  <div className=" motion-safe:animation-delay-500 h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                  <div className=" motion-safe:animation-delay-1000 h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                </div>
+                <div className=" h-9 w-9 rounded-full bg-white" />
+              </div>
             </div>
           </div>
-          <div className=" relative m-auto max-w-screen-lg gap-6 px-6 py-8">
-            <div className=" mt-12 pb-12 text-lg font-bold">
+          <div className=" relative m-auto max-w-screen-lg gap-6 px-32 py-8">
+            <div className=" mt-12 pb-3 text-lg font-bold">
               Published 7/31/2024 By Hiroto Takeuchi
             </div>
           </div>

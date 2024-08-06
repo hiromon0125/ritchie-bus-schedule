@@ -12,11 +12,36 @@
   }
 }
 
+.parallaxTitleWrapper {
+  position: relative;
+  overflow: clip;
+}
+
+.parallaxTitleWrapper > p {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      transform: translateY(-200%);
+      opacity: 0;
+      animation: general-paralax ease-in-out forwards 0s;
+      animation-timeline: view(60vh 30vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
 .scrollTitle {
   width: 100%;
   overflow-y: hidden;
   position: relative;
   height: 72px;
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      opacity: 0;
+      animation: fade-in-text ease-in-out forwards 0s;
+      animation-timeline: view(60vh 30vh);
+      animation-duration: 1ms;
+    }
+  }
 }
 
 .scrollTitle > p {
@@ -40,6 +65,27 @@
   animation-delay: 8s;
 }
 
+.fadeInText {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      opacity: 0;
+      animation: fade-in-text ease-out forwards;
+      animation-timeline: view(40vh 10vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+.fadeInTextEarly {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      opacity: 0;
+      animation: fade-in-text ease-out forwards;
+      animation-timeline: view(60vh 0vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
 .pipe {
   stroke-dasharray: 1000;
   @media (prefers-reduced-motion: no-preference) {
@@ -52,19 +98,31 @@
   }
 }
 
+.logo {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      opacity: 0;
+      transform: scale(0.8);
+      animation: fade-in-text ease-out forwards;
+      animation-timeline: view(80vh 10vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .card {
       opacity: 0.3;
       transform: scale(0.8);
       animation: fade-in ease-out forwards;
-      animation-timeline: view(90vh 0vh);
+      animation-timeline: view(80vh 0vh);
       animation-duration: 1ms;
 
       @supports (animation-range: 10%) {
         animation-range: contain;
         animation-range-start: -5%;
-        animation-range-end: 15%;
+        animation-range-end: 20%;
       }
     }
     .cardSlow {
@@ -119,5 +177,19 @@
   to {
     stroke-dashoffset: -1000;
     stroke-dasharray: none;
+  }
+}
+
+@keyframes general-paralax {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-text {
+  to {
+    transform: scale(1);
+    opacity: 1;
   }
 }
