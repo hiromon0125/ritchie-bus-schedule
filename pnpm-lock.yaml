@@ -77,6 +77,9 @@ importers:
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
+      tailwindcss-animation-delay:
+        specifier: ^2.0.1
+        version: 2.0.1(tailwindcss@3.4.4)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -1421,6 +1424,11 @@ packages:
     peerDependencies:
       react: ^16.11.0 || ^17.0.0 || ^18.0.0
 
+  tailwindcss-animation-delay@2.0.1:
+    resolution: {integrity: sha512-ruJNsjkoS9V73ce4DVBy6adj4/l6URP4uoG0nrch57xvPlE774kR5tgkzaBGtlEIaE9SctZ1BrMV8HCSN1K6cw==}
+    peerDependencies:
+      tailwindcss: '>=2.0.0 || >=3.0.0'
+
   tailwindcss@3.4.4:
     resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
     engines: {node: '>=14.0.0'}
@@ -2722,6 +2730,10 @@ snapshots:
     dependencies:
       react: 18.2.0
       use-sync-external-store: 1.2.2(react@18.2.0)
+
+  tailwindcss-animation-delay@2.0.1(tailwindcss@3.4.4):
+    dependencies:
+      tailwindcss: 3.4.4
 
   tailwindcss@3.4.4:
     dependencies:

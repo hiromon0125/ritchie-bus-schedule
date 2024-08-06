@@ -1,7 +1,20 @@
 import Header from "@/header";
 import Image from "next/image";
+import Link from "next/link";
 import aboutStyles from "~/styles/about.module.css";
 import Subtitle from "../_components/about/subtitle";
+
+function KeyScrollTitle() {
+  return (
+    <div className={`${aboutStyles.scrollTitle} text-7xl`}>
+      <p>KEY</p>
+      <p>RELIABILITY</p>
+      <p>USABILITY</p>
+      <p>SECURITY</p>
+      <p>EFFICIENCY</p>
+    </div>
+  );
+}
 
 async function Page() {
   return (
@@ -163,9 +176,16 @@ async function Page() {
               significant progress. Initially developed by Hiroto Takeuchi, the
               team has recently expanded to include another developer, Sam Ruan.
             </p>
+            <p className=" text-lg">
+              Ritchie's Bus Schedule leverages the powerful t3 tech stack, which
+              includes Next.js, React, and Tailwind for the frontend, tRPC for
+              remote procedure calls, Drizzle ORM for database interactions,
+              Vercel for API and hosting, and Supabase as the database. This
+              modern stack ensures a robust and scalable application.
+            </p>
           </div>
         </div>
-        <div className=" mb-3 mt-6 bg-slate-800">
+        <div className=" mt-6 bg-slate-800">
           <div className=" relative m-auto flex max-w-screen-lg flex-row flex-wrap justify-around gap-6 py-8">
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center rounded-lg">
               <Image
@@ -232,93 +252,110 @@ async function Page() {
             </div>
           </div>
         </div>
-        <div className=" m-auto max-w-screen-lg">
-          <div className=" px-6">
-            <p className=" text-lg">
-              Ritchie's Bus Schedule leverages the powerful t3 tech stack, which
-              includes Next.js, React, and Tailwind for the frontend, tRPC for
-              remote procedure calls, Drizzle ORM for database interactions,
-              Vercel for API and hosting, and Supabase as the database. This
-              modern stack ensures a robust and scalable application.
-            </p>
-          </div>
-          <div className=" mt-6">
-            <Subtitle white>Challenges</Subtitle>
-          </div>
-          <p className=" px-6 text-lg">
-            The development process was not without its challenges. The steep
-            learning curve associated with the new technologies required
-            extensive consultation of documentation. Additionally, a recent
-            change in database subscription fees necessitated a migration, which
-            temporarily set back development. However, through diligent effort
-            and a commitment to overcoming obstacles, the team has made
-            significant progress.
-          </p>
-          <div className=" mt-6">
-            <Subtitle white>Unique Aspects</Subtitle>
-          </div>
-          <p className=" px-6 text-lg">
-            One unique aspect of Ritchie&#39;s Bus Schedule is its approach to
-            bus status tracking. Instead of relying on real-time data, the app
-            uses the provided bus schedules to make educated guesses about bus
-            locations. This approach ensures that the app remains functional and
-            reliable, even with limited resources.
-          </p>
-          <div className=" mt-6">
-            <Subtitle white>Future Plans</Subtitle>
-          </div>
-          <p className=" px-6 text-lg">
-            Looking ahead, the team plans to expand the app to include more
-            buses and implement a rating system for buses based on their
-            reliability. These features aim to further improve the user
-            experience and provide more accurate information about the bus
-            system.
-          </p>
-          <div className=" mt-6">
-            <Subtitle white>Security and Privacy</Subtitle>
-          </div>
-          <p className=" px-6 text-lg">
-            User security and privacy are paramount. The app uses{" "}
-            <a
-              className=" underline underline-offset-2"
-              href="https://clerk.com/"
+        <div className=" text-blac relative overflow-clip bg-white pt-6 text-black">
+          <div className=" relative m-auto max-w-screen-lg px-6 py-8">
+            <div>
+              <p className=" text-4xl">THE APP'S</p>
+              <p className=" text-9xl">SIMPLICITY</p>
+              <div className=" flex flex-row gap-8">
+                <p className=" ml-24 text-4xl">is</p>
+                <KeyScrollTitle />
+              </div>
+            </div>
+            <div className=" ml-24 mt-6 flex flex-col gap-6">
+              <p>
+                While we could try to show the busses on the map like our
+                competitors, we decided to go on a different route. Instead of
+                relying on real-time data, the app uses the provided bus times
+                table to make educated guesses about bus locations. This
+                approach ensures that the app remains functional and reliable,
+                even with limited resources, thus reducing downtime. Instead of
+                showing on the map the bus locations, we try to highlight the
+                most important information, like the time until next stop.
+              </p>
+              <p>
+                User security and privacy are paramount. The app uses Clerk for
+                authentication, simplifying the authentication process and
+                ensuring user data remains secure. Additionally, the app does
+                not track user locations, reducing complexity and enhancing
+                privacy.
+              </p>
+              <p>
+                While a final form of feedback system is not yet in place, the
+                team is eager to receive feedback from users. As the app is
+                released for the public, user input will be invaluable in
+                shaping future updates and features. Temporary feedback can be
+                provided through the GitHub repository, where users can submit
+                issues and feature requests. The team is committed to fostering
+                a community-driven development process and welcomes
+                contributions from users.
+              </p>
+            </div>
+            <div className=" absolute top-80 z-20">
+              <div className=" flex flex-col gap-0">
+                <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                <div className=" motion-safe:animation-delay-500 h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                <div className=" motion-safe:animation-delay-1000 h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+              </div>
+              <svg>
+                <circle cx="28" cy="28" r="18" fill="white" />
+              </svg>
+            </div>
+            <svg
+              className={` ${aboutStyles.pipe} absolute top-52 z-10 translate-x-[-273px]`}
+              width="327"
+              height="542"
+              viewBox="0 0 327 542"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              Clerk
-            </a>{" "}
-            for authentication, simplifying the authentication process and
-            ensuring user data remains secure. Additionally, the app does not
-            track user locations, reducing complexity and enhancing privacy.
-          </p>
-          <div className=" mt-6">
-            <Subtitle white>User Feedback and Community</Subtitle>
-          </div>
-          <p className=" px-6 text-lg">
-            While a final form of feedback system is not yet in place, the team
-            is eager to receive feedback from users. As the app is released for
-            the public, user input will be invaluable in shaping future updates
-            and features. Temporary feedback can be provided through the{" "}
-            <a
-              className=" underline underline-offset-2"
-              href="https://github.com/hiromon0125/ritchie-bus-schedule/issues"
+              <path
+                d="M-56.5996 26.0234H248.225C276.943 26.0234 300.225 49.3046 300.225 78.0234V515.18"
+                stroke="#21CF33"
+                stroke-width="52"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <svg
+              className=" absolute mt-20 translate-x-[1px]"
+              width="920"
+              height="635"
+              viewBox="0 0 920 635"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              GitHub repository
-            </a>
-            , where users can submit issues and feature requests. The team is
-            committed to fostering a community-driven development process and
-            welcomes contributions from users.
-          </p>
-          <div className=" mt-6">
-            <Subtitle white>Conclusion</Subtitle>
+              <path
+                d="M26.2266 26.1802V389.822C26.2266 418.54 49.5078 441.822 78.2266 441.822H841.448C870.167 441.822 893.448 465.103 893.448 493.822V649.642"
+                stroke="#21CF33"
+                stroke-width="52"
+                stroke-linecap="round"
+              />
+              <circle cx="28" cy="28" r="18" fill="black" />
+            </svg>
+            <div className=" relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-32">
+              <p className=" text-4xl">Try the App!</p>
+              <p className=" text-xl">
+                Ritchie's Bus Schedule is a testament to the power of innovation
+                driven by personal need and community benefit. As the app
+                continues to evolve, it promises to make navigating the RIT bus
+                system easier and more efficient for all students. We hope you
+                find the app as useful and transformative as we do.
+              </p>
+              <div className=" absolute bottom-2 right-32 flex flex-row items-center gap-4">
+                <Link
+                  href="/"
+                  className=" rounded-bl-full rounded-tr-full bg-red-500 p-4 px-12 text-2xl text-white duration-300 ease-in-out before:absolute before:block before:h-20 before:w-5 before:-translate-x-20 before:-translate-y-6 before:-rotate-[20deg] before:bg-white before:opacity-50 before:duration-500 before:ease-in-out after:absolute after:block after:h-20 after:w-3 after:-translate-x-[6.5rem] after:-translate-y-14 after:-rotate-[20deg] after:bg-white after:opacity-50 after:duration-500 after:ease-in-out hover:scale-105 hover:bg-red-400 hover:before:translate-x-[14.5rem] hover:after:translate-x-52 active:bg-red-600"
+                >
+                  Use the App &gt;
+                </Link>
+              </div>
+            </div>
           </div>
-          <p className=" px-6 text-lg">
-            Ritchie&#39;s Bus Schedule is a testament to the power of innovation
-            driven by personal need and community benefit. As the app continues
-            to evolve, it promises to make navigating the RIT bus system easier
-            and more efficient for all students. Thank you for visiting, and we
-            hope you find the app as useful and transformative as we do.
-          </p>
-          <div className=" mt-12 px-6 pb-12 text-lg font-bold">
-            Published 7/31/2024 By Hiroto Takeuchi
+          <div className=" relative m-auto max-w-screen-lg gap-6 px-6 py-8">
+            <div className=" mt-12 pb-12 text-lg font-bold">
+              Published 7/31/2024 By Hiroto Takeuchi
+            </div>
           </div>
         </div>
       </div>

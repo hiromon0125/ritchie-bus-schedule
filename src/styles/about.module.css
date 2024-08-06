@@ -12,6 +12,46 @@
   }
 }
 
+.scrollTitle {
+  width: 100%;
+  overflow-y: hidden;
+  position: relative;
+  height: 72px;
+}
+
+.scrollTitle > p {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  transform: translateY(-72px);
+  animation: paralax 10s infinite;
+}
+
+.scrollTitle > p:nth-child(1) {
+  animation-delay: 2s;
+}
+.scrollTitle > p:nth-child(2) {
+  animation-delay: 4s;
+}
+.scrollTitle > p:nth-child(3) {
+  animation-delay: 6s;
+}
+.scrollTitle > p:nth-child(4) {
+  animation-delay: 8s;
+}
+
+.pipe {
+  stroke-dasharray: 1000;
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      stroke-dashoffset: 1000;
+      animation: pipe-extension linear forwards;
+      animation-timeline: view(40vh 10vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .card {
@@ -53,5 +93,31 @@
   to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@keyframes paralax {
+  0% {
+    transform: translateY(-72px);
+    opacity: 0;
+  }
+  5% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  15% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  20% {
+    transform: translateY(72px);
+    opacity: 0;
+  }
+}
+
+@keyframes pipe-extension {
+  to {
+    stroke-dashoffset: -1000;
+    stroke-dasharray: none;
   }
 }

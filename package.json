@@ -36,6 +36,7 @@
     "server-only": "^0.0.1",
     "styled-components": "^6.1.11",
     "superjson": "^2.2.1",
+    "tailwindcss-animation-delay": "^2.0.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
