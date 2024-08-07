@@ -34,7 +34,7 @@
   overflow-y: hidden;
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0;
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
@@ -46,8 +46,11 @@
   }
 }
 
-.scrollTitle > p {
+.scrollTitle p {
   opacity: 0;
+  width: 0;
+  white-space: nowrap;
+  overflow: visible;
   transform: translateY(-150%);
   animation: paralax 10s infinite;
   margin: 0 0 -48px 0;
@@ -56,16 +59,16 @@
   }
 }
 
-.scrollTitle > p:nth-child(1) {
+.scrollTitle div:nth-child(1) > p {
   animation-delay: 2s;
 }
-.scrollTitle > p:nth-child(2) {
+.scrollTitle div:nth-child(2) > p {
   animation-delay: 4s;
 }
-.scrollTitle > p:nth-child(3) {
+.scrollTitle div:nth-child(3) > p {
   animation-delay: 6s;
 }
-.scrollTitle > p:nth-child(4) {
+.scrollTitle div:nth-child(4) > p {
   animation-delay: 8s;
 }
 

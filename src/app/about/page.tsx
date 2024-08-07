@@ -6,12 +6,24 @@ import Subtitle from "../_components/about/subtitle";
 
 function KeyScrollTitle() {
   return (
-    <div className={`${aboutStyles.scrollTitle} text-5xl md:text-7xl`}>
-      <p>KEY</p>
-      <p>RELIABILITY</p>
-      <p>USABILITY</p>
-      <p>SECURITY</p>
-      <p>EFFICIENCY</p>
+    <div
+      className={`${aboutStyles.scrollTitle} text-4xl sm:text-5xl md:text-7xl`}
+    >
+      <div>
+        <p>KEY</p>
+      </div>
+      <div>
+        <p>RELIABILITY</p>
+      </div>
+      <div>
+        <p>USABILITY</p>
+      </div>
+      <div>
+        <p>SECURITY</p>
+      </div>
+      <div>
+        <p>EFFICIENCY</p>
+      </div>
     </div>
   );
 }
@@ -44,7 +56,7 @@ async function Page() {
           <div className=" flex-1">
             <div className=" rounded-md">
               <Subtitle>Welcome!</Subtitle>
-              <p className=" md:text-xl">
+              <p className=" text-sm md:text-xl">
                 Welcome to Ritchie&#39;s Bus Schedule! <br /> This web app is
                 dedicated to helping students at Rochester Institute of
                 Technology (RIT) navigate the campus bus system more
@@ -60,7 +72,7 @@ async function Page() {
             className={` ${aboutStyles.card} rounded-2xl bg-white p-3 md:border-2 md:p-8 md:drop-shadow-2xl`}
           >
             <Subtitle>Purpose and Motivation</Subtitle>
-            <p className=" md:text-xl">
+            <p className=" text-sm md:text-xl">
               The primary goal of Ritchie&#39;s Bus Schedule is to provide a
               convenient and user-friendly way for students to determine the
               current status of RIT buses based on the time schedule provided by
@@ -87,7 +99,7 @@ async function Page() {
       <div className="z-10 w-screen bg-[#2A609B] text-white">
         <div className=" m-auto mb-[-5rem] max-w-screen-lg translate-y-[-5rem]">
           <Subtitle white>Key Features</Subtitle>
-          <div className=" mx-6 flex flex-col gap-4 lg:flex-row">
+          <div className=" mx-3 flex flex-col gap-4 md:mx-6 lg:flex-row">
             <div className=" flex flex-1 flex-col gap-4">
               <div
                 className={`${aboutStyles.card} flex flex-1 flex-col gap-2 overflow-hidden rounded-3xl border border-white bg-[#3374BB] drop-shadow-md`}
@@ -170,13 +182,13 @@ async function Page() {
           <div className=" mt-12">
             <Subtitle white>Development Journey</Subtitle>
           </div>
-          <div className=" flex flex-col gap-6 px-6">
-            <p className=" text-lg">
+          <div className=" flex flex-col gap-6 px-3 md:px-6">
+            <p className=" text-sm md:text-lg">
               The project began in December 2023, and since then, it has seen
               significant progress. Initially developed by Hiroto Takeuchi, the
               team has recently expanded to include another developer, Sam Ruan.
             </p>
-            <p className=" text-lg">
+            <p className=" text-sm md:text-lg">
               Ritchie's Bus Schedule leverages the powerful t3 tech stack, which
               includes Next.js, React, and Tailwind for the frontend, tRPC for
               remote procedure calls, Drizzle ORM for database interactions,
@@ -253,22 +265,22 @@ async function Page() {
           </div>
         </div>
         <div className=" text-blac relative overflow-clip bg-white pt-6 text-black">
-          <div className=" relative m-auto max-w-screen-lg px-6 py-8">
+          <div className=" relative m-auto max-w-screen-lg py-8 pl-6 pr-2 md:px-6">
             <div>
               <div className={aboutStyles.parallaxTitleWrapper}>
                 <p className=" text-2xl md:text-4xl">THE APP'S</p>
               </div>
               <div className={aboutStyles.parallaxTitleWrapper}>
-                <p className=" text-6xl md:text-9xl">SIMPLICITY</p>
+                <p className=" text-4xl sm:text-6xl md:text-9xl">SIMPLICITY</p>
               </div>
               <div className=" relative flex h-12 flex-row gap-2 md:h-20 md:gap-8">
                 <div className={aboutStyles.parallaxTitleWrapper}>
-                  <p className=" ml-24 text-2xl md:text-4xl">is</p>
+                  <p className="  text-2xl md:ml-24 md:text-4xl">is</p>
                 </div>
                 <KeyScrollTitle />
               </div>
             </div>
-            <div className=" relative ml-24 mt-6 flex flex-col gap-6">
+            <div className=" relative ml-16 mt-6 flex flex-col gap-6 md:ml-24">
               <p className={aboutStyles.fadeInText}>
                 While we could have shown the buses on the map like our
                 competitors, we decided to go on a different approach. Instead
@@ -305,13 +317,13 @@ async function Page() {
                 a community-driven development process and welcomes
                 contributions from users.
               </p>
-              <div className=" absolute -bottom-16 -left-[95px] h-[calc(100%-460px)] min-h-12 border-l-[52px] border-[#21CF33]"></div>
+              <div className=" absolute -bottom-16 -left-[63px] h-[calc(100%-460px)] min-h-12 border-l-[52px] border-[#21CF33] md:-left-[95px]"></div>
             </div>
             <div className=" absolute top-80 z-20">
               <div className=" flex flex-col gap-0">
                 <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                <div className=" motion-safe:animation-delay-500 h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                <div className=" motion-safe:animation-delay-1000 h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
+                <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
               </div>
               <svg>
                 <circle cx="28" cy="28" r="18" fill="white" />
@@ -349,16 +361,16 @@ async function Page() {
               />
               <circle cx="27" cy="300" r="18" fill="white" />
             </svg>
-            <div className=" relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-28">
+            <div className=" relative ml-16 flex h-[57vh] flex-col justify-center gap-2 pt-28 md:ml-24">
               <p className=" text-4xl">Try the App!</p>
-              <p className=" md:text-xl">
+              <p className=" mb-20 md:mb-0 md:text-xl">
                 Ritchie's Bus Schedule is a testament to the power of innovation
                 driven by personal need and community benefit. As the app
                 continues to evolve, it promises to make navigating the RIT bus
                 system easier and more efficient for all students. We hope you
                 find the app as useful and transformative as we do.
               </p>
-              <div className=" absolute bottom-2 right-6 flex flex-row items-center gap-4 md:right-32">
+              <div className=" absolute -bottom-3 right-0 flex flex-row items-center gap-4 overflow-clip p-2 md:bottom-2 md:right-32">
                 <Link
                   href="/"
                   className=" rounded-bl-full rounded-tr-full bg-red-500 p-2 px-6 text-lg text-white duration-300 ease-in-out before:absolute before:block before:h-20 before:w-5 before:-translate-x-20 before:-translate-y-6 before:-rotate-[20deg] before:bg-white before:opacity-50 before:duration-500 before:ease-in-out after:absolute after:block after:h-20 after:w-3 after:-translate-x-[6.5rem] after:-translate-y-14 after:-rotate-[20deg] after:bg-white after:opacity-50 after:duration-500 after:ease-in-out hover:scale-105 hover:bg-red-400 hover:before:translate-x-[14.5rem] hover:after:translate-x-52 active:bg-red-600 md:p-4 md:px-12 md:text-2xl"
@@ -366,19 +378,20 @@ async function Page() {
                   Use the App &gt;
                 </Link>
               </div>
-              <div className=" absolute -bottom-[57px] right-40 flex flex-row items-end gap-12">
+              <div className=" absolute -bottom-[57px] right-0 flex h-0 flex-row items-end gap-12 md:right-40">
                 <div className=" flex translate-y-7 -rotate-90 flex-col gap-0">
                   <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                  <div className=" motion-safe:animation-delay-500 h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                  <div className=" motion-safe:animation-delay-1000 h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                  <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
+                  <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
                 </div>
                 <div className=" h-9 w-9 rounded-full bg-white" />
               </div>
             </div>
           </div>
-          <div className=" relative m-auto max-w-screen-lg gap-6 px-32 py-8">
+          <div className=" relative m-auto max-w-screen-lg gap-6 px-6 py-8 md:px-32">
             <div className=" mt-12 pb-3 text-lg font-bold">
-              Published 7/31/2024 By Hiroto Takeuchi
+              Published 7/31/2024 <br />
+              By Hiroto Takeuchi
             </div>
           </div>
         </div>
