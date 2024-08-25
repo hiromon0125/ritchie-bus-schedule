@@ -227,7 +227,7 @@ function EditBusRoute({ busId }: { busId: number }) {
                       value={
                         input[index]!.arriTime != undefined
                           ? DateTime.fromJSDate(
-                              input[index]!.arriTime!,
+                              input[index]!.arriTime,
                             ).toFormat("HH:mm")
                           : ""
                       }
@@ -262,7 +262,7 @@ function EditBusRoute({ busId }: { busId: number }) {
                     className="flex-1 p-1"
                     value={
                       input[index]!.deptTime != undefined
-                        ? DateTime.fromJSDate(input[index]!.deptTime!).toFormat(
+                        ? DateTime.fromJSDate(input[index]!.deptTime).toFormat(
                             "HH:mm",
                           )
                         : ""
