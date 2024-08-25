@@ -69,9 +69,9 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   ) {
     const timeDiff =
       (input[lastInstance]!.arriTime?.getTime() ?? 0) -
-      (input[lastInstance - stops.length]!.arriTime?.getTime() ?? 0);
+      (input[lastInstance - stops.length]?.arriTime?.getTime() ?? 0);
     const newArriTime = new Date(
-      input[lastInstance]!.arriTime!.getTime() + timeDiff,
+      input[lastInstance]?.arriTime?.getTime() ?? 0 + timeDiff,
     );
     newRoute.arriTime = newArriTime;
   }

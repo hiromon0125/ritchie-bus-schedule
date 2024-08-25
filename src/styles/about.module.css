@@ -1,0 +1,199 @@
+.bus {
+  width: 25vh;
+  max-width: 300px;
+  transform: translate(80vw, -13.5vh);
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      animation: bus-crossing linear both 0s;
+      animation-timeline: view(-30rem 0);
+      animation-range: contain;
+      animation-duration: 1ms;
+    }
+  }
+}
+
+.parallaxTitleWrapper {
+  position: relative;
+  overflow: clip;
+}
+
+.parallaxTitleWrapper > p {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      transform: translateY(-200%);
+      opacity: 0;
+      animation: general-paralax ease-in-out forwards 0s;
+      animation-timeline: view(60vh 30vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
+.scrollTitle {
+  width: 100%;
+  overflow-y: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      opacity: 0;
+      animation: fade-in-text ease-in-out forwards 0s;
+      animation-timeline: view(60vh 30vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
+.scrollTitle > p {
+  opacity: 0;
+  transform: translateY(-150%);
+  animation: paralax 10s infinite;
+  margin: 0 0 -48px 0;
+  @media (min-width: 768px) {
+    margin: 0 0 -72px 0;
+  }
+}
+
+.scrollTitle > p:nth-child(1) {
+  animation-delay: 2s;
+}
+.scrollTitle > p:nth-child(2) {
+  animation-delay: 4s;
+}
+.scrollTitle > p:nth-child(3) {
+  animation-delay: 6s;
+}
+.scrollTitle > p:nth-child(4) {
+  animation-delay: 8s;
+}
+
+.fadeInText {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      opacity: 0;
+      animation: fade-in-text ease-out forwards;
+      animation-timeline: view(40vh 10vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+.fadeInTextEarly {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      opacity: 0;
+      animation: fade-in-text ease-out forwards;
+      animation-timeline: view(60vh 0vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
+.pipe {
+  stroke-dasharray: 1000;
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      stroke-dashoffset: 1000;
+      animation: pipe-extension linear forwards;
+      animation-timeline: view(40vh 10vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
+.logo {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      opacity: 0;
+      transform: scale(0.8);
+      animation: fade-in-text ease-out forwards;
+      animation-timeline: view(80vh 10vh);
+      animation-duration: 1ms;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .card {
+      opacity: 0.3;
+      transform: scale(0.8);
+      animation: fade-in ease-out forwards;
+      animation-timeline: view(80vh 0vh);
+      animation-duration: 1ms;
+
+      @supports (animation-range: 10%) {
+        animation-range: contain;
+        animation-range-start: -5%;
+        animation-range-end: 20%;
+      }
+    }
+    .cardSlow {
+      @supports (animation-range: 10%) {
+        animation-range-start: 0%;
+        animation-range-end: 20%;
+      }
+    }
+  }
+}
+
+@keyframes bus-crossing {
+  from {
+    transform: translate(-15vw, -13.5vh);
+  }
+  to {
+    transform: translate(120vw, -13.5vh);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    transform: scale(0.8);
+    opacity: 0.3;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes paralax {
+  0% {
+    transform: translateY(-150%);
+    opacity: 0;
+  }
+  5% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  15% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+  20% {
+    transform: translateY(150%);
+    opacity: 0;
+  }
+}
+
+@keyframes pipe-extension {
+  to {
+    stroke-dashoffset: -1000;
+    stroke-dasharray: none;
+  }
+}
+
+@keyframes general-paralax {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-text {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
