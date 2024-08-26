@@ -68,7 +68,8 @@ export function getStopStatus(
   now: Date,
   weekendBus: boolean,
 ) {
-  if ((now.getDay() === 0 || now.getDay() === 6) && !weekendBus)
+  const isTodayWeekend = [0, 6].includes(now.getDay());
+  if ((isTodayWeekend && !weekendBus) || (!isTodayWeekend && weekendBus))
     return {
       statusMessage: "Out of service",
       location: undefined,
