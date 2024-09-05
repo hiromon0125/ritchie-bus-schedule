@@ -16,7 +16,7 @@ type BusStatusProps =
     };
 
 async function BusInfo({ busID, bus }: BusStatusProps) {
-  const busObj = busID ? await api.bus.getByID.query(busID) : bus;
+  const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
   const routes = await api.routes.getAllByBusId.query({ busId: busObj.id });
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";

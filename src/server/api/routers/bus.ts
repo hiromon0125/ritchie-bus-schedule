@@ -10,6 +10,7 @@ export const busRouter = createTRPCRouter({
     ctx.db.bus.findMany({
       select: {
         id: true,
+        updatedAt: true,
       },
     }),
   ),

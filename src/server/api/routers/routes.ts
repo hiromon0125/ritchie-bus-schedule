@@ -4,6 +4,7 @@ import {
   privateProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { getCurrentTime } from "../../../app/_components/util";
 
 export const routesRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.db.routes.findMany()),
@@ -78,26 +79,46 @@ export const routesRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const nowNotUTC = new Date();
-      const now = new Date(
-        nowNotUTC.getTime() - nowNotUTC.getTimezoneOffset() * 60000,
-      );
-      const firstRoute = await ctx.db.routes.findFirst({
-        where: {
-          busId: input.busId,
-        },
-      });
-      if (!firstRoute) return null;
-      now.setFullYear(firstRoute.deptTime.getFullYear());
-      now.setMonth(firstRoute.deptTime.getMonth());
-      now.setDate(firstRoute.deptTime.getDate());
+      const now = getCurrentTime();
       return ctx.db.routes.findFirst({
         where: {
           busId: input.busId,
           deptTime: {
-            gt: now,
+            gt: now.date,
+          },
+          bus: {
+            isWeekend: now.isWeekend,
           },
         },
       });
+    }),
+  getCurrentRouteOfBuses: publicProcedure
+    .input(
+      z.object({
+        busIds: z.array(z.number()),
+        date: z.date(),
+        isWeekend: z.boolean(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return Promise.all(
+        input.busIds.map(async (busId) => {
+          const res = await ctx.db.routes.findFirst({
+            where: {
+              busId,
+              deptTime: {
+                gt: input.date,
+              },
+              bus: {
+                isWeekend: input.isWeekend,
+              },
+            },
+          });
+          return {
+            busId,
+            route: res,
+          };
+        }),
+      );
     }),
 });

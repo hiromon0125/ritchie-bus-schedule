@@ -3,9 +3,10 @@ import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import style from "~/styles/bus.module.css";
-import { useBusStatus } from "./hooks";
+import { api } from "../../trpc/react";
+import { useBusStatusPerf } from "./hooks";
 import { type Bus, type BusRoute, type BusStop } from "./types";
-import { getArriTime, type getStopStatus } from "./util";
+import { getArriTime, type getStopStatusPerf } from "./util";
 
 interface Props {
   routes: BusRoute[];
@@ -18,8 +19,15 @@ interface Props {
 function WaterfallBusTimeline(props: Props) {
   const { routes, stops, bus, upIcon, downIcon } = props;
   const router = useRouter();
-  const status = useBusStatus(routes, bus);
-  const firstBusIndex = Math.ceil(status.index);
+  const { data: nextRoute, refetch } = api.routes.getCurrentRouteOfBus.useQuery(
+    {
+      busId: bus?.id ?? 0,
+    },
+  );
+  const status = useBusStatusPerf(bus, nextRoute, async () => {
+    await refetch();
+  });
+  const firstBusIndex = Math.ceil(status?.location?.index ?? 0);
   const [stopIndex, setStopIndex] = useState(
     firstBusIndex > 0 ? firstBusIndex : 0,
   );
@@ -81,19 +89,15 @@ function WaterfallBusTimeline(props: Props) {
 }
 
 function Route(prop: {
-  status: ReturnType<typeof getStopStatus>;
+  status: ReturnType<typeof getStopStatusPerf>;
   prevRoute?: BusRoute;
   route: BusRoute;
   stop: BusStop | undefined;
 }) {
-  const {
-    status: { index },
-    route: routeToShow,
-    prevRoute,
-    stop,
-  } = prop;
-  const isArriving = index + 1.5 === routeToShow.index;
-  const isDeparting = index + 1 === routeToShow.index;
+  const { status, route: routeToShow, prevRoute, stop } = prop;
+  const index = status?.index ?? -2;
+  const isArriving = index + 0.5 === routeToShow.index;
+  const isDeparting = index === routeToShow.index;
   const arriTime = getArriTime(routeToShow, prevRoute);
 
   return (

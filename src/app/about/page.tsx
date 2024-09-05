@@ -310,8 +310,8 @@ async function Page() {
             <div className=" absolute top-80 z-20">
               <div className=" flex flex-col gap-0">
                 <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                <div className=" motion-safe:animation-delay-500 h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                <div className=" motion-safe:animation-delay-1000 h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
+                <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
               </div>
               <svg>
                 <circle cx="28" cy="28" r="18" fill="white" />
@@ -369,8 +369,8 @@ async function Page() {
               <div className=" absolute -bottom-[57px] right-40 flex flex-row items-end gap-12">
                 <div className=" flex translate-y-7 -rotate-90 flex-col gap-0">
                   <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                  <div className=" motion-safe:animation-delay-500 h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                  <div className=" motion-safe:animation-delay-1000 h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                  <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
+                  <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
                 </div>
                 <div className=" h-9 w-9 rounded-full bg-white" />
               </div>

@@ -7,6 +7,13 @@ import {
 
 export const stopsRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.db.stops.findMany()),
+  getAllID: publicProcedure.query(({ ctx }) =>
+    ctx.db.stops.findMany({
+      select: {
+        id: true,
+      },
+    }),
+  ),
   getOneByID: publicProcedure
     .input(
       z.object({
