@@ -1,10 +1,10 @@
 import { z } from "zod";
+import { getCurrentTime } from "~/app/_components/util";
 import {
   createTRPCRouter,
   privateProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { getCurrentTime } from "../../../app/_components/util";
 
 export const routesRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.db.routes.findMany()),
@@ -34,6 +34,24 @@ export const routesRouter = createTRPCRouter({
       ctx.db.routes.findMany({
         where: {
           stopId: input.stopId,
+        },
+      }),
+    ),
+  getRouteByStopAndBus: publicProcedure
+    .input(
+      z.object({
+        stopId: z.number(),
+        busId: z.number(),
+      }),
+    )
+    .query(({ ctx, input }) =>
+      ctx.db.routes.findMany({
+        where: {
+          stopId: input.stopId,
+          busId: input.busId,
+        },
+        orderBy: {
+          index: "asc",
         },
       }),
     ),
@@ -81,6 +99,9 @@ export const routesRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const now = getCurrentTime();
       return ctx.db.routes.findFirst({
+        orderBy: {
+          index: "asc",
+        },
         where: {
           busId: input.busId,
           deptTime: {
@@ -104,6 +125,9 @@ export const routesRouter = createTRPCRouter({
       return Promise.all(
         input.busIds.map(async (busId) => {
           const res = await ctx.db.routes.findFirst({
+            orderBy: {
+              index: "asc",
+            },
             where: {
               busId,
               deptTime: {

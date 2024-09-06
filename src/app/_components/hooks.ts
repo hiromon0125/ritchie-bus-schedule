@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { api } from "t/react";
 import type { Bus, BusRoute } from "./types";
-import { getCurrentTime, getStopStatus, getStopStatusPerf } from "./util";
+import { getCurrentTime, getStopStatusPerf } from "./util";
 
 /**
  * The status of a bus at a given time.
@@ -20,15 +21,15 @@ export type BusMovingStatus =
   | "out-of-service"
   | "departed";
 
-export function useBusStatus(routes: BusRoute[], bus: Bus) {
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
-  const status = getStopStatus(routes, currentTime, bus?.isWeekend ?? false);
-  useEffect(() => {
-    const interval = setTimeout(() => {
-      setCurrentTime(new Date());
-    }, status.nextUpdate);
-    return () => clearTimeout(interval);
-  }, [routes, status]);
+export function useBusStatus(bus: Bus) {
+  const { data: nextRoute, refetch } = api.routes.getCurrentRouteOfBus.useQuery(
+    {
+      busId: bus?.id ?? -1,
+    },
+  );
+  const status = useBusStatusPerf(bus, nextRoute, async () => {
+    await refetch();
+  });
   return status;
 }
 
@@ -43,6 +44,7 @@ export function useBusStatusPerf(
     bus?.isWeekend ?? false,
     currentTime,
   );
+
   useEffect(() => {
     if (status == undefined) {
       (async function refetch() {
@@ -56,15 +58,4 @@ export function useBusStatusPerf(
     return () => clearTimeout(interval);
   }, [nextRoute, status]);
   return status;
-}
-
-export function useClock() {
-  const [time, setTime] = useState(getCurrentTime());
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTime(getCurrentTime());
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-  return time;
 }

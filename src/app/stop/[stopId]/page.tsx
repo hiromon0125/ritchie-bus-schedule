@@ -1,7 +1,7 @@
 import Header from "@/header";
+import { StopList } from "@/stopList";
 import { TRPCClientError } from "@trpc/client";
 import Link from "next/link";
-import { StopList } from "~/app/_components/stopList";
 import { api } from "~/trpc/server";
 
 export default async function Page({ params }: { params: { stopId: string } }) {

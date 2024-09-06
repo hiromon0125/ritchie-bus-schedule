@@ -2,8 +2,8 @@
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { api } from "t/react";
 import style from "~/styles/bus.module.css";
-import { api } from "../../trpc/react";
 import { useBusStatusPerf } from "./hooks";
 import { type Bus, type BusRoute, type BusStop } from "./types";
 import { getArriTime, type getStopStatusPerf } from "./util";

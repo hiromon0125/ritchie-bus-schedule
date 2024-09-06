@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { api } from "../trpc/server";
+import { api } from "t/server";
 
 const URL = "https://rit-bus.app";
 

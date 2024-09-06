@@ -18,7 +18,6 @@ type BusStatusProps =
 async function BusInfo({ busID, bus }: BusStatusProps) {
   const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
-  const routes = await api.routes.getAllByBusId.query({ busId: busObj.id });
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
   return (
     <Link href={`/bus/${busObj.id}`}>
@@ -33,7 +32,7 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
               {busObj.id} | {busObj?.name}
             </h2>
           </div>
-          <BusStatusString routes={routes} bus={bus ?? null} />
+          <BusStatusString bus={bus ?? null} />
         </div>
       </div>
     </Link>

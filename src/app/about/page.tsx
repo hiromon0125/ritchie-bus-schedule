@@ -1,8 +1,8 @@
+import Subtitle from "@/about/subtitle";
 import Header from "@/header";
 import Image from "next/image";
 import Link from "next/link";
 import aboutStyles from "~/styles/about.module.css";
-import Subtitle from "../_components/about/subtitle";
 
 function KeyScrollTitle() {
   return (
