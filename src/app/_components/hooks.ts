@@ -47,6 +47,7 @@ export function useBusStatusPerf(
 
   useEffect(() => {
     if (status == undefined) {
+      setCurrentTime(getCurrentTime());
       (async function refetch() {
         await refetchDataCallback();
       })().catch(console.error);

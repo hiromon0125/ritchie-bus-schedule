@@ -13,7 +13,7 @@ function StopInfo(params: StopParams) {
   const { stops, bus } = params;
   const [selectedStop, setSelectedStop] = useState<BusStop>();
   const { data: selectedRoutes, isLoading } =
-    api.routes.getRouteByStopAndBus.useQuery({
+    api.routes.getAllByStopAndBus.useQuery({
       stopId: selectedStop?.id ?? -1,
       busId: bus?.id ?? -1,
     });

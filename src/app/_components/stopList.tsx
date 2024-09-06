@@ -45,9 +45,6 @@ export async function StopList(params: { stopId: number }) {
   const keys: string[] = Object.keys(filledDict);
   const values = Object.values(filledDict);
 
-  const keysJson = JSON.stringify(keys);
-  const valuesJson = JSON.stringify(values);
-
   return (
     <div className="flex-row">
       {/* <h2 className=" text-2xl font-bold sm:mb-2 sm:text-4xl flex justify-center">Stop Info</h2> */}

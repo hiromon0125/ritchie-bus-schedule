@@ -37,7 +37,7 @@ export const routesRouter = createTRPCRouter({
         },
       }),
     ),
-  getRouteByStopAndBus: publicProcedure
+  getAllByStopAndBus: publicProcedure
     .input(
       z.object({
         stopId: z.number(),

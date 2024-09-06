@@ -2,9 +2,8 @@
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { api } from "t/react";
 import style from "~/styles/bus.module.css";
-import { useBusStatusPerf } from "./hooks";
+import { useBusStatus } from "./hooks";
 import { type Bus, type BusRoute, type BusStop } from "./types";
 import { getArriTime, type getStopStatusPerf } from "./util";
 
@@ -19,18 +18,8 @@ interface Props {
 function WaterfallBusTimeline(props: Props) {
   const { routes, stops, bus, upIcon, downIcon } = props;
   const router = useRouter();
-  const { data: nextRoute, refetch } = api.routes.getCurrentRouteOfBus.useQuery(
-    {
-      busId: bus?.id ?? 0,
-    },
-  );
-  const status = useBusStatusPerf(bus, nextRoute, async () => {
-    await refetch();
-  });
-  const firstBusIndex = Math.ceil(status?.location?.index ?? 0);
-  const [stopIndex, setStopIndex] = useState(
-    firstBusIndex > 0 ? firstBusIndex : 0,
-  );
+  const status = useBusStatus(bus);
+  const [stopIndex, setStopIndex] = useState(status?.location?.index ?? 0);
 
   function goDown() {
     setStopIndex((i) => {
@@ -107,8 +96,10 @@ function Route(prop: {
         <div className={isDeparting ? style.activeStopNode : style.stopNode} />
       </div>
       <p>
-        {DateTime.fromJSDate(arriTime).toFormat("h:mm a")} -{" "}
-        {DateTime.fromJSDate(routeToShow.deptTime).toFormat("h:mm a")}
+        <span className={routeToShow.arriTime == null ? " opacity-60" : ""}>
+          {DateTime.fromJSDate(arriTime).toFormat("h:mm a")}
+        </span>{" "}
+        - {DateTime.fromJSDate(routeToShow.deptTime).toFormat("h:mm a")}
       </p>
       <p className=" text-xl">{stop?.name}</p>
     </div>

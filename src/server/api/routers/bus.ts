@@ -27,6 +27,23 @@ export const busRouter = createTRPCRouter({
         },
       }),
     ),
+  getAllByStopID: publicProcedure
+    .input(
+      z.object({
+        stopId: z.number(),
+      }),
+    )
+    .query(({ ctx, input }) =>
+      ctx.db.routes.findMany({
+        where: {
+          stopId: input.stopId,
+        },
+        distinct: ["busId"],
+        select: {
+          bus: true,
+        },
+      }),
+    ),
   addBus: publicProcedure
     .input(
       z.object({
