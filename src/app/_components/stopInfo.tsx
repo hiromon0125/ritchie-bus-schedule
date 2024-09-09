@@ -1,17 +1,17 @@
 "use client";
+import type { Bus, Stops } from "@prisma/client";
 import { DateTime } from "luxon";
 import { useState } from "react";
 import { api } from "t/react";
-import type { Bus, BusStop } from "./types";
 
 interface StopParams {
-  stops: BusStop[];
+  stops: Stops[];
   bus: Bus;
 }
 
 function StopInfo(params: StopParams) {
   const { stops, bus } = params;
-  const [selectedStop, setSelectedStop] = useState<BusStop>();
+  const [selectedStop, setSelectedStop] = useState<Stops>();
   const { data: selectedRoutes, isLoading } =
     api.routes.getAllByStopAndBus.useQuery({
       stopId: selectedStop?.id ?? -1,

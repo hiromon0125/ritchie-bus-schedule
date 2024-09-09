@@ -1,15 +1,16 @@
 "use client";
+import type { Bus, Stops } from "@prisma/client";
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import style from "~/styles/bus.module.css";
 import { useBusStatus } from "./hooks";
-import { type Bus, type BusRoute, type BusStop } from "./types";
+import { type BusRoute, type BusStop } from "./types";
 import { getArriTime, type getStopStatusPerf } from "./util";
 
 interface Props {
   routes: BusRoute[];
-  stops: BusStop[];
+  stops: Stops[];
   bus: Bus;
   upIcon: React.ReactNode; // serverside loaded buttons
   downIcon: React.ReactNode; // serverside loaded buttons

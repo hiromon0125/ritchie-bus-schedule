@@ -1,3 +1,4 @@
+import { type Stops } from "@prisma/client";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -34,32 +35,21 @@ export const stopsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const routes = await ctx.db.routes.findMany({
-        where: {
-          busId: input.busId,
-        },
-        distinct: ["stopId"],
-        select: {
-          stopId: true,
-        },
-      });
-      return ctx.db.stops
-        .findMany({
-          where: {
-            id: {
-              in: routes.map((route) => route.stopId),
+      return (
+        ctx.db.bus
+          .findFirst({
+            where: {
+              id: input.busId,
             },
-          },
-        })
-        .then((stops) => {
-          return routes.map((route) => {
-            const stop = stops.find((stop) => stop.id === route.stopId);
-            if (!stop) {
-              throw new Error("Stop not found");
-            }
-            return stop;
-          });
-        });
+            select: {
+              stops: true,
+            },
+          })
+          // I don't fucking know why I need this.
+          // The typeserver is good enough to know what type this is,
+          // but eslint is yelling at me for no reason.
+          .then((bus) => bus?.stops as Stops[] | undefined)
+      );
     }),
   addBusStop: privateProcedure
     .input(

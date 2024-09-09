@@ -1,9 +1,9 @@
+import type { Bus } from "@prisma/client";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
 import { type RouterOutputs } from "t/shared";
 import BusStatusString from "./busStatusString";
-import { type Bus } from "./types";
 
 type BusStatusProps =
   | {
@@ -32,7 +32,7 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
               {busObj.id} | {busObj?.name}
             </h2>
           </div>
-          <BusStatusString bus={bus ?? null} />
+          <BusStatusString bus={busObj} />
         </div>
       </div>
     </Link>

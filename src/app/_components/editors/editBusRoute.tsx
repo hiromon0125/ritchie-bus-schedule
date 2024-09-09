@@ -1,4 +1,5 @@
 "use client";
+import type { Bus, Routes } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
@@ -12,10 +13,10 @@ import {
 import Select, { type StylesConfig } from "react-select";
 import { Tooltip } from "react-tooltip";
 import { api } from "t/react";
-import { type RouterInputs } from "t/shared";
+import type { RouterOutputs } from "t/shared";
 import { z } from "zod";
 
-type RouteObj = RouterInputs["routes"]["updateRoutes"][0];
+type RouteObj = Routes;
 type RouteInput = Partial<RouteObj> & Pick<RouteObj, "index" | "busId">;
 type RoutesArr = RouteInput[];
 
@@ -78,7 +79,27 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   return newRoute;
 }
 
-function EditBusRoute({ busId }: { busId: number }) {
+function savedRouteToInput(
+  data: RouterOutputs["routes"]["getAllByBusId"] | undefined,
+): RoutesArr {
+  if (!data) {
+    return [];
+  }
+  return _.sortBy(
+    data.map((route) => ({
+      ...route,
+      arriTime: route.arriTime ?? undefined,
+    })),
+    "index",
+  ) as RoutesArr;
+}
+
+function EditBusRoute({ bus }: { bus: Bus }) {
+  const busId = bus.id;
+  const { data: storedStops } = api.stops.getStopsByBusID.useQuery({
+    busId: bus.id,
+  });
+  const storedStopsId = storedStops?.map((e) => e.id) ?? [];
   const { data } = api.routes.getAllByBusId.useQuery(
     { busId },
     {
@@ -96,33 +117,11 @@ function EditBusRoute({ busId }: { busId: number }) {
     },
   );
   const { mutate, status: savingState } = api.routes.updateRoutes.useMutation();
-  const [selectedStops, setStops] = useState<number[]>([]);
-  const [input, setInput] = useState<RoutesArr>(
-    _.sortBy(
-      data?.map(
-        (route) =>
-          ({
-            ...route,
-            arriTime: route.arriTime ?? undefined,
-          }) as RouteInput,
-      ),
-      "index",
-    ),
-  );
+  const [selectedStops, setStops] = useState<number[]>(storedStopsId);
+  const [input, setInput] = useState<RoutesArr>(savedRouteToInput(data));
 
   useEffect(() => {
-    setInput(
-      _.sortBy(
-        data?.map(
-          (route) =>
-            ({
-              ...route,
-              arriTime: route.arriTime ?? undefined,
-            }) as RouteInput,
-        ),
-        "index",
-      ),
-    );
+    setInput(savedRouteToInput(data));
   }, [data]);
 
   const handleSubmit = async () => {
@@ -138,7 +137,11 @@ function EditBusRoute({ busId }: { busId: number }) {
           }),
         )
         .parse(input);
-      mutate(definedInput);
+      mutate({
+        routes: definedInput,
+        busId,
+        stopIds: selectedStops,
+      });
       await refecthData();
     } catch (e) {
       // catch if the input is invalid or attribute is missing

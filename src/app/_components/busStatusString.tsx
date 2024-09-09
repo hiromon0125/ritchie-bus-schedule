@@ -1,9 +1,9 @@
 "use client";
+import type { Bus, Stops } from "@prisma/client";
 import Image from "next/image";
 import { api } from "t/react";
 import iconStyles from "~/styles/animated-icon.module.css";
 import { useBusStatus } from "./hooks";
-import { type Bus, type BusStop } from "./types";
 
 export default function BusStatusString({ bus }: { bus: Bus }) {
   const status = useBusStatus(bus);
@@ -45,7 +45,7 @@ export default function BusStatusString({ bus }: { bus: Bus }) {
   );
 }
 
-export function BusStatusBig({ stops, bus }: { stops: BusStop[]; bus: Bus }) {
+export function BusStatusBig({ stops, bus }: { stops: Stops[]; bus: Bus }) {
   const status = useBusStatus(bus);
   return (
     <>

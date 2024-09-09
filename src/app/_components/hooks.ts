@@ -1,8 +1,9 @@
 "use client";
 
+import type { Bus } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { api } from "t/react";
-import type { Bus, BusRoute } from "./types";
+import type { BusRoute } from "./types";
 import { getCurrentTime, getStopStatusPerf } from "./util";
 
 /**

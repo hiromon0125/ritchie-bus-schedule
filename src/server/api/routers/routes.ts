@@ -57,38 +57,93 @@ export const routesRouter = createTRPCRouter({
     ),
   updateRoutes: privateProcedure
     .input(
-      z.array(
-        z.object({
-          id: z.number().optional(),
-          busId: z.number(),
-          stopId: z.number(),
-          index: z.number(),
-          deptTime: z.date(),
-          arriTime: z.date().optional(),
-        }),
-      ),
+      z.object({
+        busId: z.number(),
+        stopIds: z.array(z.number()),
+        routes: z.array(
+          z.object({
+            id: z.number().optional(),
+            busId: z.number(),
+            stopId: z.number(),
+            index: z.number(),
+            deptTime: z.date(),
+            arriTime: z.date().optional(),
+          }),
+        ),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      return Promise.all(
-        input.map(async (route) => {
-          if (route.id != undefined) {
-            return ctx.db.routes.update({
-              where: { id: route.id },
-              data: route,
-            });
-          } else {
-            await ctx.db.routes.deleteMany({
-              where: {
-                busId: route.busId,
-                index: route.index,
+      // Nuke the data that is going to be updated
+      await ctx.db.routes.deleteMany({
+        where: {
+          busId: input.busId,
+        },
+      });
+      const stops = await ctx.db.stops.findMany({
+        where: {
+          id: {
+            notIn: input.stopIds,
+          },
+          buses: {
+            some: {
+              id: input.busId,
+            },
+          },
+        },
+      });
+      await Promise.all(
+        stops.map(async (stop) => {
+          await ctx.db.stops.update({
+            where: {
+              id: stop.id,
+            },
+            data: {
+              buses: {
+                disconnect: {
+                  id: input.busId,
+                },
               },
-            });
-            return ctx.db.routes.create({
-              data: route,
-            });
-          }
+            },
+          });
         }),
       );
+      // Insert the new data
+      await ctx.db.routes.createMany({
+        data: input.routes,
+      });
+      await Promise.all(
+        input.stopIds.map(async (stopId) => {
+          await ctx.db.stops.update({
+            where: {
+              id: stopId,
+              buses: {
+                none: {
+                  id: input.busId,
+                },
+              },
+            },
+            data: {
+              buses: {
+                connect: {
+                  id: input.busId,
+                },
+              },
+            },
+          });
+        }),
+      );
+      await ctx.db.bus.update({
+        where: {
+          id: input.busId,
+        },
+        data: {
+          stops: {
+            connect: input.stopIds.map((stopId) => ({
+              id: stopId,
+            })),
+          },
+        },
+      });
     }),
   getCurrentRouteOfBus: publicProcedure
     .input(
