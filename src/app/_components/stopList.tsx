@@ -1,49 +1,11 @@
 import { api } from "~/trpc/server";
 import { StopListButton } from "./stopListButton";
-import { type BusRoute } from "./types";
 
 export async function StopList(params: { stopId: number }) {
   const { stopId } = params;
-  const routes = (await api.routes.getAll.query()) || [];
-
-  type Fin = { [busId: number]: BusRoute[] };
-  let dict: Fin = {
-    1: [],
-    2: [],
-    3: [],
-    4: [],
-    5: [],
-    6: [],
-    7: [],
-    8: [],
-    9: [],
-    10: [],
-    11: [],
-    13: [],
-    16: [],
+  const { buses } = (await api.bus.getAllByStopID.query({ stopId })) ?? {
+    buses: [],
   };
-
-  const selectedRoutes = routes
-    .filter((route) => route.stopId === stopId)
-    .sort((a, b) => a.deptTime.getTime() - b.deptTime.getTime());
-  for (let i = 0; i < selectedRoutes.length; i++) {
-    // console.log("Adding route" + i + " " + selectedRoutes[i]);
-    dict[selectedRoutes[i]?.busId]?.push(
-      selectedRoutes[i]?.deptTime.toLocaleTimeString([], {
-        timeStyle: "short",
-      }),
-    );
-  }
-
-  let filledDict: Fin = {};
-  for (let key in dict) {
-    if (dict[key].length > 0) {
-      filledDict[key] = dict[key];
-    }
-  }
-
-  const keys: string[] = Object.keys(filledDict);
-  const values = Object.values(filledDict);
 
   return (
     <div className="flex-row">
@@ -51,9 +13,7 @@ export async function StopList(params: { stopId: number }) {
       <p className=" mb-2 flex justify-center text-lg">
         Select the bus to see the time of departure
       </p>
-      <ul className="flex justify-center">
-        <StopListButton busIds={keys} values={values}></StopListButton>
-      </ul>
+      <StopListButton buses={buses} />
       <ul id="stopList" className=" mb-8 w-full text-xl"></ul>
     </div>
   );

@@ -34,13 +34,12 @@ export const busRouter = createTRPCRouter({
       }),
     )
     .query(({ ctx, input }) =>
-      ctx.db.routes.findMany({
-        where: {
-          stopId: input.stopId,
-        },
-        distinct: ["busId"],
+      ctx.db.stops.findUnique({
         select: {
-          bus: true,
+          buses: true,
+        },
+        where: {
+          id: input.stopId,
         },
       }),
     ),

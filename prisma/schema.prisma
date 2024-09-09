@@ -11,6 +11,7 @@ datasource db {
 model Bus {
   id          Int           @id @default(autoincrement())
   name        String
+  tag         String?
   description String        @default("")
   color       String        @default("#000000")
   createdAt   DateTime      @default(now())
@@ -18,11 +19,14 @@ model Bus {
   isWeekend   Boolean       @default(false)
   favUsers    FavoriteBus[]
   routes      Routes[]
+  busesStops  Stops[]
 }
 
 model Stops {
   id        Int            @id @default(autoincrement())
-  name      String?
+  name      String
+  tag       String?
+  description String        @default("")
   latitude  Float          @default(0)
   longitude Float          @default(0)
   createdAt DateTime       @default(now())
@@ -31,6 +35,7 @@ model Stops {
   inbounds  Connections[]  @relation("inbounds")
   favUsers  FavoriteStop[]
   routes    Routes[]
+  buses     Bus[]
 }
 
 model Connections {

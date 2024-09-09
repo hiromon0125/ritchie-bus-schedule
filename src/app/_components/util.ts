@@ -121,7 +121,7 @@ export function getStopStatusPerf(
     arriTime.getTime() - now.getTime() >= 10 * 60 * 1000
   ) {
     return {
-      statusMessage: `Out of service • Starting in ${deptDT.toFormat("h:mm a")}`,
+      statusMessage: `Out of service • Starting at ${deptDT.toFormat("h:mm a")}`,
       location: route,
       isMoving: "starting",
       index: route.index - 0.5,
