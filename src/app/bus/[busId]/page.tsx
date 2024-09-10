@@ -37,7 +37,7 @@ export default async function Page({ params }: Props) {
   if (!bus) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
-  const stops = await api.stops.getStopsByBusID.query({ busId });
+  const stops = (await api.stops.getStopsByBusID.query({ busId })) ?? [];
   return (
     <>
       <ScrollToTopButton color={bus.color} />
