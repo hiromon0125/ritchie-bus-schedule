@@ -22,7 +22,9 @@ export default async function Page({ params }: { params: { stopId: string } }) {
           Stop {stopId} | {currentStop?.name}
         </h1>
         <StopList stopId={stopId} />
-        <Link href="/">Back to home</Link>
+        <Link className=" border border-black bg-black text-white" href="/">
+          Back to home
+        </Link>
       </div>
     </div>
   );
