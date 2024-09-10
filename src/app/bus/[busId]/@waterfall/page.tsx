@@ -16,7 +16,7 @@ async function page({ params }: { params: { busId: string } }) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
   const routes = await api.routes.getAllByBusId.query({ busId });
-  const stops = await api.stops.getStopsByBusID.query({ busId });
+  const stops = (await api.stops.getStopsByBusID.query({ busId })) ?? [];
   return (
     <WaterfallBusTimeline
       routes={routes}
