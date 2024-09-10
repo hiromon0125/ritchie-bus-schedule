@@ -47,10 +47,10 @@ export function StopListButton(params: { buses: Bus[]; stopId: number }) {
           style={{ backgroundColor: "lightgray", border: "1px solid black" }}
         >
           <li className=" flex flex-row border border-black">
-            <p className=" flex-1 border border-black p-2 px-3 font-bold">
+            <p className=" flex-1 border border-black p-2 px-3 text-right font-bold">
               Arrival Time
             </p>
-            <p className=" flex-1 border border-black p-2 px-3 font-bold">
+            <p className=" flex-1 border border-black p-2 px-3 text-right font-bold">
               Departure Time
             </p>
           </li>
