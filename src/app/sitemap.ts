@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { api } from "t/server";
 
 const URL = "https://rit-bus.app";
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buses = await api.bus.getAllID.query();
