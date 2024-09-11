@@ -142,7 +142,22 @@ function EditBusRoute({ bus }: { bus: Bus }) {
             arriTime: z.date().optional(),
           }),
         )
-        .parse(input);
+        .parse(input)
+        .map((route) => {
+          const { arriTime, deptTime, ...rest } = route;
+          return {
+            ...rest,
+            arriTime: arriTime
+              ? new Date(
+                  Date.UTC(0, 0, 0, arriTime.getHours(), arriTime.getMinutes()),
+                )
+              : undefined,
+            deptTime: new Date(
+              Date.UTC(0, 0, 0, deptTime.getHours(), deptTime.getMinutes()),
+            ),
+          };
+        });
+
       mutate({
         routes: definedInput,
         busId,
