@@ -93,8 +93,6 @@ export function getStopStatusPerf(
 ): Status | undefined {
   const { date: now, isWeekend: isTodayWeekend } = currentTime;
 
-  console.log(now, route?.deptTime, route?.arriTime);
-
   // out of service
   if (isWeekend != isTodayWeekend || route == null || route == undefined) {
     return {
@@ -110,11 +108,6 @@ export function getStopStatusPerf(
   const arriTime = getArriTime(route);
   const arriDT = DateTime.fromJSDate(arriTime);
   const deptDT = DateTime.fromJSDate(route.deptTime);
-  console.log(
-    arriTime.getTime(),
-    now.getTime(),
-    arriTime.getTime() - now.getTime(),
-  );
 
   if (
     route.index === 1 &&
@@ -156,4 +149,12 @@ export function getStopStatusPerf(
       nextUpdate: getTimeToUpdateNext(offsetTime ?? "minutes"),
     };
   }
+
+  console.log("Status is undefined");
+  console.log(
+    "route Depture:",
+    route.deptTime.getTime(),
+    " Arrival:",
+    route.arriTime?.getTime(),
+  );
 }

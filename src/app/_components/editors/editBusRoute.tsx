@@ -96,7 +96,7 @@ function savedRouteToInput(
 
 function EditBusRoute({ bus }: { bus: Bus }) {
   const busId = bus.id;
-  const { data: storedStops } = api.stops.getStopsByBusID.useQuery({
+  const { data: storedStops, isLoading } = api.stops.getStopsByBusID.useQuery({
     busId: bus.id,
   });
   const storedStopsId = storedStops?.map((e) => e.id) ?? [];
@@ -117,9 +117,15 @@ function EditBusRoute({ bus }: { bus: Bus }) {
     },
   );
   const { mutate, status: savingState } = api.routes.updateRoutes.useMutation();
-  const [selectedStops, setStops] = useState<number[]>(storedStopsId);
+  const [edtedSelectedStops, setEditedStops] = useState(false);
+  const [selectedStops, setStops] = useState(storedStopsId);
   const [input, setInput] = useState<RoutesArr>(savedRouteToInput(data));
 
+  useEffect(() => {
+    if (!edtedSelectedStops) {
+      setStops(storedStopsId);
+    }
+  }, [isLoading]);
   useEffect(() => {
     setInput(savedRouteToInput(data));
   }, [data]);
@@ -183,7 +189,14 @@ function EditBusRoute({ bus }: { bus: Bus }) {
             value: stop.id,
             label: `${stop.id} ${stop.name}`,
           }))}
-          onChange={(selection) => setStops(selection.map((s) => s.value))}
+          value={selectedStops.map((stop) => ({
+            value: stop,
+            label: `${stop} ${stops?.find((s) => s.id === stop)?.name}`,
+          }))}
+          onChange={(selection) => {
+            setStops(selection.map((s) => s.value));
+            setEditedStops(true);
+          }}
           styles={selectStyles}
           placeholder="Select stops..."
         />
