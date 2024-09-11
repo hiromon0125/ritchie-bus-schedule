@@ -1,7 +1,8 @@
 "use client";
 
 import type { Bus } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { api } from "t/react";
 import type { BusRoute } from "./types";
 import { getCurrentTime, getStopStatusPerf } from "./util";
@@ -23,21 +24,27 @@ export type BusMovingStatus =
   | "departed";
 
 export function useBusStatus(bus: Bus) {
-  const { data: nextRoute, refetch } = api.routes.getCurrentRouteOfBus.useQuery(
-    {
-      busId: bus?.id ?? -1,
-    },
-  );
-  const status = useBusStatusPerf(bus, nextRoute, async () => {
-    await refetch();
+  const busId = bus?.id ?? -1;
+  const { data: nextRoute } = api.routes.getCurrentRouteOfBus.useQuery({
+    busId,
   });
-  return status;
+  const fetchCount = useRef(0);
+  const queryClient = useQueryClient();
+  const refetch = async () => {
+    if (fetchCount.current++ < 5)
+      await queryClient.invalidateQueries(["getCurrentRouteOfBus", busId]);
+  };
+  const resetFetchCount = () => {
+    fetchCount.current = 0;
+  };
+  return useBusStatusPerf(bus, nextRoute, refetch, resetFetchCount);
 }
 
 export function useBusStatusPerf(
   bus: Bus,
   nextRoute: BusRoute | null | undefined,
   refetchDataCallback: () => Promise<void>,
+  resetFetchCount: () => void,
 ) {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
   const status = getStopStatusPerf(
@@ -54,6 +61,7 @@ export function useBusStatusPerf(
       })().catch(console.error);
       return;
     }
+    resetFetchCount();
     const interval = setTimeout(() => {
       setCurrentTime(getCurrentTime());
     }, status?.nextUpdate ?? 1000);
