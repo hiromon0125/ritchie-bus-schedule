@@ -1,5 +1,5 @@
+import { getCurrentTimeServer } from "@/util";
 import { z } from "zod";
-import { getCurrentTime } from "~/app/_components/util";
 import {
   createTRPCRouter,
   privateProcedure,
@@ -152,7 +152,7 @@ export const routesRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const now = getCurrentTime();
+      const now = getCurrentTimeServer();
       console.log("current time:", now.date.getTime());
 
       return ctx.db.routes.findFirst({

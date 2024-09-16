@@ -48,12 +48,18 @@ export function getTimeToUpdateNext(status: string | undefined) {
 }
 
 export function getCurrentTime(): { date: Date; isWeekend: boolean } {
-  const now = DateTime.utc().toJSDate();
+  const now = new Date();
   const isTodayWeekend = [0, 6].includes(now.getDay());
   // set date to 0 so that we can compare times
-  now.setDate(1);
-  now.setFullYear(1970);
-  now.setMonth(0);
+  now.setFullYear(1970, 0, 1);
+  return { date: now, isWeekend: isTodayWeekend };
+}
+export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
+  let now = new Date();
+  now = new Date(now.getTime() + 1);
+  const isTodayWeekend = [0, 6].includes(now.getDay());
+  // set date to 0 so that we can compare times
+  now.setFullYear(1970, 0, 1);
   return { date: now, isWeekend: isTodayWeekend };
 }
 
