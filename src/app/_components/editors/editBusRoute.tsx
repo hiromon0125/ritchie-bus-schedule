@@ -37,7 +37,7 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   const newRoute = {
     ...(input[input.length - 1] ?? {
       busId,
-      stopId: stops[0] ?? 0,
+      stopId: stops.at(0) ?? 0,
       index: 0,
       deptTime: new Date(),
     }),
@@ -45,24 +45,25 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   newRoute.index += 1;
   newRoute.arriTime = undefined;
   const indStop = newRoute.stopId ? stops.indexOf(newRoute.stopId) : -1;
-  let nextStop = stops[indStop + 1];
-  newRoute.stopId = nextStop ?? stops[0] ?? 0;
-  if (!nextStop && indStop !== stops.length - 1) {
-    return newRoute;
-  } else if (indStop === stops.length - 1) {
-    nextStop = stops[0];
-  }
+  let nextStop = stops.at(indStop + 1);
+  newRoute.stopId = nextStop ?? stops.at(0) ?? 0;
+  if (!nextStop && indStop !== stops.length - 1) return newRoute;
+  else if (indStop === stops.length - 1) nextStop = stops.at(0);
+
+  // Find the last instance of the next stop to calculate the time difference
   const lastInstance = _.findLastIndex(
     input,
     (route) => route.stopId === nextStop,
   );
-  if (lastInstance === -1 || lastInstance === 0) {
-    return newRoute;
-  }
+  if ([-1, 0].includes(lastInstance)) return newRoute;
+
+  // Set the departure time to the last instance of the stop plus the time difference between the last instance and the stop before it
   const timeDiff =
     (input[lastInstance]!.deptTime?.getTime() ?? 0) -
     (input[lastInstance - 1]!.deptTime?.getTime() ?? 0);
   newRoute.deptTime = new Date((newRoute.deptTime?.getTime() ?? 0) + timeDiff);
+
+  // Set the arrival time to the last instance of the stop plus the time difference between the last instance and the instance before that
   if (
     input[lastInstance]!.arriTime &&
     lastInstance - stops.length > 0 &&
@@ -72,7 +73,7 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
       (input[lastInstance]!.arriTime?.getTime() ?? 0) -
       (input[lastInstance - stops.length]?.arriTime?.getTime() ?? 0);
     const newArriTime = new Date(
-      input[lastInstance]?.arriTime?.getTime() ?? 0 + timeDiff,
+      (input[lastInstance]?.arriTime?.getTime() ?? 0) + timeDiff,
     );
     newRoute.arriTime = newArriTime;
   }
