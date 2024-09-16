@@ -106,8 +106,8 @@ export function getStopStatusPerf(
 
   // starting
   const arriTime = getArriTime(route);
-  const arriDT = DateTime.fromJSDate(arriTime);
-  const deptDT = DateTime.fromJSDate(route.deptTime);
+  const arriDT = DateTime.fromJSDate(arriTime).toLocal();
+  const deptDT = DateTime.fromJSDate(route.deptTime).toLocal();
 
   if (
     route.index === 1 &&

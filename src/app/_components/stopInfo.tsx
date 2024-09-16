@@ -54,7 +54,7 @@ function StopInfo(params: StopParams) {
               .flat()
               .map((date, i) => {
                 const formattedDate = date
-                  ? DateTime.fromJSDate(date)
+                  ? DateTime.fromJSDate(date).toLocal()
                   : undefined;
                 return (
                   <p

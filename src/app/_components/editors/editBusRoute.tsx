@@ -244,17 +244,22 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                       placeholder="--:--"
                       value={
                         input[index]!.arriTime != undefined
-                          ? DateTime.fromJSDate(
-                              input[index]!.arriTime,
-                            ).toFormat("HH:mm")
+                          ? DateTime.fromJSDate(input[index]!.arriTime)
+                              .toLocal()
+                              .toFormat("HH:mm")
                           : ""
                       }
                       onChange={(e) => {
                         if (e.target.valueAsDate === null) return;
                         const newInput = [...input];
-                        newInput[index]!.arriTime = new Date(
-                          `01/01/1970 ${e.target.value}`,
-                        );
+                        const newDT: DateTime = DateTime.now();
+                        newDT.toLocal();
+                        newDT.set({
+                          hour: e.target.valueAsDate.getHours(),
+                          minute: e.target.valueAsDate.getMinutes(),
+                        });
+                        newDT.setZone("utc");
+                        newInput[index]!.arriTime = newDT.toJSDate();
                         setInput(newInput);
                       }}
                     />
@@ -280,17 +285,22 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                     className="flex-1 p-1"
                     value={
                       input[index]!.deptTime != undefined
-                        ? DateTime.fromJSDate(input[index]!.deptTime).toFormat(
-                            "HH:mm",
-                          )
+                        ? DateTime.fromJSDate(input[index]!.deptTime)
+                            .toLocal()
+                            .toFormat("HH:mm")
                         : ""
                     }
                     onChange={(e) => {
-                      if (e.target.value === null) return;
+                      if (e.target.valueAsDate === null) return;
                       const newInput = [...input];
-                      newInput[index]!.deptTime = new Date(
-                        `01/01/1970 ${e.target.value}`,
-                      );
+                      const newDT: DateTime = DateTime.now();
+                      newDT.toLocal();
+                      newDT.set({
+                        hour: e.target.valueAsDate.getHours(),
+                        minute: e.target.valueAsDate.getMinutes(),
+                      });
+                      newDT.setZone("utc");
+                      newInput[index]!.deptTime = newDT.toJSDate();
                       setInput(newInput);
                     }}
                   />

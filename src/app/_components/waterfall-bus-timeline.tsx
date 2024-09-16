@@ -98,9 +98,10 @@ function Route(prop: {
       </div>
       <p>
         <span className={routeToShow.arriTime == null ? " opacity-60" : ""}>
-          {DateTime.fromJSDate(arriTime).toFormat("h:mm a")}
+          {DateTime.fromJSDate(arriTime).toLocal().toFormat("h:mm a")}
         </span>{" "}
-        - {DateTime.fromJSDate(routeToShow.deptTime).toFormat("h:mm a")}
+        -{" "}
+        {DateTime.fromJSDate(routeToShow.deptTime).toLocal().toFormat("h:mm a")}
       </p>
       <p className=" text-xl">{stop?.name}</p>
     </div>

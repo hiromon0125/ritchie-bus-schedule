@@ -56,9 +56,9 @@ export function StopListButton(params: { buses: Bus[]; stopId: number }) {
           </li>
           {routes?.map((route, i) => {
             const arriDT = route.arriTime
-              ? DateTime.fromJSDate(route.arriTime)
+              ? DateTime.fromJSDate(route.arriTime).toLocal()
               : null;
-            const deptDT = DateTime.fromJSDate(route.deptTime);
+            const deptDT = DateTime.fromJSDate(route.deptTime).toLocal();
             return (
               <li className=" flex flex-row " key={i}>
                 <p className=" flex-1 border border-black px-3 text-right">
