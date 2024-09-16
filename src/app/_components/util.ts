@@ -55,8 +55,10 @@ export function getCurrentTime(): { date: Date; isWeekend: boolean } {
   return { date: now, isWeekend: isTodayWeekend };
 }
 export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
-  let now = new Date();
-  now = new Date(now.getTime() + 1);
+  const now = new Date();
+  // Dont ask me why this is here, I don't know
+  // but the vercel host is 1 hour behind
+  now.setHours(now.getHours() + 1);
   const isTodayWeekend = [0, 6].includes(now.getDay());
   // set date to 0 so that we can compare times
   now.setFullYear(1970, 0, 1);
