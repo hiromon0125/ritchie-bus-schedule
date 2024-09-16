@@ -153,7 +153,7 @@ export const routesRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const now = getCurrentTime();
-      console.log("current time:", now.date);
+      console.log("current time:", now.date.getTime());
 
       return ctx.db.routes.findFirst({
         orderBy: {
