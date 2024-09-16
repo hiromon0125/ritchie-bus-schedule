@@ -48,7 +48,7 @@ export function getTimeToUpdateNext(status: string | undefined) {
 }
 
 export function getCurrentTime(): { date: Date; isWeekend: boolean } {
-  const now = new Date();
+  const now = DateTime.utc().toJSDate();
   const isTodayWeekend = [0, 6].includes(now.getDay());
   // set date to 0 so that we can compare times
   now.setDate(1);
@@ -152,9 +152,11 @@ export function getStopStatusPerf(
 
   console.log("Status is undefined");
   console.log(
-    "route Depture:",
+    "now:",
+    now.getTime(),
+    "\nroute Depture:",
     route.deptTime.getTime(),
-    " Arrival:",
+    "\nArrival:",
     route.arriTime?.getTime(),
   );
 }
