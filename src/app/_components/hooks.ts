@@ -1,7 +1,6 @@
 "use client";
 
 import type { Bus } from "@prisma/client";
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { api } from "t/react";
 import type { BusRoute } from "./types";
@@ -25,14 +24,13 @@ export type BusMovingStatus =
 
 export function useBusStatus(bus: Bus) {
   const busId = bus?.id ?? -1;
-  const { data: nextRoute } = api.routes.getCurrentRouteOfBus.useQuery({
-    busId,
-  });
+  const { data: nextRoute, refetch: requeryData } =
+    api.routes.getCurrentRouteOfBus.useQuery({
+      busId,
+    });
   const fetchCount = useRef(0);
-  const queryClient = useQueryClient();
   const refetch = async () => {
-    if (fetchCount.current++ < 5)
-      await queryClient.invalidateQueries(["getCurrentRouteOfBus", busId]);
+    if (fetchCount.current++ < 5) await requeryData();
   };
   const resetFetchCount = () => {
     fetchCount.current = 0;
