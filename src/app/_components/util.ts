@@ -1,71 +1,14 @@
 import { DateTime } from "luxon";
+import { type BusMovingStatus } from "./hooks";
 import { type BusRoute } from "./types";
 
-function getNextSaturday(): Date {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() + (day === 0 ? 6 : 6 - day); // adjust when day is sunday
-  return new Date(now.setDate(diff));
-}
-function getNextMonday(): Date {
-  const now = new Date();
-  const day = now.getDay();
-  const diff = now.getDate() + (day === 0 ? 1 : 8 - day); // adjust when day is sunday
-  return new Date(now.setDate(diff));
-}
-function editDate(
-  date: Date,
-  { year, month, day }: { year?: number; month?: number; day?: number },
-): Date {
-  const newDate = new Date(date);
-  if (year) {
-    newDate.setFullYear(year);
-  }
-  if (month) {
-    newDate.setMonth(month);
-  }
-  if (day) {
-    newDate.setDate(day);
-  }
-  return newDate;
-}
-export function isWeekend(date: Date): boolean {
-  return [0, 6].includes(date.getDay());
-}
-/**
- * - Returns a date that today's date with the time of the given date.
- * - If given date is not a weekend and today is a weekend, the date will be the next Monday.
- * - If given date is a weekend and today is not a weekend, the date will be the next Saturday.
- * @param date date to fix
- * @returns date that follows the rules above
- */
-export function fixDate(date: Date): Date {
-  const now = new Date();
-  const isDateWeekend = isWeekend(date);
-  const isNowWeekend = isWeekend(now);
-  const dateToCorrectTo =
-    isDateWeekend && !isNowWeekend
-      ? getNextSaturday()
-      : isNowWeekend && !isDateWeekend
-        ? getNextMonday()
-        : now;
-  return editDate(date, {
-    year: dateToCorrectTo.getFullYear(),
-    month: dateToCorrectTo.getMonth(),
-    day: dateToCorrectTo.getDate(),
-  });
-}
-
-export function getNowInUTC() {
-  const now = new Date();
-  return new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-}
 export function getRelative(now: Date, time: Date) {
   return DateTime.fromJSDate(time).toRelative({
     base: DateTime.fromJSDate(now),
   });
 }
 
+const NEWYORK_TIMEZONE = "America/New_York";
 const DEFAULT_OFFSET = 2 * 60 * 1000;
 /**
  * returns a date that is 2 minutes before the given date
@@ -78,18 +21,18 @@ export function offSetByMinutes(date: Date, offset?: number): Date {
 
 export function getArriTime(current: BusRoute, prev?: BusRoute) {
   if (current.arriTime) {
-    return fixDate(current.arriTime);
+    return current.arriTime;
   } else if (!prev) {
-    return offSetByMinutes(fixDate(current.deptTime));
+    return offSetByMinutes(current.deptTime);
   }
   const prevDeptTime = prev.deptTime;
   const currentDeptTime = current.deptTime;
   const diff = currentDeptTime.getTime() - prevDeptTime.getTime();
 
   if (diff < DEFAULT_OFFSET) {
-    return fixDate(currentDeptTime);
+    return currentDeptTime;
   }
-  return offSetByMinutes(fixDate(currentDeptTime));
+  return offSetByMinutes(currentDeptTime);
 }
 
 /**
@@ -105,71 +48,128 @@ export function getTimeToUpdateNext(status: string | undefined) {
   return 5 * 60 * 1000;
 }
 
-function getIndexOfCurrentLocation(routes: BusRoute[], nowUTC: Date): number {
-  if (routes.length === 0) {
-    return -2;
-  }
-  // check if it's both a weekday or both a weekend
-  const isWknd = isWeekend(new Date()); // use local time to determine if it's a weekend as dates are not correct for UTC
-  if (isWeekend(routes[0]!.deptTime) != isWknd) {
-    return -2;
-  }
-  const stops = routes.map((route, i) => {
-    return [getArriTime(route, routes[i - 1]), fixDate(route.deptTime)];
-  });
-  const listOfTimes = stops.flat();
-  const index = listOfTimes.findIndex((time) => time > nowUTC);
-  if (index === -1) {
-    return -2;
-  }
-  return (index + 1) / 2 - 1;
+export function getCurrentTime(): { date: Date; isWeekend: boolean } {
+  const now = new Date();
+  const isTodayWeekend = [6, 7].includes(
+    DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
+  );
+  // set date to 0 so that we can compare times
+  now.setFullYear(1970, 0, 1);
+  return { date: now, isWeekend: isTodayWeekend };
+}
+export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
+  const now = new Date();
+  // Dont ask me why this is here, I don't know
+  // but the clock is off by an hour probably due to daylight savings
+  if (!DateTime.now().isInDST) now.setHours(now.getHours() + 1);
+  const isTodayWeekend = [6, 7].includes(
+    DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
+  );
+  // set date to 0 so that we can compare times
+  now.setFullYear(1970, 0, 1);
+  return { date: now, isWeekend: isTodayWeekend };
 }
 
-export function getStopStatus(routes: BusRoute[], now: Date) {
-  const index = getIndexOfCurrentLocation(routes, now);
-  if (index === -2) {
+type Status = {
+  statusMessage: string;
+  location: BusRoute | undefined;
+  isMoving: BusMovingStatus;
+  index: number;
+  nextUpdate: number;
+};
+
+/**
+ * Determines the status of the bus based on the route and the current time.
+ * This function should always run on the client side to get the current time.
+ *
+ * This is the following statuses:
+ * - "Out of service": The bus's next stop null or the bus is not running today.
+ * - "Starting": The bus is starting its route on this route. When the index is 1 and the arrival time is more than 10 minutes away.
+ * - "Moving": The bus is arriving to the next stop. When the arrival time is less than 10 minutes away.
+ * - "Stopped": The bus is stopped at this stop. When the arrival time is past the current time and departure time has not past the current time.
+ * - undefined: The bus departed or something went wrong.
+ *
+ * Indexes are offset by 0.5 to show the bus is moving. For example, if the bus is moving to the first stop, the index will be 0.5.
+ * If the bus is stopped at the first stop, the index will be 1.
+ *
+ * The default arrival time is 2 minutes before the departure time.
+ *
+ *
+ * @param route BusRoute | null
+ * @param isWeekend boolean
+ * @returns Status
+ */
+export function getStopStatusPerf(
+  route: BusRoute | null | undefined,
+  isWeekend: boolean,
+  currentTime: ReturnType<typeof getCurrentTime>,
+): Status | undefined {
+  const { date: now, isWeekend: isTodayWeekend } = currentTime;
+
+  // out of service
+  if (isWeekend != isTodayWeekend || route == null || route == undefined) {
     return {
       statusMessage: "Out of service",
       location: undefined,
-      isMoving: false,
-      index,
+      isMoving: "out-of-service",
+      index: -2,
       nextUpdate: 5 * 60 * 1000,
     };
-  } else if (index !== Math.floor(index)) {
-    const nextLocation = routes[index === -0.5 ? 0 : Math.floor(index + 1)]!;
-    const nextNextLocation = routes[index === -0.5 ? 1 : Math.floor(index + 2)];
-    const arriTime = getArriTime(nextLocation, nextNextLocation);
-    if (arriTime.getTime() - now.getTime() >= 60 * 60 * 1000) {
-      return {
-        statusMessage: "Out of service",
-        location: undefined,
-        isMoving: false,
-        index: -2,
-        nextUpdate: 5 * 60 * 1000,
-      };
-    }
-    const arrivalMessage = `Arriving ${getRelative(now, arriTime)}`;
+  }
+
+  // starting
+  const arriTime = getArriTime(route);
+  const arriDT = DateTime.fromJSDate(arriTime).toLocal();
+  const deptDT = DateTime.fromJSDate(route.deptTime).toLocal();
+
+  if (
+    route.index === 1 &&
+    arriTime.getTime() - now.getTime() >= 10 * 60 * 1000
+  ) {
     return {
-      statusMessage: `${arrivalMessage} • ${DateTime.fromJSDate(arriTime)
-        .toUTC()
-        .toFormat("h:mm a")}`,
-      location: nextLocation,
-      isMoving: true,
-      index,
-      nextUpdate: getTimeToUpdateNext(arrivalMessage),
+      statusMessage: `Out of service • Starting at ${deptDT.toFormat("h:mm a")}`,
+      location: route,
+      isMoving: "starting",
+      index: route.index - 0.5,
+      nextUpdate: 5 * 60 * 1000,
     };
   }
-  const currentLocation = routes[Math.floor(index)]!;
-  const deptTime = fixDate(currentLocation.deptTime);
-  const departingMessage = `Departing ${getRelative(
-    now,
-    deptTime,
-  )} • ${DateTime.fromJSDate(deptTime).toUTC().toFormat("h:mm a")}`;
-  return {
-    statusMessage: departingMessage,
-    location: currentLocation,
-    isMoving: false,
-    index,
-    nextUpdate: getTimeToUpdateNext(departingMessage),
-  };
+
+  // moving
+  let diff: number;
+  if (
+    (diff = arriTime.getTime() - now.getTime()) < 10 * 60 * 1000 &&
+    diff > 0
+  ) {
+    const offsetTime = getRelative(now, arriTime);
+    return {
+      statusMessage: `Arriving ${offsetTime} • ${arriDT.toFormat("h:mm a")}`,
+      location: route,
+      isMoving: "moving",
+      index: route.index - 0.5,
+      nextUpdate: getTimeToUpdateNext(offsetTime ?? "minutes"),
+    };
+  }
+
+  // stopped
+  if (diff <= 0 && route.deptTime.getTime() > now.getTime()) {
+    const offsetTime = getRelative(now, route.deptTime);
+    return {
+      statusMessage: `Departing ${offsetTime} • ${deptDT.toFormat("h:mm a")}`,
+      location: route,
+      isMoving: "stopped",
+      index: route.index,
+      nextUpdate: getTimeToUpdateNext(offsetTime ?? "minutes"),
+    };
+  }
+
+  console.log("Status is undefined");
+  console.log(
+    "now:",
+    now.getTime(),
+    "\nroute Depture:",
+    route.deptTime.getTime(),
+    "\nArrival:",
+    route.arriTime?.getTime(),
+  );
 }

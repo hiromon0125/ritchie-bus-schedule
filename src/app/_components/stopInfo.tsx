@@ -1,21 +1,22 @@
 "use client";
-import _ from "lodash";
+import type { Bus, Stops } from "@prisma/client";
 import { DateTime } from "luxon";
 import { useState } from "react";
-import type { Bus, BusRoute, BusStop } from "./types";
+import { api } from "t/react";
 
 interface StopParams {
-  routes: BusRoute[];
-  stops: BusStop[];
+  stops: Stops[];
   bus: Bus;
 }
 
 function StopInfo(params: StopParams) {
-  const { routes, stops, bus } = params;
-  const [selectedStop, setSelectedStop] = useState<BusStop>();
-  const selectedRoutes = selectedStop
-    ? _.filter(routes, { stopId: selectedStop.id })
-    : [];
+  const { stops, bus } = params;
+  const [selectedStop, setSelectedStop] = useState<Stops>();
+  const { data: selectedRoutes, isLoading } =
+    api.routes.getAllByStopAndBus.useQuery({
+      stopId: selectedStop?.id ?? -1,
+      busId: bus?.id ?? -1,
+    });
   return (
     <>
       <h2 className=" text-2xl font-bold sm:mb-2 sm:text-4xl">Stops Info</h2>
@@ -34,7 +35,7 @@ function StopInfo(params: StopParams) {
                 style={{
                   backgroundColor:
                     selectedStop?.id === stop.id
-                      ? bus?.color ?? "white"
+                      ? (bus?.color ?? "white")
                       : "white",
                 }}
               />
@@ -49,11 +50,11 @@ function StopInfo(params: StopParams) {
             <p className=" border-2 py-2 text-lg">Arrival Time</p>
             <p className=" border-2 py-2 text-lg">Departure Time</p>
             {selectedRoutes
-              .map((route) => [route.arriTime, route.deptTime])
+              ?.map((route) => [route.arriTime, route.deptTime])
               .flat()
               .map((date, i) => {
                 const formattedDate = date
-                  ? DateTime.fromJSDate(date).toUTC()
+                  ? DateTime.fromJSDate(date).toLocal()
                   : undefined;
                 return (
                   <p
@@ -63,7 +64,10 @@ function StopInfo(params: StopParams) {
                     {formattedDate?.toFormat("hh:mm a") ?? ""}
                   </p>
                 );
-              })}
+              }) ??
+              (isLoading
+                ? "Loading..."
+                : "An error occurred. Refresh the page.")}
           </div>
         </div>
       )}

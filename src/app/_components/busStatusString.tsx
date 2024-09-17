@@ -1,16 +1,13 @@
 "use client";
+import type { Bus, Stops } from "@prisma/client";
 import Image from "next/image";
+import { api } from "t/react";
 import iconStyles from "~/styles/animated-icon.module.css";
-import { api } from "../../trpc/react";
-import { type RouterOutputs } from "../../trpc/shared";
 import { useBusStatus } from "./hooks";
 
-export default function BusStatusString({
-  routes,
-}: {
-  routes: RouterOutputs["routes"]["getAllByBusId"];
-}) {
-  const { isMoving, statusMessage, location } = useBusStatus(routes);
+export default function BusStatusString({ bus }: { bus: Bus }) {
+  const status = useBusStatus(bus);
+  const { isMoving, statusMessage, location } = status ?? {};
   const { data: stop } = api.stops.getOneByID.useQuery({
     id: location?.stopId ?? 0,
   });
@@ -48,32 +45,28 @@ export default function BusStatusString({
   );
 }
 
-export function BusStatusBig({
-  routes,
-  stops,
-}: {
-  routes: RouterOutputs["routes"]["getAllByBusId"];
-  stops: RouterOutputs["stops"]["getOneByID"][];
-}) {
-  const { isMoving, statusMessage, location } = useBusStatus(routes);
+export function BusStatusBig({ stops, bus }: { stops: Stops[]; bus: Bus }) {
+  const status = useBusStatus(bus);
   return (
     <>
       <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
       {!!location && (
         <p className=" text-xl">
-          {(isMoving &&
+          {(status?.isMoving &&
             `Next stop: ${
-              stops.find((stop) => stop?.id === location?.stopId)?.name ??
-              "Unknown"
-            }`) ||
-            (isMoving === false &&
+              stops.find((stop) => stop?.id === status?.location?.stopId)
+                ?.name ?? "Unknown"
+            }`) ??
+            (status?.isMoving === "stopped" &&
               `Currently at ${
-                stops.find((stop) => stop?.id === location?.stopId)?.name ??
-                "Unknown"
+                stops.find((stop) => stop?.id === status?.location?.stopId)
+                  ?.name ?? "Unknown"
               }`)}
         </p>
       )}
-      <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">{statusMessage}</p>
+      <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">
+        {status?.statusMessage}
+      </p>
     </>
   );
 }

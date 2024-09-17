@@ -1,30 +1,26 @@
 "use client";
+import type { Bus, Stops } from "@prisma/client";
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import style from "~/styles/bus.module.css";
-import { type RouterOutputs } from "../../trpc/shared";
 import { useBusStatus } from "./hooks";
-import { type BusRoute } from "./types";
-import { getArriTime, type getStopStatus } from "./util";
-
-type BusStop = RouterOutputs["stops"]["getOneByID"];
+import { type BusRoute, type BusStop } from "./types";
+import { getArriTime, type getStopStatusPerf } from "./util";
 
 interface Props {
-  routes: RouterOutputs["routes"]["getAllByBusId"];
-  stops: RouterOutputs["stops"]["getOneByID"][];
-  upIcon: React.ReactNode;
-  downIcon: React.ReactNode;
+  routes: BusRoute[];
+  stops: Stops[];
+  bus: Bus;
+  upIcon: React.ReactNode; // serverside loaded buttons
+  downIcon: React.ReactNode; // serverside loaded buttons
 }
 
 function WaterfallBusTimeline(props: Props) {
-  const { routes, stops, upIcon, downIcon } = props;
+  const { routes, stops, bus, upIcon, downIcon } = props;
   const router = useRouter();
-  const status = useBusStatus(routes);
-  const firstBusIndex = Math.ceil(status.index);
-  const [stopIndex, setStopIndex] = useState(
-    firstBusIndex > 0 ? firstBusIndex : 0,
-  );
+  const status = useBusStatus(bus);
+  const [stopIndex, setStopIndex] = useState(status?.location?.index ?? 0);
 
   function goDown() {
     setStopIndex((i) => {
@@ -83,19 +79,15 @@ function WaterfallBusTimeline(props: Props) {
 }
 
 function Route(prop: {
-  status: ReturnType<typeof getStopStatus>;
+  status: ReturnType<typeof getStopStatusPerf>;
   prevRoute?: BusRoute;
   route: BusRoute;
   stop: BusStop | undefined;
 }) {
-  const {
-    status: { index },
-    route: routeToShow,
-    prevRoute,
-    stop,
-  } = prop;
-  const isArriving = index + 1.5 === routeToShow.index;
-  const isDeparting = index + 1 === routeToShow.index;
+  const { status, route: routeToShow, prevRoute, stop } = prop;
+  const index = status?.index ?? -2;
+  const isArriving = index + 0.5 === routeToShow.index;
+  const isDeparting = index === routeToShow.index;
   const arriTime = getArriTime(routeToShow, prevRoute);
 
   return (
@@ -105,8 +97,11 @@ function Route(prop: {
         <div className={isDeparting ? style.activeStopNode : style.stopNode} />
       </div>
       <p>
-        {DateTime.fromJSDate(arriTime).toUTC().toFormat("h:mm a")} -{" "}
-        {DateTime.fromJSDate(routeToShow.deptTime).toUTC().toFormat("h:mm a")}
+        <span className={routeToShow.arriTime == null ? " opacity-60" : ""}>
+          {DateTime.fromJSDate(arriTime).toLocal().toFormat("h:mm a")}
+        </span>{" "}
+        -{" "}
+        {DateTime.fromJSDate(routeToShow.deptTime).toLocal().toFormat("h:mm a")}
       </p>
       <p className=" text-xl">{stop?.name}</p>
     </div>

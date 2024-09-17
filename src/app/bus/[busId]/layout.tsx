@@ -23,7 +23,7 @@ async function layout({
     <div>
       <Header />
       <div className=" relative">
-        <div className=" m-auto w-full max-w-screen-lg overflow-scroll">
+        <div className=" m-auto w-full max-w-screen-lg">
           <h2 className=" my-4 whitespace-nowrap pl-4 text-2xl font-extrabold sm:my-8 sm:text-4xl">
             {bus.id} | {bus.name}
           </h2>

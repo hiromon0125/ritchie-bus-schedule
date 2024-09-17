@@ -10,6 +10,7 @@ export const busRouter = createTRPCRouter({
     ctx.db.bus.findMany({
       select: {
         id: true,
+        updatedAt: true,
       },
     }),
   ),
@@ -23,6 +24,22 @@ export const busRouter = createTRPCRouter({
       ctx.db.bus.findUnique({
         where: {
           id: input.id,
+        },
+      }),
+    ),
+  getAllByStopID: publicProcedure
+    .input(
+      z.object({
+        stopId: z.number(),
+      }),
+    )
+    .query(({ ctx, input }) =>
+      ctx.db.stops.findUnique({
+        select: {
+          buses: true,
+        },
+        where: {
+          id: input.stopId,
         },
       }),
     ),
