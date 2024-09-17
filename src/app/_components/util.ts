@@ -8,6 +8,7 @@ export function getRelative(now: Date, time: Date) {
   });
 }
 
+const NEWYORK_TIMEZONE = "America/New_York";
 const DEFAULT_OFFSET = 2 * 60 * 1000;
 /**
  * returns a date that is 2 minutes before the given date
@@ -49,7 +50,9 @@ export function getTimeToUpdateNext(status: string | undefined) {
 
 export function getCurrentTime(): { date: Date; isWeekend: boolean } {
   const now = new Date();
-  const isTodayWeekend = [0, 6].includes(now.getDay());
+  const isTodayWeekend = [6, 7].includes(
+    DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
+  );
   // set date to 0 so that we can compare times
   now.setFullYear(1970, 0, 1);
   return { date: now, isWeekend: isTodayWeekend };
@@ -57,9 +60,11 @@ export function getCurrentTime(): { date: Date; isWeekend: boolean } {
 export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
   const now = new Date();
   // Dont ask me why this is here, I don't know
-  // but the vercel host is 1 hour behind
-  now.setHours(now.getHours() + 1);
-  const isTodayWeekend = [0, 6].includes(now.getDay());
+  // but the clock is off by an hour probably due to daylight savings
+  if (DateTime.now().isInDST) now.setHours(now.getHours() + 1);
+  const isTodayWeekend = [6, 7].includes(
+    DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
+  );
   // set date to 0 so that we can compare times
   now.setFullYear(1970, 0, 1);
   return { date: now, isWeekend: isTodayWeekend };

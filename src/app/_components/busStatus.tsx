@@ -65,8 +65,8 @@ async function BusList() {
   const buses = await api.bus.getAll.query();
   return (
     <div className=" w-11/12 min-w-80 max-w-screen-lg">
-      {buses?.map((bus) => (
-        <div className=" w-full py-3">
+      {buses?.map((bus, i) => (
+        <div className=" w-full py-3" key={i}>
           <Suspense fallback={<BusInfoSkeleton />}>
             <BusInfo bus={bus} />
           </Suspense>
