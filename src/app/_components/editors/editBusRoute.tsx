@@ -95,6 +95,19 @@ function savedRouteToInput(
   ) as RoutesArr;
 }
 
+function inputToDateEvent(e: React.ChangeEvent<HTMLInputElement>) {
+  if (e.target.value === null) return undefined;
+  const [hour, minute] = e.target.value.split(":").map(Number);
+  const newDT: DateTime = DateTime.now();
+  newDT.toLocal();
+  newDT.set({
+    hour,
+    minute,
+  });
+  newDT.setZone("utc");
+  return newDT.toJSDate();
+}
+
 function EditBusRoute({ bus }: { bus: Bus }) {
   const busId = bus.id;
   const { data: storedStops, isLoading } = api.stops.getStopsByBusID.useQuery({
@@ -250,16 +263,10 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                           : ""
                       }
                       onChange={(e) => {
-                        if (e.target.valueAsDate === null) return;
                         const newInput = [...input];
-                        const newDT: DateTime = DateTime.now();
-                        newDT.toLocal();
-                        newDT.set({
-                          hour: e.target.valueAsDate.getHours(),
-                          minute: e.target.valueAsDate.getMinutes(),
-                        });
-                        newDT.setZone("utc");
-                        newInput[index]!.arriTime = newDT.toJSDate();
+                        const res = inputToDateEvent(e);
+                        if (res == undefined) return;
+                        newInput[index]!.arriTime = res;
                         setInput(newInput);
                       }}
                     />
@@ -291,16 +298,10 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                         : ""
                     }
                     onChange={(e) => {
-                      if (e.target.valueAsDate === null) return;
                       const newInput = [...input];
-                      const newDT: DateTime = DateTime.now();
-                      newDT.toLocal();
-                      newDT.set({
-                        hour: e.target.valueAsDate.getHours(),
-                        minute: e.target.valueAsDate.getMinutes(),
-                      });
-                      newDT.setZone("utc");
-                      newInput[index]!.deptTime = newDT.toJSDate();
+                      const res = inputToDateEvent(e);
+                      if (res == undefined) return;
+                      newInput[index]!.deptTime = res;
                       setInput(newInput);
                     }}
                   />
