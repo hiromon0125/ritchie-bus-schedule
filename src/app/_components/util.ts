@@ -61,7 +61,7 @@ export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
   const now = new Date();
   // Dont ask me why this is here, I don't know
   // but the clock is off by an hour probably due to daylight savings
-  if (DateTime.now().isInDST) now.setHours(now.getHours() + 1);
+  if (!DateTime.now().isInDST) now.setHours(now.getHours() + 1);
   const isTodayWeekend = [6, 7].includes(
     DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
   );
