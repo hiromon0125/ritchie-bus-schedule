@@ -1,7 +1,6 @@
 "use client";
 import type { Bus, Routes } from "@prisma/client";
 import _ from "lodash";
-import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import { IoMdSave, IoMdTrash } from "react-icons/io";
 import {
@@ -93,19 +92,6 @@ function savedRouteToInput(
     })),
     "index",
   ) as RoutesArr;
-}
-
-function inputToDateEvent(e: React.ChangeEvent<HTMLInputElement>) {
-  if (e.target.value === null) return undefined;
-  const [hour, minute] = e.target.value.split(":").map(Number);
-  const newDT: DateTime = DateTime.now();
-  newDT.toLocal();
-  newDT.set({
-    hour,
-    minute,
-  });
-  newDT.setZone("utc");
-  return newDT.toJSDate();
 }
 
 function EditBusRoute({ bus }: { bus: Bus }) {
@@ -255,18 +241,11 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                       className=" flex-1 p-1"
                       id={`arr-${index}`}
                       placeholder="--:--"
-                      value={
-                        input[index]!.arriTime != undefined
-                          ? DateTime.fromJSDate(input[index]!.arriTime)
-                              .toLocal()
-                              .toFormat("HH:mm")
-                          : ""
-                      }
                       onChange={(e) => {
+                        if (e.target.valueAsDate == null) return;
                         const newInput = [...input];
-                        const res = inputToDateEvent(e);
-                        if (res == undefined) return;
-                        newInput[index]!.arriTime = res;
+                        newInput[index]!.arriTime = e.target.valueAsDate;
+                        console.log(e.target.valueAsDate);
                         setInput(newInput);
                       }}
                     />
@@ -290,18 +269,11 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                     placeholder="--:--"
                     type="time"
                     className="flex-1 p-1"
-                    value={
-                      input[index]!.deptTime != undefined
-                        ? DateTime.fromJSDate(input[index]!.deptTime)
-                            .toLocal()
-                            .toFormat("HH:mm")
-                        : ""
-                    }
                     onChange={(e) => {
+                      if (e.target.valueAsDate == null) return;
                       const newInput = [...input];
-                      const res = inputToDateEvent(e);
-                      if (res == undefined) return;
-                      newInput[index]!.deptTime = res;
+                      newInput[index]!.deptTime = e.target.valueAsDate;
+                      console.log(e.target.valueAsDate);
                       setInput(newInput);
                     }}
                   />
