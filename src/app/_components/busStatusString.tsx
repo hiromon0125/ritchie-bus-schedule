@@ -52,7 +52,7 @@ export function BusStatusBig({ stops, bus }: { stops: Stops[]; bus: Bus }) {
       <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
       {
         <p className=" text-xl">
-          {(status?.isMoving &&
+          {(status?.isMoving == "moving" &&
             `Next stop: ${
               stops.find((stop) => stop?.id === status?.location?.stopId)
                 ?.name ?? "Unknown"
