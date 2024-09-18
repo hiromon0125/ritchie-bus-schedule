@@ -30,7 +30,7 @@ export function useBusStatus(bus: Bus) {
     });
   const fetchCount = useRef(0);
   const refetch = async () => {
-    if (fetchCount.current++ < 5) await requeryData();
+    if (fetchCount.current++ < 3) await requeryData();
   };
   const resetFetchCount = () => {
     fetchCount.current = 0;
@@ -52,7 +52,7 @@ export function useBusStatusPerf(
   );
 
   useEffect(() => {
-    if (status == undefined) {
+    if (status == undefined || status.isMoving === "departed") {
       setCurrentTime(getCurrentTime());
       (async function refetch() {
         await refetchDataCallback();

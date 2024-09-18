@@ -152,7 +152,7 @@ export function getStopStatusPerf(
   }
 
   // stopped
-  if (diff <= 0 && route.deptTime.getTime() > now.getTime()) {
+  if (diff <= 0 && route.deptTime.getTime() < now.getTime()) {
     const offsetTime = getRelative(now, route.deptTime);
     return {
       statusMessage: `Departing ${offsetTime} • ${deptDT.toFormat("h:mm a")}`,
@@ -172,4 +172,12 @@ export function getStopStatusPerf(
     "\nArrival:",
     route.arriTime?.getTime(),
   );
+
+  return {
+    statusMessage: "Departed",
+    location: route,
+    isMoving: "departed",
+    index: route.index,
+    nextUpdate: 10,
+  };
 }
