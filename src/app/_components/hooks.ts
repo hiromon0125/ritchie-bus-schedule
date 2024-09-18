@@ -24,25 +24,39 @@ export type BusMovingStatus =
 
 export function useBusStatus(bus: Bus) {
   const busId = bus?.id ?? -1;
-  const { data: nextRoute, refetch: requeryData } =
-    api.routes.getCurrentRouteOfBus.useQuery({
-      busId,
-    });
   const fetchCount = useRef(0);
-  const refetch = async () => {
-    if (fetchCount.current++ < 3) await requeryData();
-  };
-  const resetFetchCount = () => {
-    fetchCount.current = 0;
-  };
-  return useBusStatusPerf(bus, nextRoute, refetch, resetFetchCount);
+  const { data: nextRoute } = api.routes.getCurrentRouteOfBus.useQuery(
+    {
+      busId,
+    },
+    {
+      refetchInterval(_, query) {
+        const data = query.state.data;
+        if (busId === -1) return false;
+        if (data == undefined || data == null) {
+          fetchCount.current = 0;
+          return 1000 * 60;
+        }
+        const { deptTime } = data;
+        const now = getCurrentTime().date;
+        const diff = deptTime.getTime() - now.getTime();
+        if (diff < 0 && fetchCount.current < 5) {
+          fetchCount.current++;
+          return 100;
+        } else if (diff < 0) {
+          return 1000 * 60;
+        }
+        fetchCount.current = 0;
+        return diff;
+      },
+    },
+  );
+  return useBusStatusPerf(bus, nextRoute);
 }
 
 export function useBusStatusPerf(
   bus: Bus,
   nextRoute: BusRoute | null | undefined,
-  refetchDataCallback: () => Promise<void>,
-  resetFetchCount: () => void,
 ) {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
   const status = getStopStatusPerf(
@@ -50,20 +64,11 @@ export function useBusStatusPerf(
     bus?.isWeekend ?? false,
     currentTime,
   );
-
   useEffect(() => {
-    if (status == undefined || status.isMoving === "departed") {
-      setCurrentTime(getCurrentTime());
-      (async function refetch() {
-        await refetchDataCallback();
-      })().catch(console.error);
-      return;
-    }
-    resetFetchCount();
     const interval = setTimeout(() => {
       setCurrentTime(getCurrentTime());
-    }, status?.nextUpdate ?? 1000);
+    }, status?.nextUpdate ?? 2000);
     return () => clearTimeout(interval);
-  }, [nextRoute, status]);
+  }, [status]);
   return status;
 }
