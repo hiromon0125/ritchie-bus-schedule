@@ -137,7 +137,7 @@ export const routesRouter = createTRPCRouter({
 
       return ctx.db.routes.findFirst({
         orderBy: {
-          index: "asc",
+          deptTime: "asc",
         },
         where: {
           busId: input.busId,
