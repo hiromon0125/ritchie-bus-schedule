@@ -11,7 +11,7 @@ export default function BusStatusString({ bus }: { bus: Bus }) {
   const { data: stop } = api.stops.getOneByID.useQuery({
     id: location?.stopId ?? 0,
   });
-  const level = isMoving ? 1 : !!location ? 2 : 3;
+  const level = isMoving === "moving" ? 1 : isMoving === "stopped" ? 2 : 3;
   return (
     <div className=" relative flex h-20 min-h-max flex-row items-center overflow-hidden pr-3">
       <div className=" relative flex h-24 w-24 justify-center">
@@ -23,7 +23,7 @@ export default function BusStatusString({ bus }: { bus: Bus }) {
                 ? "/icons/Stopped-icon.png"
                 : "/icons/Out-of-service-icon.png"
           }
-          alt={"Bus " + (isMoving ? "moving" : "stopped")}
+          alt={`Bus ${isMoving}`}
           width={96}
           height={96}
           priority
@@ -52,7 +52,7 @@ export function BusStatusBig({ stops, bus }: { stops: Stops[]; bus: Bus }) {
       <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
       {
         <p className=" text-xl">
-          {(status?.isMoving &&
+          {(status?.isMoving == "moving" &&
             `Next stop: ${
               stops.find((stop) => stop?.id === status?.location?.stopId)
                 ?.name ?? "Unknown"
