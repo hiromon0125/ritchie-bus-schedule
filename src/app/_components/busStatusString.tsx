@@ -1,20 +1,17 @@
 "use client";
+import type { Bus, Stops } from "@prisma/client";
 import Image from "next/image";
+import { api } from "t/react";
 import iconStyles from "~/styles/animated-icon.module.css";
-import { api } from "../../trpc/react";
-import { type RouterOutputs } from "../../trpc/shared";
 import { useBusStatus } from "./hooks";
 
-export default function BusStatusString({
-  routes,
-}: {
-  routes: RouterOutputs["routes"]["getAllByBusId"];
-}) {
-  const { isMoving, statusMessage, location } = useBusStatus(routes);
+export default function BusStatusString({ bus }: { bus: Bus }) {
+  const status = useBusStatus(bus);
+  const { isMoving, statusMessage, location } = status ?? {};
   const { data: stop } = api.stops.getOneByID.useQuery({
     id: location?.stopId ?? 0,
   });
-  const level = isMoving ? 1 : !!location ? 2 : 3;
+  const level = isMoving === "moving" ? 1 : isMoving === "stopped" ? 2 : 3;
   return (
     <div className=" relative flex h-20 min-h-max flex-row items-center overflow-hidden pr-3">
       <div className=" relative flex h-24 w-24 justify-center">
@@ -26,7 +23,7 @@ export default function BusStatusString({
                 ? "/icons/Stopped-icon.png"
                 : "/icons/Out-of-service-icon.png"
           }
-          alt={"Bus " + (isMoving ? "moving" : "stopped")}
+          alt={`Bus ${isMoving}`}
           width={96}
           height={96}
           priority
@@ -48,32 +45,28 @@ export default function BusStatusString({
   );
 }
 
-export function BusStatusBig({
-  routes,
-  stops,
-}: {
-  routes: RouterOutputs["routes"]["getAllByBusId"];
-  stops: RouterOutputs["stops"]["getOneByID"][];
-}) {
-  const { isMoving, statusMessage, location } = useBusStatus(routes);
+export function BusStatusBig({ stops, bus }: { stops: Stops[]; bus: Bus }) {
+  const status = useBusStatus(bus);
   return (
     <>
       <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
-      {!!location && (
+      {
         <p className=" text-xl">
-          {(isMoving &&
+          {(status?.isMoving == "moving" &&
             `Next stop: ${
-              stops.find((stop) => stop?.id === location?.stopId)?.name ??
-              "Unknown"
-            }`) ||
-            (isMoving === false &&
+              stops.find((stop) => stop?.id === status?.location?.stopId)
+                ?.name ?? "Unknown"
+            }`) ??
+            (status?.isMoving === "stopped" &&
               `Currently at ${
-                stops.find((stop) => stop?.id === location?.stopId)?.name ??
-                "Unknown"
+                stops.find((stop) => stop?.id === status?.location?.stopId)
+                  ?.name ?? "Unknown"
               }`)}
         </p>
-      )}
-      <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">{statusMessage}</p>
+      }
+      <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">
+        {status?.statusMessage}
+      </p>
     </>
   );
 }

@@ -1,7 +1,8 @@
+import type { Bus } from "@prisma/client";
 import Link from "next/link";
 import { Suspense } from "react";
-import { api } from "../../trpc/server";
-import { type RouterOutputs } from "../../trpc/shared";
+import { api } from "t/server";
+import { type RouterOutputs } from "t/shared";
 import BusStatusString from "./busStatusString";
 
 type BusStatusProps =
@@ -10,14 +11,13 @@ type BusStatusProps =
       bus?: never;
     }
   | {
-      bus: RouterOutputs["bus"]["getByID"];
+      bus: Bus;
       busID?: never;
     };
 
 async function BusInfo({ busID, bus }: BusStatusProps) {
-  const busObj = busID ? await api.bus.getByID.query(busID) : bus;
+  const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
-  const routes = await api.routes.getAllByBusId.query({ busId: busObj.id });
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
   return (
     <Link href={`/bus/${busObj.id}`}>
@@ -32,7 +32,7 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
               {busObj.id} | {busObj?.name}
             </h2>
           </div>
-          <BusStatusString routes={routes} />
+          <BusStatusString bus={busObj} />
         </div>
       </div>
     </Link>
@@ -65,8 +65,8 @@ async function BusList() {
   const buses = await api.bus.getAll.query();
   return (
     <div className=" w-11/12 min-w-80 max-w-screen-lg">
-      {buses?.map((bus) => (
-        <div className=" w-full py-3">
+      {buses?.map((bus, i) => (
+        <div className=" w-full py-3" key={i}>
           <Suspense fallback={<BusInfoSkeleton />}>
             <BusInfo bus={bus} />
           </Suspense>

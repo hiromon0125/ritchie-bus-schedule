@@ -95,7 +95,7 @@ function EditBusList() {
           disabled={loading}
         />
         <input
-          className=" grow-4 min-w-80 rounded-md border-2 border-black bg-transparent px-4 py-2"
+          className=" min-w-80 grow-4 rounded-md border-2 border-black bg-transparent px-4 py-2"
           type="text"
           placeholder="Description"
           value={newBus.description}
@@ -128,7 +128,7 @@ function EditBusList() {
       </div>
       <div className=" mt-4 overflow-clip rounded-md border-2 border-black">
         {data?.map((bus, index) => (
-          <>
+          <div key={bus.id}>
             <div
               key={bus.id}
               className=" relative flex h-10 w-full flex-row items-center gap-3"
@@ -156,7 +156,7 @@ function EditBusList() {
             {index !== data.length - 1 && (
               <hr className=" border-1 border-black" />
             )}
-          </>
+          </div>
         ))}
       </div>
     </>
