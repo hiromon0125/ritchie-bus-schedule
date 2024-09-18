@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /manage/
+
+Sitemap: https://rit-bus.app/sitemap.xml
