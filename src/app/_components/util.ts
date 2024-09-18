@@ -136,11 +136,8 @@ export function getStopStatusPerf(
   }
 
   // moving
-  let diff: number;
-  if (
-    (diff = arriTime.getTime() - now.getTime()) < 10 * 60 * 1000 &&
-    diff > 0
-  ) {
+  const arrDiff: number = arriTime.getTime() - now.getTime();
+  if (arrDiff < 10 * 60 * 1000 && arrDiff > 0) {
     const offsetTime = getRelative(now, arriTime);
     return {
       statusMessage: `Arriving ${offsetTime} • ${arriDT.toFormat("h:mm a")}`,
@@ -152,7 +149,8 @@ export function getStopStatusPerf(
   }
 
   // stopped
-  if (diff <= 0 && route.deptTime.getTime() < now.getTime()) {
+  const deptDiff: number = route.deptTime.getTime() - now.getTime();
+  if (arrDiff <= 0 && deptDiff > 0) {
     const offsetTime = getRelative(now, route.deptTime);
     return {
       statusMessage: `Departing ${offsetTime} • ${deptDT.toFormat("h:mm a")}`,
@@ -165,12 +163,9 @@ export function getStopStatusPerf(
 
   console.log("Status is undefined");
   console.log(
-    "now:",
-    now.getTime(),
-    "\nroute Depture:",
-    route.deptTime.getTime(),
-    "\nArrival:",
-    route.arriTime?.getTime(),
+    `now: ${now.getTime()}`,
+    `\nDepture: ${route.deptTime.getTime()} ${deptDiff}`,
+    `\nArrival: ${route.arriTime?.getTime()} ${arrDiff}`,
   );
 
   return {
