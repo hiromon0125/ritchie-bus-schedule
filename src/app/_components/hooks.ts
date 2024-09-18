@@ -52,7 +52,7 @@ export function useBusStatusPerf(
   );
 
   useEffect(() => {
-    if (status == undefined) {
+    if (status == undefined || status.isMoving === "departed") {
       setCurrentTime(getCurrentTime());
       (async function refetch() {
         await refetchDataCallback();

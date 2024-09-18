@@ -6,6 +6,13 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
+function resetDate(date: Date) {
+  date.setFullYear(1970, 0, 1);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+  return date;
+}
+
 export const routesRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.db.routes.findMany()),
   getAllByBusId: publicProcedure
@@ -110,7 +117,13 @@ export const routesRouter = createTRPCRouter({
       );
       // Insert the new data
       await ctx.db.routes.createMany({
-        data: input.routes,
+        data: input.routes.map((route) => {
+          const dep = resetDate(new Date(route.deptTime));
+          const arr = route.arriTime
+            ? resetDate(new Date(route.arriTime))
+            : undefined;
+          return { ...route, deptTime: dep, arriTime: arr };
+        }),
       });
       await ctx.db.bus.update({
         where: {
@@ -154,24 +167,25 @@ export const routesRouter = createTRPCRouter({
     .input(
       z.object({
         busIds: z.array(z.number()),
-        date: z.date(),
-        isWeekend: z.boolean(),
       }),
     )
     .query(async ({ ctx, input }) => {
+      const now = getCurrentTimeServer();
+      console.log("current time:", now.date.getTime());
+
       return Promise.all(
         input.busIds.map(async (busId) => {
           const res = await ctx.db.routes.findFirst({
             orderBy: {
-              index: "asc",
+              deptTime: "asc",
             },
             where: {
               busId,
               deptTime: {
-                gt: input.date,
+                gt: now.date,
               },
               bus: {
-                isWeekend: input.isWeekend,
+                isWeekend: now.isWeekend,
               },
             },
           });
