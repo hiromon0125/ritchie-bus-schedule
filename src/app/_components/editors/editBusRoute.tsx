@@ -36,12 +36,16 @@ const selectStyles: StylesConfig<{ value: number }, true> = {
 };
 
 function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
+  const newDate = new Date();
+  newDate.setFullYear(1970, 0, 1);
+  newDate.setSeconds(0);
+  newDate.setMilliseconds(0);
   const newRoute = {
     ...(input[input.length - 1] ?? {
       busId,
       stopId: stops.at(0) ?? 0,
       index: 0,
-      deptTime: new Date(),
+      deptTime: newDate,
     }),
   };
   newRoute.index += 1;

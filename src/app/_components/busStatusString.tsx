@@ -11,7 +11,7 @@ export default function BusStatusString({ bus }: { bus: Bus }) {
   const { data: stop } = api.stops.getOneByID.useQuery({
     id: location?.stopId ?? 0,
   });
-  const level = isMoving === "moving" ? 1 : !!location ? 2 : 3;
+  const level = isMoving === "moving" ? 1 : isMoving === "stopped" ? 2 : 3;
   return (
     <div className=" relative flex h-20 min-h-max flex-row items-center overflow-hidden pr-3">
       <div className=" relative flex h-24 w-24 justify-center">
