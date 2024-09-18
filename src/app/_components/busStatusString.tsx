@@ -50,7 +50,7 @@ export function BusStatusBig({ stops, bus }: { stops: Stops[]; bus: Bus }) {
   return (
     <>
       <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
-      {!!location && (
+      {
         <p className=" text-xl">
           {(status?.isMoving &&
             `Next stop: ${
@@ -63,7 +63,7 @@ export function BusStatusBig({ stops, bus }: { stops: Stops[]; bus: Bus }) {
                   ?.name ?? "Unknown"
               }`)}
         </p>
-      )}
+      }
       <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">
         {status?.statusMessage}
       </p>
