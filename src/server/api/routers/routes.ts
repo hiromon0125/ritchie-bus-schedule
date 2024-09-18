@@ -99,10 +99,11 @@ export const routesRouter = createTRPCRouter({
             },
             data: {
               buses: {
-                disconnect: {
-                  id: input.busId,
-                },
+                disconnect: [{ id: input.busId }],
               },
+            },
+            include: {
+              buses: true,
             },
           });
         }),
@@ -111,27 +112,6 @@ export const routesRouter = createTRPCRouter({
       await ctx.db.routes.createMany({
         data: input.routes,
       });
-      await Promise.all(
-        input.stopIds.map(async (stopId) => {
-          await ctx.db.stops.update({
-            where: {
-              id: stopId,
-              buses: {
-                none: {
-                  id: input.busId,
-                },
-              },
-            },
-            data: {
-              buses: {
-                connect: {
-                  id: input.busId,
-                },
-              },
-            },
-          });
-        }),
-      );
       await ctx.db.bus.update({
         where: {
           id: input.busId,
@@ -157,7 +137,7 @@ export const routesRouter = createTRPCRouter({
 
       return ctx.db.routes.findFirst({
         orderBy: {
-          index: "asc",
+          deptTime: "asc",
         },
         where: {
           busId: input.busId,
