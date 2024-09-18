@@ -8,7 +8,7 @@ export function getRelative(now: Date, time: Date) {
   });
 }
 
-const NEWYORK_TIMEZONE = "America/New_York";
+export const NEWYORK_TIMEZONE = "America/New_York";
 const DEFAULT_OFFSET = 2 * 60 * 1000;
 /**
  * returns a date that is 2 minutes before the given date

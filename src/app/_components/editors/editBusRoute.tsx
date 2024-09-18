@@ -1,8 +1,10 @@
 "use client";
 import type { Bus, Routes } from "@prisma/client";
 import _ from "lodash";
+import { DateTime } from "luxon";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { IoMdSave, IoMdTrash } from "react-icons/io";
+import { IoMdRefreshCircle, IoMdSave, IoMdTrash } from "react-icons/io";
 import {
   MdAddBox,
   MdAddToPhotos,
@@ -14,6 +16,7 @@ import { Tooltip } from "react-tooltip";
 import { api } from "t/react";
 import type { RouterOutputs } from "t/shared";
 import { z } from "zod";
+import { NEWYORK_TIMEZONE } from "../util";
 
 type RouteObj = Routes;
 type RouteInput = Partial<RouteObj> & Pick<RouteObj, "index" | "busId">;
@@ -43,39 +46,52 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   };
   newRoute.index += 1;
   newRoute.arriTime = undefined;
-  const indStop = newRoute.stopId ? stops.indexOf(newRoute.stopId) : -1;
-  let nextStop = stops.at(indStop + 1);
-  newRoute.stopId = nextStop ?? stops.at(0) ?? 0;
-  if (!nextStop && indStop !== stops.length - 1) return newRoute;
-  else if (indStop === stops.length - 1) nextStop = stops.at(0);
+  const indStop = newRoute.stopId ? stops.indexOf(newRoute.stopId) + 1 : 0;
+  const stopId = stops.at(indStop) ?? stops.at(0);
+  newRoute.stopId = stopId;
+
+  if (stopId == undefined) {
+    newRoute.stopId = 0;
+    return newRoute;
+  }
 
   // Find the last instance of the next stop to calculate the time difference
   const lastInstance = _.findLastIndex(
     input,
-    (route) => route.stopId === nextStop,
+    (route) => route.stopId === newRoute.stopId,
   );
-  if ([-1, 0].includes(lastInstance)) return newRoute;
+
+  // Stop if not found or the first instance is the last instance as we can not find the diff
+  if (lastInstance <= 0) return newRoute;
+  console.log(2);
+
+  const lastInstanceStop = input[lastInstance];
+  if (
+    !lastInstanceStop ||
+    !lastInstanceStop.deptTime ||
+    !input[lastInstance - 1]?.deptTime
+  )
+    return newRoute;
 
   // Set the departure time to the last instance of the stop plus the time difference between the last instance and the stop before it
   const timeDiff =
-    (input[lastInstance]!.deptTime?.getTime() ?? 0) -
-    (input[lastInstance - 1]!.deptTime?.getTime() ?? 0);
+    lastInstanceStop.deptTime.getTime() -
+    input[lastInstance - 1]!.deptTime!.getTime();
   newRoute.deptTime = new Date((newRoute.deptTime?.getTime() ?? 0) + timeDiff);
 
   // Set the arrival time to the last instance of the stop plus the time difference between the last instance and the instance before that
-  if (
-    input[lastInstance]!.arriTime &&
-    lastInstance - stops.length > 0 &&
-    input[lastInstance - stops.length]!.arriTime
-  ) {
-    const timeDiff =
-      (input[lastInstance]!.arriTime?.getTime() ?? 0) -
-      (input[lastInstance - stops.length]?.arriTime?.getTime() ?? 0);
-    const newArriTime = new Date(
-      (input[lastInstance]?.arriTime?.getTime() ?? 0) + timeDiff,
-    );
-    newRoute.arriTime = newArriTime;
-  }
+  const instanceBeforeLast = lastInstance - stops.length;
+  const instanceBeforeLastStop =
+    instanceBeforeLast > 0 ? input[instanceBeforeLast] : undefined;
+  console.log(3, newRoute.deptTime);
+  if (!instanceBeforeLastStop?.arriTime || !lastInstanceStop.arriTime)
+    return newRoute;
+  console.log(4);
+
+  newRoute.arriTime = new Date(
+    lastInstanceStop.arriTime.getTime() * 2 -
+      instanceBeforeLastStop.arriTime.getTime(),
+  );
   return newRoute;
 }
 
@@ -120,7 +136,13 @@ function EditBusRoute({ bus }: { bus: Bus }) {
   const [edtedSelectedStops, setEditedStops] = useState(false);
   const [selectedStops, setStops] = useState(storedStopsId);
   const [input, setInput] = useState<RoutesArr>(savedRouteToInput(data));
-
+  const [dateInput, setDateInput] = useState(
+    data?.map((o) => ({
+      dep: o.deptTime ? DateTime.fromJSDate(o.deptTime).toFormat("HH:mm") : "",
+      arr: o.arriTime ? DateTime.fromJSDate(o.arriTime).toFormat("HH:mm") : "",
+    })) ?? [],
+  );
+  const router = useRouter();
   useEffect(() => {
     if (!edtedSelectedStops) {
       setStops(storedStopsId);
@@ -128,6 +150,16 @@ function EditBusRoute({ bus }: { bus: Bus }) {
   }, [isLoading]);
   useEffect(() => {
     setInput(savedRouteToInput(data));
+    setDateInput(
+      data?.map((o) => ({
+        dep: o.deptTime
+          ? DateTime.fromJSDate(o.deptTime).toFormat("HH:mm")
+          : "",
+        arr: o.arriTime
+          ? DateTime.fromJSDate(o.arriTime).toFormat("HH:mm")
+          : "",
+      })) ?? [],
+    );
   }, [data]);
 
   const handleSubmit = async () => {
@@ -156,18 +188,54 @@ function EditBusRoute({ bus }: { bus: Bus }) {
     }
   };
 
-  const addNewRoute = () =>
-    setInput([...input, createNewRoute(selectedStops, input, busId)]);
+  const addNewRoute = () => {
+    const i = createNewRoute(selectedStops, input, busId);
+    setDateInput((prev) => {
+      console.log(prev.length);
 
-  const addMultipleRoutes = () => {
-    const currInput = [...input];
-    selectedStops.forEach((_) =>
-      currInput.push(createNewRoute(selectedStops, currInput, busId)),
-    );
-    setInput(currInput);
+      return [
+        ...prev,
+        {
+          arr: i.arriTime
+            ? DateTime.fromJSDate(i.arriTime).toFormat("HH:mm")
+            : "",
+          dep: i.deptTime
+            ? DateTime.fromJSDate(i.deptTime).toFormat("HH:mm")
+            : "",
+        },
+      ];
+    });
+    setInput((prev) => [...prev, i]);
   };
 
-  const rmRoute = () => setInput(input.slice(0, -1));
+  const addMultipleRoutes = () => {
+    const inputArr: { arr: string; dep: string }[] = [];
+    const currInput = [...input];
+    selectedStops.forEach((_) => {
+      const i = createNewRoute(selectedStops, currInput, busId);
+      const di = {
+        arr: i.arriTime
+          ? DateTime.fromJSDate(i.arriTime).toFormat("HH:mm")
+          : "",
+        dep: i.deptTime
+          ? DateTime.fromJSDate(i.deptTime).toFormat("HH:mm")
+          : "",
+      };
+      currInput.push(i);
+      inputArr.push(di);
+    });
+    setInput(currInput);
+    setDateInput((previ) => [...previ, ...inputArr]);
+  };
+
+  const rmRoute = () => {
+    setInput((prev) => prev.slice(0, -1));
+    setDateInput((prev) => prev.slice(0, -1));
+  };
+  const rmAllRoute = () => {
+    setInput([]);
+    setDateInput([]);
+  };
 
   return (
     <>
@@ -241,11 +309,24 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                       className=" flex-1 p-1"
                       id={`arr-${index}`}
                       placeholder="--:--"
+                      value={dateInput.at(index)?.arr}
                       onChange={(e) => {
+                        setDateInput((prev) => {
+                          const i = [...prev];
+                          i[index] = {
+                            arr: e.target.value ?? "",
+                            dep: i[index]?.dep ?? "",
+                          };
+                          return i;
+                        });
                         if (e.target.valueAsDate == null) return;
                         const newInput = [...input];
-                        newInput[index]!.arriTime = e.target.valueAsDate;
-                        console.log(e.target.valueAsDate);
+                        const localDateTime = DateTime.fromFormat(
+                          e.target.value,
+                          "HH:mm",
+                          { zone: NEWYORK_TIMEZONE },
+                        );
+                        newInput[index]!.arriTime = localDateTime.toJSDate();
                         setInput(newInput);
                       }}
                     />
@@ -256,10 +337,14 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                         const newInput = [...input];
                         newInput[index]!.arriTime = undefined;
                         setInput(newInput);
-                        const inputElement = document.getElementById(
-                          `arr-${index}`,
-                        ) as HTMLInputElement;
-                        inputElement.value = "";
+                        setDateInput((prev) => {
+                          const i = [...prev];
+                          i[index] = {
+                            arr: "",
+                            dep: i[index]?.dep ?? "",
+                          };
+                          return i;
+                        });
                       }}
                     >
                       <MdOutlineClear />
@@ -269,11 +354,24 @@ function EditBusRoute({ bus }: { bus: Bus }) {
                     placeholder="--:--"
                     type="time"
                     className="flex-1 p-1"
+                    value={dateInput.at(index)?.dep}
                     onChange={(e) => {
-                      if (e.target.valueAsDate == null) return;
+                      setDateInput((prev) => {
+                        const i = [...prev];
+                        i[index] = {
+                          arr: i[index]?.arr ?? "",
+                          dep: e.target.value ?? "",
+                        };
+                        return i;
+                      });
+                      if (e.target.value == "") return;
                       const newInput = [...input];
-                      newInput[index]!.deptTime = e.target.valueAsDate;
-                      console.log(e.target.valueAsDate);
+                      const fixedDateTime = DateTime.fromFormat(
+                        e.target.value,
+                        "HH:mm",
+                        { zone: NEWYORK_TIMEZONE },
+                      );
+                      newInput[index]!.deptTime = fixedDateTime.toJSDate();
                       setInput(newInput);
                     }}
                   />
@@ -312,6 +410,20 @@ function EditBusRoute({ bus }: { bus: Bus }) {
         >
           <IoMdTrash color="rgb(239 68 68 / var(--tw-border-opacity))" />
           Remove
+        </button>
+        <button
+          onClick={rmAllRoute}
+          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
+        >
+          <IoMdTrash color="rgb(239 68 68 / var(--tw-border-opacity))" />
+          Remove All
+        </button>
+        <button
+          onClick={() => router.refresh()}
+          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
+        >
+          <IoMdRefreshCircle color="rgb(239 68 68 / var(--tw-border-opacity))" />
+          Revert Changes
         </button>
       </div>
     </>
