@@ -8,6 +8,7 @@ import Footer from "@/footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
+import { Toaster } from "~/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
           <TRPCReactProvider cookies={cookies().toString()}>
             {children}
             <Footer />
+            <Toaster />
           </TRPCReactProvider>
         </body>
       </html>

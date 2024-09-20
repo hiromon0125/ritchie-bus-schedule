@@ -1,5 +1,6 @@
 "use client";
 import _ from "lodash";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { api } from "t/react";
@@ -17,7 +18,12 @@ export default function EditStopList() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [onUserFocused, setOnUserFocused] = useState(false);
   const [list, setList] = useState<InputStop[]>(
-    savedList?.map((o) => ({ ...o, name: o.name ?? "", saved: true })) ?? [],
+    savedList?.map((o) => ({
+      ...o,
+      name: o.name ?? "",
+      description: o.description ?? "",
+      saved: true,
+    })) ?? [],
   );
 
   let focusTimeout: NodeJS.Timeout | null = null;
@@ -42,6 +48,7 @@ export default function EditStopList() {
   const addNewStop = () => {
     const newStop = {
       name: "",
+      description: "",
       saved: false,
     };
     setList((ls) => [...ls, newStop]);
@@ -50,7 +57,16 @@ export default function EditStopList() {
 
   const saveStops = async () => {
     const stops = _.filter(list, { saved: false });
-    await Promise.all(stops.map((stop) => save(stop)));
+    await Promise.all(
+      stops.map((stop) =>
+        save({
+          ...stop,
+          description: stop.description ?? "",
+          name: stop.name ?? "",
+          tag: stop.tag ?? undefined,
+        }),
+      ),
+    );
     setList((ls) => ls.map((o) => ({ ...o, saved: true })));
     await refetch();
   };
@@ -132,13 +148,21 @@ export default function EditStopList() {
                 onKeyDown={(e) => e.key === "Enter" && addNewStop()}
               />
               {hoveredIndex !== index ? null : (
-                <button
-                  className=" mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-red-600 bg-white px-1 text-red-600"
-                  onClick={() => onDelete(index)}
-                >
-                  <FaTrash color="red" />
-                  Delete
-                </button>
+                <>
+                  <Link
+                    href={`/manage/stop/${stop.id}`}
+                    className=" text-black-600 mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-black bg-white px-1"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    className=" mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-red-600 bg-white px-1 text-red-600"
+                    onClick={() => onDelete(index)}
+                  >
+                    <FaTrash color="red" />
+                    Delete
+                  </button>
+                </>
               )}
             </div>
           ))
