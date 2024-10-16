@@ -163,6 +163,7 @@ export function getStopStatusPerf(
 
   console.log("Status is undefined");
   console.log(
+    `busId: ${route.busId}`,
     `now: ${now.getTime()}`,
     `\nDepture: ${route.deptTime.getTime()} ${deptDiff}`,
     `\nArrival: ${route.arriTime?.getTime()} ${arrDiff}`,
