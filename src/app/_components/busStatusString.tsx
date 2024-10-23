@@ -4,9 +4,16 @@ import Image from "next/image";
 import { api } from "t/react";
 import iconStyles from "~/styles/animated-icon.module.css";
 import { useBusStatus } from "./hooks";
+import type { BusRoute } from "./types";
 
-export default function BusStatusString({ bus }: { bus: Bus }) {
-  const status = useBusStatus(bus);
+export default function BusStatusString({
+  bus,
+  fetchedRoute,
+}: {
+  bus: Bus;
+  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
+}) {
+  const status = useBusStatus(bus, fetchedRoute);
   const { isMoving, statusMessage, location } = status ?? {};
   const { data: stop } = api.stops.getOneByID.useQuery({
     id: location?.stopId ?? 0,
@@ -45,8 +52,16 @@ export default function BusStatusString({ bus }: { bus: Bus }) {
   );
 }
 
-export function BusStatusBig({ stops, bus }: { stops: Stops[]; bus: Bus }) {
-  const status = useBusStatus(bus);
+export function BusStatusBig({
+  stops,
+  bus,
+  fetchedRoute,
+}: {
+  stops: Stops[];
+  bus: Bus;
+  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
+}) {
+  const status = useBusStatus(bus, fetchedRoute);
   return (
     <>
       <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>

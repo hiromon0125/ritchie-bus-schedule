@@ -14,12 +14,13 @@ interface Props {
   bus: Bus;
   upIcon: React.ReactNode; // serverside loaded buttons
   downIcon: React.ReactNode; // serverside loaded buttons
+  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
 }
 
 function WaterfallBusTimeline(props: Props) {
-  const { routes, stops, bus, upIcon, downIcon } = props;
+  const { routes, stops, bus, upIcon, downIcon, fetchedRoute } = props;
   const router = useRouter();
-  const status = useBusStatus(bus);
+  const status = useBusStatus(bus, fetchedRoute);
   const [stopIndex, setStopIndex] = useState(status?.location?.index ?? 0);
 
   function goDown() {

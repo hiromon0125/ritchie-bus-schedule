@@ -37,11 +37,19 @@ export default async function Page({ params }: Props) {
   if (!bus) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
+  const currentRoute = await api.routes.getCurrentRouteOfBus.query({ busId });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({ busId })
+    .then((data) => data[0]?.lastRoute ?? null);
   const stops = (await api.stops.getStopsByBusID.query({ busId })) ?? [];
   return (
     <>
       <ScrollToTopButton color={bus.color} />
-      <BusStatusBig stops={stops} bus={bus} />
+      <BusStatusBig
+        stops={stops}
+        bus={bus}
+        fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+      />
       <h2 className=" text-2xl font-bold sm:mb-2 sm:text-4xl">Description</h2>
       <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">{bus.description}</p>
       <StopInfo stops={stops} bus={bus} />

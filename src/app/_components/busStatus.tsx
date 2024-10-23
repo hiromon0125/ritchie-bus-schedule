@@ -1,9 +1,11 @@
 import type { Bus } from "@prisma/client";
+import _ from "lodash";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
 import { type RouterOutputs } from "t/shared";
 import BusStatusString from "./busStatusString";
+import type { BusRoute } from "./types";
 
 type BusStatusProps =
   | {
@@ -15,7 +17,13 @@ type BusStatusProps =
       busID?: never;
     };
 
-async function BusInfo({ busID, bus }: BusStatusProps) {
+async function BusInfo({
+  busID,
+  bus,
+  fetchedRoute,
+}: BusStatusProps & {
+  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
+}) {
   const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
@@ -32,7 +40,7 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
               {busObj.id} | {busObj?.name}
             </h2>
           </div>
-          <BusStatusString bus={busObj} />
+          <BusStatusString bus={busObj} fetchedRoute={fetchedRoute} />
         </div>
       </div>
     </Link>
@@ -63,12 +71,25 @@ function BusInfoSkeleton() {
 
 async function BusList() {
   const buses = await api.bus.getAll.query();
+  const nextRoutes = await api.routes.getCurrentRouteOfBuses.query({
+    busIds: buses.map((bus) => bus.id),
+  });
+  const lastRoutes = await api.routes.getLastRouteOfBuses.query();
+
   return (
     <div className=" w-11/12 min-w-80 max-w-screen-lg">
       {buses?.map((bus, i) => (
         <div className=" w-full py-3" key={i}>
           <Suspense fallback={<BusInfoSkeleton />}>
-            <BusInfo bus={bus} />
+            <BusInfo
+              bus={bus}
+              fetchedRoute={{
+                serverGuess:
+                  _.find(nextRoutes, { busId: bus.id })?.route ?? null,
+                lastRoute:
+                  _.find(lastRoutes, { busId: bus.id })?.lastRoute ?? null,
+              }}
+            />
           </Suspense>
         </div>
       ))}
