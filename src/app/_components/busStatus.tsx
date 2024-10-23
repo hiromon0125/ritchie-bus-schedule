@@ -19,7 +19,6 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
   const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
-
   return (
     <Link href={`/bus/${busObj.id}`}>
       <div className="relative pl-3">
