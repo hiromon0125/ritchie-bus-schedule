@@ -12,7 +12,7 @@ function EditBusList() {
   const { data, refetch, status } = api.bus.getAll.useQuery();
   const loading = status === "loading" || mutateStatus === "loading";
   const [newBus, setNewBus] = useState<RouterInputs["bus"]["addBus"]>({
-    id: (_.max(data?.map((bus) => bus.id)) ?? 0) + 1 ?? data?.length ?? 0,
+    id: (_.max(data?.map((bus) => bus.id)) ?? 0) + 1,
     name: "",
     description: "",
     color: "#000000",
@@ -27,7 +27,7 @@ function EditBusList() {
     await refetch();
     if (status === "success") {
       setNewBus({
-        id: (_.max(data?.map((bus) => bus.id)) ?? 0) + 1 ?? data?.length ?? 0,
+        id: (_.max(data?.map((bus) => bus.id)) ?? 0) + 1,
         name: "",
         description: "",
         color: "#000000",
@@ -44,7 +44,7 @@ function EditBusList() {
     if (data) {
       setNewBus({
         ...newBus,
-        id: (_.max(data.map((bus) => bus.id)) ?? 0) + 1 ?? data.length ?? 0,
+        id: (_.max(data.map((bus) => bus.id)) ?? 0) + 1,
       });
     }
   }, [data]);
