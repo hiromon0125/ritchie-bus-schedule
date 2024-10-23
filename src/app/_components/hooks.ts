@@ -91,7 +91,7 @@ export function useBusStatus(
       const updateTime =
         nextRoute.deptTime.getTime() - getCurrentTime().date.getTime();
       const timeout = setTimeout(() => {
-        setIndex((i) => i + 1);
+        setIndex(index + 1);
       }, updateTime);
       return () => clearTimeout(timeout);
     }
