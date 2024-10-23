@@ -17,6 +17,10 @@ async function page({ params }: { params: { busId: string } }) {
   }
   const routes = await api.routes.getAllByBusId.query({ busId });
   const stops = (await api.stops.getStopsByBusID.query({ busId })) ?? [];
+  const nextRoute = await api.routes.getCurrentRouteOfBus.query({ busId });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({ busId })
+    .then((data) => data[0]?.lastRoute ?? null);
   return (
     <WaterfallBusTimeline
       routes={routes}
@@ -39,6 +43,7 @@ async function page({ params }: { params: { busId: string } }) {
           </div>
         </div>
       }
+      fetchedRoute={{ serverGuess: nextRoute, lastRoute }}
     />
   );
 }

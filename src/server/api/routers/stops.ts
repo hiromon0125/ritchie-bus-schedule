@@ -25,6 +25,15 @@ export const stopsRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
+        select: {
+          id: true,
+          name: true,
+          tag: true,
+          description: true,
+          latitude: true,
+          longitude: true,
+          buses: true,
+        },
       }),
     ),
   getStopsByBusID: publicProcedure
@@ -50,6 +59,8 @@ export const stopsRouter = createTRPCRouter({
       z.object({
         id: z.number().optional(),
         name: z.string(),
+        description: z.string(),
+        tag: z.string().optional(),
         latitude: z.number().optional(),
         longitude: z.number().optional(),
       }),
@@ -67,6 +78,25 @@ export const stopsRouter = createTRPCRouter({
           data: input,
         });
       }
+    }),
+  editBusStop: privateProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        tag: z.string().optional(),
+        description: z.string(),
+        latitude: z.number().optional(),
+        longitude: z.number().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.stops.update({
+        where: {
+          id: input.id,
+        },
+        data: input,
+      });
     }),
   deleteBusStop: privateProcedure
     .input(

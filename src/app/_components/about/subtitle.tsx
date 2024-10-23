@@ -12,7 +12,7 @@ export default function Subtitle({
     <div className=" flex flex-row items-center gap-3">
       <div
         className=" relative px-4"
-        style={white ? { backgroundColor: "#CE9E5E" } : undefined}
+        style={white ? { backgroundColor: "#D8B377" } : undefined}
       >
         <Image
           src="/icons/Moving-icon.png"

@@ -177,9 +177,9 @@ async function Page() {
               team has recently expanded to include another developer, Sam Ruan.
             </p>
             <p className=" text-lg">
-              Ritchie's Bus Schedule leverages the powerful t3 tech stack, which
-              includes Next.js, React, and Tailwind for the frontend, tRPC for
-              remote procedure calls, Drizzle ORM for database interactions,
+              Ritchie&#39;s Bus Schedule leverages the powerful t3 tech stack,
+              which includes Next.js, React, and Tailwind for the frontend, tRPC
+              for remote procedure calls, Drizzle ORM for database interactions,
               Vercel for API and hosting, and Supabase as the database. This
               modern stack ensures a robust and scalable application.
             </p>
@@ -305,17 +305,38 @@ async function Page() {
                 a community-driven development process and welcomes
                 contributions from users.
               </p>
-              <div className=" absolute -bottom-16 -left-[95px] h-[calc(100%-460px)] min-h-12 border-l-[52px] border-[#21CF33]"></div>
             </div>
-            <div className=" absolute top-80 z-20">
-              <div className=" flex flex-col gap-0">
-                <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
-                <div className=" h-7 w-3 translate-x-4 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
+            <div className=" relative ml-[1.5px] mt-[60px] h-0 w-full">
+              <div className=" absolute mt-1 flex h-[50vh] w-[51px] -translate-y-full flex-col bg-[#1FCF33] lg:hidden" />
+              <div className=" absolute flex h-[55vh] w-[51px] flex-col bg-[#1FCF33]">
+                <div className="ml-[-2px]pt-[10vh] top-[20vh] z-20 m-auto flex flex-col items-center gap-2">
+                  <div className=" flex flex-col gap-0">
+                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
+                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
+                  </div>
+                  <div className=" m-auto h-9 w-9 rounded-full bg-white" />
+                </div>
               </div>
-              <svg>
-                <circle cx="28" cy="28" r="18" fill="white" />
-              </svg>
+              <div className=" absolute top-[55vh] h-[100px] w-[100px] rounded-bl-full bg-[#1FCF33]">
+                <div className=" float-end h-[50px] w-[49px] rounded-bl-full bg-white" />
+              </div>
+              <div className=" absolute top-[55vh] mt-[50px] h-[100px] w-full">
+                <div className=" mx-[100px] flex h-[50px] flex-row bg-[#1FCF33]">
+                  <div className="m-auto flex flex-row items-center gap-4">
+                    <div className=" flex flex-row gap-4 pt-[12px]">
+                      <div className=" h-7 w-3 -rotate-[135deg] bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
+                      <div className=" h-7 w-3 -rotate-[135deg] bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
+                      <div className=" h-7 w-3 -rotate-[135deg] bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
+                    </div>
+                    <div className=" h-9 w-9 rounded-full bg-white" />
+                  </div>
+                </div>
+                <div className=" float-end mt-[-50px] flex h-[100px] w-[100px] items-end justify-start rounded-tr-full bg-[#1FCF33]">
+                  <div className=" h-[50px] w-[50px] rounded-tr-full bg-white"></div>
+                </div>
+                <div className=" absolute bottom-0 right-0 mt-[50px] h-[150px] w-[50px] translate-y-full bg-[#1FCF33]"></div>
+              </div>
             </div>
             <svg
               className={` ${aboutStyles.pipe} absolute top-52 z-10 translate-x-[-273px]`}
@@ -333,30 +354,14 @@ async function Page() {
                 stroke-linejoin="round"
               />
             </svg>
-            <svg
-              className=" absolute mt-10 translate-x-[1px]"
-              width="920"
-              height="635"
-              viewBox="0 0 920 635"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M26.2266 26.1802V435.136C26.2266 463.855 49.5078 487.136 78.2266 487.136H841.448C870.167 487.136 893.448 510.417 893.448 539.136V857.462"
-                stroke="#21CF33"
-                stroke-width="52"
-                stroke-linecap="round"
-              />
-              <circle cx="27" cy="300" r="18" fill="white" />
-            </svg>
             <div className=" relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-28">
               <p className=" text-4xl">Try the App!</p>
               <p className=" md:text-xl">
-                Ritchie's Bus Schedule is a testament to the power of innovation
-                driven by personal need and community benefit. As the app
-                continues to evolve, it promises to make navigating the RIT bus
-                system easier and more efficient for all students. We hope you
-                find the app as useful and transformative as we do.
+                Ritchie&#39;s Bus Schedule is a testament to the power of
+                innovation driven by personal need and community benefit. As the
+                app continues to evolve, it promises to make navigating the RIT
+                bus system easier and more efficient for all students. We hope
+                you find the app as useful and transformative as we do.
               </p>
               <div className=" absolute bottom-2 right-6 flex flex-row items-center gap-4 md:right-32">
                 <Link
@@ -365,14 +370,6 @@ async function Page() {
                 >
                   Use the App &gt;
                 </Link>
-              </div>
-              <div className=" absolute -bottom-[57px] right-40 flex flex-row items-end gap-12">
-                <div className=" flex translate-y-7 -rotate-90 flex-col gap-0">
-                  <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                  <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
-                  <div className=" h-7 w-3 -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
-                </div>
-                <div className=" h-9 w-9 rounded-full bg-white" />
               </div>
             </div>
           </div>

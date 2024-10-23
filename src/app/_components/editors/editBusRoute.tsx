@@ -11,29 +11,17 @@ import {
   MdInfoOutline,
   MdOutlineClear,
 } from "react-icons/md";
-import Select, { type StylesConfig } from "react-select";
+import Select from "react-select";
 import { Tooltip } from "react-tooltip";
 import { api } from "t/react";
 import type { RouterOutputs } from "t/shared";
 import { z } from "zod";
+import selectStyles from "~/styles/selectStyle";
 import { NEWYORK_TIMEZONE } from "../util";
 
 type RouteObj = Routes;
 type RouteInput = Partial<RouteObj> & Pick<RouteObj, "index" | "busId">;
 type RoutesArr = RouteInput[];
-
-const selectStyles: StylesConfig<{ value: number }, true> = {
-  control: (styles) => ({
-    ...styles,
-    backgroundColor: "white",
-    borderWidth: 2,
-    borderColor: "black",
-    ":hover": {
-      borderColor: "black",
-      backgroundColor: "rgb(226 232 240 / var(--tw-bg-opacity))",
-    },
-  }),
-};
 
 function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   const newDate = new Date();

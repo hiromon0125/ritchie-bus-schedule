@@ -1,21 +1,11 @@
 import SaveStatus from "@/SaveStatus";
 import EditBusDetail from "@/editors/editBusDetail";
 import EditBusRoute from "@/editors/editBusRoute";
-import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { api } from "t/server";
 import { z } from "zod";
 
 async function Page({ params }: { params: { busId: string } }) {
-  const { userId } = auth();
-  if (!userId) {
-    redirect("/");
-  }
-  const manager = await api.manager.isManager.query({ userId: userId });
-  if (!manager) {
-    redirect("/");
-  }
   const busIdNumber = z.coerce.number().parse(params.busId);
   const bus = await api.bus.getByID.query({ id: busIdNumber });
 

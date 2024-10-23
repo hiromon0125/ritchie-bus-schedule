@@ -19,6 +19,8 @@ export const routesRouter = createTRPCRouter({
     .input(
       z.object({
         busId: z.number(),
+        offset: z.number().optional().default(0),
+        windowsize: z.number().optional(),
       }),
     )
     .query(({ ctx, input }) =>
@@ -29,6 +31,8 @@ export const routesRouter = createTRPCRouter({
         orderBy: {
           index: "asc",
         },
+        skip: input.offset,
+        take: input.windowsize,
       }),
     ),
   getAllByStopId: publicProcedure
@@ -138,6 +142,35 @@ export const routesRouter = createTRPCRouter({
         },
       });
     }),
+  getLastRouteOfBuses: publicProcedure
+    .input(
+      z
+        .object({
+          busId: z.number(),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx, input }) => {
+      const buses = input
+        ? [{ id: input.busId }]
+        : await ctx.db.bus.findMany({ select: { id: true } });
+      return Promise.all(
+        buses.map(async (bus) => {
+          const lastRoute = await ctx.db.routes.findFirst({
+            where: {
+              busId: bus.id,
+            },
+            orderBy: {
+              deptTime: "desc",
+            },
+          });
+          return {
+            busId: bus.id,
+            lastRoute,
+          };
+        }),
+      );
+    }),
   getCurrentRouteOfBus: publicProcedure
     .input(
       z.object({
@@ -146,11 +179,6 @@ export const routesRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const now = getCurrentTimeServer();
-      console.log(
-        `bus id: ${input.busId}`,
-        `current time: ${now.date.getTime()}`,
-      );
-
       return ctx.db.routes.findFirst({
         orderBy: {
           deptTime: "asc",

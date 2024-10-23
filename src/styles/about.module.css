@@ -94,10 +94,12 @@
   stroke-dasharray: 1000;
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      stroke-dashoffset: 1000;
-      animation: pipe-extension linear forwards;
-      animation-timeline: view(40vh 10vh);
-      animation-duration: 1ms;
+      @media screen and (min-width: 1024px) {
+        stroke-dashoffset: 1000;
+        animation: pipe-extension linear forwards;
+        animation-timeline: view(40vh 10vh);
+        animation-duration: 1ms;
+      }
     }
   }
 }

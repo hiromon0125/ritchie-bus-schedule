@@ -14,12 +14,13 @@ interface Props {
   bus: Bus;
   upIcon: React.ReactNode; // serverside loaded buttons
   downIcon: React.ReactNode; // serverside loaded buttons
+  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
 }
 
 function WaterfallBusTimeline(props: Props) {
-  const { routes, stops, bus, upIcon, downIcon } = props;
+  const { routes, stops, bus, upIcon, downIcon, fetchedRoute } = props;
   const router = useRouter();
-  const status = useBusStatus(bus);
+  const status = useBusStatus(bus, fetchedRoute);
   const [stopIndex, setStopIndex] = useState(status?.location?.index ?? 0);
 
   function goDown() {
@@ -48,20 +49,25 @@ function WaterfallBusTimeline(props: Props) {
           {upIcon}
         </button>
       </li>
-      {routes.slice(stopIndex, stopIndex + stops.length).map((route, i) => (
-        <li
-          key={route.id}
-          className=" p-3"
-          onClick={() => router.push(`/stop/${route.stopId}`)}
-        >
-          <Route
-            status={status}
-            route={route}
-            prevRoute={routes[stopIndex + i - 1]}
-            stop={stops.find((stop) => stop?.id === route.stopId)}
-          />
-        </li>
-      ))}
+      {routes
+        .slice(
+          Math.max(stopIndex - 1, 0),
+          Math.max(stopIndex - 1, 0) + stops.length - 1,
+        )
+        .map((route, i) => (
+          <li
+            key={route.id}
+            className=" p-3"
+            onClick={() => router.push(`/stop/${route.stopId}`)}
+          >
+            <Route
+              status={status}
+              route={route}
+              prevRoute={routes[stopIndex + i - 1]}
+              stop={stops.find((stop) => stop?.id === route.stopId)}
+            />
+          </li>
+        ))}
       <li className=" absolute bottom-[-35px] flex w-full scale-75 flex-row justify-center sm:bottom-[-70px] sm:scale-100">
         <button
           className={

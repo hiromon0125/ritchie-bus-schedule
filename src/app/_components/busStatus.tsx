@@ -19,6 +19,7 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
   const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
+
   return (
     <Link href={`/bus/${busObj.id}`}>
       <div className="relative pl-3">
@@ -32,10 +33,35 @@ async function BusInfo({ busID, bus }: BusStatusProps) {
               {busObj.id} | {busObj?.name}
             </h2>
           </div>
-          <BusStatusString bus={busObj} />
+          <Suspense
+            fallback={
+              <div className=" h-24">
+                <p>Loading...</p>
+              </div>
+            }
+          >
+            <Status busObj={busObj} />
+          </Suspense>
         </div>
       </div>
     </Link>
+  );
+}
+
+async function Status({ busObj }: { busObj: Bus }) {
+  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+    busId: busObj.id,
+  });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({
+      busId: busObj.id,
+    })
+    .then((data) => data[0]?.lastRoute ?? null);
+  return (
+    <BusStatusString
+      bus={busObj}
+      fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+    />
   );
 }
 
@@ -78,7 +104,7 @@ async function BusList() {
 
 export function BusListSkeleton() {
   return (
-    <div className=" w-11/12 min-w-80">
+    <div className=" w-11/12 min-w-80 max-w-screen-lg">
       {Array.from({ length: 5 }).map((_, i) => (
         <div key={i} className=" w-full py-3">
           <BusInfoSkeleton />

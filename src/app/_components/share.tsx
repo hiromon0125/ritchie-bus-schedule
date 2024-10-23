@@ -19,16 +19,22 @@ export function Share() {
         title={title}
         url={url}
         className=" flex flex-row items-center gap-3"
+        aria-label="Share on Reddit"
       >
         <RedditIcon round size={36} />
       </RedditShareButton>
-      <TwitterShareButton title={title} url={url} hashtags={["RIT"]}>
+      <TwitterShareButton
+        title={title}
+        url={url}
+        hashtags={["RIT"]}
+        aria-label="Share on X"
+      >
         <XIcon round size={36} />
       </TwitterShareButton>
-      <FacebookShareButton url={url}>
+      <FacebookShareButton url={url} aria-label="Share on Facebook">
         <FacebookIcon round size={36} />
       </FacebookShareButton>
-      <LinkedinShareButton url={url}>
+      <LinkedinShareButton url={url} aria-label="Share on LinkedIn">
         <LinkedinIcon round size={36} />
       </LinkedinShareButton>
     </div>

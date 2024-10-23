@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
-import { type BusMovingStatus } from "./hooks";
-import { type BusRoute } from "./types";
+import type { BusRoute, Status } from "./types";
 
 export function getRelative(now: Date, time: Date) {
   return DateTime.fromJSDate(time).toRelative({
@@ -70,14 +69,6 @@ export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
   return { date: now, isWeekend: isTodayWeekend };
 }
 
-type Status = {
-  statusMessage: string;
-  location: BusRoute | undefined;
-  isMoving: BusMovingStatus;
-  index: number;
-  nextUpdate: number;
-};
-
 /**
  * Determines the status of the bus based on the route and the current time.
  * This function should always run on the client side to get the current time.
@@ -107,7 +98,7 @@ export function getStopStatusPerf(
   const { date: now, isWeekend: isTodayWeekend } = currentTime;
 
   // out of service
-  if (isWeekend != isTodayWeekend || route == null || route == undefined) {
+  if (isWeekend != isTodayWeekend || !route) {
     return {
       statusMessage: "Out of service",
       location: undefined,
@@ -137,7 +128,7 @@ export function getStopStatusPerf(
 
   // moving
   const arrDiff: number = arriTime.getTime() - now.getTime();
-  if (arrDiff < 10 * 60 * 1000 && arrDiff > 0) {
+  if (arrDiff > 0) {
     const offsetTime = getRelative(now, arriTime);
     return {
       statusMessage: `Arriving ${offsetTime} • ${arriDT.toFormat("h:mm a")}`,
@@ -160,19 +151,4 @@ export function getStopStatusPerf(
       nextUpdate: getTimeToUpdateNext(offsetTime ?? "minutes"),
     };
   }
-
-  console.log("Status is undefined");
-  console.log(
-    `now: ${now.getTime()}`,
-    `\nDepture: ${route.deptTime.getTime()} ${deptDiff}`,
-    `\nArrival: ${route.arriTime?.getTime()} ${arrDiff}`,
-  );
-
-  return {
-    statusMessage: "Departed",
-    location: route,
-    isMoving: "departed",
-    index: route.index,
-    nextUpdate: 10,
-  };
 }
