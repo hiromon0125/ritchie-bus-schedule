@@ -14,7 +14,7 @@ function Footer() {
               width={36}
               height={36}
             />
-            <h2 className=" text-3xl text-slate-200">Ritchie Bus Schedule</h2>
+            <h2 className=" text-3xl text-slate-200">Ritchie's Bus Schedule</h2>
           </div>
           <p className=" text-slate-200">
             This is a project made by{" "}

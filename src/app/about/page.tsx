@@ -177,9 +177,9 @@ async function Page() {
               team has recently expanded to include another developer, Sam Ruan.
             </p>
             <p className=" text-lg">
-              Ritchie's Bus Schedule leverages the powerful t3 tech stack, which
-              includes Next.js, React, and Tailwind for the frontend, tRPC for
-              remote procedure calls, Drizzle ORM for database interactions,
+              Ritchie&#39;s Bus Schedule leverages the powerful t3 tech stack,
+              which includes Next.js, React, and Tailwind for the frontend, tRPC
+              for remote procedure calls, Drizzle ORM for database interactions,
               Vercel for API and hosting, and Supabase as the database. This
               modern stack ensures a robust and scalable application.
             </p>
@@ -352,11 +352,11 @@ async function Page() {
             <div className=" relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-28">
               <p className=" text-4xl">Try the App!</p>
               <p className=" md:text-xl">
-                Ritchie's Bus Schedule is a testament to the power of innovation
-                driven by personal need and community benefit. As the app
-                continues to evolve, it promises to make navigating the RIT bus
-                system easier and more efficient for all students. We hope you
-                find the app as useful and transformative as we do.
+                Ritchie&#39;s Bus Schedule is a testament to the power of
+                innovation driven by personal need and community benefit. As the
+                app continues to evolve, it promises to make navigating the RIT
+                bus system easier and more efficient for all students. We hope
+                you find the app as useful and transformative as we do.
               </p>
               <div className=" absolute bottom-2 right-6 flex flex-row items-center gap-4 md:right-32">
                 <Link

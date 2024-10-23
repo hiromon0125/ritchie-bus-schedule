@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { api } from "t/server";
 import { type RouterOutputs } from "t/shared";
 import BusStatusString from "./busStatusString";
-import type { BusRoute } from "./types";
 
 type BusStatusProps =
   | {
@@ -16,23 +15,11 @@ type BusStatusProps =
       busID?: never;
     };
 
-async function BusInfo({
-  busID,
-  bus,
-}: BusStatusProps & {
-  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
-}) {
+async function BusInfo({ busID, bus }: BusStatusProps) {
   const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
-  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
-    busId: busObj.id,
-  });
-  const lastRoute = await api.routes.getLastRouteOfBuses
-    .query({
-      busId: busObj.id,
-    })
-    .then((data) => data[0]?.lastRoute ?? null);
+
   return (
     <Link href={`/bus/${busObj.id}`}>
       <div className="relative pl-3">
@@ -46,13 +33,35 @@ async function BusInfo({
               {busObj.id} | {busObj?.name}
             </h2>
           </div>
-          <BusStatusString
-            bus={busObj}
-            fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
-          />
+          <Suspense
+            fallback={
+              <div className=" h-24">
+                <p>Loading...</p>
+              </div>
+            }
+          >
+            <Status busObj={busObj} />
+          </Suspense>
         </div>
       </div>
     </Link>
+  );
+}
+
+async function Status({ busObj }: { busObj: Bus }) {
+  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+    busId: busObj.id,
+  });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({
+      busId: busObj.id,
+    })
+    .then((data) => data[0]?.lastRoute ?? null);
+  return (
+    <BusStatusString
+      bus={busObj}
+      fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+    />
   );
 }
 
