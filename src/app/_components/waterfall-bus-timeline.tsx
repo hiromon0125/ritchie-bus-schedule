@@ -50,7 +50,10 @@ function WaterfallBusTimeline(props: Props) {
         </button>
       </li>
       {routes
-        .slice(stopIndex - 1, stopIndex + stops.length - 1)
+        .slice(
+          Math.max(stopIndex - 1, 0),
+          Math.max(stopIndex - 1, 0) + stops.length - 1,
+        )
         .map((route, i) => (
           <li
             key={route.id}

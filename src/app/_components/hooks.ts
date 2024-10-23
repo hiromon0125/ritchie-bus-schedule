@@ -45,54 +45,59 @@ export function useBusStatus(
       : data?.[index - offset];
   const check = () => {
     const { date, isWeekend } = getCurrentTime();
-    if (bus.isWeekend != isWeekend || nextRoute == undefined) {
+    if (
+      bus.isWeekend != isWeekend ||
+      nextRoute == undefined ||
+      data == undefined
+    )
       return false;
-    }
     const prevRoute =
       index - 1 - offset > 0 ? data?.[index - 1 - offset] : undefined;
     const deptTime = nextRoute?.deptTime;
     if (prevRoute?.deptTime && prevRoute.deptTime.getTime() > date.getTime()) {
-      setIndex(index - 1);
-      console.log(
-        "decreasing index",
-        index - 1,
-        fetchedRoute?.serverGuess?.index,
-        bus.id,
-      );
-      return true;
+      return index - 1;
     }
     if (
       deptTime.getTime() < date.getTime() &&
       (!fetchedRoute?.lastRoute ||
         fetchedRoute.lastRoute.deptTime.getTime() > date.getTime())
     ) {
+      let newIndex;
       if (
         fetchedRoute?.lastRoute &&
         (fetchedRoute.lastRoute.deptTime.getTime() - date.getTime()) * 2 <
           nextRoute.deptTime.getTime() - date.getTime()
       ) {
-        const newIndex =
+        newIndex =
           index + Math.floor((fetchedRoute.lastRoute.index - index) / 2);
-        setIndex(newIndex);
-        console.log(
-          `increase bus: ${bus.id} to ${newIndex} serverGuess ${fetchedRoute?.serverGuess?.index}`,
-        );
       } else {
-        const newIndex = data
-          ? (_.findIndex(data, (route) => route?.deptTime > date) ??
-            offset + QUERY_SIZE)
-          : index + 1;
-        setIndex(newIndex);
-        console.log(
-          `increase bus: ${bus.id} to ${newIndex} serverGuess ${fetchedRoute?.serverGuess?.index}`,
+        const searchedIndex = _.findIndex(
+          data,
+          (route) => route?.deptTime > date,
         );
+        newIndex = (searchedIndex ?? QUERY_SIZE) + offset;
       }
-      return true;
+      return newIndex;
     }
-    return false;
   };
   const status = useBusStatusClocked(bus, nextRoute);
-  return status ?? (check() ? LOADING_STATUS : OUT_OF_SERVICE_STATUS);
+  useEffect(() => {
+    const newIndex = check();
+    if (newIndex) {
+      console.log(`bus: ${bus.id} from ${index} to ${newIndex}`);
+      setIndex(newIndex);
+    }
+    if (nextRoute) {
+      const updateTime =
+        nextRoute.deptTime.getTime() - getCurrentTime().date.getTime();
+      const timeout = setTimeout(() => {
+        setIndex((i) => i + 1);
+      }, updateTime);
+      return () => clearTimeout(timeout);
+    }
+  });
+  const res = data ? (status ?? OUT_OF_SERVICE_STATUS) : LOADING_STATUS;
+  return res;
 }
 
 export function useBusStatusClocked(

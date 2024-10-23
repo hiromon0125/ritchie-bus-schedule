@@ -98,7 +98,7 @@ export function getStopStatusPerf(
   const { date: now, isWeekend: isTodayWeekend } = currentTime;
 
   // out of service
-  if (isWeekend != isTodayWeekend || route == null || route == undefined) {
+  if (isWeekend != isTodayWeekend || !route) {
     return {
       statusMessage: "Out of service",
       location: undefined,

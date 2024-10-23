@@ -62,23 +62,19 @@ export function BusStatusBig({
   fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
 }) {
   const status = useBusStatus(bus, fetchedRoute);
+  const stop = stops.find((stop) => stop.id === status?.location?.stopId);
+  let stopLocationMessage;
+  if (status.isMoving === "moving") {
+    stopLocationMessage = `Next stop: ${stop?.name ?? "Unknown"}`;
+  } else if (status.isMoving === "stopped") {
+    stopLocationMessage = `Currently at ${stop?.name ?? "Unknown"}`;
+  } else if (status.isMoving === "starting") {
+    stopLocationMessage = `Bus is starting at ${stop?.name ?? "Unknown"}`;
+  }
   return (
     <>
       <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
-      {
-        <p className=" text-xl">
-          {(status?.isMoving == "moving" &&
-            `Next stop: ${
-              stops.find((stop) => stop?.id === status?.location?.stopId)
-                ?.name ?? "Unknown"
-            }`) ??
-            (status?.isMoving === "stopped" &&
-              `Currently at ${
-                stops.find((stop) => stop?.id === status?.location?.stopId)
-                  ?.name ?? "Unknown"
-              }`)}
-        </p>
-      }
+      {<p className=" text-xl">{stopLocationMessage}</p>}
       <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">
         {status?.statusMessage}
       </p>
