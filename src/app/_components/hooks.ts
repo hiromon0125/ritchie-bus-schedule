@@ -61,7 +61,17 @@ export function useBusStatus(
       (!fetchedRoute?.lastRoute ||
         fetchedRoute.lastRoute.deptTime.getTime() > date.getTime())
     ) {
-      setIndex(index + 1);
+      if (
+        fetchedRoute?.lastRoute &&
+        fetchedRoute.lastRoute.deptTime.getTime() - date.getTime() >
+          1 * 60 * 1000
+      ) {
+        setIndex(
+          index + Math.floor((fetchedRoute.lastRoute.index - index) / 2),
+        );
+      } else {
+        setIndex(index + 1);
+      }
       console.log(
         "increasing index",
         index + 1,
