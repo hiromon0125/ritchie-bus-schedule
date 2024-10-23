@@ -1,6 +1,7 @@
 "use client";
 
 import type { Bus } from "@prisma/client";
+import _ from "lodash";
 import { useEffect, useState } from "react";
 import { api } from "t/react";
 import type { BusRoute } from "./types";
@@ -21,30 +22,34 @@ const LOADING_STATUS = {
   nextUpdate: 2000,
 } as const;
 
+const QUERY_SIZE = 30;
+
 export function useBusStatus(
   bus: Bus,
   fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
 ) {
   const busId = bus?.id ?? -1;
   const [index, setIndex] = useState(fetchedRoute?.serverGuess?.index ?? 0);
-  const offset = Math.max(Math.floor((index - 1) / 5) * 5, 0);
+  const offset = Math.max(
+    Math.floor((index - 1) / (QUERY_SIZE / 2)) * (QUERY_SIZE / 2),
+    0,
+  );
   const { data } = api.routes.getAllByBusId.useQuery({
     busId,
     offset: offset,
-    windowsize: 10,
+    windowsize: QUERY_SIZE,
   });
   const nextRoute =
     index === fetchedRoute?.serverGuess?.index
       ? fetchedRoute?.serverGuess
       : data?.[index - offset];
   const check = () => {
-    console.log("checking");
-
     const { date, isWeekend } = getCurrentTime();
     if (bus.isWeekend != isWeekend || nextRoute == undefined) {
       return false;
     }
-    const prevRoute = index > 0 ? data?.[index - 1 - offset] : undefined;
+    const prevRoute =
+      index - 1 - offset > 0 ? data?.[index - 1 - offset] : undefined;
     const deptTime = nextRoute?.deptTime;
     if (prevRoute?.deptTime && prevRoute.deptTime.getTime() > date.getTime()) {
       setIndex(index - 1);
@@ -63,21 +68,25 @@ export function useBusStatus(
     ) {
       if (
         fetchedRoute?.lastRoute &&
-        fetchedRoute.lastRoute.deptTime.getTime() - date.getTime() >
-          1 * 60 * 1000
+        (fetchedRoute.lastRoute.deptTime.getTime() - date.getTime()) * 2 <
+          nextRoute.deptTime.getTime() - date.getTime()
       ) {
-        setIndex(
-          index + Math.floor((fetchedRoute.lastRoute.index - index) / 2),
+        const newIndex =
+          index + Math.floor((fetchedRoute.lastRoute.index - index) / 2);
+        setIndex(newIndex);
+        console.log(
+          `increase bus: ${bus.id} to ${newIndex} serverGuess ${fetchedRoute?.serverGuess?.index}`,
         );
       } else {
-        setIndex(index + 1);
+        const newIndex = data
+          ? (_.findIndex(data, (route) => route?.deptTime > date) ??
+            offset + QUERY_SIZE)
+          : index + 1;
+        setIndex(newIndex);
+        console.log(
+          `increase bus: ${bus.id} to ${newIndex} serverGuess ${fetchedRoute?.serverGuess?.index}`,
+        );
       }
-      console.log(
-        "increasing index",
-        index + 1,
-        fetchedRoute?.serverGuess?.index,
-        bus.id,
-      );
       return true;
     }
     return false;

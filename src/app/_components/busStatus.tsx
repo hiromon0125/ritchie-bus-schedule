@@ -1,5 +1,4 @@
 import type { Bus } from "@prisma/client";
-import _ from "lodash";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
@@ -20,13 +19,20 @@ type BusStatusProps =
 async function BusInfo({
   busID,
   bus,
-  fetchedRoute,
 }: BusStatusProps & {
   fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
 }) {
   const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
+  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+    busId: busObj.id,
+  });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({
+      busId: busObj.id,
+    })
+    .then((data) => data[0]?.lastRoute ?? null);
   return (
     <Link href={`/bus/${busObj.id}`}>
       <div className="relative pl-3">
@@ -40,7 +46,10 @@ async function BusInfo({
               {busObj.id} | {busObj?.name}
             </h2>
           </div>
-          <BusStatusString bus={busObj} fetchedRoute={fetchedRoute} />
+          <BusStatusString
+            bus={busObj}
+            fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+          />
         </div>
       </div>
     </Link>
@@ -71,25 +80,12 @@ function BusInfoSkeleton() {
 
 async function BusList() {
   const buses = await api.bus.getAll.query();
-  const nextRoutes = await api.routes.getCurrentRouteOfBuses.query({
-    busIds: buses.map((bus) => bus.id),
-  });
-  const lastRoutes = await api.routes.getLastRouteOfBuses.query();
-
   return (
     <div className=" w-11/12 min-w-80 max-w-screen-lg">
       {buses?.map((bus, i) => (
         <div className=" w-full py-3" key={i}>
           <Suspense fallback={<BusInfoSkeleton />}>
-            <BusInfo
-              bus={bus}
-              fetchedRoute={{
-                serverGuess:
-                  _.find(nextRoutes, { busId: bus.id })?.route ?? null,
-                lastRoute:
-                  _.find(lastRoutes, { busId: bus.id })?.lastRoute ?? null,
-              }}
-            />
+            <BusInfo bus={bus} />
           </Suspense>
         </div>
       ))}
@@ -99,7 +95,7 @@ async function BusList() {
 
 export function BusListSkeleton() {
   return (
-    <div className=" w-11/12 min-w-80">
+    <div className=" w-11/12 min-w-80 max-w-screen-lg">
       {Array.from({ length: 5 }).map((_, i) => (
         <div key={i} className=" w-full py-3">
           <BusInfoSkeleton />

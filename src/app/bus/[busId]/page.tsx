@@ -37,11 +37,13 @@ export default async function Page({ params }: Props) {
   if (!bus) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
-  const currentRoute = await api.routes.getCurrentRouteOfBus.query({ busId });
-  const lastRoute = await api.routes.getLastRouteOfBuses
-    .query({ busId })
-    .then((data) => data[0]?.lastRoute ?? null);
   const stops = (await api.stops.getStopsByBusID.query({ busId })) ?? [];
+  const [currentRoute, lastRoute] = await Promise.all([
+    api.routes.getCurrentRouteOfBus.query({ busId }),
+    api.routes.getLastRouteOfBuses
+      .query({ busId })
+      .then((data) => data[0]?.lastRoute ?? null),
+  ]);
   return (
     <>
       <ScrollToTopButton color={bus.color} />
