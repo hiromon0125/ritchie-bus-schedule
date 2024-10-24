@@ -4,8 +4,8 @@ import Link from "next/link";
 import { Share } from "./share";
 function Footer() {
   return (
-    <div className=" min-h-60 w-full bg-slate-800">
-      <div className=" m-auto flex min-h-60 w-full max-w-screen-lg flex-col justify-between pb-16 sm:flex-row sm:gap-0 sm:pb-0">
+    <div className=" w-full bg-slate-800">
+      <div className=" m-auto flex w-full max-w-screen-lg flex-col justify-between pb-20 sm:flex-row sm:gap-0">
         <div className=" flex flex-col gap-2 p-4">
           <div className=" flex flex-row items-center gap-2">
             <Image

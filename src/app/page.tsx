@@ -5,12 +5,15 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   return (
-    <main className=" flex min-h-screen w-full flex-col items-center bg-slate-100 pb-8 text-black">
-      <Header />
+    <main
+      className=" flex min-h-screen w-full flex-col items-center bg-slate-100 pb-8 text-black"
+      style={{ "--sm-max-w": "calc(100% - 24px)" } as React.CSSProperties}
+    >
+      <Header title="Home" route="home" />
       <Suspense fallback={<BusListSkeleton />}>
         <BusList />
       </Suspense>
-      <div className=" relative mt-3 h-screen w-full max-w-screen-lg overflow-hidden rounded-lg">
+      <div className=" relative mx-3 h-[60vh] w-full max-w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
         <iframe
           title="ArcGIS Experience"
           className=" h-full w-full"

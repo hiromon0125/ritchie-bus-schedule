@@ -21,7 +21,7 @@ async function layout({
   const busColor = (bus.color?.toLowerCase() as `#${string}`) ?? "#000000";
   return (
     <div>
-      <Header />
+      <Header title="" route="bus" />
       <div className=" relative">
         <div className=" m-auto w-full max-w-screen-lg">
           <h2 className=" my-4 whitespace-nowrap pl-4 text-2xl font-extrabold sm:my-8 sm:text-4xl">
