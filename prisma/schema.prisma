@@ -71,6 +71,7 @@ model FavoriteStop {
   id        Int      @id @default(autoincrement())
   userId    String
   stopId    Int
+  priority   Int      
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   stop      Stops    @relation(fields: [stopId], references: [id])
@@ -83,6 +84,7 @@ model FavoriteBus {
   id        Int      @id @default(autoincrement())
   userId    String
   busId     Int
+  priority   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   bus       Bus      @relation(fields: [busId], references: [id])

@@ -16,7 +16,7 @@ export default async function Page({ params }: { params: { stopId: string } }) {
 
   return (
     <div>
-      <Header />
+      <Header title="Stop" route="stop" />
       <div className=" m-auto w-full max-w-screen-lg">
         <h1 className="text-2xl font-bold sm:mb-2 sm:text-4xl">
           Stop {stopId} | {currentStop?.name}

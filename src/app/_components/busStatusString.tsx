@@ -42,13 +42,17 @@ export default function BusStatusString({
           <div className=" absolute left-0 top-0 h-3 w-3 rounded-full bg-[--status-color] animation-delay-100" />
         )}
       </div>
-      <div className=" flex h-full flex-col justify-center pl-4">
-        <h3 className=" text-sm">{statusMessage}</h3>
+      <div className=" flex h-full w-full flex-col justify-center pl-4">
+        {isMoving === "loading" ? (
+          <div className=" h-4 w-9/12 animate-pulse rounded-sm bg-slate-300 animation-delay-100" />
+        ) : (
+          <h3 className=" text-sm">{statusMessage}</h3>
+        )}
         {ACTIVE_STATUS.includes(isMoving) &&
           (!!stop ? (
             <p className=" m-0 text-sm">{stop?.name}</p>
           ) : (
-            <div className="h-5 w-[100px]" />
+            <div className="mt-1 h-4 w-3/6 animate-pulse rounded-sm bg-slate-300 animation-delay-150" />
           ))}
       </div>
     </div>

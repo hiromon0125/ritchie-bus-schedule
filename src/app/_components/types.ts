@@ -28,3 +28,5 @@ export type Status = {
   index: number;
   nextUpdate: number;
 };
+
+export type PartialKey<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
