@@ -48,7 +48,7 @@ function ProfileButton({ user, route }: { user: User; route?: RouteOptions }) {
   return (
     <Popover>
       <PopoverTrigger>
-        <div className=" flex h-[48px] w-[48px] items-center justify-center rounded-full border-black bg-gray-300 md:bg-white">
+        <div className=" flex h-[48px] w-[48px] items-center justify-center rounded-full border-black bg-gray-300 text-black md:bg-white">
           <VscAccount
             size={35}
             strokeWidth={0.5}
