@@ -12,7 +12,7 @@ export default function ScrollToTopButton({
   return (
     ((y ?? 0) > 1000 && (
       <button
-        className=" fixed bottom-4 right-4 flex items-center justify-center rounded-full border-[3px] border-black"
+        className=" fixed bottom-24 right-4 flex items-center justify-center rounded-full border-[3px] border-black md:bottom-4"
         onClick={() => scrollTo({ left: 0, top: 0, behavior: "smooth" })}
         style={{ backgroundColor: bgColor }}
       >

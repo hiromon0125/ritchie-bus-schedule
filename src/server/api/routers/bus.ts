@@ -1,10 +1,13 @@
-import _ from "lodash";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const busRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) =>
-    ctx.db.bus.findMany().then((buses) => _.orderBy(buses, ["id"], ["asc"])),
+    ctx.db.bus.findMany({
+      orderBy: {
+        id: "asc",
+      },
+    }),
   ),
   getAllID: publicProcedure.query(({ ctx }) =>
     ctx.db.bus.findMany({

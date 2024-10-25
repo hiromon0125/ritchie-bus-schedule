@@ -6,7 +6,22 @@ import {
 } from "~/server/api/trpc";
 
 export const stopsRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => ctx.db.stops.findMany()),
+  getAll: publicProcedure
+    .input(
+      z
+        .object({
+          includeRelatedBus: z.boolean().optional(),
+        })
+        .optional(),
+    )
+    .query(({ ctx, input }) =>
+      ctx.db.stops.findMany({
+        include: { buses: input?.includeRelatedBus ?? false },
+        orderBy: {
+          id: "asc",
+        },
+      }),
+    ),
   getAllID: publicProcedure.query(({ ctx }) =>
     ctx.db.stops.findMany({
       select: {

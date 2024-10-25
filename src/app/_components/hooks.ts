@@ -48,6 +48,9 @@ export function useBusStatus(
 
   const status = useBusStatusClocked(bus, nextRoute);
   useEffect(() => {
+    if (bus.isWeekend !== getCurrentTime().isWeekend) {
+      return;
+    }
     if (data && fetchedRoute) {
       const newIndex = check(offset, index, data, fetchedRoute, bus, nextRoute);
       if (newIndex) {
@@ -55,8 +58,6 @@ export function useBusStatus(
         setIndex(newIndex);
       }
     }
-  }, [status]);
-  useEffect(() => {
     if (nextRoute) {
       const updateTime =
         nextRoute.deptTime.getTime() - getCurrentTime().date.getTime();

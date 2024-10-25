@@ -7,7 +7,15 @@ import UserButton from "./user-button";
 
 type RouteOptions = "home" | "bus" | "stop" | "about";
 
-function Header({ title, route }: { title?: string; route?: RouteOptions }) {
+function Header({
+  title,
+  route,
+  titleColor,
+}: {
+  title?: string;
+  route?: RouteOptions;
+  titleColor?: string;
+}) {
   return (
     <div className=" container top-0 flex min-w-full flex-row justify-between md:bg-slate-400">
       <div className=" m-auto hidden w-full max-w-screen-lg justify-center md:block">
@@ -20,7 +28,10 @@ function Header({ title, route }: { title?: string; route?: RouteOptions }) {
                 width={48}
                 height={48}
               />
-              <h1 className=" m-0 text-xl font-semibold max-md:text-lg max-md:font-normal max-sm:hidden lg:text-2xl">
+              <h1
+                className=" m-0 text-xl font-semibold max-md:text-lg max-md:font-normal max-sm:hidden lg:text-2xl"
+                style={{ color: titleColor ?? "black" }}
+              >
                 Ritchie's Bus Schedule
               </h1>
             </div>
@@ -37,18 +48,29 @@ function Header({ title, route }: { title?: string; route?: RouteOptions }) {
         </div>
       </div>
       <div className=" relative m-auto w-full max-w-screen-lg justify-center md:hidden">
-        <MobileHeader title={title ?? ""} route={route} />
+        <MobileHeader
+          title={title ?? ""}
+          route={route}
+          titleColor={titleColor}
+        />
       </div>
     </div>
   );
 }
 
+const TABBAR_COLOR = {
+  OFF: "black",
+  ON: "#1567ea",
+};
+
 function MobileHeader({
   title,
   route,
+  titleColor,
 }: {
   title: string;
   route?: RouteOptions;
+  titleColor?: string;
 }) {
   return (
     <>
@@ -62,7 +84,12 @@ function MobileHeader({
               height={48}
             />
           </a>
-          <h1 className=" m-0 text-2xl font-semibold">{title}</h1>
+          <h1
+            className=" m-0 text-2xl font-semibold"
+            style={{ color: titleColor ?? "black" }}
+          >
+            {title}
+          </h1>
         </div>
         <div>
           <UserButton route={route} />
@@ -71,45 +98,56 @@ function MobileHeader({
       <div className=" fixed bottom-3 z-50 w-full max-w-[100vw] px-3">
         <div className=" flex flex-row justify-around rounded-lg bg-slate-500 bg-opacity-50 px-3 backdrop-blur">
           <Link
-            href="/"
-            className=" flex flex-1 flex-col items-center p-2"
+            href="/buses"
+            className=" m-1 flex flex-1 flex-col items-center rounded-md p-1"
             style={
               {
-                "--color": route === "bus" ? "#1567ea" : "black",
+                "--color": route === "bus" ? TABBAR_COLOR.ON : TABBAR_COLOR.OFF,
+                backgroundColor:
+                  route === "bus" ? "rgba(255,255,255,0.2)" : "transparent",
               } as React.CSSProperties
             }
           >
             <MdDirectionsBus
               size={32}
-              color={route === "bus" ? "#1567ea" : "black"}
+              color={route === "bus" ? TABBAR_COLOR.ON : TABBAR_COLOR.OFF}
             />
             <p className=" m-0 text-center text-sm text-[--color]">Buses</p>
           </Link>
           <Link
             href="/"
-            className=" m-1 flex flex-1 flex-col items-center rounded-lg p-1 px-4"
+            className=" m-1 flex flex-1 flex-col items-center rounded-md p-1"
             style={
               {
-                "--color": route === "home" ? "#1567ea" : "black",
+                "--color":
+                  route === "home" ? TABBAR_COLOR.ON : TABBAR_COLOR.OFF,
+                backgroundColor:
+                  route === "home" ? "rgba(255,255,255,0.2)" : "transparent",
               } as React.CSSProperties
             }
           >
-            <HiHome size={32} color={route === "home" ? "#1567ea" : "white"} />
+            <HiHome
+              size={32}
+              color={route === "home" ? TABBAR_COLOR.ON : TABBAR_COLOR.OFF}
+            />
             <p className=" m-0 text-center text-sm text-[--color]">Home</p>
           </Link>
           <Link
-            href="/about"
-            className=" flex flex-1 flex-col items-center p-2"
+            href="/stops"
+            className=" m-1 flex flex-1 flex-col items-center rounded-md p-1"
             style={
               {
-                "--color": route === "stop" ? "#1567ea" : "black",
+                "--color":
+                  route === "stop" ? TABBAR_COLOR.ON : TABBAR_COLOR.OFF,
+                backgroundColor:
+                  route === "stop" ? "rgba(255,255,255,0.2)" : "transparent",
               } as React.CSSProperties
             }
           >
             <BusStopIcon
               width={32}
               height={32}
-              color={route === "stop" ? "#1567ea" : "black"}
+              color={route === "stop" ? TABBAR_COLOR.ON : TABBAR_COLOR.OFF}
             />
             <p className=" m-0 text-center text-sm text-[--color]">Stops</p>
           </Link>
