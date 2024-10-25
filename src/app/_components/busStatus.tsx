@@ -95,7 +95,7 @@ function BusInfoSkeleton() {
   );
 }
 
-async function BusList() {
+export async function BusList() {
   const buses = await api.bus.getAll.query();
   return (
     <div className=" m-3 flex max-w-[--sm-max-w] flex-col gap-3 rounded-3xl bg-slate-200 p-3 md:max-w-screen-lg">
@@ -153,5 +153,3 @@ export function BusListSkeleton() {
     </div>
   );
 }
-
-export default BusList;

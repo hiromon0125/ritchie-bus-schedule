@@ -1,9 +1,9 @@
+import { BackBtn } from "@/backBtn";
+import Header from "@/header";
+import { BusPageListSkeleton } from "@/navlist/busNavList";
+import ScrollToTopButton from "@/scrollToTopBtn";
 import { Suspense } from "react";
 import { IoChevronBackSharp } from "react-icons/io5";
-import { BackBtn } from "../_components/backBtn";
-import Header from "../_components/header";
-import ScrollToTopButton from "../_components/scrollToTopBtn";
-import { BusListSkeleton } from "./page";
 
 export default async function Page() {
   return (
@@ -18,7 +18,7 @@ export default async function Page() {
             </BackBtn>
           </Suspense>
         </div>
-        <BusListSkeleton />
+        <BusPageListSkeleton />
       </div>
       <ScrollToTopButton />
     </div>

@@ -1,4 +1,4 @@
-import BusList, { BusListSkeleton } from "@/busStatus";
+import { BusList, BusListSkeleton } from "@/busStatus";
 import Header from "@/header";
 import { Suspense } from "react";
 export const dynamic = "force-dynamic";
