@@ -7,17 +7,29 @@ import UserButton from "./user-button";
 
 type RouteOptions = "home" | "bus" | "stop" | "about";
 
-function Header({
+export default function Header({
   title,
   route,
-  titleColor,
+  titleColor = { sm: "black", lg: "white" },
+  bgColor = { sm: "white", lg: "#1E283B" },
 }: {
   title?: string;
   route?: RouteOptions;
-  titleColor?: string;
+  titleColor?: { sm: string; lg: string };
+  bgColor?: { sm: string; lg: string };
 }) {
   return (
-    <div className=" container top-0 flex min-w-full flex-row justify-between md:bg-slate-400">
+    <div
+      className=" container top-0 flex min-w-full flex-row justify-between bg-[--sm-bg-color] text-[--sm-title-color] md:bg-[--lg-bg-color] md:text-[--lg-title-color]"
+      style={
+        {
+          "--lg-bg-color": bgColor.lg,
+          "--sm-bg-color": bgColor.sm,
+          "--lg-title-color": titleColor.lg,
+          "--sm-title-color": titleColor.sm,
+        } as React.CSSProperties
+      }
+    >
       <div className=" m-auto hidden w-full max-w-screen-lg justify-center md:block">
         <div className=" top-0 m-auto flex w-full max-w-screen-lg flex-row justify-between px-4">
           <a href="/">
@@ -28,31 +40,33 @@ function Header({
                 width={48}
                 height={48}
               />
-              <h1
-                className=" m-0 text-xl font-semibold max-md:text-lg max-md:font-normal max-sm:hidden lg:text-2xl"
-                style={{ color: titleColor ?? "black" }}
-              >
+              <h1 className=" m-0 text-xl font-semibold text-[--sm-title-color] max-md:text-lg max-md:font-normal max-sm:hidden md:text-[--lg-title-color] lg:text-2xl">
                 Ritchie's Bus Schedule
               </h1>
             </div>
           </a>
           <div className=" flex flex-row items-center gap-4">
-            <Link href="/">
-              <p className=" mx-3 text-xl underline">Buses</p>
+            <Link href="/buses">
+              <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+                Buses
+              </p>
+            </Link>
+            <Link href="/stops">
+              <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+                Stops
+              </p>
             </Link>
             <Link href="/about">
-              <p className=" mx-3 text-xl underline">About</p>
+              <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+                About
+              </p>
             </Link>
             <UserButton route={route} />
           </div>
         </div>
       </div>
       <div className=" relative m-auto w-full max-w-screen-lg justify-center md:hidden">
-        <MobileHeader
-          title={title ?? ""}
-          route={route}
-          titleColor={titleColor}
-        />
+        <MobileHeader title={title ?? ""} route={route} />
       </div>
     </div>
   );
@@ -66,11 +80,9 @@ const TABBAR_COLOR = {
 function MobileHeader({
   title,
   route,
-  titleColor,
 }: {
   title: string;
   route?: RouteOptions;
-  titleColor?: string;
 }) {
   return (
     <>
@@ -84,10 +96,7 @@ function MobileHeader({
               height={48}
             />
           </a>
-          <h1
-            className=" m-0 text-2xl font-semibold"
-            style={{ color: titleColor ?? "black" }}
-          >
+          <h1 className=" m-0 text-2xl font-semibold text-[--sm-title-color] md:text-[--lg-title-color]">
             {title}
           </h1>
         </div>
@@ -156,5 +165,3 @@ function MobileHeader({
     </>
   );
 }
-
-export default Header;

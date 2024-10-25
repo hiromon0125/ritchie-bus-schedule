@@ -19,7 +19,9 @@ function KeyScrollTitle() {
 async function Page() {
   return (
     <>
-      <Header title="About" />
+      <div className=" w-full bg-slate-900">
+        <Header title="About" />
+      </div>
       <div className=" flex h-[30vh] max-h-[600px] w-screen flex-col items-center justify-center overflow-hidden bg-[#E1ECF7] md:h-[70vh]">
         <Image
           src="/ritches-bus-schedule-banner.png"

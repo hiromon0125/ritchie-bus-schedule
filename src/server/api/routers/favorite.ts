@@ -1,9 +1,9 @@
+import type { PartialKey } from "@/types";
 import type { FavoriteBus, FavoriteStop } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import _ from "lodash";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
-import type { PartialKey } from "../../../app/_components/types";
 
 function isValidPriority<T extends { priority: number }>(
   list: PartialKey<T, "priority">[],
@@ -26,15 +26,24 @@ export const favoriteRouter = createTRPCRouter({
     .input(
       z.object({
         busId: z.number(),
-        priority: z.number(),
       }),
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const lastBus = await ctx.db.favoriteBus.findFirst({
+        orderBy: {
+          priority: "desc",
+        },
+        where: {
+          userId: ctx.user.id,
+        },
+      });
+      const newPriority =
+        lastBus != null ? (lastBus.priority as number) + 1 : 0;
       return ctx.db.favoriteBus.create({
         data: {
           userId: ctx.user.id,
           busId: input.busId,
-          priority: input.priority,
+          priority: newPriority,
         },
       });
     }),
@@ -74,24 +83,33 @@ export const favoriteRouter = createTRPCRouter({
           userId: ctx.user.id,
         },
       });
-      await ctx.db.favoriteBus.deleteMany({
+      const { count } = await ctx.db.favoriteBus.deleteMany({
         where: {
           userId: ctx.user.id,
           busId: input.busId,
         },
       });
       const newBusesList = buses
-        .filter((bus) => bus.id !== input.busId)
+        .filter((bus) => bus.busId !== input.busId)
         .map((bus, i) => ({
           ...bus,
           priority: i,
         }));
-      return ctx.db.favoriteBus.updateMany({
-        where: {
-          userId: ctx.user.id,
-        },
-        data: newBusesList,
-      });
+      if (newBusesList.length != 0) {
+        await Promise.all(
+          newBusesList.map((bus) =>
+            ctx.db.favoriteBus.update({
+              where: {
+                id: bus.id,
+              },
+              data: {
+                priority: bus.priority,
+              },
+            }),
+          ),
+        );
+      }
+      return count;
     }),
   getAllStop: privateProcedure.query(async ({ ctx }) => {
     return ctx.db.favoriteStop.findMany({
@@ -144,7 +162,7 @@ export const favoriteRouter = createTRPCRouter({
   delStop: privateProcedure
     .input(z.object({ stopId: z.number() }))
     .mutation(async ({ ctx, input }) => {
-      const buses = await ctx.db.favoriteStop.findMany({
+      const stops = await ctx.db.favoriteStop.findMany({
         orderBy: {
           priority: "asc",
         },
@@ -152,23 +170,32 @@ export const favoriteRouter = createTRPCRouter({
           userId: ctx.user.id,
         },
       });
-      await ctx.db.favoriteStop.deleteMany({
+      const { count } = await ctx.db.favoriteStop.deleteMany({
         where: {
           userId: ctx.user.id,
           stopId: input.stopId,
         },
       });
-      const newBusesList = buses
-        .filter((bus) => bus.id !== input.stopId)
+      const newStopsList = stops
+        .filter((stop) => stop.id !== input.stopId)
         .map((bus, i) => ({
           ...bus,
           priority: i,
         }));
-      return ctx.db.favoriteBus.updateMany({
-        where: {
-          userId: ctx.user.id,
-        },
-        data: newBusesList,
-      });
+      if (newStopsList.length != 0) {
+        await Promise.all(
+          newStopsList.map((stop) =>
+            ctx.db.favoriteStop.update({
+              where: {
+                id: stop.id,
+              },
+              data: {
+                priority: stop.priority,
+              },
+            }),
+          ),
+        );
+      }
+      return count;
     }),
 });
