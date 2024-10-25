@@ -37,12 +37,13 @@ export const favoriteRouter = createTRPCRouter({
           userId: ctx.user.id,
         },
       });
-      const newPriority =
-        lastBus != null ? (lastBus.priority as number) + 1 : 0;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const newPriority = lastBus != null ? lastBus.priority + 1 : 0;
       return ctx.db.favoriteBus.create({
         data: {
           userId: ctx.user.id,
           busId: input.busId,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           priority: newPriority,
         },
       });
