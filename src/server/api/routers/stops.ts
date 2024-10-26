@@ -40,13 +40,7 @@ export const stopsRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
-        select: {
-          id: true,
-          name: true,
-          tag: true,
-          description: true,
-          latitude: true,
-          longitude: true,
+        include: {
           buses: true,
         },
       }),

@@ -39,16 +39,16 @@ async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
       <Link
         href={`/bus/${busObj.id}`}
         title={`${busObj.id} ${busObj.name}`}
-        className=" relative -z-0"
+        className=" relative"
       >
         <div
           className="relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white bg-white p-1 transition-all hover:border-[#1567ea] hover:shadow-md"
           style={{ "--bus-color": color } as React.CSSProperties}
         >
           <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
-          <div className=" relative flex w-full flex-1 flex-col flex-wrap justify-between">
-            <div className=" mr-1 flex w-full flex-1 flex-row items-center pl-4 pr-2 pt-2">
-              <h2 className=" w-full overflow-hidden text-ellipsis text-nowrap font-bold md:text-xl">
+          <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
+            <div className=" mr-1 flex flex-1 flex-row items-center pl-4 pr-2 pt-2">
+              <h2 className=" w-0 flex-1 overflow-hidden text-ellipsis text-nowrap font-bold md:text-xl">
                 {busObj.id} | {busObj?.name}
               </h2>
               <div className=" favbtn-placeholder h-6 w-6" />
@@ -131,24 +131,15 @@ export async function BusList() {
     (bus) => !favBusesId.find((favBus) => favBus.busId === bus.id),
   );
   return (
-    <div className=" m-3 flex max-w-[--sm-max-w] flex-col gap-3 rounded-3xl bg-slate-200 p-3 md:max-w-screen-lg">
+    <div className=" xs:p-3 xs:rounded-3xl xs:gap-3 flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 md:max-w-screen-lg">
       <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
-        <h1 className=" m-0 text-2xl font-bold">Favorite Buses</h1>
+        <h1 className=" xs:text-2xl m-0 text-xl font-bold">Favorite Buses</h1>
       </div>
-      <div
-        className=" relative flex max-w-screen-lg flex-row flex-wrap gap-3 md:min-w-80"
-        style={
-          {
-            "--md-max-width": "calc(50% - 5px)",
-            "--lg-min-width": "calc(50% - 12px)",
-            "--sm-min-width": "calc(100vw - 48px)",
-          } as React.CSSProperties
-        }
-      >
+      <div className=" xs:gap-3 relative flex max-w-screen-lg flex-row flex-wrap gap-2 md:min-w-80">
         <SignedIn>
           {favBuses.map((bus, i) => (
             <div
-              className=" min-w-[--sm-min-width] flex-1 md:w-auto md:min-w-[300px] md:max-w-[--md-max-width] lg:min-w-[--lg-min-width]"
+              className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
               key={i}
             >
               <Suspense fallback={<BusInfoSkeleton />}>
@@ -172,21 +163,12 @@ export async function BusList() {
         </SignedOut>
       </div>
       <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
-        <h1 className=" m-0 text-2xl font-bold">Buses</h1>
+        <h1 className=" xs:text-2xl m-0 text-xl font-bold">Buses</h1>
       </div>
-      <div
-        className=" relative flex max-w-screen-lg flex-row flex-wrap gap-3 md:min-w-80"
-        style={
-          {
-            "--md-max-width": "calc(50% - 5px)",
-            "--lg-min-width": "calc(50% - 12px)",
-            "--sm-min-width": "calc(100vw - 48px)",
-          } as React.CSSProperties
-        }
-      >
+      <div className=" xs:gap-3 relative flex max-w-screen-lg flex-row flex-wrap gap-2 md:min-w-80">
         {nonFavBuses.map((bus, i) => (
           <div
-            className=" min-w-[--sm-min-width] flex-1 md:w-auto md:min-w-[300px] md:max-w-[--md-max-width] lg:min-w-[--lg-min-width]"
+            className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
             key={i}
           >
             <Suspense fallback={<BusInfoSkeleton />}>
@@ -205,18 +187,10 @@ export function BusListSkeleton() {
       <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
         <h1 className=" m-0 text-2xl font-bold">Buses</h1>
       </div>
-      <div
-        className=" relative flex max-w-screen-lg flex-row flex-wrap gap-3 md:min-w-80"
-        style={
-          {
-            "--md-max-width": "calc(50% - 5px)",
-            "--sm-min-width": "calc(100vw - 48px)",
-          } as React.CSSProperties
-        }
-      >
+      <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-3 md:min-w-80">
         {[...Array(6).keys()]?.map((i) => (
           <div
-            className=" min-w-[--sm-min-width] flex-1 md:w-auto md:min-w-[300px] md:max-w-[--md-max-width]"
+            className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)]"
             key={i}
           >
             <BusInfoSkeleton />

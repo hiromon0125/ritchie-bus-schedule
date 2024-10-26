@@ -1,35 +1,62 @@
 import { BusTag, StopTag } from "@/tags";
 import _ from "lodash";
+import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "../../trpc/server";
+import { FavBtn } from "../_components/favBtn";
 
+async function favoriteStop(stopId: number) {
+  "use server";
+  await api.favorite.addStop.mutate({ stopId });
+  revalidatePath("/stops");
+}
+
+async function unfavoriteStop(stopId: number) {
+  "use server";
+  await api.favorite.delStop.mutate({ stopId });
+  revalidatePath("/stops");
+}
 export default async function StopList() {
   const stops = await api.stops.getAll.query({ includeRelatedBus: true });
-
-  return stops.map((stop) => (
-    <Link
-      href={`/stop/${stop.id}`}
-      key={stop.id}
-      className=" flex w-full flex-row items-center gap-3 border-t-2 p-3 transition-all hover:bg-slate-200"
-    >
-      <div className=" flex flex-1 flex-col gap-2">
-        <div className=" flex w-full flex-row items-center gap-2">
-          <StopTag stop={stop} />
-          <span className=" w-full overflow-clip text-ellipsis text-nowrap text-lg font-bold">
-            {" "}
-            {stop.name}
-          </span>
+  const favStop = (await api.favorite.getAllStop.query()).map(
+    (stop) => stop.stopId,
+  );
+  return stops.map((stop) => {
+    const isFav = favStop.includes(stop.id);
+    return (
+      <Link
+        href={`/stop/${stop.id}`}
+        key={stop.id}
+        className=" xs:gap-3 xs:p-3 group flex w-full flex-row items-center gap-2 border-t-2 p-1 transition-all hover:bg-slate-200"
+      >
+        <div className=" flex flex-1 flex-col gap-2">
+          <div className=" flex w-full flex-row items-center">
+            <div className=" flex w-0 flex-row items-center justify-center overflow-hidden opacity-0 transition-all group-hover:w-8 group-hover:opacity-100">
+              <FavBtn
+                isFavorited={isFav}
+                onClick={async () => {
+                  "use server";
+                  await (isFav ? unfavoriteStop : favoriteStop)(stop.id);
+                }}
+              />
+            </div>
+            <StopTag stop={stop} />
+            <span className=" xs:ml-2 ml-1 w-0 flex-1 overflow-clip text-ellipsis text-nowrap text-lg font-bold">
+              {" "}
+              {stop.name}
+            </span>
+          </div>
+          <div className=" flex flex-row flex-wrap gap-1">
+            {stop.buses.length > 0 &&
+              _.orderBy(stop.buses, ["id"], "asc").map((bus) => {
+                return <BusTag bus={bus} key={bus.id} size="sm" />;
+              })}
+          </div>
+          <p className=" text-left text-lg">{stop.description}</p>
         </div>
-        <div className=" flex flex-row flex-wrap gap-1">
-          {stop.buses.length > 0 &&
-            _.orderBy(stop.buses, ["id"], "asc").map((bus) => {
-              return <BusTag bus={bus} key={bus.id} size="sm" />;
-            })}
-        </div>
-        <p className=" text-left text-lg">{stop.description}</p>
-      </div>
-      <IoChevronForwardSharp size={24} />
-    </Link>
-  ));
+        <IoChevronForwardSharp size={24} />
+      </Link>
+    );
+  });
 }

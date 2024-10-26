@@ -25,11 +25,7 @@ export function FavBtn({
       ref={ref}
     >
       {isFavorited || hovering ? (
-        <MdFavorite
-          size={size}
-          color="#FF78AE"
-          className={" transition-all hover:drop-shadow-sm"}
-        />
+        <MdFavorite size={size} color="#FF78AE" className=" transition-all" />
       ) : (
         <MdFavoriteBorder size={size} color="gray" />
       )}

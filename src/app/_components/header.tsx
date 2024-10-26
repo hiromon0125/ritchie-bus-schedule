@@ -11,7 +11,7 @@ export default function Header({
   title,
   route,
   titleColor = { sm: "black", lg: "white" },
-  bgColor = { sm: "white", lg: "#1E283B" },
+  bgColor = { sm: "#f1f5f9", lg: "#1E283B" },
 }: {
   title?: string;
   route?: RouteOptions;

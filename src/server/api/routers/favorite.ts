@@ -123,15 +123,25 @@ export const favoriteRouter = createTRPCRouter({
     .input(
       z.object({
         stopId: z.number(),
-        priority: z.number(),
       }),
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
+      const lastStop = await ctx.db.favoriteStop.findFirst({
+        orderBy: {
+          priority: "desc",
+        },
+        where: {
+          userId: ctx.user.id,
+        },
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const newPriority = lastStop != null ? lastStop.priority + 1 : 0;
       return ctx.db.favoriteStop.create({
         data: {
           userId: ctx.user.id,
           stopId: input.stopId,
-          priority: input.priority,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          priority: newPriority,
         },
       });
     }),
