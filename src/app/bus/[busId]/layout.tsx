@@ -23,11 +23,11 @@ async function layout({
     <div>
       <Header title="" route="bus" />
       <div
-        className=" relative"
+        className=" relative max-w-[100vw]"
         style={{ "--bus-color": busColor } as React.CSSProperties}
       >
         <div className=" m-auto w-full max-w-screen-lg">
-          <h2 className=" my-4 max-w-[100vw] text-ellipsis whitespace-nowrap pl-1 text-lg font-extrabold xs:pl-4 sm:my-8 sm:text-4xl md:text-2xl">
+          <h2 className=" my-4 max-w-[100vw] text-ellipsis pl-1 text-lg font-extrabold xs:pl-4 sm:my-8 sm:text-4xl md:text-2xl">
             {bus.id} | {bus.name}
           </h2>
         </div>
@@ -46,8 +46,8 @@ async function layout({
               </div>
             </div>
           </div>
-          <div className=" z-0 flex min-w-96 flex-1 flex-col items-center border-t-[64px] border-[--bus-color] p-4 md:items-end">
-            <div className=" max-w-md">{children}</div>
+          <div className=" z-0 flex flex-1 flex-col items-center border-t-[64px] border-[--bus-color] p-4 md:items-end">
+            <div className=" w-full max-w-md">{children}</div>
           </div>
         </div>
         <div className=" h-16" />
