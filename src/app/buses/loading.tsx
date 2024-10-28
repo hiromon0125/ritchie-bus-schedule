@@ -6,7 +6,7 @@ export default function BusPageListSkeleton() {
       {[...Array(6).keys()].map((count) => (
         <div
           key={count}
-          className=" flex w-full flex-row items-center gap-3 border-t-2 border-white p-3 text-white transition-all"
+          className=" flex w-full flex-row items-center gap-3 border-t-2 p-3 text-white transition-all"
         >
           <div className=" flex flex-1 flex-col gap-2">
             <div className=" flex w-full flex-row items-center gap-2">

@@ -15,7 +15,7 @@ export function FavBtn({
   const [ref, hovering] = useHover();
   return (
     <button
-      className={cn(props.className, " transition-all hover:drop-shadow-sm")}
+      className={cn(props.className, " group transition-all")}
       {...props}
       onClick={() => {
         props.onClick?.();
@@ -25,7 +25,11 @@ export function FavBtn({
       ref={ref}
     >
       {isFavorited || hovering ? (
-        <MdFavorite size={size} color="#FF78AE" className=" transition-all" />
+        <MdFavorite
+          size={size}
+          color="#FF78AE"
+          className=" transition-all hover:drop-shadow-md"
+        />
       ) : (
         <MdFavoriteBorder size={size} color="gray" />
       )}

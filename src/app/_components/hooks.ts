@@ -27,6 +27,7 @@ const QUERY_SIZE = 30;
 export function useBusStatus(
   bus: Bus,
   fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
+  stopId?: number,
 ) {
   const busId = bus?.id ?? -1;
   const [index, setIndex] = useState(
@@ -38,6 +39,7 @@ export function useBusStatus(
   );
   const { data } = api.routes.getAllByBusId.useQuery({
     busId,
+    stopId,
     offset: offset,
     windowsize: QUERY_SIZE,
   });

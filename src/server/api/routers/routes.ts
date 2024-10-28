@@ -19,6 +19,7 @@ export const routesRouter = createTRPCRouter({
     .input(
       z.object({
         busId: z.number(),
+        stopId: z.number().optional(),
         offset: z.number().optional().default(0),
         windowsize: z.number().optional(),
       }),
@@ -147,6 +148,7 @@ export const routesRouter = createTRPCRouter({
       z
         .object({
           busId: z.number(),
+          stopId: z.number().optional(),
         })
         .optional(),
     )
@@ -159,6 +161,7 @@ export const routesRouter = createTRPCRouter({
           const lastRoute = await ctx.db.routes.findFirst({
             where: {
               busId: bus.id,
+              ...(input?.stopId ? { stopId: input.stopId } : {}),
             },
             orderBy: {
               deptTime: "desc",
@@ -175,6 +178,7 @@ export const routesRouter = createTRPCRouter({
     .input(
       z.object({
         busId: z.number(),
+        stopId: z.number().optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -191,6 +195,7 @@ export const routesRouter = createTRPCRouter({
           bus: {
             isWeekend: now.isWeekend,
           },
+          ...(input.stopId ? { stopId: input.stopId } : {}),
         },
       });
     }),

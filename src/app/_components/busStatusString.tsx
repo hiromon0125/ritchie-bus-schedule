@@ -17,14 +17,18 @@ const ACTIVE_STATUS = ["moving", "stopped", "starting"];
 export default function BusStatusString({
   bus,
   fetchedRoute,
+  stopId,
+  hideStopName = false,
 }: {
   bus: Bus;
   fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
+  stopId?: number;
+  hideStopName?: boolean;
 }) {
-  const status = useBusStatus(bus, fetchedRoute);
+  const status = useBusStatus(bus, fetchedRoute, stopId);
   const { isMoving, statusMessage, location } = status ?? {};
   const { data: stop } = api.stops.getOneByID.useQuery({
-    id: location?.stopId ?? 0,
+    id: stopId ?? location?.stopId ?? 0,
   });
   const activityColor = ACTIVITY_COLOR[isMoving ?? "out-of-service"];
   return (
@@ -46,11 +50,12 @@ export default function BusStatusString({
         {isMoving === "loading" ? (
           <div className=" h-4 w-9/12 animate-pulse rounded-sm bg-slate-300 animation-delay-100" />
         ) : (
-          <h3 className=" text-sm">{statusMessage}</h3>
+          <h3 className=" text-left text-sm">{statusMessage}</h3>
         )}
-        {ACTIVE_STATUS.includes(isMoving) &&
+        {!hideStopName &&
+          ACTIVE_STATUS.includes(isMoving) &&
           (!!stop ? (
-            <p className=" m-0 text-sm">{stop?.name}</p>
+            <p className=" m-0 text-left text-sm">{stop?.name}</p>
           ) : (
             <div className="mt-1 h-4 w-3/6 animate-pulse rounded-sm bg-slate-300 animation-delay-150" />
           ))}
@@ -80,7 +85,9 @@ export function BusStatusBig({
   }
   return (
     <>
-      <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
+      <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-4xl">
+        Status
+      </h2>
       {<p className=" text-xl">{stopLocationMessage}</p>}
       <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">
         {status?.statusMessage}

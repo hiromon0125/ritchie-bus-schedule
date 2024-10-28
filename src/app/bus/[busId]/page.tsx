@@ -46,8 +46,10 @@ export default async function Page({ params }: Props) {
       <Suspense fallback={<p>Loading...</p>}>
         <BusStatus bus={bus} stops={stops} />
       </Suspense>
-      <h2 className=" text-2xl font-bold sm:mb-2 sm:text-4xl">Description</h2>
-      <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">{bus.description}</p>
+      <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-4xl">
+        Description
+      </h2>
+      <p className=" mb-4 xs:text-lg sm:mb-8 sm:text-xl">{bus.description}</p>
       <StopInfo stops={stops} bus={bus} />
     </>
   );

@@ -20,7 +20,7 @@ export default function Header({
 }) {
   return (
     <div
-      className=" container top-0 flex min-w-full flex-row justify-between bg-[--sm-bg-color] text-[--sm-title-color] md:bg-[--lg-bg-color] md:text-[--lg-title-color]"
+      className=" w-full"
       style={
         {
           "--lg-bg-color": bgColor.lg,
@@ -30,44 +30,47 @@ export default function Header({
         } as React.CSSProperties
       }
     >
-      <div className=" m-auto hidden w-full max-w-screen-lg justify-center md:block">
-        <div className=" top-0 m-auto flex w-full max-w-screen-lg flex-row justify-between px-4">
-          <a href="/">
-            <div className=" flex flex-row items-center gap-4 py-6">
-              <Image
-                src="/icons/bus-512x512.png"
-                alt="Logo"
-                width={48}
-                height={48}
-              />
-              <h1 className=" m-0 text-xl font-semibold text-[--sm-title-color] max-md:text-lg max-md:font-normal max-sm:hidden md:text-[--lg-title-color] lg:text-2xl">
-                Ritchie's Bus Schedule
-              </h1>
+      <div className=" container top-0 flex min-w-full flex-row justify-between bg-[--sm-bg-color] text-[--sm-title-color] md:bg-[--lg-bg-color] md:text-[--lg-title-color]">
+        <div className=" m-auto hidden w-full max-w-screen-lg justify-center md:block">
+          <div className=" top-0 m-auto flex w-full max-w-screen-lg flex-row justify-between px-4">
+            <a href="/">
+              <div className=" flex flex-row items-center gap-4 py-6">
+                <Image
+                  src="/icons/bus-512x512.png"
+                  alt="Logo"
+                  width={48}
+                  height={48}
+                />
+                <h1 className=" m-0 text-xl font-semibold text-[--sm-title-color] max-md:text-lg max-md:font-normal max-sm:hidden md:text-[--lg-title-color] lg:text-2xl">
+                  Ritchie's Bus Schedule
+                </h1>
+              </div>
+            </a>
+            <div className=" flex flex-row items-center gap-4">
+              <Link href="/buses">
+                <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+                  Buses
+                </p>
+              </Link>
+              <Link href="/stops">
+                <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+                  Stops
+                </p>
+              </Link>
+              <Link href="/about">
+                <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+                  About
+                </p>
+              </Link>
+              <UserButton route={route} />
             </div>
-          </a>
-          <div className=" flex flex-row items-center gap-4">
-            <Link href="/buses">
-              <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
-                Buses
-              </p>
-            </Link>
-            <Link href="/stops">
-              <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
-                Stops
-              </p>
-            </Link>
-            <Link href="/about">
-              <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
-                About
-              </p>
-            </Link>
-            <UserButton route={route} />
           </div>
         </div>
+        <div className=" relative m-auto w-full max-w-screen-lg justify-center md:hidden">
+          <MobileHeader title={title ?? ""} route={route} />
+        </div>
       </div>
-      <div className=" relative m-auto w-full max-w-screen-lg justify-center md:hidden">
-        <MobileHeader title={title ?? ""} route={route} />
-      </div>
+      <div className=" h-3 w-full bg-gradient-to-b from-[--sm-bg-color] md:hidden" />
     </div>
   );
 }
@@ -105,7 +108,7 @@ function MobileHeader({
         </div>
       </div>
       <div className=" fixed bottom-3 z-50 w-full max-w-[100vw] px-3">
-        <div className=" flex flex-row justify-around rounded-lg bg-slate-500 bg-opacity-50 px-3 backdrop-blur">
+        <div className=" flex flex-row justify-around rounded-lg bg-slate-500 bg-opacity-50 backdrop-blur">
           <Link
             href="/buses"
             className=" m-1 flex flex-1 flex-col items-center rounded-md p-1"

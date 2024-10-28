@@ -19,7 +19,9 @@ function StopInfo(params: StopParams) {
     });
   return (
     <>
-      <h2 className=" text-2xl font-bold sm:mb-2 sm:text-4xl">Stops Info</h2>
+      <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-4xl">
+        Stops Info
+      </h2>
       <p className=" mb-2 text-lg">
         Select the stop to see the time of arrival and departure
       </p>

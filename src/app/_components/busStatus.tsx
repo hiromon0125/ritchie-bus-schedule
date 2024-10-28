@@ -29,7 +29,7 @@ const unfavoriteBus = async (busId: number) => {
   return api.favorite.delBus.mutate({ busId });
 };
 
-async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
+export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
   const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
@@ -54,7 +54,7 @@ async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
               <div className=" favbtn-placeholder h-6 w-6" />
             </div>
             <Suspense fallback={<SkeletonBusStatusString />}>
-              <Status busObj={busObj} />
+              <BusStatus busObj={busObj} />
             </Suspense>
           </div>
         </div>
@@ -72,19 +72,31 @@ async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
   );
 }
 
-async function Status({ busObj }: { busObj: Bus }) {
+export async function BusStatus({
+  busObj,
+  stopId,
+  hideStopName = false,
+}: {
+  busObj: Bus;
+  stopId?: number;
+  hideStopName?: boolean;
+}) {
   const currentRoute = await api.routes.getCurrentRouteOfBus.query({
     busId: busObj.id,
+    stopId,
   });
   const lastRoute = await api.routes.getLastRouteOfBuses
     .query({
       busId: busObj.id,
+      stopId,
     })
     .then((data) => data[0]?.lastRoute ?? null);
   return (
     <BusStatusString
       bus={busObj}
       fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+      stopId={stopId}
+      hideStopName={hideStopName}
     />
   );
 }
@@ -102,7 +114,7 @@ export function SkeletonBusStatusString() {
   );
 }
 
-function BusInfoSkeleton() {
+export function BusInfoSkeleton() {
   return (
     <div className=" relative -z-0">
       <div
@@ -131,11 +143,11 @@ export async function BusList() {
     (bus) => !favBusesId.find((favBus) => favBus.busId === bus.id),
   );
   return (
-    <div className=" xs:p-3 xs:rounded-3xl xs:gap-3 flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 md:max-w-screen-lg">
+    <div className=" flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
       <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
-        <h1 className=" xs:text-2xl m-0 text-xl font-bold">Favorite Buses</h1>
+        <h1 className=" m-0 text-xl font-bold xs:text-2xl">Favorite Buses</h1>
       </div>
-      <div className=" xs:gap-3 relative flex max-w-screen-lg flex-row flex-wrap gap-2 md:min-w-80">
+      <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-2 xs:gap-3 md:min-w-80">
         <SignedIn>
           {favBuses.map((bus, i) => (
             <div
@@ -163,9 +175,9 @@ export async function BusList() {
         </SignedOut>
       </div>
       <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
-        <h1 className=" xs:text-2xl m-0 text-xl font-bold">Buses</h1>
+        <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
       </div>
-      <div className=" xs:gap-3 relative flex max-w-screen-lg flex-row flex-wrap gap-2 md:min-w-80">
+      <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-2 xs:gap-3 md:min-w-80">
         {nonFavBuses.map((bus, i) => (
           <div
             className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
