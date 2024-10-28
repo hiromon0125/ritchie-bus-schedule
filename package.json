@@ -53,14 +53,14 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
     "@next/eslint-plugin-next": "^14.2.16",
     "@types/eslint": "^8.56.12",
+    "@types/eslint__js": "^8.42.3",
     "@types/luxon": "^3.4.2",
     "@types/node": "^18.19.59",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@typescript-eslint/eslint-plugin": "^8.11.0",
-    "@typescript-eslint/parser": "^8.11.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.13.0",
     "postcss": "^8.4.47",
@@ -68,7 +68,8 @@
     "prettier-plugin-tailwindcss": "^0.5.14",
     "prisma": "^5.21.1",
     "tailwindcss": "^3.4.14",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.11.0"
   },
   "ct3aMetadata": {
     "initVersion": "7.25.0"

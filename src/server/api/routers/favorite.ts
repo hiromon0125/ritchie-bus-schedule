@@ -7,7 +7,7 @@ import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
 function isValidPriority<T extends { priority: number }>(
   list: PartialKey<T, "priority">[],
-): list is Array<T> {
+): list is T[] {
   return (
     _.find(list, (bus) => bus.priority === undefined) === undefined &&
     new Set(list.map((b) => b.priority)).size === list.length
@@ -37,13 +37,11 @@ export const favoriteRouter = createTRPCRouter({
           userId: ctx.user.id,
         },
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const newPriority = lastBus != null ? lastBus.priority + 1 : 0;
       return ctx.db.favoriteBus.create({
         data: {
           userId: ctx.user.id,
           busId: input.busId,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           priority: newPriority,
         },
       });
@@ -134,13 +132,11 @@ export const favoriteRouter = createTRPCRouter({
           userId: ctx.user.id,
         },
       });
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const newPriority = lastStop != null ? lastStop.priority + 1 : 0;
       return ctx.db.favoriteStop.create({
         data: {
           userId: ctx.user.id,
           stopId: input.stopId,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           priority: newPriority,
         },
       });

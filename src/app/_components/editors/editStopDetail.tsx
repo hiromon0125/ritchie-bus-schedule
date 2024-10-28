@@ -87,7 +87,7 @@ export default function EditStopDetail({ stop }: { stop: DetailedStop }) {
                 latitude: editedStop.latitude,
                 longitude: editedStop.longitude,
               });
-            } catch (e) {
+            } catch (_) {
               toast({ title: "Error", variant: "destructive" });
               return;
             }

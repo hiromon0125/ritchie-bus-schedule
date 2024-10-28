@@ -22,10 +22,9 @@ export default function EditBusDetail({ busId }: { busId: number }) {
   const [newData, setNewData] = useState<Bus | null>(data ?? null);
   const savedData = useDebounce(newData, 1000);
   useEffect(() => {
-    fetchStatus === "success" &&
-      savedData &&
-      !_.isEqual(savedData, data) &&
+    if (fetchStatus === "success" && savedData && !_.isEqual(savedData, data)) {
       mutate(savedData);
+    }
   }, [savedData]);
   useEffect(() => {
     setNewData(data ?? null);

@@ -54,7 +54,7 @@ export default function BusStatusString({
         )}
         {!hideStopName &&
           ACTIVE_STATUS.includes(isMoving) &&
-          (!!stop ? (
+          (stop ? (
             <p className=" m-0 text-left text-sm">{stop?.name}</p>
           ) : (
             <div className="mt-1 h-4 w-3/6 animate-pulse rounded-sm bg-slate-300 animation-delay-150" />

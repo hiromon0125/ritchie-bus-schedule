@@ -9,7 +9,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = auth();
+  const { userId } = auth() as { userId: string | null };
   if (!userId) {
     redirect("/");
   }
