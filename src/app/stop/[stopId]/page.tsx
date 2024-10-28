@@ -174,7 +174,7 @@ const unfavoriteBus = async (busId: number) => {
   return api.favorite.delBus.mutate({ busId });
 };
 
-export async function SelectableBusInfo({
+async function SelectableBusInfo({
   busID,
   bus,
   isFavorited,
