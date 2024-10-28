@@ -5,6 +5,8 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "../../trpc/server";
 import { FavBtn } from "../_components/favBtn";
 
+export const dynamic = "force-dynamic";
+
 async function favoriteBus(busId: number) {
   "use server";
   await api.favorite.addBus.mutate({ busId });

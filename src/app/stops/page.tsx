@@ -6,6 +6,8 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "../../trpc/server";
 import { FavBtn } from "../_components/favBtn";
 
+export const dynamic = "force-dynamic";
+
 async function favoriteStop(stopId: number) {
   "use server";
   await api.favorite.addStop.mutate({ stopId });
@@ -28,7 +30,7 @@ export default async function StopList() {
       <Link
         href={`/stop/${stop.id}`}
         key={stop.id}
-        className=" xs:gap-3 xs:p-3 group flex w-full flex-row items-center gap-2 border-t-2 p-1 transition-all hover:bg-slate-200"
+        className=" group flex w-full flex-row items-center gap-2 border-t-2 p-1 transition-all hover:bg-slate-200 xs:gap-3 xs:p-3"
       >
         <div className=" flex flex-1 flex-col gap-2">
           <div className=" flex w-full flex-row items-center">
@@ -42,7 +44,7 @@ export default async function StopList() {
               />
             </div>
             <StopTag stop={stop} />
-            <span className=" xs:ml-2 ml-1 w-0 flex-1 overflow-clip text-ellipsis text-nowrap text-lg font-bold">
+            <span className=" ml-1 w-0 flex-1 overflow-clip text-ellipsis text-nowrap text-lg font-bold xs:ml-2">
               {" "}
               {stop.name}
             </span>
