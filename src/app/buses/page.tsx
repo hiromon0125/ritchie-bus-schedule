@@ -1,4 +1,5 @@
 import { BusTag } from "@/tags";
+import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
@@ -20,8 +21,11 @@ async function unfavoriteBus(busId: number) {
 }
 
 export default async function BusPageList() {
+  const user = await currentUser();
   const buses = await api.bus.getAll.query();
-  const favBus = (await api.favorite.getAllBus.query()).map((bus) => bus.busId);
+  const favBus = !user
+    ? []
+    : (await api.favorite.getAllBus.query()).map((bus) => bus.busId);
   return (
     <>
       {buses.map((bus) => {

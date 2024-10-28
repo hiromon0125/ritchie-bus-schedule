@@ -1,4 +1,5 @@
 import { BusTag, StopTag } from "@/tags";
+import { currentUser } from "@clerk/nextjs/server";
 import _ from "lodash";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
@@ -20,10 +21,11 @@ async function unfavoriteStop(stopId: number) {
   revalidatePath("/stops");
 }
 export default async function StopList() {
+  const user = await currentUser();
   const stops = await api.stops.getAll.query({ includeRelatedBus: true });
-  const favStop = (await api.favorite.getAllStop.query()).map(
-    (stop) => stop.stopId,
-  );
+  const favStop = !user
+    ? []
+    : (await api.favorite.getAllStop.query()).map((stop) => stop.stopId);
   return stops.map((stop) => {
     const isFav = favStop.includes(stop.id);
     return (
@@ -39,7 +41,8 @@ export default async function StopList() {
                 isFavorited={isFav}
                 onClick={async () => {
                   "use server";
-                  await (isFav ? unfavoriteStop : favoriteStop)(stop.id);
+                  if (user)
+                    await (isFav ? unfavoriteStop : favoriteStop)(stop.id);
                 }}
               />
             </div>

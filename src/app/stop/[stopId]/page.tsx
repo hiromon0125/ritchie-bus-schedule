@@ -1,4 +1,5 @@
 import Header from "@/header";
+import { currentUser } from "@clerk/nextjs/server";
 import type { Bus } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
 import { revalidatePath } from "next/cache";
@@ -25,6 +26,7 @@ export default async function Page({
   params: { stopId: string };
   searchParams: { busId?: string };
 }) {
+  const user = await currentUser();
   const stopId = Number(params.stopId);
   if (Number.isNaN(stopId)) {
     throw TRPCClientError.from(Error(`Invalid ID (stop id: ${params.stopId})`));
@@ -33,12 +35,14 @@ export default async function Page({
   if (!currentStop) {
     throw TRPCClientError.from(Error(`Stop not found (stop id: ${stopId})`));
   }
-  const isFavorite = (await api.favorite.getAllStop.query())
-    .map((e) => e.stopId)
-    .includes(stopId);
-  const favoriteBuses = (await api.favorite.getAllBus.query()).map(
-    (bus) => bus.busId,
-  );
+  const isFavorite = !user
+    ? false
+    : (await api.favorite.getAllStop.query())
+        .map((e) => e.stopId)
+        .includes(stopId);
+  const favoriteBuses = !user
+    ? []
+    : (await api.favorite.getAllBus.query()).map((bus) => bus.busId);
   const { busId: rawSelectedBusId } = searchParams;
   if (Array.isArray(rawSelectedBusId)) {
     permanentRedirect(`/stop/${stopId}?busId=${rawSelectedBusId[0]}`);

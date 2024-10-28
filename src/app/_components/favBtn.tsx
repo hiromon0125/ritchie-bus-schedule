@@ -1,4 +1,5 @@
 "use client";
+import { useUser } from "@clerk/nextjs";
 import { useHover } from "@uidotdev/usehooks";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { cn } from "../../lib/utils";
@@ -12,14 +13,19 @@ export function FavBtn({
   size?: number;
   onClick?: () => void;
 } & React.ComponentProps<"button">) {
+  const { user } = useUser();
   const [ref, hovering] = useHover();
   return (
     <button
       className={cn(props.className, " group transition-all")}
       {...props}
-      onClick={() => {
+      onClick={(e) => {
+        e.preventDefault();
+        if (!user) {
+          alert("Please log in to favorite");
+          return;
+        }
         props.onClick?.();
-        console.log("Favorite clicked");
       }}
       title={isFavorited ? "Unfavorite" : "Favorite"}
       ref={ref}

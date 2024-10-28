@@ -39,7 +39,7 @@ export default function StopMap({ stops }: { stops: Stops[] | Stops }) {
       {stopCoors.map((coor, index) => (
         <Marker key={index} anchor={[coor.lat, coor.lng]} offset={[-7, -7]}>
           <div
-            className=" aspect-square w-7 rounded-full border-2 border-black bg-white p-[2px]"
+            className=" aspect-square w-7 rounded-full border-2 border-black bg-white p-[2px] text-center"
             title={coor.name}
           >
             {coor.tag}

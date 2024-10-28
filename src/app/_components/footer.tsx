@@ -6,7 +6,7 @@ import { Share } from "./share";
 function Footer() {
   return (
     <div className=" w-full bg-slate-800">
-      <div className=" m-auto flex w-full max-w-screen-lg flex-col justify-between pb-20 sm:flex-row sm:gap-0">
+      <div className=" m-auto flex w-full max-w-screen-lg flex-col justify-between pb-20 lg:flex-row lg:gap-0">
         <div className=" flex flex-col gap-2 p-4">
           <div className=" flex flex-row items-center gap-2">
             <Image
@@ -38,7 +38,7 @@ function Footer() {
           </p>
           <Coffee />
         </div>
-        <div className=" flex-1 sm:pl-16">
+        <div className=" flex-1 lg:pl-16">
           <div className=" flex flex-col gap-5 p-4">
             <div className=" flex flex-col gap-2">
               <h2 className=" text-3xl text-slate-200">Links</h2>
@@ -57,7 +57,9 @@ function Footer() {
                 </Link>
                 <SignedOut>
                   <SignInButton>
-                    <p className=" bg-slate-600 p-2 text-slate-200">Sign In</p>
+                    <p className=" text-slate-200 underline drop-shadow-md">
+                      Sign In
+                    </p>
                   </SignInButton>
                 </SignedOut>
                 <SignedIn>
