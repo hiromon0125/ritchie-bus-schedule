@@ -1,11 +1,5 @@
 "use client";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignOutButton,
-  useUser,
-} from "@clerk/nextjs";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import { PopoverArrow } from "@radix-ui/react-popover";
 import Link from "next/link";
 import { GoCodeReview, GoHomeFill } from "react-icons/go";
@@ -24,26 +18,11 @@ import {
 import { api } from "../../trpc/react";
 import { BusStopIcon } from "./icons";
 
-type User = ReturnType<typeof useUser>["user"];
 type RouteOptions = "home" | "bus" | "stop" | "about";
 
-export default function UserButton({ route }: { route?: RouteOptions }) {
+export default function ProfileButton({ route }: { route?: RouteOptions }) {
   const { user } = useUser();
-  return (
-    <div className="flex flex-none flex-row items-center justify-end text-lg">
-      <SignedOut>
-        <div className=" rounded-lg border-2 border-black p-2">
-          <SignInButton />
-        </div>
-      </SignedOut>
-      <SignedIn>
-        <ProfileButton user={user} route={route} />
-      </SignedIn>
-    </div>
-  );
-}
 
-function ProfileButton({ user, route }: { user: User; route?: RouteOptions }) {
   const { data } = api.manager.isManager.useQuery({ userId: user?.id ?? "" });
   return (
     <Popover>

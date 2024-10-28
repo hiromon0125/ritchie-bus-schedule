@@ -1,9 +1,10 @@
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { HiHome } from "react-icons/hi2";
 import { MdDirectionsBus } from "react-icons/md";
 import { BusStopIcon } from "./icons";
-import UserButton from "./user-button";
+import { default as ProfileButton } from "./user-button";
 
 type RouteOptions = "home" | "bus" | "stop" | "about";
 
@@ -166,5 +167,22 @@ function MobileHeader({
         </div>
       </div>
     </>
+  );
+}
+
+function UserButton({ route }: { route?: RouteOptions }) {
+  return (
+    <div className="flex flex-none flex-row items-center justify-end text-lg">
+      <SignedOut>
+        <div className=" rounded-full border-2 border-blue-600 bg-white px-4 py-2">
+          <SignInButton>
+            <button className=" text-blue-600">Sign In</button>
+          </SignInButton>
+        </div>
+      </SignedOut>
+      <SignedIn>
+        <ProfileButton route={route} />
+      </SignedIn>
+    </div>
   );
 }

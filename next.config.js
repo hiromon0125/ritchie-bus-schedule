@@ -7,7 +7,13 @@ await import("./src/env.js");
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    domains: ["cdn.buymeacoffee.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.buymeacoffee.com",
+        pathname: "**",
+      },
+    ],
   },
 };
 

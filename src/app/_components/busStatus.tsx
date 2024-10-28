@@ -1,4 +1,5 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import type { Bus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
@@ -134,14 +135,22 @@ export function BusInfoSkeleton() {
 }
 
 export async function BusList() {
+  const user = await currentUser();
   const buses = await api.bus.getAll.query();
-  const favBusesId = await api.favorite.getAllBus.query();
-  const favBuses = favBusesId.map((favBus) =>
-    buses.find((bus) => bus.id === favBus.busId),
-  ) as Bus[];
-  const nonFavBuses = buses.filter(
-    (bus) => !favBusesId.find((favBus) => favBus.busId === bus.id),
-  );
+  let favBusesId = [] as RouterOutputs["favorite"]["getAllBus"];
+  let favBuses = [] as Bus[];
+  let nonFavBuses = [] as Bus[];
+  if (user) {
+    favBusesId = await api.favorite.getAllBus.query();
+    favBuses = favBusesId.map((favBus) =>
+      buses.find((bus) => bus.id === favBus.busId),
+    ) as Bus[];
+    nonFavBuses = buses.filter(
+      (bus) => !favBusesId.find((favBus) => favBus.busId === bus.id),
+    );
+  } else {
+    nonFavBuses = buses;
+  }
   return (
     <div className=" flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
       <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
@@ -166,11 +175,11 @@ export async function BusList() {
           )}
         </SignedIn>
         <SignedOut>
-          <div className=" flex h-28 w-full flex-row items-center justify-center rounded-md bg-slate-300 p-2 text-lg font-bold text-slate-600">
+          <div className=" flex h-28 w-full flex-row items-center justify-center gap-1 rounded-md bg-slate-300 p-2 text-lg font-bold text-slate-600">
             <SignInButton>
               <u className=" text-blue-600 underline">Sign in</u>
-            </SignInButton>{" "}
-            to see your favorite buses
+            </SignInButton>
+            <p>to add your favorite buses.</p>
           </div>
         </SignedOut>
       </div>
