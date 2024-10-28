@@ -1,4 +1,5 @@
 import Coffee from "@/buymecoffee";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { Share } from "./share";
@@ -43,10 +44,29 @@ function Footer() {
               <h2 className=" text-3xl text-slate-200">Links</h2>
               <div className=" flex flex-row gap-4">
                 <Link className=" text-slate-200 underline" href="/">
-                  App
+                  Home
                 </Link>
                 <Link className=" text-slate-200 underline" href="/about">
                   About
+                </Link>
+                <Link className=" text-slate-200 underline" href="/buses">
+                  Buses
+                </Link>
+                <Link className=" text-slate-200 underline" href="/stops">
+                  Stops
+                </Link>
+                <SignedOut>
+                  <SignInButton>
+                    <p className=" bg-slate-600 p-2 text-slate-200">Sign In</p>
+                  </SignInButton>
+                </SignedOut>
+                <SignedIn>
+                  <Link className=" text-slate-200 underline" href="/settings">
+                    Settings
+                  </Link>
+                </SignedIn>
+                <Link className=" text-slate-200 underline" href="/pp">
+                  Private Policy
                 </Link>
               </div>
             </div>

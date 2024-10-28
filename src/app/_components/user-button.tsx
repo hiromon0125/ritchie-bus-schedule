@@ -129,7 +129,7 @@ function ProfileButton({ user, route }: { user: User; route?: RouteOptions }) {
           </Link>
         )}
         <Link
-          href="/settings"
+          href="/pp"
           className=" flex flex-row items-center gap-2 rounded-md p-2 hover:bg-slate-200"
         >
           <VscLaw size={20} />
