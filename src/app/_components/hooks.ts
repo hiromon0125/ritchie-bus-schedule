@@ -27,6 +27,7 @@ const QUERY_SIZE = 30;
 export function useBusStatus(
   bus: Bus,
   fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
+  stopId?: number,
 ) {
   const busId = bus?.id ?? -1;
   const [index, setIndex] = useState(
@@ -38,6 +39,7 @@ export function useBusStatus(
   );
   const { data } = api.routes.getAllByBusId.useQuery({
     busId,
+    stopId,
     offset: offset,
     windowsize: QUERY_SIZE,
   });
@@ -48,6 +50,9 @@ export function useBusStatus(
 
   const status = useBusStatusClocked(bus, nextRoute);
   useEffect(() => {
+    if (bus.isWeekend !== getCurrentTime().isWeekend) {
+      return;
+    }
     if (data && fetchedRoute) {
       const newIndex = check(offset, index, data, fetchedRoute, bus, nextRoute);
       if (newIndex) {
@@ -55,8 +60,6 @@ export function useBusStatus(
         setIndex(newIndex);
       }
     }
-  }, [status]);
-  useEffect(() => {
     if (nextRoute) {
       const updateTime =
         nextRoute.deptTime.getTime() - getCurrentTime().date.getTime();

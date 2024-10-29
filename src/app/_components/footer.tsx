@@ -1,11 +1,12 @@
 import Coffee from "@/buymecoffee";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { Share } from "./share";
 function Footer() {
   return (
-    <div className=" min-h-60 w-full bg-slate-800">
-      <div className=" m-auto flex min-h-60 w-full max-w-screen-lg flex-col justify-between pb-16 sm:flex-row sm:gap-0 sm:pb-0">
+    <div className=" w-full bg-slate-800">
+      <div className=" m-auto flex w-full max-w-screen-lg flex-col justify-between pb-20 lg:flex-row lg:gap-0">
         <div className=" flex flex-col gap-2 p-4">
           <div className=" flex flex-row items-center gap-2">
             <Image
@@ -37,16 +38,37 @@ function Footer() {
           </p>
           <Coffee />
         </div>
-        <div className=" flex-1 sm:pl-16">
+        <div className=" flex-1 lg:pl-16">
           <div className=" flex flex-col gap-5 p-4">
             <div className=" flex flex-col gap-2">
               <h2 className=" text-3xl text-slate-200">Links</h2>
               <div className=" flex flex-row gap-4">
                 <Link className=" text-slate-200 underline" href="/">
-                  App
+                  Home
                 </Link>
                 <Link className=" text-slate-200 underline" href="/about">
                   About
+                </Link>
+                <Link className=" text-slate-200 underline" href="/buses">
+                  Buses
+                </Link>
+                <Link className=" text-slate-200 underline" href="/stops">
+                  Stops
+                </Link>
+                <SignedOut>
+                  <SignInButton>
+                    <p className=" text-slate-200 underline drop-shadow-md">
+                      Sign In
+                    </p>
+                  </SignInButton>
+                </SignedOut>
+                <SignedIn>
+                  <Link className=" text-slate-200 underline" href="/setting">
+                    Settings
+                  </Link>
+                </SignedIn>
+                <Link className=" text-slate-200 underline" href="/pp">
+                  Private Policy
                 </Link>
               </div>
             </div>

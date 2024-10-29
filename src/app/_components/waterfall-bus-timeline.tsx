@@ -57,7 +57,7 @@ function WaterfallBusTimeline(props: Props) {
         .map((route, i) => (
           <li
             key={route.id}
-            className=" p-3"
+            className=" px-3 py-1"
             onClick={() => router.push(`/stop/${route.stopId}`)}
           >
             <Route
@@ -68,7 +68,7 @@ function WaterfallBusTimeline(props: Props) {
             />
           </li>
         ))}
-      <li className=" absolute bottom-[-35px] flex w-full scale-75 flex-row justify-center sm:bottom-[-70px] sm:scale-100">
+      <li className=" absolute bottom-[-42px] flex w-full scale-75 flex-row justify-center sm:bottom-[-70px] sm:scale-100 md:bottom-[-35px]">
         <button
           className={
             " relative overflow-hidden rounded-full border-[3px] border-black" +
@@ -97,19 +97,19 @@ function Route(prop: {
   const arriTime = getArriTime(routeToShow, prevRoute);
 
   return (
-    <div className=" relative">
+    <div className=" relative flex-1">
       {isArriving && <DownArrow />}
       <div className={style.nodeWrapper}>
         <div className={isDeparting ? style.activeStopNode : style.stopNode} />
       </div>
-      <p>
+      <p className=" text-sm">
         <span className={routeToShow.arriTime == null ? " opacity-60" : ""}>
           {DateTime.fromJSDate(arriTime).toLocal().toFormat("h:mm a")}
         </span>{" "}
         -{" "}
         {DateTime.fromJSDate(routeToShow.deptTime).toLocal().toFormat("h:mm a")}
       </p>
-      <p className=" text-xl">{stop?.name}</p>
+      <p>{stop?.name}</p>
     </div>
   );
 }

@@ -10,9 +10,10 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   const { userId } = auth();
-  if (!userId) {
+  if (userId == null) {
     redirect("/");
   }
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const manager = await api.manager.isManager.query({ userId: userId });
   if (!manager) {
     redirect("/");

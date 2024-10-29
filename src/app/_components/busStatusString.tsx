@@ -1,52 +1,64 @@
 "use client";
 import type { Bus, Stops } from "@prisma/client";
-import Image from "next/image";
 import { api } from "t/react";
-import iconStyles from "~/styles/animated-icon.module.css";
 import { useBusStatus } from "./hooks";
-import type { BusRoute } from "./types";
+import type { BusMovingStatus, BusRoute } from "./types";
+
+const ACTIVITY_COLOR: Record<BusMovingStatus, string> = {
+  moving: "#77fe5c",
+  stopped: "#ff564f",
+  starting: "#ffae49",
+  "out-of-service": "gray",
+  departed: "gray",
+  loading: "gray",
+};
+const ACTIVE_STATUS = ["moving", "stopped", "starting"];
 
 export default function BusStatusString({
   bus,
   fetchedRoute,
+  stopId,
+  hideStopName = false,
 }: {
   bus: Bus;
   fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
+  stopId?: number;
+  hideStopName?: boolean;
 }) {
-  const status = useBusStatus(bus, fetchedRoute);
+  const status = useBusStatus(bus, fetchedRoute, stopId);
   const { isMoving, statusMessage, location } = status ?? {};
   const { data: stop } = api.stops.getOneByID.useQuery({
-    id: location?.stopId ?? 0,
+    id: stopId ?? location?.stopId ?? 0,
   });
-  const level = isMoving === "moving" ? 1 : isMoving === "stopped" ? 2 : 3;
+  const activityColor = ACTIVITY_COLOR[isMoving ?? "out-of-service"];
   return (
-    <div className=" relative flex h-20 min-h-max flex-row items-center overflow-hidden pr-3">
-      <div className=" relative flex h-24 w-24 justify-center">
-        <Image
-          src={
-            level === 1
-              ? "/icons/Moving-icon.png"
-              : level === 2
-                ? "/icons/Stopped-icon.png"
-                : "/icons/Out-of-service-icon.png"
-          }
-          alt={`Bus ${isMoving}`}
-          width={96}
-          height={96}
-          priority
-          className={
-            level === 1
-              ? iconStyles.moving
-              : level === 2
-                ? iconStyles.stopped
-                : iconStyles.out
-          }
-        />
-        {level === 3 && <div className={iconStyles.outAfter} />}
+    <div
+      className=" relative flex h-12 min-h-max flex-row items-center overflow-hidden"
+      style={{ "--status-color": activityColor } as React.CSSProperties}
+    >
+      <div className=" relative ml-5 h-3 w-3">
+        {ACTIVE_STATUS.includes(isMoving) ? (
+          <>
+            <div className=" absolute left-0 top-0 h-3 w-3 animate-ping rounded-full bg-[--status-color]" />
+            <div className=" absolute left-0 top-0 h-3 w-3 animate-pulse rounded-full bg-[--status-color] animation-delay-100" />
+          </>
+        ) : (
+          <div className=" absolute left-0 top-0 h-3 w-3 rounded-full bg-[--status-color] animation-delay-100" />
+        )}
       </div>
-      <div className=" flex h-full flex-col justify-center">
-        <h3 className=" my-1 text-lg font-medium">{statusMessage}</h3>
-        {!!stop?.name && <p>{stop?.name}</p>}
+      <div className=" flex h-full w-full flex-col justify-center pl-4">
+        {isMoving === "loading" ? (
+          <div className=" h-4 w-9/12 animate-pulse rounded-sm bg-slate-300 animation-delay-100" />
+        ) : (
+          <h3 className=" text-left text-sm">{statusMessage}</h3>
+        )}
+        {!hideStopName &&
+          ACTIVE_STATUS.includes(isMoving) &&
+          (stop ? (
+            <p className=" m-0 text-left text-sm">{stop?.name}</p>
+          ) : (
+            <div className="mt-1 h-4 w-3/6 animate-pulse rounded-sm bg-slate-300 animation-delay-150" />
+          ))}
       </div>
     </div>
   );
@@ -73,7 +85,9 @@ export function BusStatusBig({
   }
   return (
     <>
-      <h2 className=" text-2xl font-bold sm:text-4xl">Status</h2>
+      <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-4xl">
+        Status
+      </h2>
       {<p className=" text-xl">{stopLocationMessage}</p>}
       <p className=" mb-4 text-lg sm:mb-8 sm:text-xl">
         {status?.statusMessage}
