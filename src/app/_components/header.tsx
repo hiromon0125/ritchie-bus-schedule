@@ -1,10 +1,11 @@
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { Protect, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { HiHome } from "react-icons/hi2";
 import { MdDirectionsBus } from "react-icons/md";
 import { BusStopIcon } from "./icons";
-import { default as ProfileButton } from "./user-button";
+import { default as ProfileButton } from "./userButton";
 
 type RouteOptions = "home" | "bus" | "stop" | "about";
 
@@ -63,7 +64,14 @@ export default function Header({
                   About
                 </p>
               </Link>
-              <UserButton route={route} />
+              <Protect role="org:admin">
+                <Link href="/manage">
+                  <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+                    Manage
+                  </p>
+                </Link>
+              </Protect>
+              <ProfileBtn />
             </div>
           </div>
         </div>
@@ -105,7 +113,7 @@ function MobileHeader({
           </h1>
         </div>
         <div>
-          <UserButton route={route} />
+          <ProfileBtn />
         </div>
       </div>
       <div className=" fixed bottom-3 z-50 w-full max-w-[100vw] px-3">
@@ -170,7 +178,7 @@ function MobileHeader({
   );
 }
 
-function UserButton({ route }: { route?: RouteOptions }) {
+function ProfileBtn() {
   return (
     <div className="flex flex-none flex-row items-center justify-end text-lg">
       <SignedOut>
@@ -181,7 +189,11 @@ function UserButton({ route }: { route?: RouteOptions }) {
         </div>
       </SignedOut>
       <SignedIn>
-        <ProfileButton route={route} />
+        <Suspense fallback={<div className=" h-8 w-8 rounded-full bg-black" />}>
+          <div className=" flex h-12 w-12 flex-col items-center justify-center rounded-full">
+            <ProfileButton />
+          </div>
+        </Suspense>
       </SignedIn>
     </div>
   );

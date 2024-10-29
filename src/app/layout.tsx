@@ -24,7 +24,7 @@ export default function RootLayout({
     <ClerkProvider
       appearance={{
         layout: {
-          termsPageUrl: "https://rit-but.app/pp",
+          termsPageUrl: "/pp",
         },
       }}
     >

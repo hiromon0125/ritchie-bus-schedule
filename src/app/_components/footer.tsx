@@ -63,7 +63,7 @@ function Footer() {
                   </SignInButton>
                 </SignedOut>
                 <SignedIn>
-                  <Link className=" text-slate-200 underline" href="/settings">
+                  <Link className=" text-slate-200 underline" href="/setting">
                     Settings
                   </Link>
                 </SignedIn>
