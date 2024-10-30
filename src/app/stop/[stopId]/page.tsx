@@ -43,9 +43,13 @@ export default async function Page({
         .includes(stopId);
   const favoriteBuses = !user
     ? []
-    : (await api.favorite.getAllBus.query()).map((bus) => bus.busId);
+    : (await api.favorite.getAllBus.query())
+        .map((bus) => bus.busId)
+        .filter((bid) => currentStop.buses.map((b) => b.id).includes(bid))
+        .filter(Boolean);
   const { busId: rawSelectedBusId } = searchParams;
   if (Array.isArray(rawSelectedBusId)) {
+    console.log(1);
     permanentRedirect(`/stop/${stopId}?busId=${rawSelectedBusId[0]}`);
   }
   const selectedBusId = rawSelectedBusId ? Number(rawSelectedBusId) : NaN;
@@ -53,6 +57,7 @@ export default async function Page({
   if (isNaN(selectedBusId)) {
     const busId =
       favoriteBuses.length > 0 ? favoriteBuses[0] : currentStop.buses[0]?.id;
+    console.log(2, selectedBusId, rawSelectedBusId);
     permanentRedirect(`/stop/${stopId}?busId=${busId}`);
   }
 
@@ -61,6 +66,12 @@ export default async function Page({
   if (selectedBus === undefined) {
     const busId =
       favoriteBuses.length > 0 ? favoriteBuses[0] : currentStop.buses[0]?.id;
+    console.log(
+      3,
+      selectedBus,
+      currentStop.buses.map((b) => b.id),
+      rawSelectedBusId,
+    );
     permanentRedirect(`/stop/${stopId}?busId=${busId}`);
   }
   return (
@@ -145,6 +156,20 @@ export default async function Page({
                 </h2>
               </div>
             </div>
+          </div>
+        </div>
+        <div className=" max-w-[480px] rounded-[20px] border-[8px] border-[#E2E8F0] p-3 xs:rounded-3xl md:border-[12px]">
+          <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-3xl">
+            Rate Page
+          </h2>
+          <p>Rate this bus!</p>
+          <div className=" flex w-full flex-row justify-end">
+            <Link
+              href="https://forms.gle/7ooRfsDzmKvHnnZ76"
+              className=" rounded-md bg-blue-600 p-3 text-white"
+            >
+              Yes
+            </Link>
           </div>
         </div>
       </div>
