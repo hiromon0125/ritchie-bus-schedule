@@ -1,4 +1,9 @@
-# Ritchie's Bus Service
+<p align=”center”>
+<img width=”200" height=”200" src="https://github.com/user-attachments/assets/a084b748-ae0b-49a7-8faf-d4c9b2808f68" alt="my banner">
+</p>
+
+
+# Ritchie's Bus Schedule
 
 Welcome to the source code for Ritchie's Bus Schedule. This is a web application intended to help users find bus routes quickly and easily without the hassle of searching through multiple tables and scrolling through long lists of time schedules.
 
