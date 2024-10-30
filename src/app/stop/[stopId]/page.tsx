@@ -2,6 +2,7 @@ import Header from "@/header";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
+import _ from "lodash";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
@@ -78,7 +79,7 @@ export default async function Page({
           <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
             <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
           </div>
-          {currentStop.buses.map((bus, i) => (
+          {_.sortBy(currentStop.buses, ["id"]).map((bus, i) => (
             <div
               className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
               key={i}
