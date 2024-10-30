@@ -29,5 +29,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           priority: 0.5,
         }) as const,
     ),
+    {
+      url: `${URL}/buses`,
+      changeFrequency: "monthly",
+      priority: 1.0,
+    } as const,
+    {
+      url: `${URL}/stops`,
+      changeFrequency: "monthly",
+      priority: 1.0,
+    } as const,
+    {
+      url: `${URL}/pp`,
+      changeFrequency: "monthly",
+      priority: 1.0,
+    } as const,
+    {
+      url: `${URL}/`,
+      changeFrequency: "daily",
+      priority: 1.0,
+    } as const,
   ];
 }
