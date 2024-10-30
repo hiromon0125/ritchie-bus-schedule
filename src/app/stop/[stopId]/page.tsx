@@ -2,6 +2,7 @@ import Header from "@/header";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
+import _ from "lodash";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
@@ -65,20 +66,20 @@ export default async function Page({
   return (
     <main className=" [--margin:8px] md:[--margin:24px]">
       <Header title="Stop" route="stop" />
-      <div className=" m-auto flex w-full max-w-screen-lg flex-col gap-2 px-[--margin] py-2">
-        <div className=" flex flex-row items-center gap-2">
+      <div className=" m-auto flex w-full max-w-screen-lg flex-col gap-2 px-[--margin] py-2 xs:gap-4">
+        <div className=" flex flex-row items-center gap-2 xs:mt-3">
           <StopTag stop={currentStop} />
           <p className=" text-2xl font-bold">{currentStop.name}</p>
           <FavBtn isFavorited={isFavorite} />
         </div>
-        <div>
+        <div className=" xs:mb-3">
           <p className=" text-lg">{currentStop.description}</p>
         </div>
         <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
           <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
             <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
           </div>
-          {currentStop.buses.map((bus, i) => (
+          {_.sortBy(currentStop.buses, ["id"]).map((bus, i) => (
             <div
               className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
               key={i}
@@ -95,7 +96,7 @@ export default async function Page({
             </div>
           ))}
         </div>
-        <div className=" flex flex-col gap-2 md:flex-row">
+        <div className=" flex flex-col gap-2 xs:gap-4 md:flex-row">
           <div
             className=" flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg"
             style={

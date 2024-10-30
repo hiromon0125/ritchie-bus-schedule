@@ -24,9 +24,9 @@ async function Page() {
       </div>
       <div className=" flex h-[30vh] max-h-[600px] w-screen flex-col items-center justify-center overflow-hidden bg-[#E1ECF7] md:h-[70vh]">
         <Image
-          src="/ritches-bus-schedule-banner.png"
+          src="/ritches-bus-schedule-banner-uiux.png"
           alt="Ritche's Bus Schedule"
-          className=" w-3/5 max-w-screen-lg"
+          className=" max-w-screen-lg"
           width={1200}
           height={630}
         />
@@ -96,7 +96,7 @@ async function Page() {
               >
                 <div className=" relative m-auto">
                   <Image
-                    src="/images/feature-1.png"
+                    src="/images/feature-home.png"
                     alt="Unified Status Page"
                     width={504}
                     height={300}
@@ -116,7 +116,7 @@ async function Page() {
               >
                 <div className=" relative m-auto">
                   <Image
-                    src="/images/feature-2.png"
+                    src="/images/feature-bus.png"
                     alt="Unified Status Page"
                     width={504}
                     height={300}
@@ -135,7 +135,7 @@ async function Page() {
               >
                 <div className=" relative m-auto">
                   <Image
-                    src="/images/feature-coming.png"
+                    src="/images/feature-stop.png"
                     alt="Unified Status Page"
                     width={504}
                     height={300}
@@ -152,7 +152,7 @@ async function Page() {
               >
                 <div className=" relative m-auto">
                   <Image
-                    src="/images/feature-coming.png"
+                    src="/images/feature-favorite.png"
                     alt="Unified Status Page"
                     width={504}
                     height={300}
