@@ -17,7 +17,8 @@ Welcome to the source code for Ritchie's Bus Schedule. This is a web application
 - Responsive design for desktop, mobile, and very small screens
 
 ## Deployed Application
-Deployed [here](https://rit-bus.app/)
+- Deployed version: [rit-bus.app](https://rit-bus.app/)
+- About this project: [About Page](https://www.rit-bus.app/about)
 
 ## Tech Stack
 Language
