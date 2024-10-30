@@ -67,12 +67,12 @@ export default async function Page({
     <main className=" [--margin:8px] md:[--margin:24px]">
       <Header title="Stop" route="stop" />
       <div className=" m-auto flex w-full max-w-screen-lg flex-col gap-2 px-[--margin] py-2">
-        <div className=" flex flex-row items-center gap-2">
+        <div className=" flex flex-row items-center gap-2 xs:mt-3">
           <StopTag stop={currentStop} />
           <p className=" text-2xl font-bold">{currentStop.name}</p>
           <FavBtn isFavorited={isFavorite} />
         </div>
-        <div>
+        <div className=" xs:mb-3">
           <p className=" text-lg">{currentStop.description}</p>
         </div>
         <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
