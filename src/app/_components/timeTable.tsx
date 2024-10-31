@@ -5,12 +5,19 @@ import { useSearchParams } from "next/navigation";
 import { api } from "../../trpc/react";
 import { getArriTime } from "./util";
 
-export default function TimeTable({ stopId }: { stopId: number }) {
+export default function TimeTable({
+  stopId,
+  busId,
+}: {
+  stopId?: number;
+  busId?: number;
+}) {
   const searchParams = useSearchParams();
-  const busId = searchParams.get("busId");
+  const bus = busId ?? Number(searchParams.get("busId"));
+  const stop = stopId ?? Number(searchParams.get("stopId"));
   const { data: route, isLoading } = api.routes.getAllByStopAndBus.useQuery({
-    stopId,
-    busId: Number(busId),
+    stopId: stop,
+    busId: bus,
   });
 
   if (isLoading)
@@ -23,7 +30,9 @@ export default function TimeTable({ stopId }: { stopId: number }) {
   if (!route)
     return (
       <div className=" max-h-[500px] rounded-md bg-white">
-        <h3 className=" text-2xl font-bold">Bus route not found</h3>
+        <h3 className=" text-2xl font-bold">
+          {busId ? "Bus route" : stopId ? "Stop" : "Times"} not found
+        </h3>
       </div>
     );
 

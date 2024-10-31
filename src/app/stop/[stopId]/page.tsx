@@ -1,4 +1,13 @@
+import {
+  BusInfoSkeleton,
+  BusStatus,
+  SkeletonBusStatusString,
+} from "@/busStatus";
+import { FavBtn } from "@/favBtn";
 import Header from "@/header";
+import StopMap from "@/Map";
+import { BusTag, StopTag } from "@/tags";
+import TimeTable from "@/timeTable";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
@@ -10,19 +19,10 @@ import { Suspense } from "react";
 import { MdDirectionsBus } from "react-icons/md";
 import { api } from "~/trpc/server";
 import type { RouterOutputs } from "../../../trpc/shared";
-import {
-  BusInfoSkeleton,
-  BusStatus,
-  SkeletonBusStatusString,
-} from "../../_components/busStatus";
-import { FavBtn } from "../../_components/favBtn";
-import StopMap from "../../_components/Map";
-import { BusTag, StopTag } from "../../_components/tags";
-import TimeTable from "../../_components/timeTable";
 
 export default async function Page({
   params,
-  searchParams,
+  searchParams: { busId: rawSelectedBusId },
 }: {
   params: { stopId: string };
   searchParams: { busId?: string };
@@ -36,44 +36,31 @@ export default async function Page({
   if (!currentStop) {
     throw TRPCClientError.from(Error(`Stop not found (stop id: ${stopId})`));
   }
-  const isFavorite = !user
-    ? false
-    : (await api.favorite.getAllStop.query())
-        .map((e) => e.stopId)
-        .includes(stopId);
-  const favoriteBuses = !user
-    ? []
-    : (await api.favorite.getAllBus.query())
-        .map((bus) => bus.busId)
-        .filter((bid) => currentStop.buses.map((b) => b.id).includes(bid))
-        .filter(Boolean);
-  const { busId: rawSelectedBusId } = searchParams;
+  let isFavorite = false;
+  let favoriteBuses: number[] = [];
+  if (user) {
+    isFavorite = (await api.favorite.getAllStop.query())
+      .map((e) => e.stopId)
+      .includes(stopId);
+    favoriteBuses = (await api.favorite.getAllBus.query())
+      .map((bus) => bus.busId)
+      .filter((bid) => currentStop.buses.map((b) => b.id).includes(bid))
+      .filter(Boolean);
+  }
   if (Array.isArray(rawSelectedBusId)) {
-    console.log(1);
     permanentRedirect(`/stop/${stopId}?busId=${rawSelectedBusId[0]}`);
   }
   const selectedBusId = rawSelectedBusId ? Number(rawSelectedBusId) : NaN;
-
-  if (isNaN(selectedBusId)) {
-    const busId =
-      favoriteBuses.length > 0 ? favoriteBuses[0] : currentStop.buses[0]?.id;
-    console.log(2, selectedBusId, rawSelectedBusId);
-    permanentRedirect(`/stop/${stopId}?busId=${busId}`);
-  }
-
-  const selectedBus = currentStop.buses.find((bus) => bus.id === selectedBusId);
+  const selectedBus = !isNaN(selectedBusId)
+    ? currentStop.buses.find((bus) => bus.id === selectedBusId)
+    : undefined;
 
   if (selectedBus === undefined) {
     const busId =
       favoriteBuses.length > 0 ? favoriteBuses[0] : currentStop.buses[0]?.id;
-    console.log(
-      3,
-      selectedBus,
-      currentStop.buses.map((b) => b.id),
-      rawSelectedBusId,
-    );
     permanentRedirect(`/stop/${stopId}?busId=${busId}`);
   }
+
   return (
     <main className=" [--margin:8px] md:[--margin:24px]">
       <Header title="Stop" route="stop" />
@@ -122,17 +109,17 @@ export default async function Page({
                   Timetable
                 </h2>
                 <Link
-                  href={`/bus/${selectedBus?.id}`}
+                  href={`/bus/${selectedBus.id}`}
                   className=" flex flex-row items-center gap-2"
                 >
                   <BusTag bus={selectedBus} size="md" />
                   <p className=" font-semibold xs:text-2xl">
-                    {selectedBus?.name}
+                    {selectedBus.name}
                   </p>
                 </Link>
               </div>
               <Link
-                href={`/bus/${selectedBus?.id}`}
+                href={`/bus/${selectedBus.id}`}
                 className=" mr-2 flex flex-col items-center justify-center"
               >
                 <MdDirectionsBus size={24} color="gray" />
@@ -183,7 +170,7 @@ type BusStatusProps =
       bus?: never;
       isFavorited?: boolean;
       isSelected?: boolean;
-      stopId?: number;
+      stopId: number;
       href: string;
     }
   | {
@@ -191,7 +178,7 @@ type BusStatusProps =
       busID?: never;
       isFavorited?: boolean;
       isSelected?: boolean;
-      stopId?: number;
+      stopId: number;
       href: string;
     };
 
@@ -212,7 +199,8 @@ async function SelectableBusInfo({
   stopId,
   href,
 }: BusStatusProps) {
-  const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
+  const busObj =
+    bus ?? (busID ? await api.bus.getByID.query({ id: busID }) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
 
@@ -237,7 +225,7 @@ async function SelectableBusInfo({
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
-            <BusStatus busObj={busObj} stopId={stopId} hideStopName />
+            <BusStatus bus={busObj} stopId={stopId} hideStopName />
           </Suspense>
         </div>
       </Link>

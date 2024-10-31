@@ -1,6 +1,5 @@
 "use client";
 import type { Bus, Stops } from "@prisma/client";
-import { api } from "t/react";
 import { useBusStatus } from "./hooks";
 import type { BusMovingStatus, BusRoute } from "./types";
 
@@ -17,19 +16,16 @@ const ACTIVE_STATUS = ["moving", "stopped", "starting"];
 export default function BusStatusString({
   bus,
   fetchedRoute,
-  stopId,
+  stop,
   hideStopName = false,
 }: {
   bus: Bus;
   fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
-  stopId?: number;
+  stop?: Stops;
   hideStopName?: boolean;
 }) {
-  const status = useBusStatus(bus, fetchedRoute, stopId);
-  const { isMoving, statusMessage, location } = status ?? {};
-  const { data: stop } = api.stops.getOneByID.useQuery({
-    id: stopId ?? location?.stopId ?? 0,
-  });
+  const status = useBusStatus(bus, fetchedRoute, stop?.id);
+  const { isMoving, statusMessage } = status ?? {};
   const activityColor = ACTIVITY_COLOR[isMoving ?? "out-of-service"];
   return (
     <div

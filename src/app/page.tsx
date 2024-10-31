@@ -7,12 +7,13 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "../trpc/server";
 import { FavBtn } from "./_components/favBtn";
+import { DotMap } from "./_components/Map";
 import { BusTag, StopTag } from "./_components/tags";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   return (
-    <main className=" xs:[--margin:24px] flex min-h-screen w-full flex-col items-center gap-3 bg-slate-100 pb-8 text-black [--margin:8px] [--sm-max-w:calc(100%-var(--margin))]">
+    <main className=" flex min-h-screen w-full flex-col items-center gap-3 bg-slate-100 pb-8 text-black [--margin:8px] [--sm-max-w:calc(100%-var(--margin))] xs:[--margin:24px]">
       <Header title="Home" route="home" />
       <SignedIn>
         <FavStopList />
@@ -21,11 +22,9 @@ export default async function Home() {
         <BusList />
       </Suspense>
       <div className=" relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
-        <iframe
-          title="ArcGIS Experience"
-          className=" h-full w-full"
-          src="https://experience.arcgis.com/experience/2ee741ae4a8d4e23be34fa5a5b9173f3/"
-        />
+        <Suspense fallback={<p>Loading map...</p>}>
+          <HomeMap />
+        </Suspense>
       </div>
     </main>
   );
@@ -35,9 +34,9 @@ async function FavStopList() {
   const favStops = await api.favorite.getAllStop.query();
   if (favStops.length === 0) return null;
   return (
-    <div className=" xs:p-3 xs:rounded-3xl xs:gap-3 flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 md:max-w-screen-lg">
+    <div className=" flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
       <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
-        <h1 className=" xs:text-2xl m-0 text-xl font-bold">Favorite Stop</h1>
+        <h1 className=" m-0 text-xl font-bold xs:text-2xl">Favorite Stop</h1>
       </div>
       {favStops.map((stop) => (
         <StopView key={stop.stopId} stopId={stop.stopId} />
@@ -81,4 +80,16 @@ async function StopView({ stopId }: { stopId: number }) {
       />
     </div>
   );
+}
+
+async function HomeMap() {
+  const coors = (await api.stops.getCoorOfAllStop.query())
+    .map((stop) => ({
+      lat: stop.latitude,
+      lng: stop.longitude,
+      tag: stop.tag ?? stop.id,
+      name: stop.name,
+    }))
+    .filter((coor) => coor.lat !== 0 && coor.lng !== 0);
+  return <DotMap markers={coors} />;
 }

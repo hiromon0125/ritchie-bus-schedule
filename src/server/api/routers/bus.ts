@@ -10,12 +10,13 @@ export const busRouter = createTRPCRouter({
     }),
   ),
   getAllID: publicProcedure.query(({ ctx }) =>
-    ctx.db.bus.findMany({
-      select: {
-        id: true,
-        updatedAt: true,
-      },
-    }),
+    ctx.db.bus
+      .findMany({
+        select: {
+          id: true,
+        },
+      })
+      .then((buses) => buses.map((bus) => bus.id)),
   ),
   getByID: publicProcedure
     .input(
@@ -27,6 +28,9 @@ export const busRouter = createTRPCRouter({
       ctx.db.bus.findUnique({
         where: {
           id: input.id,
+        },
+        include: {
+          stops: true,
         },
       }),
     ),
