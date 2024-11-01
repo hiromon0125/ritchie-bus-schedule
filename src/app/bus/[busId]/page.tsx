@@ -13,6 +13,7 @@ import { api } from "t/server";
 import {
   BusInfoSkeleton,
   BusStatus,
+  BusStatusBig,
   SkeletonBusStatusString,
 } from "../../_components/busStatus";
 import { FavBtn } from "../../_components/favBtn";
@@ -95,12 +96,15 @@ export default async function Page({
           <p className=" text-2xl font-bold">{bus.name}</p>
           <FavBtn isFavorited={isFavorite} />
         </div>
-        <div className=" xs:mb-3">
+        <div className=" flex flex-col gap-1 xs:mb-2">
           <p className=" text-lg">{bus.description}</p>
+          <Suspense>
+            <BusStatusBig bus={bus} stops={bus.stops} />
+          </Suspense>
         </div>
         <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
           <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
-            <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
+            <h1 className=" m-0 text-xl font-bold xs:text-2xl">Select Stops</h1>
           </div>
           {_.sortBy(bus.stops, ["id"]).map((stop, i) => (
             <div
@@ -130,7 +134,7 @@ export default async function Page({
                   href={`/stop/${selectedStop.id}`}
                   className=" flex flex-row items-center gap-2"
                 >
-                  <StopTag stop={selectedStop} size="md" />
+                  <StopTag stop={selectedStop} size="lg" />
                   <p className=" font-semibold xs:text-2xl">
                     {selectedStop.name}
                   </p>
@@ -233,7 +237,7 @@ async function SelectableStopInfo({
       >
         <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
         <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
-          <div className=" mr-1 flex flex-1 flex-row items-center pl-4 pr-2 pt-2">
+          <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-4 pr-2 pt-2">
             <StopTag stop={stopObj} />
             <h2 className=" w-0 flex-1 overflow-hidden text-ellipsis text-nowrap text-left font-bold md:text-xl">
               {stopObj?.name}

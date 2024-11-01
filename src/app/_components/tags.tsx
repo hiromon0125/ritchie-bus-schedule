@@ -5,10 +5,10 @@ type TagSize = "sm" | "md" | "lg";
 const SIZES: Record<TagSize, string> = {
   sm: "text-sm min-w-7",
   md: "text-lg min-w-10",
-  lg: "text-xl min-w-12",
+  lg: "text-2xl min-w-12",
 };
 
-export async function StopTag({
+export function StopTag({
   stop,
   size = "md",
 }: {

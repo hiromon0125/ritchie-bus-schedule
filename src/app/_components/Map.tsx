@@ -52,10 +52,10 @@ export function DotMap({
       {markers.map((marker) => (
         <Marker anchor={[marker.lat, marker.lng]} offset={[-7, -7]}>
           <div
-            className=" aspect-square w-7 rounded-full border-2 border-black bg-white p-[2px] text-center"
+            className=" flex aspect-square w-7 flex-col items-center justify-center rounded-full border-2 border-[--color] bg-white p-[2px] text-center [--color:var(--bus-color,black)]"
             title={marker.name}
           >
-            {marker.tag}
+            <p>{marker.tag}</p>
           </div>
         </Marker>
       ))}

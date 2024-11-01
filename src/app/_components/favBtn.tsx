@@ -30,7 +30,7 @@ export function FavBtn({
       title={isFavorited ? "Unfavorite" : "Favorite"}
       ref={ref}
     >
-      {isFavorited || hovering ? (
+      {isFavorited || (props.onClick && hovering) ? (
         <MdFavorite
           size={size}
           color="#FF78AE"

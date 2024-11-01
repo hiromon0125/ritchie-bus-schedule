@@ -6,7 +6,7 @@ import Link from "next/link";
 import React, { Suspense } from "react";
 import { api } from "t/server";
 import { type RouterOutputs } from "t/shared";
-import BusStatusString from "./busStatusString";
+import BusStatusString, { BusStatusStringBig } from "./busStatusString";
 import { FavBtn } from "./favBtn";
 
 type BusStatusProps =
@@ -93,8 +93,8 @@ export async function BusStatus({
   hideStopName = false,
 }: BusStatusProp) {
   const data = {
-    stopId: stopId ?? stop?.id ?? -1,
-    busId: busId ?? bus?.id ?? -1,
+    stopId: stopId ?? stop?.id,
+    busId: busId ?? bus.id,
     bus: bus ?? (await api.bus.getByID.query({ id: busId })),
     stop:
       stop ??
@@ -122,6 +122,32 @@ export async function BusStatus({
   );
 }
 
+type BusStatusBigProp = BusProp & {
+  stops: Stops[];
+};
+
+export async function BusStatusBig({ bus, busId, stops }: BusStatusBigProp) {
+  const data = {
+    busId: busId ?? bus.id,
+    bus: bus ?? (await api.bus.getByID.query({ id: busId })),
+  };
+  if (!data.bus) return null;
+  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+    busId: data.busId,
+  });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({
+      busId: data.busId,
+    })
+    .then((data) => data[0]?.lastRoute ?? null);
+  return (
+    <BusStatusStringBig
+      bus={data.bus}
+      fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+      stops={stops}
+    />
+  );
+}
 export function SkeletonBusStatusString() {
   return (
     <div className=" flex h-12 flex-row items-center">
@@ -150,6 +176,17 @@ export function BusInfoSkeleton() {
           <SkeletonBusStatusString />
         </div>
       </div>
+    </div>
+  );
+}
+
+export function InfoSkeleton() {
+  return (
+    <div className=" relative flex w-full flex-1 flex-col flex-wrap justify-between">
+      <div className=" mr-1 flex w-full flex-1 flex-row items-center px-4 pt-2">
+        <div className=" h-4 w-full animate-pulse overflow-hidden text-ellipsis text-nowrap rounded-sm bg-slate-300 font-bold md:text-xl"></div>
+      </div>
+      <SkeletonBusStatusString />
     </div>
   );
 }
