@@ -49,8 +49,8 @@ export function DotMap({
   };
   return (
     <Map center={[center.lat, center.lng]}>
-      {markers.map((marker) => (
-        <Marker anchor={[marker.lat, marker.lng]} offset={[-7, -7]}>
+      {markers.map((marker, i) => (
+        <Marker anchor={[marker.lat, marker.lng]} offset={[-7, -7]} key={i}>
           <div
             className=" flex aspect-square w-7 flex-col items-center justify-center rounded-full border-2 border-[--color] bg-white p-[2px] text-center [--color:var(--bus-color,black)]"
             title={marker.name}
