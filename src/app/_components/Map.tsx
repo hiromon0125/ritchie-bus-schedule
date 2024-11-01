@@ -29,29 +29,33 @@ export default function StopMap({ stops }: { stops: Stops[] | Stops }) {
       </div>
     );
   }
+  return <DotMap markers={stopCoors} />;
+}
+
+export function DotMap({
+  markers,
+}: {
+  markers: { lat: number; lng: number; tag: string | number; name: string }[];
+}) {
   const center = {
     lat:
-      ((_.minBy(stopCoors, "lat")?.lat ?? stopCoors[0]?.lat ?? 0) +
-        (_.maxBy(stopCoors, "lat")?.lat ?? stopCoors[0]?.lat ?? 0)) /
+      ((_.minBy(markers, "lat")?.lat ?? markers[0]?.lat ?? 0) +
+        (_.maxBy(markers, "lat")?.lat ?? markers[0]?.lat ?? 0)) /
       2,
     lng:
-      ((_.minBy(stopCoors, "lng")?.lng ?? stopCoors[0]?.lng ?? 0) +
-        (_.maxBy(stopCoors, "lng")?.lng ?? stopCoors[0]?.lng ?? 0)) /
+      ((_.minBy(markers, "lng")?.lng ?? markers[0]?.lng ?? 0) +
+        (_.maxBy(markers, "lng")?.lng ?? markers[0]?.lng ?? 0)) /
       2,
   };
   return (
-    <Map
-      center={[center.lat, center.lng]}
-      zoom={14}
-      boxClassname=" rounded-xl overflow-hidden"
-    >
-      {stopCoors.map((coor, index) => (
-        <Marker key={index} anchor={[coor.lat, coor.lng]} offset={[-7, -7]}>
+    <Map center={[center.lat, center.lng]}>
+      {markers.map((marker) => (
+        <Marker anchor={[marker.lat, marker.lng]} offset={[-7, -7]}>
           <div
-            className=" aspect-square w-7 rounded-full border-2 border-black bg-white p-[2px] text-center"
-            title={coor.name}
+            className=" flex aspect-square w-7 flex-col items-center justify-center rounded-full border-2 border-[--color] bg-white p-[2px] text-center [--color:var(--bus-color,black)]"
+            title={marker.name}
           >
-            {coor.tag}
+            <p>{marker.tag}</p>
           </div>
         </Marker>
       ))}

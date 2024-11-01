@@ -1,12 +1,12 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
-import type { Bus } from "@prisma/client";
+import type { Bus, Stops } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import React, { Suspense } from "react";
 import { api } from "t/server";
 import { type RouterOutputs } from "t/shared";
-import BusStatusString from "./busStatusString";
+import BusStatusString, { BusStatusStringBig } from "./busStatusString";
 import { FavBtn } from "./favBtn";
 
 type BusStatusProps =
@@ -31,7 +31,8 @@ const unfavoriteBus = async (busId: number) => {
 };
 
 export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
-  const busObj = bus ?? (busID ? await api.bus.getByID.query(busID) : null);
+  const busObj =
+    bus ?? (busID ? await api.bus.getByID.query({ id: busID }) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
 
@@ -55,7 +56,7 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
               <div className=" favbtn-placeholder h-6 w-6" />
             </div>
             <Suspense fallback={<SkeletonBusStatusString />}>
-              <BusStatus busObj={busObj} />
+              <BusStatus bus={busObj} />
             </Suspense>
           </div>
         </div>
@@ -73,35 +74,80 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
   );
 }
 
+type BusProp = { bus: Bus; busId?: never } | { busId: number; bus?: never };
+
+type StopProp =
+  | { stop?: never; stopId?: never }
+  | { stop: Stops; stopId?: never }
+  | { stopId: number; stop?: never };
+
+type BusStatusProp = (BusProp & StopProp) & {
+  hideStopName?: boolean;
+};
+
 export async function BusStatus({
-  busObj,
+  bus,
+  stop,
+  busId,
   stopId,
   hideStopName = false,
-}: {
-  busObj: Bus;
-  stopId?: number;
-  hideStopName?: boolean;
-}) {
+}: BusStatusProp) {
+  const data = {
+    stopId: stopId ?? stop?.id,
+    busId: busId ?? bus.id,
+    bus: bus ?? (await api.bus.getByID.query({ id: busId })),
+    stop:
+      stop ??
+      (stopId ? await api.stops.getOneByID.query({ id: stopId }) : undefined) ??
+      undefined,
+  };
+  if (!data.bus) return null;
   const currentRoute = await api.routes.getCurrentRouteOfBus.query({
-    busId: busObj.id,
-    stopId,
+    busId: data.busId,
+    stopId: data.stopId,
   });
   const lastRoute = await api.routes.getLastRouteOfBuses
     .query({
-      busId: busObj.id,
-      stopId,
+      busId: data.busId,
+      stopId: data.stopId,
     })
     .then((data) => data[0]?.lastRoute ?? null);
   return (
     <BusStatusString
-      bus={busObj}
+      bus={data.bus}
       fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
-      stopId={stopId}
+      stop={data.stop}
       hideStopName={hideStopName}
     />
   );
 }
 
+type BusStatusBigProp = BusProp & {
+  stops: Stops[];
+};
+
+export async function BusStatusBig({ bus, busId, stops }: BusStatusBigProp) {
+  const data = {
+    busId: busId ?? bus.id,
+    bus: bus ?? (await api.bus.getByID.query({ id: busId })),
+  };
+  if (!data.bus) return null;
+  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+    busId: data.busId,
+  });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({
+      busId: data.busId,
+    })
+    .then((data) => data[0]?.lastRoute ?? null);
+  return (
+    <BusStatusStringBig
+      bus={data.bus}
+      fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+      stops={stops}
+    />
+  );
+}
 export function SkeletonBusStatusString() {
   return (
     <div className=" flex h-12 flex-row items-center">
@@ -130,6 +176,17 @@ export function BusInfoSkeleton() {
           <SkeletonBusStatusString />
         </div>
       </div>
+    </div>
+  );
+}
+
+export function InfoSkeleton() {
+  return (
+    <div className=" relative flex w-full flex-1 flex-col flex-wrap justify-between">
+      <div className=" mr-1 flex w-full flex-1 flex-row items-center px-4 pt-2">
+        <div className=" h-4 w-full animate-pulse overflow-hidden text-ellipsis text-nowrap rounded-sm bg-slate-300 font-bold md:text-xl"></div>
+      </div>
+      <SkeletonBusStatusString />
     </div>
   );
 }

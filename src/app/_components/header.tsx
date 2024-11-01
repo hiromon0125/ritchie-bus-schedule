@@ -1,7 +1,6 @@
 import { Protect, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
 import { HiHome } from "react-icons/hi2";
 import { MdDirectionsBus } from "react-icons/md";
 import { BusStopIcon } from "./icons";
@@ -189,11 +188,12 @@ function ProfileBtn() {
         </div>
       </SignedOut>
       <SignedIn>
-        <Suspense fallback={<div className=" h-8 w-8 rounded-full bg-black" />}>
-          <div className=" flex h-12 w-12 flex-col items-center justify-center rounded-full">
-            <ProfileButton />
-          </div>
-        </Suspense>
+        <div
+          className=" flex h-12 w-12 flex-col items-center justify-center rounded-full"
+          suppressHydrationWarning
+        >
+          <ProfileButton />
+        </div>
       </SignedIn>
     </div>
   );

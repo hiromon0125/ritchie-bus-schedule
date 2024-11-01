@@ -8,7 +8,7 @@ const isAdminPrivate = createRouteMatcher(["/manage/(.*)"]);
 export default clerkMiddleware(async (auth, req) => {
   if (isAdminPrivate(req))
     auth().protect((has) => {
-      return has({ permission: "org:admin" });
+      return has({ role: "org:admin" });
     });
 });
 

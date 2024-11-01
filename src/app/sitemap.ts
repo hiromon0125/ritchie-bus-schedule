@@ -5,7 +5,7 @@ const URL = "https://rit-bus.app";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const buses = await api.bus.getAllID.query();
+  const busIDs = await api.bus.getAllID.query();
   const stops = await api.stops.getAllID.query();
   return [
     {
@@ -13,10 +13,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly",
       priority: 0.2,
     },
-    ...buses.map(
-      (bus) =>
+    ...busIDs.map(
+      (busID) =>
         ({
-          url: `${URL}/bus/${bus.id}`,
+          url: `${URL}/bus/${busID}`,
           changeFrequency: "monthly",
           priority: 0.5,
         }) as const,

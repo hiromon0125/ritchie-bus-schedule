@@ -63,6 +63,17 @@ export const stopsRouter = createTRPCRouter({
         })
         .then((bus) => bus?.stops);
     }),
+  getCoorOfAllStop: publicProcedure.query(({ ctx }) =>
+    ctx.db.stops.findMany({
+      select: {
+        id: true,
+        name: true,
+        tag: true,
+        latitude: true,
+        longitude: true,
+      },
+    }),
+  ),
   addBusStop: privateProcedure
     .input(
       z.object({

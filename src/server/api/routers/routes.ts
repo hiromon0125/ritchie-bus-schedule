@@ -28,6 +28,7 @@ export const routesRouter = createTRPCRouter({
       ctx.db.routes.findMany({
         where: {
           busId: input.busId,
+          ...(input.stopId ? { stopId: input.stopId } : {}),
         },
         orderBy: {
           index: "asc",
