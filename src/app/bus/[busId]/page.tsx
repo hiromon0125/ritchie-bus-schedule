@@ -1,3 +1,14 @@
+import {
+  BusInfoSkeleton,
+  BusStatus,
+  BusStatusBig,
+  SkeletonBusStatusString,
+} from "@/busStatus";
+import { FavBtn } from "@/favBtn";
+import Header from "@/header";
+import StopMap from "@/Map";
+import { BusTag, StopTag } from "@/tags";
+import TimeTable from "@/timeTable";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus, Stops } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
@@ -10,17 +21,6 @@ import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { MdDirectionsBus } from "react-icons/md";
 import { api } from "t/server";
-import {
-  BusInfoSkeleton,
-  BusStatus,
-  BusStatusBig,
-  SkeletonBusStatusString,
-} from "../../_components/busStatus";
-import { FavBtn } from "../../_components/favBtn";
-import Header from "../../_components/header";
-import StopMap from "../../_components/Map";
-import { BusTag, StopTag } from "../../_components/tags";
-import TimeTable from "../../_components/timeTable";
 
 type Props = {
   params: { busId: string };
@@ -149,7 +149,9 @@ export default async function Page({
               </Link>
             </div>
             <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
-              <TimeTable busId={bus.id} />
+              <Suspense fallback={<p>Loading...</p>}>
+                <TimeTable busId={bus.id} />
+              </Suspense>
             </div>
           </div>
           <div className=" relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">

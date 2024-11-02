@@ -1,14 +1,14 @@
 import { BusList, BusListSkeleton } from "@/busStatus";
+import { FavBtn } from "@/favBtn";
 import Header from "@/header";
+import { DotMap } from "@/Map";
+import { BusTag, StopTag } from "@/tags";
 import { SignedIn } from "@clerk/nextjs";
 import _ from "lodash";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
-import { api } from "../trpc/server";
-import { FavBtn } from "./_components/favBtn";
-import { DotMap } from "./_components/Map";
-import { BusTag, StopTag } from "./_components/tags";
+import { api } from "t/server";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {

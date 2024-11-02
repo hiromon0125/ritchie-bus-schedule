@@ -1,8 +1,8 @@
+import { BackBtn } from "@/backBtn";
+import Header from "@/header";
+import ScrollToTopButton from "@/scrollToTopBtn";
 import { Suspense } from "react";
 import { IoChevronBackSharp } from "react-icons/io5";
-import { BackBtn } from "../_components/backBtn";
-import Header from "../_components/header";
-import ScrollToTopButton from "../_components/scrollToTopBtn";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
