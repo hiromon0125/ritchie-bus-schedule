@@ -30,10 +30,9 @@ export default function BusStatusString({
 }) {
   const status = useBusStatus(bus, fetchedRoute, stop?.id);
   const { isMoving, statusMessage, location } = status;
-  const { data: stopObj } = api.stops.getOneByID.useQuery(
-    { id: location?.stopId ?? -1 },
-    { enabled: !!stop },
-  );
+  const { data: stopObj } = api.stops.getOneByID.useQuery({
+    id: location?.stopId ?? -1,
+  });
   return (
     <div className=" relative flex h-8 min-h-max flex-row items-center overflow-hidden">
       <div className=" ml-4 flex items-center justify-center">
