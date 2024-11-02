@@ -7,13 +7,13 @@
     "build": "next build",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start"
   },
   "dependencies": {
-    "@clerk/nextjs": "^5.4.1",
+    "@clerk/nextjs": "^6.1.0",
     "@prisma/client": "^5.21.1",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-popover": "^1.1.2",
@@ -35,10 +35,10 @@
     "lucide-react": "^0.441.0",
     "luxon": "^3.5.0",
     "moment": "^2.30.1",
-    "next": "^14.2.16",
+    "next": "15.0.2",
     "pigeon-maps": "^0.21.6",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "19.0.0-rc-02c0e824-20241028",
+    "react-dom": "19.0.0-rc-02c0e824-20241028",
     "react-fast-marquee": "^1.6.5",
     "react-icons": "^4.12.0",
     "react-select": "^5.8.1",
@@ -55,13 +55,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
-    "@next/eslint-plugin-next": "^14.2.16",
+    "@next/eslint-plugin-next": "15.0.2",
     "@types/eslint": "^8.56.12",
     "@types/eslint__js": "^8.42.3",
     "@types/luxon": "^3.4.2",
     "@types/node": "^18.19.59",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.13.0",
     "postcss": "^8.4.47",
@@ -75,5 +75,11 @@
   "ct3aMetadata": {
     "initVersion": "7.25.0"
   },
-  "packageManager": "pnpm@9.12.3"
+  "packageManager": "pnpm@9.12.3",
+  "pnpm": {
+    "overrides": {
+      "@types/react": "npm:types-react@19.0.0-rc.1",
+      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+    }
+  }
 }

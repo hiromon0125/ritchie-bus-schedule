@@ -15,7 +15,7 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -29,8 +29,11 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <body className={`font-sans ${inter.variable}`}>
-          <TRPCReactProvider cookies={cookies().toString()}>
+        <body
+          className={`font-sans ${inter.variable}`}
+          suppressHydrationWarning
+        >
+          <TRPCReactProvider cookies={(await cookies()).toString()}>
             {children}
             <Footer />
             <Toaster />

@@ -37,7 +37,7 @@ export function AnimatedDoubleList({
           {favoritedChildren.length === 0
             ? emptySection
             : favoritedChildren.map((child, i) => (
-                <motion.button
+                <motion.div
                   key={child.key}
                   className=" w-auto min-w-full flex-1 md:min-w-[40%] md:max-w-[calc(50%-6px)]"
                   animate={{ scale: 1, opacity: 1 }}
@@ -50,7 +50,7 @@ export function AnimatedDoubleList({
                   }}
                 >
                   {child}
-                </motion.button>
+                </motion.div>
               ))}
         </AnimatePresence>
       </div>
@@ -60,7 +60,7 @@ export function AnimatedDoubleList({
       <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-2 xs:gap-3 md:min-w-80">
         <AnimatePresence>
           {unfavoritedChildren.map((child, i) => (
-            <motion.button
+            <motion.div
               className=" w-auto min-w-full flex-1 md:min-w-[40%] md:max-w-[calc(50%-6px)]"
               key={child.key}
               initial={false}
@@ -74,7 +74,7 @@ export function AnimatedDoubleList({
               }}
             >
               {child}
-            </motion.button>
+            </motion.div>
           ))}
         </AnimatePresence>
       </div>

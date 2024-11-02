@@ -5,7 +5,8 @@ import Link from "next/link";
 import { api } from "t/server";
 import { z } from "zod";
 
-async function Page({ params }: { params: { busId: string } }) {
+async function Page(props: { params: Promise<{ busId: string }> }) {
+  const params = await props.params;
   const busIdNumber = z.coerce.number().parse(params.busId);
   const bus = await api.bus.getByID.query({ id: busIdNumber });
 

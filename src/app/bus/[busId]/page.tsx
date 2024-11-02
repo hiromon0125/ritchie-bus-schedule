@@ -23,11 +23,12 @@ import { MdDirectionsBus } from "react-icons/md";
 import { api } from "t/server";
 
 type Props = {
-  params: { busId: string };
-  searchParams: { stopId?: string | string[] | undefined };
+  params: Promise<{ busId: string }>;
+  searchParams: Promise<{ stopId?: string | string[] | undefined }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const busId = parseInt(params.busId);
   if (Number.isNaN(busId)) {
     throw TRPCClientError.from(
@@ -45,12 +46,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function Page({
-  params,
-  searchParams: { stopId: rawStopID },
-}: Props) {
-  const user = await currentUser();
+export default async function Page(props: Props) {
+  const [{ stopId: rawStopID }, params, user] = await Promise.all([
+    props.searchParams,
+    props.params,
+    currentUser(),
+  ]);
   const bus = await api.bus.getByID.query({ id: parseInt(params.busId) });
+
   if (!bus) {
     throw TRPCClientError.from(
       Error(`Bus not found (bus id: ${params.busId})`),
@@ -61,10 +64,12 @@ export default async function Page({
   let favoriteStops: number[] = [];
   if (user) {
     const stopIds = bus.stops.map((b) => b.id);
-    isFavorite = (await api.favorite.getAllBus.query())
-      .map((e) => e.busId)
-      .includes(bus.id);
-    favoriteStops = (await api.favorite.getAllStop.query())
+    const [allBus, allStop] = await Promise.all([
+      api.favorite.getAllBus.query(),
+      api.favorite.getAllStop.query(),
+    ]);
+    isFavorite = allBus.map((e) => e.busId).includes(bus.id);
+    favoriteStops = allStop
       .map((stop) => stop.stopId)
       .filter((bid) => stopIds.includes(bid))
       .filter(Boolean);
@@ -97,7 +102,7 @@ export default async function Page({
         </div>
         <div className=" flex flex-col gap-1 xs:mb-2">
           <p className=" text-lg">{bus.description}</p>
-          <Suspense>
+          <Suspense fallback={<p>Loading...</p>}>
             <BusStatusBig bus={bus} stops={bus.stops} />
           </Suspense>
         </div>

@@ -1,15 +1,11 @@
 import { Protect } from "@clerk/nextjs";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
 import { HiHome } from "react-icons/hi2";
 import { MdDirectionsBus } from "react-icons/md";
 import { BusStopIcon } from "./icons";
-
-const ProfileBtnComponent = dynamic(() => import("./profileBtn"), {
-  ssr: false,
-});
+import { ProfileBtnComponent } from "./profileBtnWrapper";
 
 type RouteOptions = "home" | "bus" | "stop" | "about";
 
