@@ -1,5 +1,5 @@
 "use client";
-import { Map, Marker } from "pigeon-maps";
+import { Map, Marker, ZoomControl } from "pigeon-maps";
 
 import type { Stops } from "@prisma/client";
 import _ from "lodash";
@@ -48,7 +48,16 @@ export function DotMap({
       2,
   };
   return (
-    <Map center={[center.lat, center.lng]}>
+    <Map
+      center={[center.lat, center.lng]}
+      minZoom={13}
+      maxZoom={16}
+      metaWheelZoom
+      metaWheelZoomWarning="Use META + scroll to zoom the map"
+      twoFingerDrag
+      twoFingerDragWarning="Use two fingers to move the map"
+    >
+      <ZoomControl style={{ bottom: 12, left: 12, top: undefined }} />
       {markers.map((marker, i) => (
         <Marker anchor={[marker.lat, marker.lng]} offset={[-7, -7]} key={i}>
           <div

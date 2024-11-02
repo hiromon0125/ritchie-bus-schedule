@@ -72,7 +72,7 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
         onClick={async () => {
           "use server";
           await (isFavorited ? unfavoriteBus : favoriteBus)(busObj.id);
-          revalidatePath("/");
+          revalidatePath("/", "page");
         }}
       />
     </div>

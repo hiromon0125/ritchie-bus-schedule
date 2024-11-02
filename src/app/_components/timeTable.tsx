@@ -3,6 +3,7 @@
 import { DateTime } from "luxon";
 import { useSearchParams } from "next/navigation";
 import { api } from "../../trpc/react";
+import { TimeTableSkeleton } from "./busPageLoaders";
 import { getArriTime } from "./util";
 
 export default function TimeTable({
@@ -20,12 +21,7 @@ export default function TimeTable({
     busId: bus,
   });
 
-  if (isLoading)
-    return (
-      <div className=" max-h-[500px] rounded-md bg-white">
-        <h3 className=" text-2xl font-bold">Loading...</h3>
-      </div>
-    );
+  if (isLoading) return <TimeTableSkeleton />;
 
   if (!route)
     return (

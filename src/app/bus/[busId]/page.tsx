@@ -1,3 +1,4 @@
+import { MapSkeleton, TimeTableSkeleton } from "@/busPageLoaders";
 import {
   BusInfoSkeleton,
   BusStatus,
@@ -5,7 +6,6 @@ import {
   SkeletonBusStatusString,
 } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
-import Header from "@/header";
 import StopMap from "@/Map";
 import { BusTag, StopTag } from "@/tags";
 import TimeTable from "@/timeTable";
@@ -85,12 +85,11 @@ export default async function Page({
     permanentRedirect(`/bus/${params.busId}?stopId=${stopId}`);
   }
   return (
-    <main
-      className=" [--margin:8px] md:[--margin:24px]"
-      style={{ "--bus-color": bus.color } as React.CSSProperties}
-    >
-      <Header title="Bus" route="bus" />
-      <div className=" m-auto flex w-full max-w-screen-lg flex-col gap-2 px-[--margin] py-2 xs:gap-4">
+    <>
+      <div
+        className=" m-auto flex w-full max-w-screen-lg flex-col gap-2 px-[--margin] py-2 xs:gap-4"
+        style={{ "--bus-color": bus.color } as React.CSSProperties}
+      >
         <div className=" flex flex-row items-center gap-2 xs:mt-3">
           <BusTag bus={bus} />
           <p className=" text-2xl font-bold">{bus.name}</p>
@@ -148,15 +147,15 @@ export default async function Page({
                 <p className=" text-sm text-[gray]">View</p>
               </Link>
             </div>
-            <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
-              <Suspense fallback={<p>Loading...</p>}>
+            <div className=" flex w-full flex-col justify-between rounded-xl bg-white p-3 py-2">
+              <Suspense fallback={<TimeTableSkeleton />}>
                 <TimeTable busId={bus.id} />
               </Suspense>
             </div>
           </div>
           <div className=" relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">
             <div className=" h-[50vh] w-full flex-1 overflow-clip rounded-xl md:h-full">
-              <Suspense fallback={<p>Loading...</p>}>
+              <Suspense fallback={<MapSkeleton />}>
                 <StopMap stops={bus.stops} />
               </Suspense>
             </div>
@@ -184,7 +183,7 @@ export default async function Page({
           </div>
         </div>
       </div>
-    </main>
+    </>
   );
 }
 

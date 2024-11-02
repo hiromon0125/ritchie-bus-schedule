@@ -3,7 +3,7 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import ProfileButton from "./userButton";
 
-export function ProfileBtn() {
+export default function ProfileBtn() {
   return (
     <div className="flex flex-none flex-row items-center justify-end text-lg">
       <SignedOut>
