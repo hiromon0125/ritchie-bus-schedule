@@ -1,4 +1,3 @@
-import { MapSkeleton, TimeTableSkeleton } from "@/busPageLoaders";
 import {
   BusInfoSkeleton,
   BusStatus,
@@ -6,9 +5,7 @@ import {
   SkeletonBusStatusString,
 } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
-import StopMap from "@/Map";
 import { BusTag, StopTag } from "@/tags";
-import TimeTable from "@/timeTable";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus, Stops } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
@@ -19,12 +16,12 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
-import { MdDirectionsBus } from "react-icons/md";
 import { api } from "t/server";
 
 type Props = {
   params: Promise<{ busId: string }>;
   searchParams: Promise<{ stopId?: string | string[] | undefined }>;
+  timetable: React.ReactNode;
 };
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
@@ -90,118 +87,39 @@ export default async function Page(props: Props) {
     permanentRedirect(`/bus/${params.busId}?stopId=${stopId}`);
   }
 
-  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
-    busId: bus.id,
-    stopId: selectedStop.id,
-  });
-  const lastRoute = await api.routes.getLastRouteOfBuses
-    .query({
-      busId: bus.id,
-      stopId: selectedStop.id,
-    })
-    .then((data) => data[0]?.lastRoute ?? null);
   return (
     <>
-      <div
-        className=" m-auto flex w-full max-w-screen-lg flex-col gap-2 px-[--margin] py-2 xs:gap-4"
-        style={{ "--bus-color": bus.color } as React.CSSProperties}
-      >
-        <div className=" flex flex-row items-center gap-2 xs:mt-3">
-          <BusTag bus={bus} />
-          <p className=" text-2xl font-bold">{bus.name}</p>
-          <FavBtn isFavorited={isFavorite} />
+      <div className=" flex flex-row items-center gap-2 xs:mt-3">
+        <BusTag bus={bus} />
+        <p className=" text-2xl font-bold">{bus.name}</p>
+        <FavBtn isFavorited={isFavorite} />
+      </div>
+      <div className=" flex flex-col gap-1 xs:mb-2">
+        <p className=" text-lg">{bus.description}</p>
+        <Suspense fallback={<p>Loading...</p>}>
+          <BusStatusBig bus={bus} stops={bus.stops} />
+        </Suspense>
+      </div>
+      <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+        <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
+          <h1 className=" m-0 text-xl font-bold xs:text-2xl">Select Stops</h1>
         </div>
-        <div className=" flex flex-col gap-1 xs:mb-2">
-          <p className=" text-lg">{bus.description}</p>
-          <Suspense fallback={<p>Loading...</p>}>
-            <BusStatusBig bus={bus} stops={bus.stops} />
-          </Suspense>
-        </div>
-        <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-          <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
-            <h1 className=" m-0 text-xl font-bold xs:text-2xl">Select Stops</h1>
+        {_.sortBy(bus.stops, ["id"]).map((stop, i) => (
+          <div
+            className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
+            key={i}
+          >
+            <Suspense fallback={<BusInfoSkeleton />}>
+              <SelectableStopInfo
+                isSelected={selectedStop.id === stop.id}
+                isFavorited={favoriteStops.includes(stop.id)}
+                bus={bus}
+                stopID={stop.id}
+                href={`/bus/${bus.id}?stopId=${stop.id}`}
+              />
+            </Suspense>
           </div>
-          {_.sortBy(bus.stops, ["id"]).map((stop, i) => (
-            <div
-              className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
-              key={i}
-            >
-              <Suspense fallback={<BusInfoSkeleton />}>
-                <SelectableStopInfo
-                  isSelected={selectedStop.id === stop.id}
-                  isFavorited={favoriteStops.includes(stop.id)}
-                  bus={bus}
-                  stopID={stop.id}
-                  href={`/bus/${bus.id}?stopId=${stop.id}`}
-                />
-              </Suspense>
-            </div>
-          ))}
-        </div>
-        <div className=" flex flex-col gap-2 xs:gap-4 md:flex-row">
-          <div className=" flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-            <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
-              <div className=" flex flex-col gap-2">
-                <h2 className=" m-0 pl-2 font-bold text-gray-700 xs:text-lg">
-                  Timetable
-                </h2>
-                <Link
-                  href={`/stop/${selectedStop.id}`}
-                  className=" flex flex-row items-center gap-2"
-                >
-                  <StopTag stop={selectedStop} size="lg" />
-                  <p className=" font-semibold xs:text-2xl">
-                    {selectedStop.name}
-                  </p>
-                </Link>
-              </div>
-              <Link
-                href={`/stop/${selectedStop.id}`}
-                className=" mr-2 flex flex-col items-center justify-center"
-              >
-                <MdDirectionsBus size={24} color="gray" />
-                <p className=" text-sm text-[gray]">View</p>
-              </Link>
-            </div>
-            <div className=" flex w-full flex-col justify-between rounded-xl bg-white p-3 py-2">
-              <Suspense fallback={<TimeTableSkeleton />}>
-                <TimeTable
-                  busId={bus.id}
-                  stopId={selectedStop.id}
-                  fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
-                />
-              </Suspense>
-            </div>
-          </div>
-          <div className=" relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">
-            <div className=" h-[50vh] w-full flex-1 overflow-clip rounded-xl md:h-full">
-              <Suspense fallback={<MapSkeleton />}>
-                <StopMap stops={bus.stops} />
-              </Suspense>
-            </div>
-            <div className=" absolute left-0 top-0 flex w-full flex-row justify-between p-4 xs:p-5">
-              <div className=" w-full rounded-md bg-white p-2">
-                <h2 className=" m-0 text-xl font-bold xs:text-2xl">
-                  Bus Stop Location
-                </h2>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className=" max-w-[480px] rounded-[20px] border-[8px] border-[#E2E8F0] p-3 xs:rounded-3xl md:border-[12px]">
-          <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-3xl">
-            Rate Page
-          </h2>
-          <p>Rate this bus!</p>
-          <div className=" flex w-full flex-row justify-end">
-            <Link
-              href="https://forms.gle/7ooRfsDzmKvHnnZ76"
-              className=" rounded-md bg-blue-600 p-3 text-white"
-            >
-              Yes
-            </Link>
-          </div>
-        </div>
+        ))}
       </div>
     </>
   );
