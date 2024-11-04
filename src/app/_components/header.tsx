@@ -1,10 +1,11 @@
 import { Protect } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { HiHome } from "react-icons/hi2";
 import { MdDirectionsBus } from "react-icons/md";
 import { BusStopIcon } from "./icons";
-import { ProfileBtn } from "./profileBtn";
+import { ProfileBtnComponent } from "./profileBtnWrapper";
 
 type RouteOptions = "home" | "bus" | "stop" | "about";
 
@@ -70,7 +71,9 @@ export default function Header({
                   </p>
                 </Link>
               </Protect>
-              <ProfileBtn />
+              <Suspense>
+                <ProfileBtnComponent />
+              </Suspense>
             </div>
           </div>
         </div>
@@ -112,7 +115,7 @@ function MobileHeader({
           </h1>
         </div>
         <div>
-          <ProfileBtn />
+          <ProfileBtnComponent />
         </div>
       </div>
       <div className=" fixed bottom-3 z-50 w-full max-w-[100vw] px-3">

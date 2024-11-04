@@ -17,16 +17,19 @@ import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { MdDirectionsBus } from "react-icons/md";
-import { api } from "~/trpc/server";
-import type { RouterOutputs } from "../../../trpc/shared";
+import { api } from "t/server";
+import type { RouterOutputs } from "t/shared";
+import { TimeTableSkeleton } from "../../_components/busPageLoaders";
 
-export default async function Page({
-  params,
-  searchParams: { busId: rawSelectedBusId },
-}: {
-  params: { stopId: string };
-  searchParams: { busId?: string };
+export default async function Page(props: {
+  params: Promise<{ stopId: string }>;
+  searchParams: Promise<{ busId?: string }>;
 }) {
+  const searchParams = await props.searchParams;
+
+  const { busId: rawSelectedBusId } = searchParams;
+
+  const params = await props.params;
   const user = await currentUser();
   const stopId = Number(params.stopId);
   if (Number.isNaN(stopId)) {
@@ -50,16 +53,27 @@ export default async function Page({
   if (Array.isArray(rawSelectedBusId)) {
     permanentRedirect(`/stop/${stopId}?busId=${rawSelectedBusId[0]}`);
   }
+  const busId =
+    favoriteBuses.length > 0 ? favoriteBuses[0] : currentStop.buses[0]?.id;
   const selectedBusId = rawSelectedBusId ? Number(rawSelectedBusId) : NaN;
   const selectedBus = !isNaN(selectedBusId)
     ? currentStop.buses.find((bus) => bus.id === selectedBusId)
-    : undefined;
+    : currentStop.buses.find((bus) => bus.id === busId);
 
   if (selectedBus === undefined) {
-    const busId =
-      favoriteBuses.length > 0 ? favoriteBuses[0] : currentStop.buses[0]?.id;
     permanentRedirect(`/stop/${stopId}?busId=${busId}`);
   }
+
+  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+    busId: selectedBus.id,
+    stopId: currentStop.id,
+  });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({
+      busId: selectedBus.id,
+      stopId: currentStop.id,
+    })
+    .then((data) => data[0]?.lastRoute ?? null);
 
   return (
     <main className=" [--margin:8px] md:[--margin:24px]">
@@ -84,7 +98,7 @@ export default async function Page({
             >
               <Suspense fallback={<BusInfoSkeleton />}>
                 <SelectableBusInfo
-                  isSelected={selectedBusId === bus.id}
+                  isSelected={selectedBus.id === bus.id}
                   isFavorited={favoriteBuses.includes(bus.id)}
                   bus={bus}
                   stopId={stopId}
@@ -127,7 +141,13 @@ export default async function Page({
               </Link>
             </div>
             <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
-              <TimeTable stopId={stopId} />
+              <Suspense fallback={<TimeTableSkeleton />}>
+                <TimeTable
+                  stopId={stopId}
+                  busId={selectedBus.id}
+                  fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+                />
+              </Suspense>
             </div>
           </div>
           <div className=" relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">

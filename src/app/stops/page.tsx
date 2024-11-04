@@ -1,11 +1,11 @@
+import { FavBtn } from "@/favBtn";
 import { BusTag, StopTag } from "@/tags";
 import { currentUser } from "@clerk/nextjs/server";
 import _ from "lodash";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
-import { api } from "../../trpc/server";
-import { FavBtn } from "../_components/favBtn";
+import { api } from "t/server";
 
 export const dynamic = "force-dynamic";
 

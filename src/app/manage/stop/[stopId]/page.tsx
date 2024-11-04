@@ -3,7 +3,8 @@ import Link from "next/link";
 import { api } from "t/server";
 import { z } from "zod";
 
-export default async function Page({ params }: { params: { stopId: string } }) {
+export default async function Page(props: { params: Promise<{ stopId: string }> }) {
+  const params = await props.params;
   const stopIdNumber = z.coerce.number().parse(params.stopId);
   const stop = await api.stops.getOneByID.query({ id: stopIdNumber });
   if (stop == null) {

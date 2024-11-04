@@ -1,5 +1,5 @@
-import Header from "../../_components/header";
-import Settings from "../../_components/settings";
+import Header from "@/header";
+import Settings from "@/settings";
 
 function UserProfilePage() {
   return (

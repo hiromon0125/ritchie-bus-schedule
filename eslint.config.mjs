@@ -1,6 +1,6 @@
 // @ts-check
-
 import eslint from "@eslint/js";
+import nextPlugin from "@next/eslint-plugin-next";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
@@ -8,6 +8,9 @@ export default tseslint.config(
   ...tseslint.configs.recommendedTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   {
+    plugins: {
+      "@next/next": nextPlugin,
+    },
     ignores: [
       "./*.config.?(js|ts|mjs|cjs)",
       "./node_modules/**",

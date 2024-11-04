@@ -7,7 +7,7 @@ const isAdminPrivate = createRouteMatcher(["/manage/(.*)"]);
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default clerkMiddleware(async (auth, req) => {
   if (isAdminPrivate(req))
-    auth().protect((has) => {
+    await auth.protect((has) => {
       return has({ role: "org:admin" });
     });
 });
