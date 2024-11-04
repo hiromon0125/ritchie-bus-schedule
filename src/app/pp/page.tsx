@@ -1,5 +1,3 @@
-"use cache";
-
 export default async function Page() {
   return (
     <div className=" m-auto w-full max-w-screen-lg pb-12 opacity-80">
