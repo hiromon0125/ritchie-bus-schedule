@@ -7,9 +7,9 @@ import {
 } from "~/server/api/trpc";
 
 function resetDate(date: Date) {
-  date.setFullYear(1970, 0, 1);
-  date.setSeconds(0);
-  date.setMilliseconds(0);
+  date.setUTCFullYear(1970, 0, 1);
+  date.setUTCSeconds(0);
+  date.setUTCMilliseconds(0);
   return date;
 }
 
