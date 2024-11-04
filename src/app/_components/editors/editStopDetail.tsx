@@ -175,7 +175,9 @@ function NavigateToStop({
             ? `${selectedStop?.id} ${selectedStop?.name}`
             : "",
         }}
-        onChange={(selection) => selection && setStopId(selection?.value)}
+        onChange={(selection: { value: number }) =>
+          selection && setStopId(selection.value)
+        }
         styles={selectStyles}
         placeholder="Select stops..."
       />
