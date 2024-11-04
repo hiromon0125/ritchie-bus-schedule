@@ -24,7 +24,7 @@ export default async function RootLayout({
     <ClerkProvider
       appearance={{
         layout: {
-          termsPageUrl: "/pp",
+          privacyPageUrl: "/pp",
         },
       }}
     >

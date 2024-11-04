@@ -89,6 +89,17 @@ export default async function Page(props: Props) {
   if (!selectedStop) {
     permanentRedirect(`/bus/${params.busId}?stopId=${stopId}`);
   }
+
+  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+    busId: bus.id,
+    stopId: selectedStop.id,
+  });
+  const lastRoute = await api.routes.getLastRouteOfBuses
+    .query({
+      busId: bus.id,
+      stopId: selectedStop.id,
+    })
+    .then((data) => data[0]?.lastRoute ?? null);
   return (
     <>
       <div
@@ -154,7 +165,11 @@ export default async function Page(props: Props) {
             </div>
             <div className=" flex w-full flex-col justify-between rounded-xl bg-white p-3 py-2">
               <Suspense fallback={<TimeTableSkeleton />}>
-                <TimeTable busId={bus.id} stopId={selectedStop.id} />
+                <TimeTable
+                  busId={bus.id}
+                  stopId={selectedStop.id}
+                  fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+                />
               </Suspense>
             </div>
           </div>
