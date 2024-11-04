@@ -77,16 +77,16 @@ export default async function Page(props: Props) {
   if (Array.isArray(rawStopID)) {
     permanentRedirect(`/bus/${params.busId}?stopId=${rawStopID[0]}`);
   }
+  const stopId =
+    favoriteStops.length > 0
+      ? favoriteStops[0]
+      : bus.stops.map((e) => e.id).sort()[0];
   const selectedStopId = rawStopID ? Number(rawStopID) : NaN;
   const selectedStop = !isNaN(selectedStopId)
-    ? await api.stops.getOneByID.query({ id: selectedStopId })
-    : undefined;
+    ? bus.stops.find((stop) => stop.id === selectedStopId)
+    : bus.stops.find((stop) => stop.id === stopId);
 
   if (!selectedStop) {
-    const stopId =
-      favoriteStops.length > 0
-        ? favoriteStops[0]
-        : bus.stops.map((e) => e.id).sort()[0];
     permanentRedirect(`/bus/${params.busId}?stopId=${stopId}`);
   }
   return (
@@ -117,7 +117,7 @@ export default async function Page(props: Props) {
             >
               <Suspense fallback={<BusInfoSkeleton />}>
                 <SelectableStopInfo
-                  isSelected={selectedStopId === stop.id}
+                  isSelected={selectedStop.id === stop.id}
                   isFavorited={favoriteStops.includes(stop.id)}
                   bus={bus}
                   stopID={stop.id}
@@ -154,7 +154,7 @@ export default async function Page(props: Props) {
             </div>
             <div className=" flex w-full flex-col justify-between rounded-xl bg-white p-3 py-2">
               <Suspense fallback={<TimeTableSkeleton />}>
-                <TimeTable busId={bus.id} />
+                <TimeTable busId={bus.id} stopId={selectedStop.id} />
               </Suspense>
             </div>
           </div>

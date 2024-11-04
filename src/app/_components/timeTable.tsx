@@ -14,23 +14,21 @@ export default function TimeTable({
   busId?: number;
 }) {
   const searchParams = useSearchParams();
-  const bus = busId ?? Number(searchParams.get("busId"));
-  const stop = stopId ?? Number(searchParams.get("stopId"));
+  const bus = searchParams.get("busId")
+    ? Number(searchParams.get("busId"))
+    : busId;
+  const stop = searchParams.get("stopId")
+    ? Number(searchParams.get("stopId"))
+    : stopId;
+
   const { data: route, isLoading } = api.routes.getAllByStopAndBus.useQuery({
-    stopId: stop,
-    busId: bus,
+    stopId: stop ?? -1,
+    busId: bus ?? -1,
   });
 
+  if (bus === undefined || stop === undefined) return <ErrorTimeTable />;
   if (isLoading) return <TimeTableSkeleton />;
-
-  if (!route)
-    return (
-      <div className=" max-h-[500px] rounded-md bg-white">
-        <h3 className=" text-2xl font-bold">
-          {busId ? "Bus route" : stopId ? "Stop" : "Times"} not found
-        </h3>
-      </div>
-    );
+  if (!route) return <ErrorTimeTable />;
 
   return (
     <div className=" max-h-[50vh] w-full overflow-scroll bg-white">
@@ -76,4 +74,12 @@ export default function TimeTable({
 
 function formatToLocalTimeString(date: Date) {
   return DateTime.fromJSDate(date).toLocal().toFormat("h:mm a");
+}
+
+function ErrorTimeTable() {
+  return (
+    <div className=" max-h-[500px] rounded-md bg-white">
+      <h3 className=" text-2xl font-bold">Times not found</h3>
+    </div>
+  );
 }
