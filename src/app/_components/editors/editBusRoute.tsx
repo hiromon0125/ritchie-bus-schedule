@@ -254,7 +254,7 @@ function EditBusRoute({ bus }: { bus: Bus }) {
             value: stop,
             label: `${stop} ${stops?.find((s) => s.id === stop)?.name}`,
           }))}
-          onChange={(selection: { value: number }[]) => {
+          onChange={(selection) => {
             setStops(selection.map((s) => s.value));
             setEditedStops(true);
           }}
