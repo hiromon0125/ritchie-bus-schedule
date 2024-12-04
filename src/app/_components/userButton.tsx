@@ -1,5 +1,6 @@
 "use client";
 import { UserButton } from "@clerk/nextjs";
+import { FaRegStar } from "react-icons/fa6";
 import { GoCodeReview } from "react-icons/go";
 import { HiHome } from "react-icons/hi2";
 import { MdDirectionsBus } from "react-icons/md";
@@ -28,6 +29,11 @@ export default function ProfileButton() {
           href="/about"
           label="About"
           labelIcon={<GoCodeReview size={16} />}
+        />
+        <UserButton.Link
+          href="https://forms.gle/7ooRfsDzmKvHnnZ76"
+          label="Rate Us!"
+          labelIcon={<FaRegStar size={16} />}
         />
       </UserButton.MenuItems>
     </UserButton>

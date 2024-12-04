@@ -165,19 +165,16 @@ export default async function Page(props: {
             </div>
           </div>
         </div>
-        <div className=" max-w-[480px] rounded-[20px] border-[8px] border-[#E2E8F0] p-3 xs:rounded-3xl md:border-[12px]">
+        <div className=" flex max-w-[480px] flex-row items-center justify-between rounded-[20px] border-[8px] border-[#E2E8F0] p-3 xs:rounded-3xl md:border-[12px]">
           <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-3xl">
-            Rate Page
+            Rate this bus
           </h2>
-          <p>Rate this bus!</p>
-          <div className=" flex w-full flex-row justify-end">
-            <Link
-              href="https://forms.gle/7ooRfsDzmKvHnnZ76"
-              className=" rounded-md bg-blue-600 p-3 text-white"
-            >
-              Yes
-            </Link>
-          </div>
+          <Link
+            href="https://forms.gle/7ooRfsDzmKvHnnZ76"
+            className=" rounded-md bg-blue-600 p-3 text-white"
+          >
+            Rate!
+          </Link>
         </div>
       </div>
     </main>
