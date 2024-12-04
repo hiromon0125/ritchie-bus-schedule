@@ -87,7 +87,7 @@ export default function EditStopDetail({ stop }: { stop: DetailedStop }) {
                 latitude: editedStop.latitude,
                 longitude: editedStop.longitude,
               });
-            } catch (_) {
+            } catch {
               toast({ title: "Error", variant: "destructive" });
               return;
             }
@@ -175,9 +175,7 @@ function NavigateToStop({
             ? `${selectedStop?.id} ${selectedStop?.name}`
             : "",
         }}
-        onChange={(selection: { value: number }) =>
-          selection && setStopId(selection.value)
-        }
+        onChange={(selection) => selection && setStopId(selection.value)}
         styles={selectStyles}
         placeholder="Select stops..."
       />
