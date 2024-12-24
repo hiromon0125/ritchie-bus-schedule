@@ -124,7 +124,7 @@ function EditBusRoute({ bus }: { bus: Bus }) {
       refetchOnReconnect: false,
     },
   );
-  const { mutate, status: savingState } = api.routes.updateRoutes.useMutation();
+  const { mutate, isPending } = api.routes.updateRoutes.useMutation();
   const [edtedSelectedStops, setEditedStops] = useState(false);
   const [selectedStops, setStops] = useState(storedStopsId);
   const [input, setInput] = useState<RoutesArr>(savedRouteToInput(data));
@@ -377,7 +377,7 @@ function EditBusRoute({ bus }: { bus: Bus }) {
         <button
           onClick={handleSubmit}
           className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800 disabled:opacity-50"
-          disabled={savingState === "loading"}
+          disabled={isPending}
         >
           <IoMdSave />
           Save
