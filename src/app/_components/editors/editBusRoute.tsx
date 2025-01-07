@@ -13,8 +13,8 @@ import {
 } from "react-icons/md";
 import Select from "react-select";
 import { Tooltip } from "react-tooltip";
+import type { RouterOutputs } from "t/react";
 import { api } from "t/react";
-import type { RouterOutputs } from "t/shared";
 import { z } from "zod";
 import selectStyles from "~/styles/selectStyle";
 import { NEWYORK_TIMEZONE } from "../util";

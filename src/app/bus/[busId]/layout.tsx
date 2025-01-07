@@ -19,7 +19,7 @@ export default async function Layout({
   if (Number.isNaN(busId)) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${rawBusId})`));
   }
-  const bus = await api.bus.getByID.query({ id: busId });
+  const bus = await api.bus.getByID({ id: busId });
   if (!bus) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }

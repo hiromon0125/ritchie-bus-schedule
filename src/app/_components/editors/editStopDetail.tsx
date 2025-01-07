@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { Draggable, Map } from "pigeon-maps";
 import { useState } from "react";
 import Select from "react-select";
+import type { RouterOutputs } from "t/react";
 import { api } from "t/react";
-import type { RouterOutputs } from "t/shared";
 import { useToast } from "~/hooks/use-toast";
 import selectStyles from "~/styles/selectStyle";
 

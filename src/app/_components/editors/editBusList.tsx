@@ -2,8 +2,8 @@
 import _ from "lodash";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { RouterInputs } from "t/react";
 import { api } from "t/react";
-import type { RouterInputs } from "t/shared";
 
 function EditBusList() {
   const router = useRouter();

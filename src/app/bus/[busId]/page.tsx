@@ -32,7 +32,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       Error(`Bus not found (bus id: ${params.busId})`),
     );
   }
-  const bus = await api.bus.getByID.query({ id: busId });
+  const bus = await api.bus.getByID({ id: busId });
   if (!bus) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
@@ -49,7 +49,7 @@ export default async function Page(props: Props) {
     props.params,
     currentUser(),
   ]);
-  const bus = await api.bus.getByID.query({ id: parseInt(params.busId) });
+  const bus = await api.bus.getByID({ id: parseInt(params.busId) });
 
   if (!bus) {
     throw TRPCClientError.from(
@@ -62,8 +62,8 @@ export default async function Page(props: Props) {
   if (user) {
     const stopIds = bus.stops.map((b) => b.id);
     const [allBus, allStop] = await Promise.all([
-      api.favorite.getAllBus.query(),
-      api.favorite.getAllStop.query(),
+      api.favorite.getAllBus(),
+      api.favorite.getAllStop(),
     ]);
     isFavorite = allBus.map((e) => e.busId).includes(bus.id);
     favoriteStops = allStop
@@ -145,11 +145,11 @@ type BusStatusProps =
 
 const favoriteStop = async (stopId: number) => {
   "use server";
-  return api.favorite.addStop.mutate({ stopId });
+  return api.favorite.addStop({ stopId });
 };
 const unfavoriteStop = async (stopId: number) => {
   "use server";
-  return api.favorite.delStop.mutate({ stopId });
+  return api.favorite.delStop({ stopId });
 };
 
 async function SelectableStopInfo({
@@ -160,7 +160,7 @@ async function SelectableStopInfo({
   bus,
   href,
 }: BusStatusProps) {
-  const stopObj = stop ?? (await api.stops.getOneByID.query({ id: stopID }));
+  const stopObj = stop ?? (await api.stops.getOneByID({ id: stopID }));
   if (!stopObj) return null;
 
   return (

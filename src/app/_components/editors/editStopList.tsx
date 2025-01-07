@@ -3,8 +3,8 @@ import _ from "lodash";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import type { RouterOutputs } from "t/react";
 import { api } from "t/react";
-import type { RouterOutputs } from "t/shared";
 
 type InputStop = Partial<RouterOutputs["stops"]["getAll"][0]> & {
   saved: boolean;

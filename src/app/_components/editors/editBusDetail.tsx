@@ -2,8 +2,7 @@
 import { useDebounce } from "@uidotdev/usehooks";
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { api } from "t/react";
-import { type RouterOutputs } from "t/shared";
+import { api, type RouterOutputs } from "t/react";
 
 type Bus = Omit<
   NonNullable<RouterOutputs["bus"]["getByID"]>,

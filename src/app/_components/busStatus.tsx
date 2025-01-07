@@ -4,8 +4,8 @@ import type { Bus, Stops } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import React, { Suspense } from "react";
+import { type RouterOutputs } from "t/react";
 import { api } from "t/server";
-import { type RouterOutputs } from "t/shared";
 import { AnimatedDoubleList, ClickEventBlocker } from "./animatedList";
 import BusStatusString, { BusStatusStringBig } from "./busStatusString";
 import { FavBtn } from "./favBtn";
@@ -25,16 +25,15 @@ type BusStatusProps =
 
 const favoriteBus = async (busId: number) => {
   "use server";
-  return api.favorite.addBus.mutate({ busId });
+  return api.favorite.addBus({ busId });
 };
 const unfavoriteBus = async (busId: number) => {
   "use server";
-  return api.favorite.delBus.mutate({ busId });
+  return api.favorite.delBus({ busId });
 };
 
 export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
-  const busObj =
-    bus ?? (busID ? await api.bus.getByID.query({ id: busID }) : null);
+  const busObj = bus ?? (busID ? await api.bus.getByID({ id: busID }) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
 
@@ -100,19 +99,19 @@ export async function BusStatus({
   const data = {
     stopId: stopId ?? stop?.id,
     busId: busId ?? bus.id,
-    bus: bus ?? (await api.bus.getByID.query({ id: busId })),
+    bus: bus ?? (await api.bus.getByID({ id: busId })),
     stop:
       stop ??
-      (stopId ? await api.stops.getOneByID.query({ id: stopId }) : undefined) ??
+      (stopId ? await api.stops.getOneByID({ id: stopId }) : undefined) ??
       undefined,
   };
   if (!data.bus) return null;
-  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+  const currentRoute = await api.routes.getCurrentRouteOfBus({
     busId: data.busId,
     stopId: data.stopId,
   });
-  const lastRoute = await api.routes.getLastRouteOfBuses
-    .query({
+  const lastRoute = await api.routes
+    .getLastRouteOfBuses({
       busId: data.busId,
       stopId: data.stopId,
     })
@@ -134,14 +133,14 @@ type BusStatusBigProp = BusProp & {
 export async function BusStatusBig({ bus, busId, stops }: BusStatusBigProp) {
   const data = {
     busId: busId ?? bus.id,
-    bus: bus ?? (await api.bus.getByID.query({ id: busId })),
+    bus: bus ?? (await api.bus.getByID({ id: busId })),
   };
   if (!data.bus) return null;
-  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+  const currentRoute = await api.routes.getCurrentRouteOfBus({
     busId: data.busId,
   });
-  const lastRoute = await api.routes.getLastRouteOfBuses
-    .query({
+  const lastRoute = await api.routes
+    .getLastRouteOfBuses({
       busId: data.busId,
     })
     .then((data) => data[0]?.lastRoute ?? null);
@@ -198,10 +197,10 @@ export function InfoSkeleton() {
 
 export async function BusList() {
   const user = await currentUser();
-  const buses = await api.bus.getAll.query();
+  const buses = await api.bus.getAll();
   let favBusesId: number[] = [];
   if (user) {
-    favBusesId = (await api.favorite.getAllBus.query()).map((bus) => bus.busId);
+    favBusesId = (await api.favorite.getAllBus()).map((bus) => bus.busId);
   }
   return (
     <AnimatedDoubleList
