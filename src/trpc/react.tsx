@@ -38,7 +38,7 @@ export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export function TRPCReactProvider(props: {
   children: React.ReactNode;
-  cookie: string;
+  cookies: string;
 }) {
   const queryClient = getQueryClient();
 
@@ -55,7 +55,7 @@ export function TRPCReactProvider(props: {
           url: getBaseUrl() + "/api/trpc",
           headers: () => {
             const headers = new Headers();
-            headers.set("cookie", props.cookie);
+            headers.set("cookie", props.cookies);
             headers.set("x-trpc-source", "nextjs-react");
             return headers;
           },
