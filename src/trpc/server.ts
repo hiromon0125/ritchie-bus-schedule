@@ -18,6 +18,7 @@ const createContext = cache(async () => {
 
   return createTRPCContext({
     headers: heads,
+    // TODO: See if the auth related requests can be passed here
   });
 });
 
