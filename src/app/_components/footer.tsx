@@ -70,6 +70,9 @@ function Footer() {
                 <Link className=" text-slate-200 underline" href="/pp">
                   Privacy Policy
                 </Link>
+                <Link className=" text-slate-200 underline" href="https://github.com/hiromon0125/ritchies-bus-schedule">
+                  GitHub
+                </Link>
               </div>
             </div>
             <div className=" flex flex-col gap-2">
