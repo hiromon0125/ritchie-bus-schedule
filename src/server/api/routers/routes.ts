@@ -1,4 +1,5 @@
 import { getCurrentTimeServer } from "@/util";
+import _ from "lodash";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -11,6 +12,14 @@ function resetDate(date: Date) {
   date.setUTCSeconds(0);
   date.setUTCMilliseconds(0);
   return date;
+}
+
+function isSameDate(date: Date, date2: Date) {
+  return (
+    date.getUTCFullYear() === date2.getUTCFullYear() &&
+    date.getUTCMonth() === date2.getUTCMonth() &&
+    date.getUTCDate() === date2.getUTCDate()
+  );
 }
 
 export const routesRouter = createTRPCRouter({
@@ -41,12 +50,16 @@ export const routesRouter = createTRPCRouter({
     .input(
       z.object({
         stopId: z.number(),
+        isVisible: z.boolean().default(true),
       }),
     )
     .query(({ ctx, input }) =>
       ctx.db.routes.findMany({
         where: {
           stopId: input.stopId,
+          bus: {
+            isVisible: input.isVisible,
+          },
         },
       }),
     ),
@@ -55,6 +68,7 @@ export const routesRouter = createTRPCRouter({
       z.object({
         stopId: z.number(),
         busId: z.number(),
+        isVisible: z.boolean().default(true),
       }),
     )
     .query(({ ctx, input }) =>
@@ -62,6 +76,9 @@ export const routesRouter = createTRPCRouter({
         where: {
           stopId: input.stopId,
           busId: input.busId,
+          bus: {
+            isVisible: input.isVisible,
+          },
         },
         orderBy: {
           index: "asc",
@@ -193,9 +210,6 @@ export const routesRouter = createTRPCRouter({
           deptTime: {
             gt: now.date,
           },
-          bus: {
-            isWeekend: now.isWeekend,
-          },
           ...(input.stopId ? { stopId: input.stopId } : {}),
         },
       });
@@ -208,8 +222,6 @@ export const routesRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const now = getCurrentTimeServer();
-      console.log("current time:", now.date.getTime());
-
       return Promise.all(
         input.busIds.map(async (busId) => {
           const res = await ctx.db.routes.findFirst({
@@ -221,9 +233,6 @@ export const routesRouter = createTRPCRouter({
               deptTime: {
                 gt: now.date,
               },
-              bus: {
-                isWeekend: now.isWeekend,
-              },
             },
           });
           return {
@@ -232,5 +241,38 @@ export const routesRouter = createTRPCRouter({
           };
         }),
       );
+    }),
+  isBusOperating: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+        isVisible: z.boolean().default(true),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const now = getCurrentTimeServer();
+      const res = await ctx.db.bus.findFirst({
+        where: {
+          id: input.busId,
+          isVisible: input.isVisible,
+        },
+        include: {
+          operatingDays: true,
+        },
+      });
+      if (!res) return false;
+      // TODO: Disable isWeekend for the future but support both for previous versions
+      if (res.isWeekend != null) {
+        return res.isWeekend === now.isWeekend;
+      }
+      const opDay = _.find(res.operatingDays, (opDay) => {
+        const { day, isWeekly } = opDay;
+        const nowDate = now.date;
+        return (
+          (isWeekly && day.getDay() === nowDate.getDay()) ||
+          isSameDate(day, nowDate)
+        );
+      });
+      return Boolean(opDay);
     }),
 });

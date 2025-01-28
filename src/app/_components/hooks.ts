@@ -23,6 +23,11 @@ const LOADING_STATUS = {
 } as const;
 
 const QUERY_SIZE = 30;
+const OFFSET_RANGE = QUERY_SIZE / 2;
+function calcOffsetFromIndex(index: number) {
+  if (index < OFFSET_RANGE) return 0;
+  return index - 1 - OFFSET_RANGE;
+}
 
 export function useBusStatus(
   bus: Bus,
@@ -33,10 +38,7 @@ export function useBusStatus(
   const [index, setIndex] = useState(
     () => fetchedRoute?.serverGuess?.index ?? 0,
   );
-  const offset = Math.max(
-    Math.floor((index - 1) / (QUERY_SIZE / 2)) * (QUERY_SIZE / 2),
-    0,
-  );
+  const offset = calcOffsetFromIndex(index);
   const { data } = api.routes.getAllByBusId.useQuery({
     busId,
     stopId,
@@ -47,18 +49,12 @@ export function useBusStatus(
     index === fetchedRoute?.serverGuess?.index
       ? fetchedRoute?.serverGuess
       : data?.[index - offset];
-
   const status = useBusStatusClocked(bus, nextRoute);
   useEffect(() => {
-    if (bus.isWeekend !== getCurrentTime().isWeekend) {
-      return;
-    }
+    if (bus.isWeekend !== getCurrentTime().isWeekend) return;
     if (data && fetchedRoute) {
       const newIndex = check(offset, index, data, fetchedRoute, bus, nextRoute);
-      if (newIndex) {
-        console.log(`bus: ${bus.id} from ${index} to ${newIndex}`);
-        setIndex(newIndex);
-      }
+      if (newIndex) setIndex(newIndex);
     }
     if (nextRoute) {
       const updateTime =
@@ -69,8 +65,7 @@ export function useBusStatus(
       return () => clearTimeout(timeout);
     }
   }, [status]);
-  const res = data ? (status ?? OUT_OF_SERVICE_STATUS) : LOADING_STATUS;
-  return res;
+  return data ? (status ?? OUT_OF_SERVICE_STATUS) : LOADING_STATUS;
 }
 
 export function useBusStatusClocked(
@@ -92,6 +87,16 @@ export function useBusStatusClocked(
   return status;
 }
 
+/**
+ * This function is used for checking if the server's computed result is correct on
+ * the client side. This is from an issue caused by the server where the server is
+ * sometimes seen to be on a completely different timezones than the client which
+ * should never be a problem but it seems to be that some server just can not keep
+ * track of utc time.
+ * I also hate dealing with times so there might actually be a bug somewhere in the
+ * system that causes the initial problem, but I am just going to put this function
+ * in for now as a temporary solution until further investigation.
+ */
 function check(
   offset: number,
   index: number,
