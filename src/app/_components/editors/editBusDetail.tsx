@@ -24,7 +24,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
     if (fetchStatus === "success" && savedData && !_.isEqual(savedData, data)) {
       mutate(savedData);
     }
-  }, [savedData]);
+  }, [savedData, data, fetchStatus, mutate]);
   useEffect(() => {
     setNewData(data ?? null);
   }, [data]);

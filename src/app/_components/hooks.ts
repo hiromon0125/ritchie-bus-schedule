@@ -64,7 +64,7 @@ export function useBusStatus(
       }, updateTime);
       return () => clearTimeout(timeout);
     }
-  }, [status, index, data, fetchedRoute, nextRoute, offset]);
+  }, [status, index, data, fetchedRoute, nextRoute, offset, bus]);
   return data ? (status ?? OUT_OF_SERVICE_STATUS) : LOADING_STATUS;
 }
 

@@ -47,7 +47,7 @@ function EditBusList() {
         id: (_.max(data.map((bus) => bus.id)) ?? 0) + 1,
       });
     }
-  }, [data]);
+  }, [data, newBus]);
 
   return (
     <>

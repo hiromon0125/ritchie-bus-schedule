@@ -3,7 +3,7 @@ import type { Bus, Routes } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IoMdRefreshCircle, IoMdSave, IoMdTrash } from "react-icons/io";
 import {
   MdAddBox,
@@ -107,7 +107,10 @@ function EditBusRoute({ bus }: { bus: Bus }) {
   const { data: storedStops, isLoading } = api.stops.getStopsByBusID.useQuery({
     busId: bus.id,
   });
-  const storedStopsId = storedStops?.map((e) => e.id) ?? [];
+  const storedStopsId = useMemo(
+    () => storedStops?.map((e) => e.id) ?? [],
+    [storedStops],
+  );
   const { data } = api.routes.getAllByBusId.useQuery(
     { busId },
     {
