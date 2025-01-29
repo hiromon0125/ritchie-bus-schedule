@@ -35,7 +35,7 @@ export default function Header({
       <div className=" container top-0 flex min-w-full flex-row justify-between bg-[--sm-bg-color] text-[--sm-title-color] md:bg-[--lg-bg-color] md:text-[--lg-title-color]">
         <div className=" m-auto hidden w-full max-w-screen-lg justify-center md:block">
           <div className=" top-0 m-auto flex w-full max-w-screen-lg flex-row justify-between px-4">
-            <a href="/">
+            <Link href="/">
               <div className=" flex flex-row items-center gap-4 py-6">
                 <Image
                   src="/icons/bus-512x512.png"
@@ -47,7 +47,7 @@ export default function Header({
                   Ritchie's Bus Schedule
                 </h1>
               </div>
-            </a>
+            </Link>
             <div className=" flex flex-row items-center gap-4">
               <Link href="/buses">
                 <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
@@ -102,14 +102,14 @@ function MobileHeader({
     <>
       <div className=" flex flex-row items-end justify-between px-3">
         <div className=" flex flex-row items-center gap-4 pt-4">
-          <a href="/">
+          <Link href="/">
             <Image
               src="/icons/bus-512x512.png"
               alt="Logo"
               width={48}
               height={48}
             />
-          </a>
+          </Link>
           <h1 className=" m-0 text-2xl font-semibold text-[--sm-title-color] md:text-[--lg-title-color]">
             {title}
           </h1>

@@ -125,7 +125,7 @@ function EditBusRoute({ bus }: { bus: Bus }) {
     },
   );
   const { mutate, isPending } = api.routes.updateRoutes.useMutation();
-  const [edtedSelectedStops, setEditedStops] = useState(false);
+  const [editedSelectedStops, setEditedStops] = useState(false);
   const [selectedStops, setStops] = useState(storedStopsId);
   const [input, setInput] = useState<RoutesArr>(savedRouteToInput(data));
   const [dateInput, setDateInput] = useState(
@@ -136,10 +136,10 @@ function EditBusRoute({ bus }: { bus: Bus }) {
   );
   const router = useRouter();
   useEffect(() => {
-    if (!edtedSelectedStops) {
+    if (!editedSelectedStops) {
       setStops(storedStopsId);
     }
-  }, [isLoading]);
+  }, [isLoading, editedSelectedStops, storedStopsId]);
   useEffect(() => {
     setInput(savedRouteToInput(data));
     setDateInput(

@@ -60,11 +60,11 @@ export function useBusStatus(
       const updateTime =
         nextRoute.deptTime.getTime() - getCurrentTime().date.getTime();
       const timeout = setTimeout(() => {
-        setIndex(index + 1);
+        setIndex((i) => i + 1);
       }, updateTime);
       return () => clearTimeout(timeout);
     }
-  }, [status]);
+  }, [status, index, data, fetchedRoute, nextRoute, offset]);
   return data ? (status ?? OUT_OF_SERVICE_STATUS) : LOADING_STATUS;
 }
 
