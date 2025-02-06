@@ -76,11 +76,7 @@ export function useBusStatusClocked(
   const { data: isOperating } = api.routes.isBusOperating.useQuery({
     busId: bus.id,
   });
-  const status = getStopStatusPerf(
-    nextRoute,
-    bus?.isWeekend ?? false,
-    currentTime,
-  );
+  const status = getStopStatusPerf(nextRoute, currentTime);
   useEffect(() => {
     const interval = setTimeout(() => {
       setCurrentTime(getCurrentTime());
