@@ -1,11 +1,19 @@
 <p align="center">
-<img width="200" height="200" src="https://github.com/user-attachments/assets/a084b748-ae0b-49a7-8faf-d4c9b2808f68" alt="my banner">
+<img width="1024" height="600" src="https://github.com/user-attachments/assets/a084b748-ae0b-49a7-8faf-d4c9b2808f68" alt="my banner">
 </p>
 
 
 # Ritchie's Bus Schedule
 
-Welcome to the source code for Ritchie's Bus Schedule. This is a web application intended to help users find bus routes quickly and easily without the hassle of searching through multiple tables and scrolling through long lists of time schedules.
+Welcome to the source code for Ritchie's Bus Schedule.
+
+# Contributors and Issues
+
+We store all of our documentations on our [wiki](https://github.com/hiromon0125/ritchie-bus-schedule/wiki) so head over there for more detailed information.
+
+# Philosophy
+
+We focus on [User-centered design](https://en.wikipedia.org/wiki/User-centered_design). This means the only thing we focus on is the user and user only. We don't care about a cool tech that we are able to implement just because we can. We have to specifically know that the user needs the tech before it is implemented into our app.
 
 ## Features
 - Status of the current bus route

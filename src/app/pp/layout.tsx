@@ -3,7 +3,7 @@ import Header from "@/header";
 export default function Layout(props: { children: React.ReactNode }) {
   return (
     <div>
-      <Header title="Private Policy" />
+      <Header title="Privacy Policy" />
       {props.children}
     </div>
   );

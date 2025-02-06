@@ -68,7 +68,7 @@ function Footer() {
                   </Link>
                 </SignedIn>
                 <Link className=" text-slate-200 underline" href="/pp">
-                  Private Policy
+                  Privacy Policy
                 </Link>
               </div>
             </div>
