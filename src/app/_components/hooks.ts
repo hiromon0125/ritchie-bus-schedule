@@ -73,6 +73,9 @@ export function useBusStatusClocked(
   nextRoute: BusRoute | null | undefined,
 ) {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
+  const { data: isOperating } = api.routes.isBusOperating.useQuery({
+    busId: bus.id,
+  });
   const status = getStopStatusPerf(
     nextRoute,
     bus?.isWeekend ?? false,
@@ -84,7 +87,7 @@ export function useBusStatusClocked(
     }, status?.nextUpdate ?? 2000);
     return () => clearTimeout(interval);
   }, [status]);
-  return status;
+  return isOperating ? status : OUT_OF_SERVICE_STATUS;
 }
 
 /**
