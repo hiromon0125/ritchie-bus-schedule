@@ -4,7 +4,6 @@ import { TimeTableSkeleton } from "@/busPageLoaders";
 import { useBusStatus } from "@/hooks";
 import type { BusRoute } from "@/types";
 import { getArriTime } from "@/util";
-import type { Bus } from "@prisma/client";
 import { DateTime } from "luxon";
 import { useSearchParams } from "next/navigation";
 import { api } from "t/react";
@@ -16,17 +15,16 @@ export default function TimeTable({
 }: {
   stopId?: number;
   busId?: number;
-  fetchedRoute: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
+  fetchedRoute?: BusRoute | null;
 }) {
   const searchParams = useSearchParams();
-  const bus = searchParams.get("busId")
-    ? Number(searchParams.get("busId"))
-    : busId;
+  const bus =
+    (searchParams.get("busId") ? Number(searchParams.get("busId")) : busId) ??
+    -1;
   const stop = searchParams.get("stopId")
     ? Number(searchParams.get("stopId"))
     : stopId;
-  const { data: busObj } = api.bus.getByID.useQuery({ id: bus ?? -1 });
-  const status = useBusStatus(busObj ?? ({} as Bus), fetchedRoute, stop);
+  const status = useBusStatus(bus ?? -1, fetchedRoute, stop);
   const { data: route, isLoading } = api.routes.getAllByStopAndBus.useQuery({
     stopId: stop ?? -1,
     busId: bus ?? -1,

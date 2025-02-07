@@ -1,4 +1,5 @@
 import { getCurrentTimeServer } from "@/util";
+import _ from "lodash";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -13,6 +14,14 @@ function resetDate(date: Date) {
   return date;
 }
 
+function isSameDate(date: Date, date2: Date) {
+  return (
+    date.getUTCFullYear() === date2.getUTCFullYear() &&
+    date.getUTCMonth() === date2.getUTCMonth() &&
+    date.getUTCDate() === date2.getUTCDate()
+  );
+}
+
 export const routesRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.db.routes.findMany()),
   getAllByBusId: publicProcedure
@@ -20,7 +29,7 @@ export const routesRouter = createTRPCRouter({
       z.object({
         busId: z.number(),
         stopId: z.number().optional(),
-        offset: z.number().optional().default(0),
+        offset: z.number().default(0),
         windowsize: z.number().optional(),
       }),
     )
@@ -37,16 +46,51 @@ export const routesRouter = createTRPCRouter({
         take: input.windowsize,
       }),
     ),
+  getAllByBusIdPaginated: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+        stopId: z.number().optional(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(), // id of the last fetched route
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 10;
+      const result = await ctx.db.routes.findMany({
+        where: {
+          busId: input.busId,
+          ...(input.stopId ? { stopId: input.stopId } : {}),
+        },
+        orderBy: {
+          index: "asc",
+        },
+        take: limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+      });
+      let nextCursor: typeof input.cursor = null;
+      if (result.length > limit) {
+        nextCursor = result.pop()!.id;
+      }
+      return {
+        data: result,
+        nextCursor,
+      };
+    }),
   getAllByStopId: publicProcedure
     .input(
       z.object({
         stopId: z.number(),
+        isVisible: z.boolean().default(true),
       }),
     )
     .query(({ ctx, input }) =>
       ctx.db.routes.findMany({
         where: {
           stopId: input.stopId,
+          bus: {
+            isVisible: input.isVisible,
+          },
         },
       }),
     ),
@@ -55,6 +99,7 @@ export const routesRouter = createTRPCRouter({
       z.object({
         stopId: z.number(),
         busId: z.number(),
+        isVisible: z.boolean().default(true),
       }),
     )
     .query(({ ctx, input }) =>
@@ -62,6 +107,9 @@ export const routesRouter = createTRPCRouter({
         where: {
           stopId: input.stopId,
           busId: input.busId,
+          bus: {
+            isVisible: input.isVisible,
+          },
         },
         orderBy: {
           index: "asc",
@@ -193,9 +241,6 @@ export const routesRouter = createTRPCRouter({
           deptTime: {
             gt: now.date,
           },
-          bus: {
-            isWeekend: now.isWeekend,
-          },
           ...(input.stopId ? { stopId: input.stopId } : {}),
         },
       });
@@ -208,8 +253,6 @@ export const routesRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const now = getCurrentTimeServer();
-      console.log("current time:", now.date.getTime());
-
       return Promise.all(
         input.busIds.map(async (busId) => {
           const res = await ctx.db.routes.findFirst({
@@ -221,9 +264,6 @@ export const routesRouter = createTRPCRouter({
               deptTime: {
                 gt: now.date,
               },
-              bus: {
-                isWeekend: now.isWeekend,
-              },
             },
           });
           return {
@@ -232,5 +272,66 @@ export const routesRouter = createTRPCRouter({
           };
         }),
       );
+    }),
+  isBusOperating: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+        isVisible: z.boolean().default(true),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const now = getCurrentTimeServer();
+      const res = await ctx.db.bus.findFirst({
+        where: {
+          id: input.busId,
+          isVisible: input.isVisible,
+        },
+        include: {
+          operatingDays: true,
+        },
+      });
+      if (!res) return false;
+      // TODO: Disable isWeekend for the future but support both for previous versions
+      if (res.isWeekend != null) {
+        return res.isWeekend === now.isWeekend;
+      }
+      const opDay = _.find(res.operatingDays, (opDay) => {
+        const { day, isWeekly } = opDay;
+        const nowDate = now.date;
+        return (
+          (isWeekly && day.getDay() === nowDate.getDay()) ||
+          isSameDate(day, nowDate)
+        );
+      });
+      return Boolean(opDay);
+    }),
+  isLastBusFinished: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+        stopId: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      /**
+       * This is used so that the client does not have to go up the pagination of the routes to check if the last bus has finished.
+       * This is useful for when the bus is done for the day and the server guesses that the current route is undefined which the client
+       * instead interprets that as the server is unable to fetch the current route thus manually checking on the client side by
+       * going from the first route of the day to the very last. This creates a flickering effect and uses unnecessary resources.
+       */
+      const now = getCurrentTimeServer();
+      const lastRoute = await ctx.db.routes.findFirst({
+        orderBy: {
+          deptTime: "desc",
+        },
+        where: {
+          busId: input.busId,
+          ...(input.stopId ? { stopId: input.stopId } : {}),
+        },
+      });
+      return lastRoute
+        ? lastRoute?.deptTime.getTime() < now.date.getTime()
+        : false;
     }),
 });

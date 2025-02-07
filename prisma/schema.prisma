@@ -14,12 +14,14 @@ model Bus {
   tag         String?
   description String        @default("")
   color       String        @default("#000000")
+  isVisible   Boolean       @default(true)
+  isWeekend   Boolean?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
-  isWeekend   Boolean       @default(false)
   favUsers    FavoriteBus[]
   routes      Routes[]
   stops       Stops[]      
+  operatingDays BusOperatingDay[]
 }
 
 model Stops {
@@ -31,24 +33,9 @@ model Stops {
   longitude Float          @default(0)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
-  outbounds Connections[]  @relation("outbounds")
-  inbounds  Connections[]  @relation("inbounds")
   favUsers  FavoriteStop[]
   routes    Routes[]
   buses     Bus[]          
-}
-
-model Connections {
-  id         Int      @id @default(autoincrement())
-  toStopId   Int
-  fromStopId Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  fromStop   Stops    @relation("outbounds", fields: [fromStopId], references: [id])
-  toStop     Stops    @relation("inbounds", fields: [toStopId], references: [id])
-
-  @@index([toStopId])
-  @@index([fromStopId])
 }
 
 model Routes {
@@ -60,8 +47,8 @@ model Routes {
   arriTime  DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  bus       Bus       @relation(fields: [busId], references: [id])
-  stop      Stops     @relation(fields: [stopId], references: [id])
+  bus       Bus       @relation(fields: [busId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  stop      Stops     @relation(fields: [stopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([busId])
   @@index([stopId])
@@ -74,7 +61,7 @@ model FavoriteStop {
   priority   Int      
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  stop      Stops    @relation(fields: [stopId], references: [id])
+  stop      Stops    @relation(fields: [stopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
   @@index([stopId])
@@ -87,7 +74,7 @@ model FavoriteBus {
   priority   Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  bus       Bus      @relation(fields: [busId], references: [id])
+  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId])
   @@index([busId])
@@ -96,4 +83,14 @@ model FavoriteBus {
 model Manager {
   id     Int    @id @default(autoincrement())
   userId String
+}
+
+model BusOperatingDay {
+  id        Int      @id @default(autoincrement())
+  busId     Int
+  day       DateTime
+  isWeekly  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }

@@ -21,7 +21,7 @@ export default async function TimeTableWidget(props: Props) {
     props.params,
     currentUser(),
   ]);
-  const bus = await api.bus.getByID.query({ id: parseInt(params.busId) });
+  const bus = await api.bus.getByID({ id: parseInt(params.busId) });
 
   if (!bus) {
     throw TRPCClientError.from(
@@ -32,7 +32,7 @@ export default async function TimeTableWidget(props: Props) {
   let favoriteStops: number[] = [];
   if (user) {
     const stopIds = bus.stops.map((b) => b.id);
-    const allStop = await api.favorite.getAllStop.query();
+    const allStop = await api.favorite.getAllStop();
     favoriteStops = allStop
       .map((stop) => stop.stopId)
       .filter((bid) => stopIds.includes(bid))
@@ -53,16 +53,10 @@ export default async function TimeTableWidget(props: Props) {
   if (!selectedStop) {
     permanentRedirect(`/bus/${params.busId}?stopId=${stopId}`);
   }
-  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+  const currentRoute = await api.routes.getCurrentRouteOfBus({
     busId: bus.id,
     stopId: selectedStop.id,
   });
-  const lastRoute = await api.routes.getLastRouteOfBuses
-    .query({
-      busId: bus.id,
-      stopId: selectedStop.id,
-    })
-    .then((data) => data[0]?.lastRoute ?? null);
   return (
     <div className=" flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
       <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
@@ -91,7 +85,7 @@ export default async function TimeTableWidget(props: Props) {
           <TimeTable
             busId={bus.id}
             stopId={selectedStop.id}
-            fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+            fetchedRoute={currentRoute}
           />
         </Suspense>
       </div>

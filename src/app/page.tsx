@@ -31,7 +31,7 @@ export default async function Home() {
 }
 
 async function FavStopList() {
-  const favStops = await api.favorite.getAllStop.query();
+  const favStops = await api.favorite.getAllStop();
   if (favStops.length === 0) return null;
   return (
     <div className=" flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
@@ -46,7 +46,7 @@ async function FavStopList() {
 }
 
 async function StopView({ stopId }: { stopId: number }) {
-  const stopBus = await api.stops.getOneByID.query({
+  const stopBus = await api.stops.getOneByID({
     id: stopId,
   });
   if (!stopBus) return null;
@@ -74,7 +74,7 @@ async function StopView({ stopId }: { stopId: number }) {
         isFavorited
         onClick={async () => {
           "use server";
-          await api.favorite.delStop.mutate({ stopId });
+          await api.favorite.delStop({ stopId });
           revalidatePath("/"); // revalidate the home page
         }}
       />
@@ -83,7 +83,7 @@ async function StopView({ stopId }: { stopId: number }) {
 }
 
 async function HomeMap() {
-  const coors = (await api.stops.getCoorOfAllStop.query())
+  const coors = (await api.stops.getCoorOfAllStop())
     .map((stop) => ({
       lat: stop.latitude,
       lng: stop.longitude,

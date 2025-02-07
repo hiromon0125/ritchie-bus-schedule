@@ -2,15 +2,15 @@
 import _ from "lodash";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import type { RouterInputs } from "t/react";
 import { api } from "t/react";
-import type { RouterInputs } from "t/shared";
 
 function EditBusList() {
   const router = useRouter();
-  const { mutateAsync, status: mutateStatus } = api.bus.addBus.useMutation();
+  const { mutateAsync, isPending } = api.bus.addBus.useMutation();
   const { mutateAsync: deleteBus } = api.bus.deleteBus.useMutation();
   const { data, refetch, status } = api.bus.getAll.useQuery();
-  const loading = status === "loading" || mutateStatus === "loading";
+  const loading = status === "pending" || isPending;
   const [newBus, setNewBus] = useState<RouterInputs["bus"]["addBus"]>({
     id: (_.max(data?.map((bus) => bus.id)) ?? 0) + 1,
     name: "",
@@ -47,7 +47,7 @@ function EditBusList() {
         id: (_.max(data.map((bus) => bus.id)) ?? 0) + 1,
       });
     }
-  }, [data]);
+  }, [data, newBus]);
 
   return (
     <>

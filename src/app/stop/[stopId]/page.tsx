@@ -1,3 +1,4 @@
+import { TimeTableSkeleton } from "@/busPageLoaders";
 import {
   BusInfoSkeleton,
   BusStatus,
@@ -17,9 +18,8 @@ import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { MdDirectionsBus } from "react-icons/md";
+import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
-import type { RouterOutputs } from "t/shared";
-import { TimeTableSkeleton } from "../../_components/busPageLoaders";
 
 export default async function Page(props: {
   params: Promise<{ stopId: string }>;
@@ -35,17 +35,17 @@ export default async function Page(props: {
   if (Number.isNaN(stopId)) {
     throw TRPCClientError.from(Error(`Invalid ID (stop id: ${params.stopId})`));
   }
-  const currentStop = await api.stops.getOneByID.query({ id: stopId });
+  const currentStop = await api.stops.getOneByID({ id: stopId });
   if (!currentStop) {
     throw TRPCClientError.from(Error(`Stop not found (stop id: ${stopId})`));
   }
   let isFavorite = false;
   let favoriteBuses: number[] = [];
   if (user) {
-    isFavorite = (await api.favorite.getAllStop.query())
+    isFavorite = (await api.favorite.getAllStop())
       .map((e) => e.stopId)
       .includes(stopId);
-    favoriteBuses = (await api.favorite.getAllBus.query())
+    favoriteBuses = (await api.favorite.getAllBus())
       .map((bus) => bus.busId)
       .filter((bid) => currentStop.buses.map((b) => b.id).includes(bid))
       .filter(Boolean);
@@ -64,17 +64,10 @@ export default async function Page(props: {
     permanentRedirect(`/stop/${stopId}?busId=${busId}`);
   }
 
-  const currentRoute = await api.routes.getCurrentRouteOfBus.query({
+  const currentRoute = await api.routes.getCurrentRouteOfBus({
     busId: selectedBus.id,
     stopId: currentStop.id,
   });
-  const lastRoute = await api.routes.getLastRouteOfBuses
-    .query({
-      busId: selectedBus.id,
-      stopId: currentStop.id,
-    })
-    .then((data) => data[0]?.lastRoute ?? null);
-
   return (
     <main className=" [--margin:8px] md:[--margin:24px]">
       <Header title="Stop" route="stop" />
@@ -145,7 +138,7 @@ export default async function Page(props: {
                 <TimeTable
                   stopId={stopId}
                   busId={selectedBus.id}
-                  fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+                  fetchedRoute={currentRoute}
                 />
               </Suspense>
             </div>
@@ -201,11 +194,11 @@ type BusStatusProps =
 
 const favoriteBus = async (busId: number) => {
   "use server";
-  return api.favorite.addBus.mutate({ busId });
+  return api.favorite.addBus({ busId });
 };
 const unfavoriteBus = async (busId: number) => {
   "use server";
-  return api.favorite.delBus.mutate({ busId });
+  return api.favorite.delBus({ busId });
 };
 
 async function SelectableBusInfo({
@@ -216,8 +209,7 @@ async function SelectableBusInfo({
   stopId,
   href,
 }: BusStatusProps) {
-  const busObj =
-    bus ?? (busID ? await api.bus.getByID.query({ id: busID }) : null);
+  const busObj = bus ?? (busID ? await api.bus.getByID({ id: busID }) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
 
@@ -242,7 +234,7 @@ async function SelectableBusInfo({
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
-            <BusStatus bus={busObj} stopId={stopId} hideStopName />
+            <BusStatus busId={busObj.id} stopId={stopId} hideStopName />
           </Suspense>
         </div>
       </Link>
