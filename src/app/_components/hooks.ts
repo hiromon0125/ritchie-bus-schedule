@@ -44,16 +44,21 @@ export function useBusStatus(
   serverGuessedRoute?: BusRoute | null,
   stopId?: number,
 ) {
-  const { data: isOperating } = api.routes.isBusOperating.useQuery({
-    busId: busId,
-  });
+  const { data: isOperating, isPending } = api.routes.isBusOperating.useQuery(
+    {
+      busId: busId,
+    },
+    {
+      staleTime: 1000 * 60 * 30, // 30 minutes doesn't really need to refetch that often
+    },
+  );
   const { data: isRouteCompleted } = api.routes.isLastBusFinished.useQuery(
     {
       busId: busId,
       stopId: stopId,
     },
     {
-      enabled: isOperating,
+      staleTime: 1000 * 60 * 30, // 30 minutes doesn't really need to refetch that often
     },
   );
   const [index, setIndex] = useState(0);
@@ -89,7 +94,7 @@ export function useBusStatus(
     index,
     fetchNextPage,
   ]);
-  return status ?? LOADING_STATUS;
+  return isPending ? LOADING_STATUS : (status ?? LOADING_STATUS);
 }
 
 function useStatusFromRoute(
