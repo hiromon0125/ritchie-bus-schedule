@@ -68,13 +68,6 @@ export default async function Page(props: {
     busId: selectedBus.id,
     stopId: currentStop.id,
   });
-  const lastRoute = await api.routes
-    .getLastRouteOfBuses({
-      busId: selectedBus.id,
-      stopId: currentStop.id,
-    })
-    .then((data) => data[0]?.lastRoute ?? null);
-
   return (
     <main className=" [--margin:8px] md:[--margin:24px]">
       <Header title="Stop" route="stop" />
@@ -145,7 +138,7 @@ export default async function Page(props: {
                 <TimeTable
                   stopId={stopId}
                   busId={selectedBus.id}
-                  fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+                  fetchedRoute={currentRoute}
                 />
               </Suspense>
             </div>
@@ -241,7 +234,7 @@ async function SelectableBusInfo({
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
-            <BusStatus bus={busObj} stopId={stopId} hideStopName />
+            <BusStatus busId={busObj.id} stopId={stopId} hideStopName />
           </Suspense>
         </div>
       </Link>

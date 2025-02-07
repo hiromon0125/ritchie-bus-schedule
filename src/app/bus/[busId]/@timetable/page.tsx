@@ -57,12 +57,6 @@ export default async function TimeTableWidget(props: Props) {
     busId: bus.id,
     stopId: selectedStop.id,
   });
-  const lastRoute = await api.routes
-    .getLastRouteOfBuses({
-      busId: bus.id,
-      stopId: selectedStop.id,
-    })
-    .then((data) => data[0]?.lastRoute ?? null);
   return (
     <>
       <div className=" flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
@@ -92,7 +86,7 @@ export default async function TimeTableWidget(props: Props) {
             <TimeTable
               busId={bus.id}
               stopId={selectedStop.id}
-              fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
+              fetchedRoute={currentRoute}
             />
           </Suspense>
         </div>
