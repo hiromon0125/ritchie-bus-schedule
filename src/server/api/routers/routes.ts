@@ -306,4 +306,32 @@ export const routesRouter = createTRPCRouter({
       });
       return Boolean(opDay);
     }),
+  isLastBusFinished: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+        stopId: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      /**
+       * This is used so that the client does not have to go up the pagination of the routes to check if the last bus has finished.
+       * This is useful for when the bus is done for the day and the server guesses that the current route is undefined which the client
+       * instead interprets that as the server is unable to fetch the current route thus manually checking on the client side by
+       * going from the first route of the day to the very last. This creates a flickering effect and uses unnecessary resources.
+       */
+      const now = getCurrentTimeServer();
+      const lastRoute = await ctx.db.routes.findFirst({
+        orderBy: {
+          deptTime: "desc",
+        },
+        where: {
+          busId: input.busId,
+          ...(input.stopId ? { stopId: input.stopId } : {}),
+        },
+      });
+      return lastRoute
+        ? lastRoute?.deptTime.getTime() < now.date.getTime()
+        : false;
+    }),
 });

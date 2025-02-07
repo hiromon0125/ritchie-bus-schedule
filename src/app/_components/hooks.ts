@@ -41,24 +41,33 @@ function useRouteByBus(
 
 export function useBusStatus(
   busId: Bus["id"],
-  fetchedRoute?: BusRoute | null,
+  serverGuessedRoute?: BusRoute | null,
   stopId?: number,
 ) {
   const { data: isOperating } = api.routes.isBusOperating.useQuery({
     busId: busId,
   });
+  const { data: isRouteCompleted } = api.routes.isLastBusFinished.useQuery(
+    {
+      busId: busId,
+      stopId: stopId,
+    },
+    {
+      enabled: isOperating,
+    },
+  );
   const [index, setIndex] = useState(0);
   const {
     data: routes,
     fetchNextPage,
     hasNextPage,
     isFetching,
-  } = useRouteByBus(busId, stopId, fetchedRoute?.id);
+  } = useRouteByBus(busId, stopId, serverGuessedRoute?.id);
   const fetchedRoutes = _.flatMap(routes?.pages, (page) => page.data);
   const nextRoute = fetchedRoutes[index];
-  const status = useStatusFromRoute(nextRoute, isOperating);
+  const status = useStatusFromRoute(nextRoute, isOperating, isRouteCompleted);
   useEffect(() => {
-    if (!isOperating) return;
+    if (!isOperating || isRouteCompleted) return;
     if (hasNextPage && !isFetching && index >= fetchedRoutes.length - 2) {
       fetchNextPage().catch((e) => console.error(e));
     }
@@ -72,6 +81,7 @@ export function useBusStatus(
     }
   }, [
     isOperating,
+    isRouteCompleted,
     hasNextPage,
     isFetching,
     nextRoute,
@@ -85,17 +95,18 @@ export function useBusStatus(
 function useStatusFromRoute(
   nextRoute: BusRoute | null | undefined,
   isOperating?: boolean,
+  isRouteCompleted?: boolean,
 ) {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
   const status = evalStatusFromRoute(nextRoute, currentTime);
   useEffect(() => {
-    if (!isOperating) return;
+    if (!isOperating || isRouteCompleted) return;
     const interval = setTimeout(() => {
       setCurrentTime(getCurrentTime());
     }, status?.nextUpdate ?? 2000);
     return () => clearTimeout(interval);
-  }, [status, isOperating]);
-  return isOperating ? status : OUT_OF_SERVICE_STATUS;
+  }, [status, isOperating, isRouteCompleted]);
+  return isOperating && !isRouteCompleted ? status : OUT_OF_SERVICE_STATUS;
 }
 
 /**
