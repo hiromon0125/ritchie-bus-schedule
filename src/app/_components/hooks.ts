@@ -5,7 +5,7 @@ import _ from "lodash";
 import { useEffect, useState } from "react";
 import { api } from "t/react";
 import type { BusRoute } from "./types";
-import { getCurrentTime, getStopStatusPerf } from "./util";
+import { evalStatusFromRoute, getCurrentTime } from "./util";
 
 const OUT_OF_SERVICE_STATUS = {
   statusMessage: "Out of service",
@@ -22,39 +22,45 @@ const LOADING_STATUS = {
   nextUpdate: 2000,
 } as const;
 
-const QUERY_SIZE = 30;
-const OFFSET_RANGE = QUERY_SIZE / 2;
-function calcOffsetFromIndex(index: number) {
-  if (index < OFFSET_RANGE) return 0;
-  return index - 1 - OFFSET_RANGE;
+function useRouteByBus(
+  busId: number,
+  stopId?: number,
+  initialRouteId?: number,
+) {
+  return api.routes.getAllByBusIdPaginated.useInfiniteQuery(
+    {
+      busId,
+      stopId,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialCursor: initialRouteId,
+    },
+  );
 }
 
 export function useBusStatus(
-  bus: Bus,
-  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
+  busId: Bus["id"],
+  fetchedRoute?: BusRoute | null,
   stopId?: number,
 ) {
-  const busId = bus?.id ?? -1;
-  const [index, setIndex] = useState(
-    () => fetchedRoute?.serverGuess?.index ?? 0,
-  );
-  const offset = calcOffsetFromIndex(index);
-  const { data } = api.routes.getAllByBusId.useQuery({
-    busId,
-    stopId,
-    offset: offset,
-    windowsize: QUERY_SIZE,
+  const { data: isOperating } = api.routes.isBusOperating.useQuery({
+    busId: busId,
   });
-  const nextRoute =
-    index === fetchedRoute?.serverGuess?.index
-      ? fetchedRoute?.serverGuess
-      : data?.[index - offset];
-  const status = useBusStatusClocked(bus, nextRoute);
+  const [index, setIndex] = useState(0);
+  const {
+    data: routes,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+  } = useRouteByBus(busId, stopId, fetchedRoute?.id);
+  const fetchedRoutes = _.flatMap(routes?.pages, (page) => page.data);
+  const nextRoute = fetchedRoutes[index];
+  const status = useStatusFromRoute(nextRoute, isOperating);
   useEffect(() => {
-    if (bus.isWeekend !== getCurrentTime().isWeekend) return;
-    if (data && fetchedRoute) {
-      const newIndex = check(offset, index, data, fetchedRoute, bus, nextRoute);
-      if (newIndex) setIndex(newIndex);
+    if (!isOperating) return;
+    if (hasNextPage && !isFetching && index >= fetchedRoutes.length - 2) {
+      fetchNextPage().catch((e) => console.error(e));
     }
     if (nextRoute) {
       const updateTime =
@@ -64,25 +70,31 @@ export function useBusStatus(
       }, updateTime);
       return () => clearTimeout(timeout);
     }
-  }, [status, index, data, fetchedRoute, nextRoute, offset, bus]);
-  return data ? (status ?? OUT_OF_SERVICE_STATUS) : LOADING_STATUS;
+  }, [
+    isOperating,
+    hasNextPage,
+    isFetching,
+    nextRoute,
+    fetchedRoutes,
+    index,
+    fetchNextPage,
+  ]);
+  return status ?? LOADING_STATUS;
 }
 
-export function useBusStatusClocked(
-  bus: Bus,
+function useStatusFromRoute(
   nextRoute: BusRoute | null | undefined,
+  isOperating?: boolean,
 ) {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
-  const { data: isOperating } = api.routes.isBusOperating.useQuery({
-    busId: bus.id,
-  });
-  const status = getStopStatusPerf(nextRoute, currentTime);
+  const status = evalStatusFromRoute(nextRoute, currentTime);
   useEffect(() => {
+    if (!isOperating) return;
     const interval = setTimeout(() => {
       setCurrentTime(getCurrentTime());
     }, status?.nextUpdate ?? 2000);
     return () => clearTimeout(interval);
-  }, [status]);
+  }, [status, isOperating]);
   return isOperating ? status : OUT_OF_SERVICE_STATUS;
 }
 
@@ -96,37 +108,37 @@ export function useBusStatusClocked(
  * system that causes the initial problem, but I am just going to put this function
  * in for now as a temporary solution until further investigation.
  */
-function check(
-  offset: number,
-  index: number,
-  data: BusRoute[],
-  fetchedRoute: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
-  bus: Bus,
-  nextRoute: BusRoute | undefined,
-) {
-  const { date, isWeekend } = getCurrentTime();
-  if (bus.isWeekend != isWeekend || nextRoute == undefined || data == undefined)
-    return;
-  const deptTime = nextRoute?.deptTime;
-  if (
-    deptTime.getTime() < date.getTime() &&
-    (!fetchedRoute?.lastRoute ||
-      fetchedRoute.lastRoute.deptTime.getTime() > date.getTime())
-  ) {
-    let newIndex;
-    if (
-      fetchedRoute?.lastRoute &&
-      (fetchedRoute.lastRoute.deptTime.getTime() - date.getTime()) * 2 <
-        nextRoute.deptTime.getTime() - date.getTime()
-    ) {
-      newIndex = index + Math.floor((fetchedRoute.lastRoute.index - index) / 2);
-    } else {
-      const searchedIndex = _.findIndex(
-        data,
-        (route) => route?.deptTime > date,
-      );
-      newIndex = (searchedIndex ?? QUERY_SIZE) + offset;
-    }
-    return newIndex;
-  }
-}
+// function check(
+//   offset: number,
+//   index: number,
+//   data: BusRoute[],
+//   fetchedRoute: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
+//   bus: Bus,
+//   nextRoute: BusRoute | undefined,
+// ) {
+//   const { date, isWeekend } = getCurrentTime();
+//   if (bus.isWeekend != isWeekend || nextRoute == undefined || data == undefined)
+//     return;
+//   const deptTime = nextRoute?.deptTime;
+//   if (
+//     deptTime.getTime() < date.getTime() &&
+//     (!fetchedRoute?.lastRoute ||
+//       fetchedRoute.lastRoute.deptTime.getTime() > date.getTime())
+//   ) {
+//     let newIndex;
+//     if (
+//       fetchedRoute?.lastRoute &&
+//       (fetchedRoute.lastRoute.deptTime.getTime() - date.getTime()) * 2 <
+//         nextRoute.deptTime.getTime() - date.getTime()
+//     ) {
+//       newIndex = index + Math.floor((fetchedRoute.lastRoute.index - index) / 2);
+//     } else {
+//       const searchedIndex = _.findIndex(
+//         data,
+//         (route) => route?.deptTime > date,
+//       );
+//       newIndex = (searchedIndex ?? QUERY_SIZE) + offset;
+//     }
+//     return newIndex;
+//   }
+// }

@@ -97,7 +97,7 @@ export default async function Page(props: Props) {
       <div className=" flex flex-col gap-1 xs:mb-2">
         <p className=" text-lg">{bus.description}</p>
         <Suspense fallback={<p>Loading...</p>}>
-          <BusStatusBig bus={bus} stops={bus.stops} />
+          <BusStatusBig busId={bus.id ?? -1} />
         </Suspense>
       </div>
       <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
@@ -184,7 +184,7 @@ async function SelectableStopInfo({
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
-            <BusStatus bus={bus} stop={stopObj} hideStopName />
+            <BusStatus busId={bus.id} hideStopName />
           </Suspense>
         </div>
       </Link>

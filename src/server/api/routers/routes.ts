@@ -29,7 +29,7 @@ export const routesRouter = createTRPCRouter({
       z.object({
         busId: z.number(),
         stopId: z.number().optional(),
-        offset: z.number().optional().default(0),
+        offset: z.number().default(0),
         windowsize: z.number().optional(),
       }),
     )
@@ -46,6 +46,37 @@ export const routesRouter = createTRPCRouter({
         take: input.windowsize,
       }),
     ),
+  getAllByBusIdPaginated: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+        stopId: z.number().optional(),
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(), // id of the last fetched route
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 10;
+      const result = await ctx.db.routes.findMany({
+        where: {
+          busId: input.busId,
+          ...(input.stopId ? { stopId: input.stopId } : {}),
+        },
+        orderBy: {
+          index: "asc",
+        },
+        take: limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+      });
+      let nextCursor: typeof input.cursor = null;
+      if (result.length > limit) {
+        nextCursor = result.pop()!.id;
+      }
+      return {
+        data: result,
+        nextCursor,
+      };
+    }),
   getAllByStopId: publicProcedure
     .input(
       z.object({

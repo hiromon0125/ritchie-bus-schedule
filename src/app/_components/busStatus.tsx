@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
-import type { Bus, Stops } from "@prisma/client";
+import type { Bus } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import React, { Suspense } from "react";
@@ -59,7 +59,7 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
                 <div className=" favbtn-placeholder h-6 w-6" />
               </div>
               <Suspense fallback={<SkeletonBusStatusString />}>
-                <BusStatus bus={busObj} />
+                <BusStatus busId={busObj.id} />
               </Suspense>
             </div>
           </div>
@@ -78,79 +78,40 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
   );
 }
 
-type BusProp = { bus: Bus; busId?: never } | { busId: number; bus?: never };
-
-type StopProp =
-  | { stop?: never; stopId?: never }
-  | { stop: Stops; stopId?: never }
-  | { stopId: number; stop?: never };
-
-type BusStatusProp = (BusProp & StopProp) & {
+type BusStatusProp = {
+  busId: number;
+  stopId?: number;
   hideStopName?: boolean;
 };
 
 export async function BusStatus({
-  bus,
-  stop,
   busId,
   stopId,
   hideStopName = false,
 }: BusStatusProp) {
   const data = {
-    stopId: stopId ?? stop?.id,
-    busId: busId ?? bus.id,
-    bus: bus ?? (await api.bus.getByID({ id: busId })),
-    stop:
-      stop ??
-      (stopId ? await api.stops.getOneByID({ id: stopId }) : undefined) ??
-      undefined,
+    stopId: stopId,
+    busId: busId,
   };
-  if (!data.bus) return null;
   const currentRoute = await api.routes.getCurrentRouteOfBus({
     busId: data.busId,
     stopId: data.stopId,
   });
-  const lastRoute = await api.routes
-    .getLastRouteOfBuses({
-      busId: data.busId,
-      stopId: data.stopId,
-    })
-    .then((data) => data[0]?.lastRoute ?? null);
   return (
     <BusStatusString
-      bus={data.bus}
-      fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
-      stop={data.stop}
+      busId={data.busId}
+      fetchedRoute={currentRoute}
+      stopId={data.stopId}
       hideStopName={hideStopName}
     />
   );
 }
 
-type BusStatusBigProp = BusProp & {
-  stops: Stops[];
-};
-
-export async function BusStatusBig({ bus, busId, stops }: BusStatusBigProp) {
-  const data = {
-    busId: busId ?? bus.id,
-    bus: bus ?? (await api.bus.getByID({ id: busId })),
-  };
-  if (!data.bus) return null;
+export async function BusStatusBig({ busId }: { busId: number }) {
   const currentRoute = await api.routes.getCurrentRouteOfBus({
-    busId: data.busId,
+    busId,
   });
-  const lastRoute = await api.routes
-    .getLastRouteOfBuses({
-      busId: data.busId,
-    })
-    .then((data) => data[0]?.lastRoute ?? null);
-  return (
-    <BusStatusStringBig
-      bus={data.bus}
-      fetchedRoute={{ serverGuess: currentRoute, lastRoute }}
-      stops={stops}
-    />
-  );
+  return <BusStatusStringBig busId={busId} fetchedRoute={currentRoute} />;
 }
 export function SkeletonBusStatusString() {
   return (

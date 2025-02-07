@@ -93,7 +93,7 @@ export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
  * @param isWeekend boolean
  * @returns Status
  */
-export function getStopStatusPerf(
+export function evalStatusFromRoute(
   route: BusRoute | null | undefined,
   currentTime: ReturnType<typeof getCurrentTime>,
 ): Status | undefined {

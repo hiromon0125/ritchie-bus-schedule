@@ -18,17 +18,17 @@ const ACTIVITY_COLOR: Record<BusMovingStatus, string> = {
 const ACTIVE_STATUS = ["moving", "stopped", "starting"];
 
 export default function BusStatusString({
-  bus,
+  busId,
   fetchedRoute,
-  stop,
+  stopId,
   hideStopName = false,
 }: {
-  bus: Bus;
-  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
-  stop?: Stops;
+  busId: Bus["id"];
+  fetchedRoute?: BusRoute | null;
+  stopId?: Stops["id"];
   hideStopName?: boolean;
 }) {
-  const status = useBusStatus(bus, fetchedRoute, stop?.id);
+  const status = useBusStatus(busId, fetchedRoute, stopId);
   const { isMoving, statusMessage, location } = status;
   const { data: stopObj } = api.stops.getOneByID.useQuery({
     id: location?.stopId ?? -1,
@@ -66,16 +66,16 @@ const STOP_LOCATION_MESSAGE: Record<BusMovingStatus, string | undefined> = {
 };
 
 export function BusStatusStringBig({
-  stops,
-  bus,
+  busId,
   fetchedRoute,
 }: {
-  stops: Stops[];
-  bus: Bus;
-  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null };
+  busId: Bus["id"];
+  fetchedRoute: BusRoute | null;
 }) {
-  const status = useBusStatus(bus, fetchedRoute);
-  const stop = stops.find((stop) => stop.id === status?.location?.stopId);
+  const status = useBusStatus(busId, fetchedRoute);
+  const { data: stop } = api.stops.getOneByID.useQuery({
+    id: status?.location?.stopId ?? -1,
+  });
   const stopLocationMessage = STOP_LOCATION_MESSAGE[status?.isMoving];
   return (
     <>
@@ -83,7 +83,7 @@ export function BusStatusStringBig({
         <>
           <Link
             className=" flex flex-row items-center gap-2"
-            href={`/stop/${stop.id}?busId=${bus.id}`}
+            href={`/stop/${stop.id}?busId=${busId}`}
           >
             <StopTag stop={stop} size="sm" />
             <p>{stop.name ?? "Unknown"}</p>
