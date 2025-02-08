@@ -32,7 +32,7 @@ async function Page(props: { params: Promise<{ busId: string }> }) {
       <div className=" mt-12">
         <h1>Edit Bus Route</h1>
       </div>
-      <EditBusRoute bus={bus} />
+      <EditBusRoute busId={busIdNumber} />
     </div>
   );
 }

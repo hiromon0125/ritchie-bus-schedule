@@ -6,7 +6,7 @@ export const busRouter = createTRPCRouter({
     .input(
       z
         .object({
-          isVisible: z.boolean().default(true),
+          isVisible: z.boolean().default(true).optional(),
         })
         .default({
           isVisible: true,
@@ -26,7 +26,7 @@ export const busRouter = createTRPCRouter({
     .input(
       z
         .object({
-          isVisible: z.boolean().default(true),
+          isVisible: z.boolean().default(true).optional(),
         })
         .default({
           isVisible: true,
@@ -48,7 +48,8 @@ export const busRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
-        isVisible: z.boolean().default(true),
+        isVisible: z.boolean().default(true).optional(),
+        includeStops: z.boolean().default(false),
       }),
     )
     .query(({ ctx, input }) =>
@@ -58,7 +59,7 @@ export const busRouter = createTRPCRouter({
           isVisible: input.isVisible,
         },
         include: {
-          stops: true,
+          stops: input.includeStops,
         },
       }),
     ),

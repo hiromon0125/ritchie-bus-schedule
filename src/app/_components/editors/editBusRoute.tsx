@@ -102,10 +102,9 @@ function savedRouteToInput(
   ) as RoutesArr;
 }
 
-function EditBusRoute({ bus }: { bus: Bus }) {
-  const busId = bus.id;
+function EditBusRoute({ busId }: { busId: Bus["id"] }) {
   const { data: storedStops, isLoading } = api.stops.getStopsByBusID.useQuery({
-    busId: bus.id,
+    busId: busId,
   });
   const storedStopsId = useMemo(
     () => storedStops?.map((e) => e.id) ?? [],
