@@ -47,6 +47,12 @@ export function getTimeToUpdateNext(status: string | undefined) {
   return 5 * 60 * 1000;
 }
 
+/**
+ * Previously there was a bug that was seen where some server computed date had the incorrect UTC time.
+ * These two, while is now identical, differenciates the two functions run in different environments,
+ * and if this bug is seen again this should be used to correct them. This can especially be problematic
+ * after or before daylight savings time changes.
+ */
 export function getCurrentTime(): { date: Date; isWeekend: boolean } {
   const now = new Date();
   const isTodayWeekend = [6, 7].includes(
@@ -71,7 +77,7 @@ export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
  * This function should always run on the client side to get the current time.
  *
  * This is the following statuses:
- * - "Out of service": The bus's next stop null or the bus is not running today.
+ * - "Out of service": The bus's next stop null.
  * - "Starting": The bus is starting its route on this route. When the index is 1 and the arrival time is more than 10 minutes away.
  * - "Moving": The bus is arriving to the next stop. When the arrival time is less than 10 minutes away.
  * - "Stopped": The bus is stopped at this stop. When the arrival time is past the current time and departure time has not past the current time.
@@ -87,15 +93,14 @@ export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
  * @param isWeekend boolean
  * @returns Status
  */
-export function getStopStatusPerf(
+export function evalStatusFromRoute(
   route: BusRoute | null | undefined,
-  isWeekend: boolean,
   currentTime: ReturnType<typeof getCurrentTime>,
 ): Status | undefined {
-  const { date: now, isWeekend: isTodayWeekend } = currentTime;
+  const { date: now } = currentTime;
 
   // out of service
-  if (isWeekend != isTodayWeekend || !route) {
+  if (!route) {
     return {
       statusMessage: "Out of service",
       location: undefined,

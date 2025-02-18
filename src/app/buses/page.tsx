@@ -10,22 +10,22 @@ export const dynamic = "force-dynamic";
 
 async function favoriteBus(busId: number) {
   "use server";
-  await api.favorite.addBus.mutate({ busId });
+  await api.favorite.addBus({ busId });
   revalidatePath("/buses");
 }
 
 async function unfavoriteBus(busId: number) {
   "use server";
-  await api.favorite.delBus.mutate({ busId });
+  await api.favorite.delBus({ busId });
   revalidatePath("/buses");
 }
 
 export default async function BusPageList() {
   const user = await currentUser();
-  const buses = await api.bus.getAll.query();
+  const buses = await api.bus.getAll();
   const favBus = !user
     ? []
-    : (await api.favorite.getAllBus.query()).map((bus) => bus.busId);
+    : (await api.favorite.getAllBus()).map((bus) => bus.busId);
   return (
     <>
       {buses.map((bus) => {

@@ -3,7 +3,7 @@ import { StopListButton } from "./stopListButton";
 
 export async function StopList(params: { stopId: number }) {
   const { stopId } = params;
-  const { buses } = (await api.bus.getAllByStopID.query({ stopId })) ?? {
+  const { buses } = (await api.bus.getAllByStopID({ stopId })) ?? {
     buses: [],
   };
 

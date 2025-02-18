@@ -5,7 +5,7 @@ import _ from "lodash";
 import { useEffect, useState } from "react";
 import { api } from "t/react";
 import type { BusRoute } from "./types";
-import { getCurrentTime, getStopStatusPerf } from "./util";
+import { evalStatusFromRoute, getCurrentTime } from "./util";
 
 const OUT_OF_SERVICE_STATUS = {
   statusMessage: "Out of service",
@@ -22,107 +22,139 @@ const LOADING_STATUS = {
   nextUpdate: 2000,
 } as const;
 
-const QUERY_SIZE = 30;
+function useRouteByBus(
+  busId: number,
+  stopId?: number,
+  initialRouteId?: number,
+) {
+  return api.routes.getAllByBusIdPaginated.useInfiniteQuery(
+    {
+      busId,
+      stopId,
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      initialCursor: initialRouteId,
+    },
+  );
+}
 
 export function useBusStatus(
-  bus: Bus,
-  fetchedRoute?: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
+  busId: Bus["id"],
+  serverGuessedRoute?: BusRoute | null,
   stopId?: number,
 ) {
-  const busId = bus?.id ?? -1;
-  const [index, setIndex] = useState(
-    () => fetchedRoute?.serverGuess?.index ?? 0,
+  const { data: isOperating, isPending } = api.routes.isBusOperating.useQuery(
+    {
+      busId: busId,
+    },
+    {
+      staleTime: 1000 * 60 * 30, // 30 minutes doesn't really need to refetch that often
+    },
   );
-  const offset = Math.max(
-    Math.floor((index - 1) / (QUERY_SIZE / 2)) * (QUERY_SIZE / 2),
-    0,
+  const { data: isRouteCompleted } = api.routes.isLastBusFinished.useQuery(
+    {
+      busId: busId,
+      stopId: stopId,
+    },
+    {
+      staleTime: 1000 * 60 * 30, // 30 minutes doesn't really need to refetch that often
+    },
   );
-  const { data } = api.routes.getAllByBusId.useQuery({
-    busId,
-    stopId,
-    offset: offset,
-    windowsize: QUERY_SIZE,
-  });
-  const nextRoute =
-    index === fetchedRoute?.serverGuess?.index
-      ? fetchedRoute?.serverGuess
-      : data?.[index - offset];
-
-  const status = useBusStatusClocked(bus, nextRoute);
+  const [index, setIndex] = useState(0);
+  const {
+    data: routes,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+  } = useRouteByBus(busId, stopId, serverGuessedRoute?.id);
+  const fetchedRoutes = _.flatMap(routes?.pages, (page) => page.data);
+  const nextRoute = fetchedRoutes[index];
+  const status = useStatusFromRoute(nextRoute, isOperating, isRouteCompleted);
   useEffect(() => {
-    if (bus.isWeekend !== getCurrentTime().isWeekend) {
-      return;
-    }
-    if (data && fetchedRoute) {
-      const newIndex = check(offset, index, data, fetchedRoute, bus, nextRoute);
-      if (newIndex) {
-        console.log(`bus: ${bus.id} from ${index} to ${newIndex}`);
-        setIndex(newIndex);
-      }
+    if (!isOperating || isRouteCompleted) return;
+    if (hasNextPage && !isFetching && index >= fetchedRoutes.length - 2) {
+      fetchNextPage().catch((e) => console.error(e));
     }
     if (nextRoute) {
       const updateTime =
         nextRoute.deptTime.getTime() - getCurrentTime().date.getTime();
       const timeout = setTimeout(() => {
-        setIndex(index + 1);
+        setIndex((i) => i + 1);
       }, updateTime);
       return () => clearTimeout(timeout);
     }
-  }, [status]);
-  const res = data ? (status ?? OUT_OF_SERVICE_STATUS) : LOADING_STATUS;
-  return res;
+  }, [
+    isOperating,
+    isRouteCompleted,
+    hasNextPage,
+    isFetching,
+    nextRoute,
+    fetchedRoutes,
+    index,
+    fetchNextPage,
+  ]);
+  return isPending ? LOADING_STATUS : (status ?? LOADING_STATUS);
 }
 
-export function useBusStatusClocked(
-  bus: Bus,
+function useStatusFromRoute(
   nextRoute: BusRoute | null | undefined,
+  isOperating?: boolean,
+  isRouteCompleted?: boolean,
 ) {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
-  const status = getStopStatusPerf(
-    nextRoute,
-    bus?.isWeekend ?? false,
-    currentTime,
-  );
+  const status = evalStatusFromRoute(nextRoute, currentTime);
   useEffect(() => {
+    if (!isOperating || isRouteCompleted) return;
     const interval = setTimeout(() => {
       setCurrentTime(getCurrentTime());
     }, status?.nextUpdate ?? 2000);
     return () => clearTimeout(interval);
-  }, [status]);
-  return status;
+  }, [status, isOperating, isRouteCompleted]);
+  return isOperating && !isRouteCompleted ? status : OUT_OF_SERVICE_STATUS;
 }
 
-function check(
-  offset: number,
-  index: number,
-  data: BusRoute[],
-  fetchedRoute: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
-  bus: Bus,
-  nextRoute: BusRoute | undefined,
-) {
-  const { date, isWeekend } = getCurrentTime();
-  if (bus.isWeekend != isWeekend || nextRoute == undefined || data == undefined)
-    return;
-  const deptTime = nextRoute?.deptTime;
-  if (
-    deptTime.getTime() < date.getTime() &&
-    (!fetchedRoute?.lastRoute ||
-      fetchedRoute.lastRoute.deptTime.getTime() > date.getTime())
-  ) {
-    let newIndex;
-    if (
-      fetchedRoute?.lastRoute &&
-      (fetchedRoute.lastRoute.deptTime.getTime() - date.getTime()) * 2 <
-        nextRoute.deptTime.getTime() - date.getTime()
-    ) {
-      newIndex = index + Math.floor((fetchedRoute.lastRoute.index - index) / 2);
-    } else {
-      const searchedIndex = _.findIndex(
-        data,
-        (route) => route?.deptTime > date,
-      );
-      newIndex = (searchedIndex ?? QUERY_SIZE) + offset;
-    }
-    return newIndex;
-  }
-}
+/**
+ * This function is used for checking if the server's computed result is correct on
+ * the client side. This is from an issue caused by the server where the server is
+ * sometimes seen to be on a completely different timezones than the client which
+ * should never be a problem but it seems to be that some server just can not keep
+ * track of utc time.
+ * I also hate dealing with times so there might actually be a bug somewhere in the
+ * system that causes the initial problem, but I am just going to put this function
+ * in for now as a temporary solution until further investigation.
+ */
+// function check(
+//   offset: number,
+//   index: number,
+//   data: BusRoute[],
+//   fetchedRoute: { serverGuess: BusRoute | null; lastRoute: BusRoute | null },
+//   bus: Bus,
+//   nextRoute: BusRoute | undefined,
+// ) {
+//   const { date, isWeekend } = getCurrentTime();
+//   if (bus.isWeekend != isWeekend || nextRoute == undefined || data == undefined)
+//     return;
+//   const deptTime = nextRoute?.deptTime;
+//   if (
+//     deptTime.getTime() < date.getTime() &&
+//     (!fetchedRoute?.lastRoute ||
+//       fetchedRoute.lastRoute.deptTime.getTime() > date.getTime())
+//   ) {
+//     let newIndex;
+//     if (
+//       fetchedRoute?.lastRoute &&
+//       (fetchedRoute.lastRoute.deptTime.getTime() - date.getTime()) * 2 <
+//         nextRoute.deptTime.getTime() - date.getTime()
+//     ) {
+//       newIndex = index + Math.floor((fetchedRoute.lastRoute.index - index) / 2);
+//     } else {
+//       const searchedIndex = _.findIndex(
+//         data,
+//         (route) => route?.deptTime > date,
+//       );
+//       newIndex = (searchedIndex ?? QUERY_SIZE) + offset;
+//     }
+//     return newIndex;
+//   }
+// }

@@ -11,21 +11,21 @@ export const dynamic = "force-dynamic";
 
 async function favoriteStop(stopId: number) {
   "use server";
-  await api.favorite.addStop.mutate({ stopId });
+  await api.favorite.addStop({ stopId });
   revalidatePath("/stops");
 }
 
 async function unfavoriteStop(stopId: number) {
   "use server";
-  await api.favorite.delStop.mutate({ stopId });
+  await api.favorite.delStop({ stopId });
   revalidatePath("/stops");
 }
 export default async function StopList() {
   const user = await currentUser();
-  const stops = await api.stops.getAll.query({ includeRelatedBus: true });
+  const stops = await api.stops.getAll({ includeRelatedBus: true });
   const favStop = !user
     ? []
-    : (await api.favorite.getAllStop.query()).map((stop) => stop.stopId);
+    : (await api.favorite.getAllStop()).map((stop) => stop.stopId);
   return stops.map((stop) => {
     const isFav = favStop.includes(stop.id);
     return (

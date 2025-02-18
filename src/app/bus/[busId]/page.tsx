@@ -32,7 +32,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       Error(`Bus not found (bus id: ${params.busId})`),
     );
   }
-  const bus = await api.bus.getByID.query({ id: busId });
+  const bus = await api.bus.getByID({ id: busId });
   if (!bus) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
@@ -49,7 +49,7 @@ export default async function Page(props: Props) {
     props.params,
     currentUser(),
   ]);
-  const bus = await api.bus.getByID.query({ id: parseInt(params.busId) });
+  const bus = await api.bus.getByID({ id: parseInt(params.busId) });
 
   if (!bus) {
     throw TRPCClientError.from(
@@ -62,8 +62,8 @@ export default async function Page(props: Props) {
   if (user) {
     const stopIds = bus.stops.map((b) => b.id);
     const [allBus, allStop] = await Promise.all([
-      api.favorite.getAllBus.query(),
-      api.favorite.getAllStop.query(),
+      api.favorite.getAllBus(),
+      api.favorite.getAllStop(),
     ]);
     isFavorite = allBus.map((e) => e.busId).includes(bus.id);
     favoriteStops = allStop
@@ -97,7 +97,7 @@ export default async function Page(props: Props) {
       <div className=" flex flex-col gap-1 xs:mb-2">
         <p className=" text-lg">{bus.description}</p>
         <Suspense fallback={<p>Loading...</p>}>
-          <BusStatusBig bus={bus} stops={bus.stops} />
+          <BusStatusBig busId={bus.id ?? -1} />
         </Suspense>
       </div>
       <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
@@ -145,11 +145,11 @@ type BusStatusProps =
 
 const favoriteStop = async (stopId: number) => {
   "use server";
-  return api.favorite.addStop.mutate({ stopId });
+  return api.favorite.addStop({ stopId });
 };
 const unfavoriteStop = async (stopId: number) => {
   "use server";
-  return api.favorite.delStop.mutate({ stopId });
+  return api.favorite.delStop({ stopId });
 };
 
 async function SelectableStopInfo({
@@ -160,7 +160,7 @@ async function SelectableStopInfo({
   bus,
   href,
 }: BusStatusProps) {
-  const stopObj = stop ?? (await api.stops.getOneByID.query({ id: stopID }));
+  const stopObj = stop ?? (await api.stops.getOneByID({ id: stopID }));
   if (!stopObj) return null;
 
   return (
@@ -184,7 +184,7 @@ async function SelectableStopInfo({
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
-            <BusStatus bus={bus} stop={stopObj} hideStopName />
+            <BusStatus busId={bus.id} hideStopName />
           </Suspense>
         </div>
       </Link>

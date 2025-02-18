@@ -2,32 +2,60 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const busRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) =>
-    ctx.db.bus.findMany({
-      orderBy: {
-        id: "asc",
-      },
-    }),
-  ),
-  getAllID: publicProcedure.query(({ ctx }) =>
-    ctx.db.bus
-      .findMany({
-        select: {
-          id: true,
+  getAll: publicProcedure
+    .input(
+      z
+        .object({
+          isVisible: z.boolean().default(true),
+        })
+        .default({
+          isVisible: true,
+        }),
+    )
+    .query(({ ctx, input }) =>
+      ctx.db.bus.findMany({
+        where: {
+          isVisible: input.isVisible,
         },
-      })
-      .then((buses) => buses.map((bus) => bus.id)),
-  ),
+        orderBy: {
+          id: "asc",
+        },
+      }),
+    ),
+  getAllID: publicProcedure
+    .input(
+      z
+        .object({
+          isVisible: z.boolean().default(true),
+        })
+        .default({
+          isVisible: true,
+        }),
+    )
+    .query(({ ctx, input }) =>
+      ctx.db.bus
+        .findMany({
+          where: {
+            isVisible: input.isVisible,
+          },
+          select: {
+            id: true,
+          },
+        })
+        .then((buses) => buses.map((bus) => bus.id)),
+    ),
   getByID: publicProcedure
     .input(
       z.object({
         id: z.number(),
+        isVisible: z.boolean().default(true),
       }),
     )
     .query(({ ctx, input }) =>
       ctx.db.bus.findUnique({
         where: {
           id: input.id,
+          isVisible: input.isVisible,
         },
         include: {
           stops: true,
@@ -57,6 +85,7 @@ export const busRouter = createTRPCRouter({
         name: z.string(),
         description: z.string(),
         color: z.string(),
+        isVisible: z.boolean().default(true),
       }),
     )
     .mutation(({ ctx, input }) =>
@@ -71,7 +100,7 @@ export const busRouter = createTRPCRouter({
         name: z.string(),
         description: z.string(),
         color: z.string(),
-        isWeekend: z.boolean(),
+        isVisible: z.boolean(),
       }),
     )
     .mutation(({ ctx, input }) =>

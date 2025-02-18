@@ -8,7 +8,7 @@ import { z } from "zod";
 async function Page(props: { params: Promise<{ busId: string }> }) {
   const params = await props.params;
   const busIdNumber = z.coerce.number().parse(params.busId);
-  const bus = await api.bus.getByID.query({ id: busIdNumber });
+  const bus = await api.bus.getByID({ id: busIdNumber });
 
   if (!bus) {
     return (
