@@ -34,6 +34,20 @@ function Footer() {
               Sam Ruan
             </a>
             .<br />
+            <a
+              className="text-slate-200 underline"
+              href="https://github.com/hiromon0125/ritchie-bus-schedule"
+            >
+              Visit the Repository
+            </a>{" "}
+            or
+            <a
+              className="text-slate-200 underline"
+              href="https://github.com/hiromon0125/ritchie-bus-schedule/issues/new/choose"
+            >
+              report an issue
+            </a>
+            .
             <br />
           </p>
           <Coffee />
@@ -54,12 +68,6 @@ function Footer() {
                 </Link>
                 <Link className="text-slate-200 underline" href="/stops">
                   Stops
-                </Link>
-                <Link
-                  className="text-slate-200 underline"
-                  href="https://github.com/hiromon0125/ritchies-bus-schedule"
-                >
-                  GitHub
                 </Link>
                 <SignedOut>
                   <SignInButton>
