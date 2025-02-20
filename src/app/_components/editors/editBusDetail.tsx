@@ -1,9 +1,10 @@
 "use client";
 import _ from "lodash";
 import { useEffect, useState } from "react";
-import { api, type RouterOutputs } from "t/react";
+import { api, type RouterInputs, type RouterOutputs } from "t/react";
 import { useDebounceValue } from "usehooks-ts";
 import { Switch } from "../../../components/ui/switch";
+import DayOfWeekSelector from "./dayOfWeekSelector";
 
 type Bus = Omit<
   NonNullable<RouterOutputs["bus"]["getByID"]>,
@@ -16,30 +17,52 @@ type Bus = Omit<
     >
   >;
 
+type NewBus = RouterInputs["bus"]["editBus"];
+type IdLessBus = Omit<NewBus, "id">;
+
 export default function EditBusDetail({ busId }: { busId: number }) {
   const { data, status: fetchStatus } = api.bus.getByID.useQuery({
     id: busId,
     isVisible: undefined,
+    includeDays: true,
   });
   const { mutate } = api.bus.editBus.useMutation();
-  const [newData, setNewData] = useState<Bus | null>(data ?? null);
-  const [savedData] = useDebounceValue(newData, 1000);
+  const [newData, setNewData] = useState<Bus | null | undefined>(() => data);
+  const [unsavedData, setUnsavedData] = useState<IdLessBus>({});
+  const [debouncedUnsavedData] = useDebounceValue(unsavedData, 1000);
   useEffect(() => {
-    if (fetchStatus === "success" && savedData && !_.isEqual(savedData, data)) {
-      mutate(savedData);
+    if (
+      fetchStatus === "success" &&
+      data &&
+      Object.keys(debouncedUnsavedData).length != 0
+    ) {
+      mutate({ id: busId, ...debouncedUnsavedData });
+      setUnsavedData((prev) => {
+        const ud = { ...prev };
+        const udKeys = Object.keys(ud) as (keyof IdLessBus)[];
+        const savedKeys = (
+          Object.keys(debouncedUnsavedData) as (keyof IdLessBus)[]
+        ).filter((k) => udKeys.includes(k));
+        savedKeys.forEach((k) => delete ud[k]);
+        return ud;
+      });
     }
-  }, [savedData, data, fetchStatus, mutate]);
+  }, [busId, data, fetchStatus, mutate, debouncedUnsavedData]);
   useEffect(() => {
-    setNewData(data ?? null);
+    if (data != null) setNewData(data);
   }, [data]);
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+  if (!data) return <div>Loading...</div>;
 
-  // TODO: find the correct solution for the types here without the as keyword
-  function handleInput(data: Partial<Bus>) {
-    setNewData((oldData) => ({ ...oldData, ...data }) as Bus);
+  function handleInput(data: IdLessBus) {
+    setNewData(
+      (oldData) =>
+        ({
+          ...oldData,
+          ..._.pickBy(data, (o) => o != undefined),
+        }) as Bus,
+    );
+    setUnsavedData((prev) => ({ ...prev, ...data }));
   }
 
   return (
@@ -76,13 +99,24 @@ export default function EditBusDetail({ busId }: { busId: number }) {
           className=" text-md h-32 w-full resize-none rounded-md border-2 border-black bg-white p-2"
         />
       </label>
-      <div>
+      <div className=" flex flex-col gap-3">
         <div className=" flex flex-row items-center gap-3">
           <p>Visible</p>
           <Switch
             checked={newData?.isVisible}
             onClick={() =>
               newData && handleInput({ isVisible: !newData.isVisible })
+            }
+          />
+        </div>
+        <div className=" flex flex-col gap-3">
+          <DayOfWeekSelector
+            operatingDays={data.operatingDays}
+            onChange={(newDays) =>
+              newData &&
+              handleInput({
+                operatingDays: newDays.map((o) => ({ ...o, busId })),
+              })
             }
           />
         </div>

@@ -50,6 +50,7 @@ export const busRouter = createTRPCRouter({
         id: z.number(),
         isVisible: z.boolean().default(true).optional(),
         includeStops: z.boolean().default(false),
+        includeDays: z.boolean().default(false),
       }),
     )
     .query(({ ctx, input }) =>
@@ -60,6 +61,7 @@ export const busRouter = createTRPCRouter({
         },
         include: {
           stops: input.includeStops,
+          operatingDays: input.includeDays,
         },
       }),
     ),
@@ -98,20 +100,40 @@ export const busRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
-        name: z.string(),
-        description: z.string(),
-        color: z.string(),
-        isVisible: z.boolean(),
+        tag: z.string().optional().nullable(),
+        name: z.string().optional(),
+        description: z.string().optional(),
+        color: z.string().optional(),
+        isVisible: z.boolean().optional(),
+        operatingDays: z
+          .array(
+            z.object({
+              day: z.date(),
+              isWeekly: z.boolean(),
+            }),
+          )
+          .optional(),
       }),
     )
-    .mutation(({ ctx, input }) =>
-      ctx.db.bus.update({
+    .mutation(async ({ ctx, input }) => {
+      if (input.operatingDays != undefined) {
+        const newOperatingDays = input.operatingDays;
+        await ctx.db.busOperatingDay.deleteMany({
+          where: {
+            busId: input.id,
+          },
+        });
+        await ctx.db.busOperatingDay.createMany({
+          data: newOperatingDays.map((d) => ({ ...d, busId: input.id })),
+        });
+      }
+      return await ctx.db.bus.update({
         where: {
           id: input.id,
         },
-        data: input,
-      }),
-    ),
+        data: { ...input, operatingDays: undefined },
+      });
+    }),
   deleteBus: publicProcedure
     .input(
       z.object({
