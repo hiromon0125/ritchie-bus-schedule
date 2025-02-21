@@ -11,7 +11,6 @@ type EditedOperatingDay = Partial<BusOperatingDay> &
   Pick<BusOperatingDay, "day" | "isWeekly">;
 
 const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const TIMEZONE = "America/New_York";
 /**
  * There are also no debouncing in these components because the editBusDetail component will already have debouncing and we don't want to stack debounce.
  * @param param0 operatingDays: Array of BusOperatingDay objects stored in bus object
@@ -36,23 +35,18 @@ export default function DayOfWeekSelector({
       onChange([...weeklyDays, ...newDays]);
     }
   };
+
   return (
     <>
       <WeeklyPicker
-        days={days.weekly.map((d) => d.day.getDay())}
+        days={days.weekly.map((d) => d.day.getUTCDay())}
         onChange={(weeklyDays) => {
           const newWeeklyDays = weeklyDays.map((day) => {
             // Start from Sunday, Jan 4, 1970 (first Sunday in the epoch)
-            const dayOfWeekUTC = new Date(Date.UTC(1970, 0, 4));
-
-            // Shift to the correct day of the week
-            dayOfWeekUTC.setUTCDate(
-              dayOfWeekUTC.getUTCDate() +
-                ((day + 7 - dayOfWeekUTC.getUTCDay()) % 7),
-            );
-
+            const dayOfWeek = new Date(Date.UTC(1970, 0, 4));
+            dayOfWeek.setUTCDate(dayOfWeek.getUTCDate() + (day % 7));
             return {
-              day: dayOfWeekUTC,
+              day: dayOfWeek,
               isWeekly: true,
             };
           });
@@ -62,25 +56,10 @@ export default function DayOfWeekSelector({
       <NonWeeklyPicker
         selectedDays={days.nonWeekly.map((d) => d.day)}
         onChange={(d) => {
-          const sanitizedDays = d.map((day) => {
-            const utcDate = new Date(
-              day.toLocaleString("en-US", { timeZone: TIMEZONE }),
-            );
-            return {
-              day: new Date(
-                Date.UTC(
-                  utcDate.getFullYear(),
-                  utcDate.getMonth(),
-                  utcDate.getDate(),
-                  utcDate.getHours(),
-                  utcDate.getMinutes(),
-                  utcDate.getSeconds(),
-                  utcDate.getMilliseconds(),
-                ),
-              ),
-              isWeekly: false,
-            };
-          });
+          const sanitizedDays = d.map((inputDate) => ({
+            day: inputDate,
+            isWeekly: false,
+          }));
           handleChange(sanitizedDays, false);
         }}
       />
