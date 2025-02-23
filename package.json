@@ -5,8 +5,6 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "build:workers": "tsc -p tsconfig.worker.json",
-    "watch:workers": "tsc -p tsconfig.worker.json --watch",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "dev": "next dev --turbopack",

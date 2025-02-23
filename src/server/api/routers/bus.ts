@@ -51,19 +51,27 @@ export const busRouter = createTRPCRouter({
         isVisible: z.boolean().default(true).optional(),
         includeStops: z.boolean().default(false),
         includeDays: z.boolean().default(false),
+        throwIfNotFound: z.boolean().default(false),
       }),
     )
     .query(({ ctx, input }) =>
-      ctx.db.bus.findUnique({
-        where: {
-          id: input.id,
-          isVisible: input.isVisible,
-        },
-        include: {
-          stops: input.includeStops,
-          operatingDays: input.includeDays,
-        },
-      }),
+      ctx.db.bus
+        .findUnique({
+          where: {
+            id: input.id,
+            isVisible: input.isVisible,
+          },
+          include: {
+            stops: input.includeStops,
+            operatingDays: input.includeDays,
+          },
+        })
+        .then((bus) => {
+          if (input.throwIfNotFound && !bus) {
+            throw new Error(`Bus with ID ${input.id} not found`);
+          }
+          return bus;
+        }),
     ),
   getAllByStopID: publicProcedure
     .input(

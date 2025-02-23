@@ -1,26 +1,13 @@
 import SaveStatus from "@/SaveStatus";
 import EditBusDetail from "@/editors/editBusDetail";
 import EditBusRoute from "@/editors/editBusRoute";
-import Link from "next/link";
 import { api } from "t/server";
 import { z } from "zod";
 
 async function Page(props: { params: Promise<{ busId: string }> }) {
   const params = await props.params;
   const busIdNumber = z.coerce.number().parse(params.busId);
-  const bus = await api.bus.getByID({ id: busIdNumber });
-
-  if (!bus) {
-    return (
-      <div>
-        <h1>Bus not found</h1>
-        <p>Bus ID: {params.busId}</p>
-        <Link href="/manage">
-          <a>Back to bus list</a>
-        </Link>
-      </div>
-    );
-  }
+  await api.bus.getByID.prefetch({ id: busIdNumber });
 
   return (
     <div className=" w-full max-w-screen-lg px-6">
