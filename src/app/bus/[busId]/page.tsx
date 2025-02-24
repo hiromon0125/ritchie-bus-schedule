@@ -49,7 +49,10 @@ export default async function Page(props: Props) {
     props.params,
     currentUser(),
   ]);
-  const bus = await api.bus.getByID({ id: parseInt(params.busId) });
+  const bus = await api.bus.getByID({
+    id: parseInt(params.busId),
+    includeStops: true,
+  });
 
   if (!bus) {
     throw TRPCClientError.from(

@@ -6,7 +6,10 @@ export default async function Map(props: {
   params: Promise<{ busId: string }>;
 }) {
   const params = await props.params;
-  const bus = await api.bus.getByID({ id: parseInt(params.busId) });
+  const bus = await api.bus.getByID({
+    id: parseInt(params.busId),
+    includeStops: true,
+  });
 
   if (!bus) {
     throw TRPCClientError.from(

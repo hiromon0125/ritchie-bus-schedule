@@ -1,15 +1,19 @@
 "use client";
 import _ from "lodash";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { RouterInputs } from "t/react";
 import { api } from "t/react";
+import { Switch } from "../../../components/ui/switch";
 
 function EditBusList() {
   const router = useRouter();
-  const { mutateAsync, isPending } = api.bus.addBus.useMutation();
+  const { mutateAsync: createBus, isPending } = api.bus.addBus.useMutation();
+  const { mutateAsync: editBus } = api.bus.editBus.useMutation();
   const { mutateAsync: deleteBus } = api.bus.deleteBus.useMutation();
-  const { data, refetch, status } = api.bus.getAll.useQuery();
+  const { data, refetch, status } = api.bus.getAll.useQuery({
+    isVisible: undefined,
+  });
   const loading = status === "pending" || isPending;
   const [newBus, setNewBus] = useState<RouterInputs["bus"]["addBus"]>({
     id: (_.max(data?.map((bus) => bus.id)) ?? 0) + 1,
@@ -23,7 +27,7 @@ function EditBusList() {
     if (!newBus.name || !newBus.description) {
       return;
     }
-    await mutateAsync(newBus);
+    await createBus(newBus);
     await refetch();
     if (status === "success") {
       setNewBus({
@@ -39,15 +43,6 @@ function EditBusList() {
     await deleteBus(bus);
     await refetch();
   };
-
-  useEffect(() => {
-    if (data) {
-      setNewBus({
-        ...newBus,
-        id: (_.max(data.map((bus) => bus.id)) ?? 0) + 1,
-      });
-    }
-  }, [data, newBus]);
 
   return (
     <>
@@ -140,15 +135,26 @@ function EditBusList() {
               <p className=" flex-1 text-nowrap">
                 {bus.id} {bus.name}
               </p>
+              <Switch
+                checked={bus.isVisible}
+                onClick={async () => {
+                  await editBus({
+                    ...bus,
+                    isVisible: !bus.isVisible,
+                  });
+                  await refetch();
+                }}
+              />
+              <p className=" text-slate-800">Visible</p>
               <button
                 onClick={() => router.push(`/manage/bus/${bus.id}`)}
-                className=" m-2 h-full px-2 hover:bg-slate-300"
+                className=" m-2 rounded-sm border border-black px-2 py-1 hover:bg-slate-300"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(bus)}
-                className=" m-2 ml-[-12px] h-full px-2 text-red-500 hover:bg-red-100"
+                className=" m-2 ml-[-12px] rounded-sm border border-red-500 px-2 py-1 text-red-500 hover:bg-red-100"
               >
                 Delete
               </button>
