@@ -303,6 +303,14 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
     }
     setInput(inputRoutes as RoutesArr);
     setDateInput(inputRoutes.map(savedRouteToDateInput));
+    setStops(
+      _.uniq(
+        inputRoutes
+          .slice(0, stopNames.length)
+          .map((route) => route.stopId)
+          .filter((s) => s != undefined),
+      ),
+    );
   };
 
   const handleSelectedStopChange = (
