@@ -40,7 +40,7 @@ function Footer() {
             >
               Visit the Repository
             </a>{" "}
-            or
+            or {" "}
             <a
               className="text-slate-200 underline"
               href="https://github.com/hiromon0125/ritchie-bus-schedule/issues/new/choose"
