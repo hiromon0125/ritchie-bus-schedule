@@ -3,7 +3,7 @@ import type { Bus, Routes, Stops } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdRefreshCircle, IoMdSave, IoMdTrash } from "react-icons/io";
 import {
   MdAddBox,
@@ -11,7 +11,7 @@ import {
   MdInfoOutline,
   MdOutlineClear,
 } from "react-icons/md";
-import Select, { MultiValue } from "react-select";
+import Select, { type MultiValue } from "react-select";
 import { Tooltip } from "react-tooltip";
 import type { RouterOutputs } from "t/react";
 import { api } from "t/react";
@@ -132,15 +132,10 @@ function wasAllStopFound(
 
 function EditBusRoute({ busId }: { busId: Bus["id"] }) {
   const utils = api.useUtils();
-  const { data: savedBusStops, isLoading } = api.stops.getStopsByBusID.useQuery(
-    {
+  const { data: savedBusStopId, isLoading } =
+    api.stops.getStopIdsByBusID.useQuery({
       busId,
-    },
-  );
-  const savedBusStopId = useMemo(
-    () => savedBusStops?.map((e) => e.id) ?? [],
-    [savedBusStops],
-  );
+    });
   const { data } = api.routes.getAllByBusId.useQuery(
     { busId },
     {
@@ -191,7 +186,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
       mutate({
         routes: definedInput,
         busId,
-        stopIds: selectedStops,
+        stopIds: selectedStops ?? [],
       });
     } catch (e) {
       // catch if the input is invalid or attribute is missing
@@ -200,7 +195,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
   };
 
   const addNewRoute = () => {
-    const i = createNewRoute(selectedStops, input, busId);
+    const i = createNewRoute(selectedStops ?? [], input, busId);
     setInput((prev) => [...prev, i]);
     setDateInput((prev) => [...prev, savedRouteToDateInput(i)]);
   };
@@ -208,8 +203,8 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
   const addMultipleRoutes = () => {
     const inputArr: { arr: string; dep: string }[] = [];
     const currInput = [...input];
-    selectedStops.forEach((_) => {
-      const i = createNewRoute(selectedStops, currInput, busId);
+    (selectedStops ?? []).forEach((_) => {
+      const i = createNewRoute(selectedStops ?? [], currInput, busId);
       currInput.push(i);
       inputArr.push(savedRouteToDateInput(i));
     });
@@ -217,7 +212,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
     setDateInput((previ) => [...previ, ...inputArr]);
   };
 
-  const rmRoute = () => {
+  const rmLastRoute = () => {
     setInput((prev) => prev.slice(0, -1));
     setDateInput((prev) => prev.slice(0, -1));
   };
@@ -230,19 +225,11 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
     const firstRow = data[0]!;
     const stopNames = Object.keys(firstRow);
     const usedStops = stopNames.map((name) => {
-      if (name.toLowerCase().endsWith(" departure")) {
-        return {
-          stop:
-            stops?.find((stop) => stop.name === name.replace(" arrival", "")) ??
-            name,
-          type: "arrival",
-        };
-      }
       return {
         stop:
-          stops?.find((stop) => stop.name === name.replace(" departure", "")) ??
+          stops?.find((stop) => stop.name.trim().toLowerCase() === name) ??
           name,
-        type: "departure",
+        type: name.toLowerCase().endsWith(" arrival") ? "arrival" : "departure",
       };
     });
     if (!wasAllStopFound(usedStops)) {
@@ -252,16 +239,61 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
       return;
     }
     const stopMap = _.zipObject(stopNames, usedStops);
-    const times = data.map((row) => {
-      const res = {};
-      const time = Object.entries(row).map(([k, v]) => {
+    const routeTemplate = {
+      busId,
+      arriTime: null,
+    };
+    const times = data.map((row, rowIndex) => {
+      const res: Record<Stops["id"], RouteInput> = {};
+      // Merging departure and arrival times into a single object also indexed to keep order
+      _.sortBy(Object.entries(row), (o) => o[1]).forEach(([k, v], index) => {
         if (v === "") return undefined;
-        const stop = stopMap[k];
-
-        return DateTime.fromFormat(time, "HH:mm", { zone: NEWYORK_TIMEZONE });
+        const stopId = stopMap[k]!.stop.id;
+        const time = DateTime.fromFormat(v, "HH:mm a", {
+          zone: NEWYORK_TIMEZONE,
+        }).toJSDate();
+        if (stopMap[k]?.type === "arrival") {
+          if (res[stopId] == undefined) {
+            res[stopId] = {
+              ...routeTemplate,
+              stopId,
+              arriTime: time,
+              index: rowIndex + index,
+            };
+            return;
+          }
+          res[stopId].arriTime = time;
+          res[stopId].index = rowIndex + index; // index is always the smaller of the two when arrival and departure are present
+          return;
+        }
+        if (res[stopId] == undefined) {
+          res[stopId] = {
+            ...routeTemplate,
+            stopId,
+            deptTime: time,
+            index: rowIndex + index,
+          };
+          return;
+        }
+        res[stopId].deptTime = time;
       });
-      return time;
+      return res;
     });
+    const inputRoutes = _.sortBy(
+      times
+        .map((row) => Object.values(row))
+        .flat()
+        .map((v) => (v.deptTime ? v : { ...v, deptTime: v.arriTime })),
+      "index",
+    );
+    if (!inputRoutes.every((route) => route.deptTime != null)) {
+      console.error(
+        "Invalid route: Departure time and Arrival time is missing for one stop",
+      );
+      return;
+    }
+    setInput(inputRoutes as RoutesArr);
+    setDateInput(inputRoutes.map(savedRouteToDateInput));
   };
 
   const handleSelectedStopChange = (
@@ -288,10 +320,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
   ) => {
     setDateInput((prev) => {
       const i = [...prev];
-      i[index] = {
-        arr: e.target.value ?? "",
-        dep: i[index]?.dep ?? "",
-      };
+      if (i[index]) i[index].arr = e.target.value ?? i[index].arr;
       return i;
     });
     if (e.target.valueAsDate == null) return;
@@ -308,12 +337,27 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
     setInput(newInput);
     setDateInput((prev) => {
       const i = [...prev];
-      i[index] = {
-        arr: "",
-        dep: i[index]?.dep ?? "",
-      };
+      if (i[index]) i[index].arr = "";
       return i;
     });
+  };
+  const handleDepartureTimeChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    setDateInput((prev) => {
+      const i = [...prev];
+      if (!i[index]) i[index] = { arr: "", dep: e.target.value };
+      i[index].dep ??= "";
+      return i;
+    });
+    if (e.target.value == "") return;
+    const newInput = [...input];
+    const fixedDateTime = DateTime.fromFormat(e.target.value, "HH:mm", {
+      zone: NEWYORK_TIMEZONE,
+    });
+    newInput[index]!.deptTime = fixedDateTime.toJSDate();
+    setInput(newInput);
   };
 
   return (
@@ -337,7 +381,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
             value: stop.id,
             label: `${stop.id} ${stop.name}`,
           }))}
-          value={selectedStops.map((stop) => ({
+          value={(selectedStops ?? []).map((stop) => ({
             value: stop,
             label: `${stop} ${stops?.find((s) => s.id === stop)?.name}`,
           }))}
@@ -397,25 +441,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                     type="time"
                     className="flex-1 p-1"
                     value={dateInput.at(index)?.dep}
-                    onChange={(e) => {
-                      setDateInput((prev) => {
-                        const i = [...prev];
-                        i[index] = {
-                          arr: i[index]?.arr ?? "",
-                          dep: e.target.value ?? "",
-                        };
-                        return i;
-                      });
-                      if (e.target.value == "") return;
-                      const newInput = [...input];
-                      const fixedDateTime = DateTime.fromFormat(
-                        e.target.value,
-                        "HH:mm",
-                        { zone: NEWYORK_TIMEZONE },
-                      );
-                      newInput[index]!.deptTime = fixedDateTime.toJSDate();
-                      setInput(newInput);
-                    }}
+                    onChange={(e) => handleDepartureTimeChange(e, index)}
                   />
                 </div>
               ))
@@ -447,7 +473,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
           Add multiple
         </button>
         <button
-          onClick={rmRoute}
+          onClick={rmLastRoute}
           className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
         >
           <IoMdTrash color="rgb(239 68 68 / var(--tw-border-opacity))" />
@@ -468,7 +494,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
           Revert Changes
         </button>
       </div>
-      <EditRoutesByFile onParse={console.log} />
+      <EditRoutesByFile onParse={handleFileParse} />
     </>
   );
 }

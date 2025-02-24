@@ -63,6 +63,31 @@ export const stopsRouter = createTRPCRouter({
         })
         .then((bus) => bus?.stops);
     }),
+  getStopIdsByBusID: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      return ctx.db.bus
+        .findFirst({
+          where: {
+            id: input.busId,
+          },
+          select: {
+            stops: {
+              select: {
+                id: true,
+              },
+              orderBy: {
+                id: "asc",
+              },
+            },
+          },
+        })
+        .then((bus) => bus?.stops.map((stop) => stop.id));
+    }),
   getCoorOfAllStop: publicProcedure.query(({ ctx }) =>
     ctx.db.stops.findMany({
       select: {
