@@ -7,6 +7,7 @@ import { SignedIn } from "@clerk/nextjs";
 import _ from "lodash";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import Image from "next/image";
 import { Suspense } from "react";
 import { api } from "t/server";
 import WelcomePopup from "./_components/welcome";
@@ -24,6 +25,14 @@ export default async function Home() {
       <Suspense fallback={<BusListSkeleton />}>
         <BusList />
       </Suspense>
+      <div className=" relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
+        <Image
+          src="/images/unofficial-diagram-of-the-rit-shuttle-system-v0-crop.webp"
+          alt="Unofficial diagram of the RIT shuttle system"
+          width="1080"
+          height="720"
+        ></Image>
+      </div>
       <div className=" relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
         <Suspense fallback={<p>Loading map...</p>}>
           <HomeMap />
