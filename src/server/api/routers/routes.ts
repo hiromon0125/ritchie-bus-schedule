@@ -292,10 +292,6 @@ export const routesRouter = createTRPCRouter({
         },
       });
       if (!res) return false;
-      // TODO: Disable isWeekend for the future but support both for previous versions
-      if (res.isWeekend != null) {
-        return res.isWeekend === now.isWeekend;
-      }
       const opDay = _.find(res.operatingDays, (opDay) => {
         const { day, isWeekly } = opDay;
         const nowDate = now.date;

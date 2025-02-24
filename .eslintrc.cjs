@@ -5,7 +5,7 @@ const config = {
     project: true,
   },
   plugins: [
-    // @ts-ignore
+    // @ts-expect-error no plugin property idk
     "@typescript-eslint",
   ],
   extends: [
