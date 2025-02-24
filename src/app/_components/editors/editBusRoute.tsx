@@ -125,8 +125,8 @@ function savedRoutesToDateInputs(
 }
 
 function wasAllStopFound(
-  stops: { stop: string | Stops; type: string }[],
-): stops is { stop: Stops; type: string }[] {
+  stops: { stop: string | Stops; isArrival: boolean }[],
+): stops is { stop: Stops; isArrival: boolean }[] {
   return stops.every((stop) => typeof stop.stop !== "string");
 }
 
@@ -225,34 +225,43 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
     const firstRow = data[0]!;
     const stopNames = Object.keys(firstRow);
     const usedStops = stopNames.map((name) => {
+      let stopName = name.toLowerCase();
+      let isArrival = false;
+      if (stopName.trim().endsWith(" arrival")) {
+        stopName = stopName.slice(0, -8).trim();
+        isArrival = true;
+      } else if (stopName.trim().endsWith(" departure")) {
+        stopName = stopName.slice(0, -10).trim();
+      }
       return {
         stop:
-          stops?.find((stop) => stop.name.trim().toLowerCase() === name) ??
+          stops?.find((stop) => stop.name.trim().toLowerCase() === stopName) ??
           name,
-        type: name.toLowerCase().endsWith(" arrival") ? "arrival" : "departure",
+        isArrival,
       };
     });
     if (!wasAllStopFound(usedStops)) {
       console.error(
-        `Invalid stop name: ${usedStops.filter((s) => typeof s.stop === "string").reduce((acc, s) => `${acc}, ${s.stop as string}`, "")}`,
+        `Invalid stop name: ${usedStops.filter((s) => typeof s.stop === "string").reduce((acc, s) => `${acc}, ${(s.stop as string).trim().toLowerCase()}`, "")}`,
       );
       return;
     }
     const stopMap = _.zipObject(stopNames, usedStops);
     const routeTemplate = {
       busId,
-      arriTime: null,
+      arriTime: undefined,
     };
-    const times = data.map((row, rowIndex) => {
+    const times = data.map((row, ri) => {
+      const rowIndex = ri * stopNames.length;
       const res: Record<Stops["id"], RouteInput> = {};
       // Merging departure and arrival times into a single object also indexed to keep order
-      _.sortBy(Object.entries(row), (o) => o[1]).forEach(([k, v], index) => {
+      Object.entries(row).forEach(([k, v], index) => {
         if (v === "") return undefined;
         const stopId = stopMap[k]!.stop.id;
-        const time = DateTime.fromFormat(v, "HH:mm a", {
+        const time = DateTime.fromFormat(v, "h:mm a", {
           zone: NEWYORK_TIMEZONE,
         }).toJSDate();
-        if (stopMap[k]?.type === "arrival") {
+        if (stopMap[k]?.isArrival) {
           if (res[stopId] == undefined) {
             res[stopId] = {
               ...routeTemplate,
