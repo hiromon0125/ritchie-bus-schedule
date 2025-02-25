@@ -11,32 +11,32 @@ datasource db {
 model Bus {
   id            Int                  @id @default(autoincrement())
   name          String
-  tag           String?
   description   String               @default("")
   color         String               @default("#000000")
-  isVisible     Boolean              @default(true)
-  isWeekend     Boolean?
   createdAt     DateTime             @default(now())
   updatedAt     DateTime             @updatedAt
+  isWeekend     Boolean?
+  tag           String?
+  isVisible     Boolean              @default(true)
+  operatingDays BusOperatingDay[]
   favUsers      FavoriteBus[]
   routes        Routes[]
-  stops         Stops[]
-  operatingDays BusOperatingDay[]
   serviceInfo   ServiceInformation[]
+  stops         Stops[]              @relation("BusToStops")
 }
 
 model Stops {
   id          Int            @id @default(autoincrement())
   name        String
-  tag         String?
-  description String         @default("")
   latitude    Float          @default(0)
   longitude   Float          @default(0)
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+  description String         @default("")
+  tag         String?
   favUsers    FavoriteStop[]
   routes      Routes[]
-  buses       Bus[]
+  buses       Bus[]          @relation("BusToStops")
 }
 
 model Routes {
@@ -48,8 +48,8 @@ model Routes {
   arriTime  DateTime?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  bus       Bus       @relation(fields: [busId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  stop      Stops     @relation(fields: [stopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bus       Bus       @relation(fields: [busId], references: [id], onDelete: Cascade)
+  stop      Stops     @relation(fields: [stopId], references: [id], onDelete: Cascade)
 
   @@index([busId])
   @@index([stopId])
@@ -59,10 +59,10 @@ model FavoriteStop {
   id        Int      @id @default(autoincrement())
   userId    String
   stopId    Int
-  priority  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  stop      Stops    @relation(fields: [stopId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  priority  Int
+  stop      Stops    @relation(fields: [stopId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([stopId])
@@ -72,10 +72,10 @@ model FavoriteBus {
   id        Int      @id @default(autoincrement())
   userId    String
   busId     Int
-  priority  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  priority  Int
+  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([busId])
@@ -93,15 +93,17 @@ model BusOperatingDay {
   isWeekly  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade)
 }
 
 model ServiceInformation {
-  id        Int      @id @default(autoincrement())
-  type      String
   content   String
   busId     Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  hash      String
+  title     String
+  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade)
+
+  @@id([hash, busId])
 }

@@ -3,6 +3,7 @@ import { busRouter } from "./routers/bus";
 import { favoriteRouter } from "./routers/favorite";
 import { manageRouter } from "./routers/manage";
 import { routesRouter } from "./routers/routes";
+import { serviceInfoRouter } from "./routers/serviceInfo";
 import { stopsRouter } from "./routers/stops";
 
 /**
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   stops: stopsRouter,
   favorite: favoriteRouter,
   manager: manageRouter,
+  serviceinfo: serviceInfoRouter,
 });
 
 // export type definition of API
