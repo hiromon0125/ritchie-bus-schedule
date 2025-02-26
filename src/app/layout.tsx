@@ -9,6 +9,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
 import { Toaster } from "~/components/ui/toaster";
+import { ServiceInfoProvider } from "./_components/serviceinfo";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,9 +35,11 @@ export default async function RootLayout({
           suppressHydrationWarning
         >
           <TRPCReactProvider cookies={(await cookies()).toString()}>
-            {children}
-            <Footer />
-            <Toaster />
+            <ServiceInfoProvider>
+              {children}
+              <Footer />
+              <Toaster />
+            </ServiceInfoProvider>
           </TRPCReactProvider>
         </body>
       </html>

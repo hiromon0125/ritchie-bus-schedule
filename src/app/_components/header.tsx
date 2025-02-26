@@ -6,6 +6,7 @@ import { HiHome } from "react-icons/hi2";
 import { MdDirectionsBus } from "react-icons/md";
 import { BusStopIcon } from "./icons";
 import { ProfileBtnComponent } from "./profileBtnWrapper";
+import ServiceInfoButton from "./serviceinfo";
 
 type RouteOptions = "home" | "bus" | "stop" | "about";
 
@@ -59,11 +60,11 @@ export default function Header({
                   Stops
                 </p>
               </Link>
-              <Link href="/about">
+              <ServiceInfoButton>
                 <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
-                  About
+                  Alert
                 </p>
-              </Link>
+              </ServiceInfoButton>
               <Protect role="org:admin">
                 <Link href="/manage">
                   <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">

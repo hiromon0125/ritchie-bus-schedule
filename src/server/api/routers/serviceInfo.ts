@@ -5,10 +5,12 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 export const serviceInfoRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
-      z.object({
-        includeRelatedBus: z.boolean().optional(),
-        busId: z.number().optional(),
-      }),
+      z
+        .object({
+          includeRelatedBus: z.boolean().optional(),
+          busId: z.number().optional(),
+        })
+        .optional(),
     )
     .query(({ ctx, input }) =>
       ctx.db.serviceInformation
@@ -26,7 +28,7 @@ export const serviceInfoRouter = createTRPCRouter({
             (acc, info) => {
               const ind = acc.findIndex((i) => i.hash === info.hash);
               if (ind != -1) {
-                if (input.includeRelatedBus) acc[ind]!.buses!.push(info.bus);
+                if (input?.includeRelatedBus) acc[ind]!.buses!.push(info.bus);
                 acc[ind]!.busIds.push(info.busId);
                 return acc;
               }
@@ -35,7 +37,7 @@ export const serviceInfoRouter = createTRPCRouter({
                 content: info.content,
                 hash: info.hash,
                 busIds: [info.busId],
-                ...(input.includeRelatedBus ? { buses: [info.bus] } : {}),
+                ...(input?.includeRelatedBus ? { buses: [info.bus] } : {}),
                 createdAt: info.createdAt,
                 updatedAt: info.updatedAt,
               });
@@ -91,8 +93,8 @@ export const serviceInfoRouter = createTRPCRouter({
         );
       const mut = await Promise.allSettled(
         input
-          .map(async (serviceInfo) =>
-            serviceInfo.buses.map((busName) => {
+          .map((serviceInfo) =>
+            serviceInfo.buses.map(async (busName) => {
               const busId = busIds[busName.replace(/^\d+\s+/, "")];
               if (busId === undefined) {
                 console.error(
@@ -105,13 +107,13 @@ export const serviceInfoRouter = createTRPCRouter({
                 content: serviceInfo.content,
                 hash: serviceInfo.hash,
                 createdAt: new Date(serviceInfo.timestamp),
-                busId: busId,
+                busId,
               };
-              return ctx.db.serviceInformation.upsert({
+              return await ctx.db.serviceInformation.upsert({
                 where: {
                   hash_busId: {
                     hash: serviceInfo.hash,
-                    busId: busIds[busName]!,
+                    busId: busId,
                   },
                 },
                 create: newInfo,

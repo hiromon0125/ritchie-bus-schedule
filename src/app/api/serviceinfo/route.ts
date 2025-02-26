@@ -43,16 +43,17 @@ export async function POST() {
     return new Response("Invalid service info", { status: 500 });
   }
   try {
-    await api.serviceinfo.createServiceInfo(parsed.data.data);
+    const res = await api.serviceinfo.createServiceInfo(parsed.data.data);
+    console.log(res.length);
+    return new Response(`Service info successfully updated: ${res.length}`, {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (e) {
     return new Response(`Failed to update service info: ${e as Error}`, {
       status: 500,
     });
   }
-  return new Response("Service info successfully updated", {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
 }
