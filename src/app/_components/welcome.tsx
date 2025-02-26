@@ -21,8 +21,7 @@ import Coffee from "./buymecoffee";
 import ServiceInfoButton, { ServiceInfoContext } from "./serviceinfo";
 export default function WelcomePopup() {
   const [state, setState] = useLocalStorage("welcome", true);
-  const { state: isServiceInfoOpen, setState: setServiceInfoState } =
-    useContext(ServiceInfoContext);
+  const { state: isServiceInfoOpen } = useContext(ServiceInfoContext);
   const isWelcomeOpen = state && !isServiceInfoOpen; // to prevent both popups from showing at the same time
   return (
     <Dialog open={isWelcomeOpen} onOpenChange={setState}>
@@ -44,7 +43,7 @@ export default function WelcomePopup() {
             <DialogTitle className=" text-center text-2xl">
               Welcome!
             </DialogTitle>
-            <DialogDescription className=" text-base">
+            <DialogDescription className=" pb-4 text-base">
               Richie’s Bus Schedule is a place to quickly grab the next
               scheduled bus stop and never be late for a bus again.
             </DialogDescription>
@@ -77,21 +76,10 @@ export default function WelcomePopup() {
               </div>
               <div className=" flex w-full flex-row items-center justify-between">
                 <div className="left flex flex-row gap-2">
-                  <DialogClose
-                    asChild
-                    onClick={() => setServiceInfoState(true)}
-                  >
-                    <ServiceInfoButton>
-                      <Button
-                        variant={"outline"}
-                        size="sm"
-                        className="rounded-lg border-2 border-blue-500 p-2 text-xs text-blue-500 hover:text-white"
-                      >
-                        <MdOutlineBusAlert className=" scale-125" />
-                        Service Alert
-                      </Button>
-                    </ServiceInfoButton>
-                  </DialogClose>
+                  <ServiceInfoButton className="flex flex-row items-center gap-2 rounded-lg border-2 border-blue-500 p-2 text-xs text-blue-500 hover:text-white">
+                    <MdOutlineBusAlert className=" scale-150" />
+                    Service Alert
+                  </ServiceInfoButton>
                   <Button
                     variant={"outline"}
                     size="sm"
