@@ -130,6 +130,15 @@ export const serviceInfoRouter = createTRPCRouter({
             errors.reduce((acc, err) => acc + "\n" + err.reason, ""),
         );
       }
+      // Remove any old service info that is not in the new data
+      await ctx.db.serviceInformation.deleteMany({
+        where: {
+          hash: {
+            notIn: input.map((i) => i.hash),
+          },
+        },
+      });
+
       return mut;
     }),
 });

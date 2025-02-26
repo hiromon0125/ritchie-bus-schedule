@@ -27,13 +27,7 @@ export function StopTag({
   );
 }
 
-export async function BusTag({
-  bus,
-  size = "md",
-}: {
-  bus: Bus;
-  size?: TagSize;
-}) {
+export function BusTag({ bus, size = "md" }: { bus: Bus; size?: TagSize }) {
   return (
     <div
       className={cn(

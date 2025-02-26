@@ -25,13 +25,6 @@ function Footer() {
             >
               {" "}
               Hiroto Takeuchi
-            </a>{" "}
-            and{" "}
-            <a
-              className=" text-slate-200 underline"
-              href="https://github.com/0SMA0"
-            >
-              Sam Ruan
             </a>
             .<br />
             <br />

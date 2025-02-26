@@ -16,7 +16,7 @@ const SERVICE_INFO_SCHEMA = z.object({
   ),
 });
 
-export async function POST() {
+export async function GET() {
   if (env.SERVICE_INFO_LINK === undefined) {
     return new Response("Service info link not set", { status: 500 });
   } else if (env.SERVICE_INFO_SECRET_KEY === undefined) {
