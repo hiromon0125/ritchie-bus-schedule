@@ -9,17 +9,11 @@ import { api } from "t/server";
 
 export const dynamic = "force-dynamic";
 
-async function favoriteStop(stopId: number) {
-  "use server";
-  await api.favorite.addStop({ stopId });
+async function handleFavorite(stopId: number, isFav: boolean) {
+  await api.favorite[isFav ? "delStop" : "addStop"]({ stopId });
   revalidatePath("/stops");
 }
 
-async function unfavoriteStop(stopId: number) {
-  "use server";
-  await api.favorite.delStop({ stopId });
-  revalidatePath("/stops");
-}
 export default async function StopList() {
   const user = await currentUser();
   const stops = await api.stops.getAll({ includeRelatedBus: true });
@@ -41,8 +35,7 @@ export default async function StopList() {
                 isFavorited={isFav}
                 onClick={async () => {
                   "use server";
-                  if (user)
-                    await (isFav ? unfavoriteStop : favoriteStop)(stop.id);
+                  await handleFavorite(stop.id, isFav);
                 }}
               />
             </div>
