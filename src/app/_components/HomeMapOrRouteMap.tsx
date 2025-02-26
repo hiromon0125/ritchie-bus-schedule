@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
-import { DotMap } from "@/Map";
 import Image from "next/image";
+import { Suspense } from "react";
 import { Switch } from "~/components/ui/switch";
+import { HomeMap } from "~/app/page"
 
 export default function HomeMapOrRouteMap() {
   const [isMapVisible, setMapVisible] = useState<boolean>(false);
@@ -31,16 +32,4 @@ export default function HomeMapOrRouteMap() {
       </div>
     </>
   );
-}
-
-async function HomeMap() {
-  const coors = (await api.stops.getCoorOfAllStop())
-    .map((stop) => ({
-      lat: stop.latitude,
-      lng: stop.longitude,
-      tag: stop.tag ?? stop.id,
-      name: stop.name,
-    }))
-    .filter((coor) => coor.lat !== 0 && coor.lng !== 0);
-  return <DotMap markers={coors} />;
 }

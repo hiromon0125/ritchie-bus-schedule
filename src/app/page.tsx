@@ -1,5 +1,7 @@
+"use server";
 import { BusList, BusListSkeleton } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
+import { DotMap } from "@/Map";
 import Header from "@/header";
 import { BusTag, StopTag } from "@/tags";
 import { SignedIn } from "@clerk/nextjs";
@@ -8,7 +10,7 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
-import HomeMapOrRouteMap from "./_components/HomeMap";
+import HomeMapOrRouteMap from "./_components/HomeMapOrRouteMap";
 import WelcomePopup from "./_components/welcome";
 
 export const dynamic = "force-dynamic";
@@ -79,4 +81,16 @@ async function StopView({ stopId }: { stopId: number }) {
       />
     </div>
   );
+}
+
+export async function HomeMap() {
+  const coors = (await api.stops.getCoorOfAllStop())
+    .map((stop) => ({
+      lat: stop.latitude,
+      lng: stop.longitude,
+      tag: stop.tag ?? stop.id,
+      name: stop.name,
+    }))
+    .filter((coor) => coor.lat !== 0 && coor.lng !== 0);
+  return <DotMap markers={coors} />;
 }
