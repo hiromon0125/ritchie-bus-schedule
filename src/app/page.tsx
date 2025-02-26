@@ -1,15 +1,14 @@
 import { BusList, BusListSkeleton } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
 import Header from "@/header";
-import { DotMap } from "@/Map";
 import { BusTag, StopTag } from "@/tags";
 import { SignedIn } from "@clerk/nextjs";
 import _ from "lodash";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
-import Image from "next/image";
 import { Suspense } from "react";
 import { api } from "t/server";
+import HomeMapOrRouteMap from "./_components/HomeMap";
 import WelcomePopup from "./_components/welcome";
 
 export const dynamic = "force-dynamic";
@@ -25,19 +24,7 @@ export default async function Home() {
       <Suspense fallback={<BusListSkeleton />}>
         <BusList />
       </Suspense>
-      <div className=" relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
-        <Image
-          src="/images/unofficial-diagram-of-the-rit-shuttle-system-v0-crop.webp"
-          alt="Unofficial diagram of the RIT shuttle system"
-          width="1080"
-          height="720"
-        ></Image>
-      </div>
-      <div className=" relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
-        <Suspense fallback={<p>Loading map...</p>}>
-          <HomeMap />
-        </Suspense>
-      </div>
+      <HomeMapOrRouteMap></HomeMapOrRouteMap>
     </main>
   );
 }
@@ -92,16 +79,4 @@ async function StopView({ stopId }: { stopId: number }) {
       />
     </div>
   );
-}
-
-async function HomeMap() {
-  const coors = (await api.stops.getCoorOfAllStop())
-    .map((stop) => ({
-      lat: stop.latitude,
-      lng: stop.longitude,
-      tag: stop.tag ?? stop.id,
-      name: stop.name,
-    }))
-    .filter((coor) => coor.lat !== 0 && coor.lng !== 0);
-  return <DotMap markers={coors} />;
 }
