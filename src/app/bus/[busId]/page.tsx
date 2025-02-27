@@ -193,7 +193,7 @@ async function SelectableStopInfo({
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
-            <BusStatus busId={bus.id} hideStopName />
+            <BusStatus busId={bus.id} stopId={stopObj.id} hideStopName />
           </Suspense>
         </div>
       </Link>
