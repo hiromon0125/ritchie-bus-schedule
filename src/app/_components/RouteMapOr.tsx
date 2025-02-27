@@ -3,7 +3,11 @@ import { useState } from "react";
 import Image from "next/image";
 import { Switch } from "~/components/ui/switch";
 
-export default function RouteMapOr({ children }: { children: React.ReactNode }) {
+export default function RouteMapOr({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isMapVisible, setMapVisible] = useState<boolean>(false);
   return (
     <>
