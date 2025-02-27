@@ -76,7 +76,7 @@ export default function WelcomePopup() {
               </div>
               <div className=" flex w-full flex-row items-center justify-between">
                 <div className="left flex flex-row gap-2">
-                  <ServiceInfoButton className="flex flex-row items-center gap-2 rounded-lg border-2 border-blue-500 p-2 text-xs text-blue-500 hover:text-white">
+                  <ServiceInfoButton className="flex max-h-8 flex-row items-center gap-2 rounded-lg border-2 border-blue-500 p-2 text-xs text-blue-500 hover:bg-blue-500 hover:text-white">
                     <MdOutlineBusAlert className=" scale-150" />
                     Service Alert
                   </ServiceInfoButton>
