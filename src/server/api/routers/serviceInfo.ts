@@ -55,6 +55,13 @@ export const serviceInfoRouter = createTRPCRouter({
           );
         }),
     ),
+  getCount: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.serviceInformation
+      .findMany({
+        distinct: "hash",
+      })
+      .then((l) => l.length);
+  }),
   createServiceInfo: publicProcedure
     .input(
       z.array(

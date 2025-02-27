@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { HiHome } from "react-icons/hi2";
 import { MdDirectionsBus } from "react-icons/md";
+import { api } from "../../trpc/server";
 import { BusStopIcon } from "./icons";
 import { ProfileBtnComponent } from "./profileBtnWrapper";
 import ServiceInfoButton from "./serviceinfo";
@@ -60,11 +61,17 @@ export default function Header({
                   Stops
                 </p>
               </Link>
-              <ServiceInfoButton>
-                <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
-                  Alert
-                </p>
-              </ServiceInfoButton>
+              <Suspense
+                fallback={
+                  <ServiceInfoButton>
+                    <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+                      Alert
+                    </p>
+                  </ServiceInfoButton>
+                }
+              >
+                <AlertNavigation />
+              </Suspense>
               <Protect role="org:admin">
                 <Link href="/manage">
                   <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
@@ -178,5 +185,21 @@ function MobileHeader({
         </div>
       </div>
     </>
+  );
+}
+
+export async function AlertNavigation() {
+  const count = await api.serviceinfo.getCount();
+  return (
+    <ServiceInfoButton className=" flex flex-row items-center gap-1 px-3">
+      {count > 0 && (
+        <div className=" aspect-square h-5 rounded-full bg-red-500 font-bold text-white">
+          <p>{count}</p>
+        </div>
+      )}
+      <p className=" text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
+        Alert
+      </p>
+    </ServiceInfoButton>
   );
 }
