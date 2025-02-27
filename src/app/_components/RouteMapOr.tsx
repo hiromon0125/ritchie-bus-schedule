@@ -11,7 +11,7 @@ export default function RouteMapOr({
   const [isMapVisible, setMapVisible] = useState<boolean>(false);
   return (
     <>
-      <div className="m-[5px] ml-[2em]">
+      <div className="m-[5px] ml-[2em] w-[--sm-max-w] md:max-w-screen-lg">
         <label>
           Show map{" "}
           <Switch
