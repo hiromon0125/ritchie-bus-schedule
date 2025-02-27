@@ -19,6 +19,7 @@ import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { api } from "t/server";
+import { ServiceInfoContentDecorator } from "../../_components/serviceinfo";
 
 type Props = {
   params: Promise<{ busId: string }>;
@@ -227,12 +228,14 @@ async function BusServiceInfo({ busId }: { busId: number }) {
         {infoService.map((alert) => (
           <div key={alert.hash} className=" flex flex-col gap-2">
             <div className=" flex flex-row items-center gap-4">
-              <p className=" text-lg font-semibold">{alert.title}</p>
+              <p className=" text-lg font-bold">{alert.title}</p>
               <p className=" text-sm font-semibold text-[#63646e]">
                 {DateTime.fromJSDate(alert.createdAt).toFormat("LLL dd")}
               </p>
             </div>
-            <div className=" text-base">{alert.content}</div>
+            <div className=" text-base">
+              <ServiceInfoContentDecorator content={alert.content} />
+            </div>
           </div>
         ))}
       </div>

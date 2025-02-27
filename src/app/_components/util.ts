@@ -1,3 +1,5 @@
+import { type Bus } from "@prisma/client";
+import _ from "lodash";
 import { DateTime } from "luxon";
 import type { BusRoute, Status } from "./types";
 
@@ -153,4 +155,52 @@ export function evalStatusFromRoute(
       nextUpdate: getTimeToUpdateNext(offsetTime ?? "minutes"),
     };
   }
+}
+
+type SplitResult = { text: string; bus?: Bus };
+const normalize = (str: string) => str.normalize("NFKD");
+
+/**
+ * This function is used for splitting the serviceinfo paragraph into parts based on bus names
+ */
+export function splitByKeywords(
+  content: string,
+  keywords: string[],
+  buses: Bus[],
+): SplitResult[] {
+  const baseString = normalize(content);
+  if (_.isEmpty(keywords)) return [{ text: baseString }];
+
+  // Sort keywords by length in descending order to prioritize superstrings
+  const sortedKeywords = _.orderBy(keywords, [(k) => k.length], ["desc"]);
+  const regex = new RegExp(
+    `(${sortedKeywords.map((o) => _.escapeRegExp(o)).join("|")})`,
+    "g",
+  );
+
+  let lastIndex = 0;
+
+  return _.reduce(
+    [...baseString.matchAll(regex)],
+    (parts, match) => {
+      const offset = match.index ?? 0;
+
+      if (offset > lastIndex)
+        parts.push({
+          text: baseString.slice(lastIndex, offset),
+        });
+      const matchedBus = buses.find((bus) =>
+        match[0].toLowerCase().includes(bus.name.toLowerCase()),
+      );
+      parts.push({ text: match[0], bus: matchedBus });
+      lastIndex = offset + match[0].length;
+
+      return parts;
+    },
+    [] as SplitResult[],
+  ).concat(
+    lastIndex < baseString.length
+      ? [{ text: baseString.slice(lastIndex) }]
+      : [],
+  );
 }

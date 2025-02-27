@@ -6,6 +6,7 @@ import {
   type ButtonHTMLAttributes,
   createContext,
   useContext,
+  useMemo,
   useState,
 } from "react";
 import {
@@ -18,6 +19,7 @@ import {
 import { Button } from "../../components/ui/button";
 import { api } from "../../trpc/react";
 import { BusTag } from "./tags";
+import { splitByKeywords } from "./util";
 
 export const ServiceInfoContext = createContext({
   state: false,
@@ -95,7 +97,9 @@ export function ServiceInfoProvider({
                       {alert.buses?.map((bus) => bus.name).join(", ")}
                     </p>
                   </div>
-                  <div className=" text-base">{alert.content}</div>
+                  <div className=" text-base">
+                    <ServiceInfoContentDecorator content={alert.content} />
+                  </div>
                   <div className=" h-[2px] w-full rounded-full bg-slate-600" />
                 </div>
               ))}
@@ -134,5 +138,35 @@ export default function ServiceInfoButton(
     <button {...prop} onClick={() => setState(true)}>
       {prop.children}
     </button>
+  );
+}
+
+export function ServiceInfoContentDecorator({ content }: { content: string }) {
+  const { data: busNames } = api.bus.getAll.useQuery();
+  const busNameList = useMemo(
+    () =>
+      busNames
+        ?.map((bus) => [
+          `${bus.tag ?? bus.id} ${bus.name} shuttle`,
+          `${bus.tag ?? bus.id} ${bus.name}`,
+          bus.name,
+        ])
+        .flat() ?? [],
+    [busNames],
+  );
+  const contentWrapped = useMemo(
+    () => splitByKeywords(content, busNameList ?? [], busNames ?? []),
+    [content, busNameList, busNames],
+  );
+  return contentWrapped.map((item, index) =>
+    item.bus ? (
+      <b key={index} className="text-base">
+        <a href={`/bus/${item.bus.id}`}>{item.text}</a>
+      </b>
+    ) : (
+      <span key={index} className="text-base">
+        {item.text}
+      </span>
+    ),
   );
 }
