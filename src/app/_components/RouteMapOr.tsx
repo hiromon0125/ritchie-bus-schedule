@@ -1,11 +1,9 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Suspense } from "react";
 import { Switch } from "~/components/ui/switch";
-import { HomeMap } from "~/app/page"
 
-export default function HomeMapOrRouteMap() {
+export default function RouteMapOr({ children }: { children: React.ReactNode }) {
   const [isMapVisible, setMapVisible] = useState<boolean>(false);
   return (
     <>
@@ -18,9 +16,7 @@ export default function HomeMapOrRouteMap() {
       </div>
       <div className=" relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
         {isMapVisible ? (
-          <Suspense fallback={<p>Loading map...</p>}>
-            <HomeMap />
-          </Suspense>
+          children
         ) : (
           <Image
             src="/images/unofficial-diagram-of-the-rit-shuttle-system-v0-crop.webp"

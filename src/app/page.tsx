@@ -1,4 +1,3 @@
-"use server";
 import { BusList, BusListSkeleton } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
 import { DotMap } from "@/Map";
@@ -10,7 +9,7 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
-import HomeMapOrRouteMap from "./_components/HomeMapOrRouteMap";
+import RouteMapOr from "./_components/RouteMapOr";
 import WelcomePopup from "./_components/welcome";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +25,11 @@ export default async function Home() {
       <Suspense fallback={<BusListSkeleton />}>
         <BusList />
       </Suspense>
-      <HomeMapOrRouteMap></HomeMapOrRouteMap>
+      <RouteMapOr>
+        <Suspense fallback={<p>Loading map...</p>}>
+          <HomeMap />
+        </Suspense>
+      </RouteMapOr>
     </main>
   );
 }
