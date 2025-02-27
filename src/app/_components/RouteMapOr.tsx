@@ -15,8 +15,6 @@ export default function RouteMapOr({
         <label>
           Show map{" "}
           <Switch
-            id="maptoggle"
-            name="maptoggle"
             checked={isMapVisible}
             onClick={() => setMapVisible(!isMapVisible)}
           />
