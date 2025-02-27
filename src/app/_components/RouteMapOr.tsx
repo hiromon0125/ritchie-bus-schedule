@@ -11,12 +11,16 @@ export default function RouteMapOr({
   const [isMapVisible, setMapVisible] = useState<boolean>(false);
   return (
     <>
-      <div>
-        <p>Show map</p>
-        <Switch
-          checked={isMapVisible}
-          onClick={() => setMapVisible(!isMapVisible)}
-        />
+      <div className="m-[5px] ml-[2em]">
+        <label>
+          Show map{" "}
+          <Switch
+            id="maptoggle"
+            name="maptoggle"
+            checked={isMapVisible}
+            onClick={() => setMapVisible(!isMapVisible)}
+          />
+        </label>
       </div>
       <div className=" relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
         {isMapVisible ? (
