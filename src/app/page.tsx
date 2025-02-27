@@ -26,9 +26,11 @@ export default async function Home() {
         <BusList />
       </Suspense>
       <RouteMapOr>
-        <Suspense fallback={<p>Loading map...</p>}>
-          <HomeMap />
-        </Suspense>
+        <div className="relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
+          <Suspense fallback={<p>Loading map...</p>}>
+            <HomeMap />
+          </Suspense>
+        </div>
       </RouteMapOr>
     </main>
   );
