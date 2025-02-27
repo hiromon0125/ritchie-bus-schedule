@@ -227,9 +227,10 @@ async function SelectableBusInfo({
       >
         <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
         <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
-          <div className=" mr-1 flex flex-1 flex-row items-center pl-4 pr-2 pt-2">
+          <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-4 pr-2 pt-2">
+            <BusTag bus={busObj} />
             <h2 className=" w-0 flex-1 overflow-hidden text-ellipsis text-nowrap text-left font-bold md:text-xl">
-              {busObj.id} | {busObj?.name}
+              {busObj?.name}
             </h2>
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
