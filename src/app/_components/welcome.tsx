@@ -38,7 +38,7 @@ export default function WelcomePopup() {
           </div>
           <div className=" h-3 w-full bg-gradient-to-b from-[#e1ecf7] to-[#e1ecf700]" />
         </div>
-        <div className=" flex flex-col gap-4 p-4 pt-0">
+        <div className=" flex flex-col gap-4 p-4 pb-3 pt-0">
           <DialogHeader>
             <DialogTitle className=" text-center text-2xl">
               Welcome!
@@ -101,6 +101,13 @@ export default function WelcomePopup() {
                 <div className="right flex flex-row gap-2">
                   <Coffee size="small" />
                 </div>
+              </div>
+              <div className=" flex flex-row items-center justify-between text-gray-600">
+                <p className=" text-xs">© 2025 Open Source on Github</p>
+                <p className=" text-xs">
+                  Designed & Developed by{" "}
+                  <a href="https://github.com/hiromon0125">Hiro</a>
+                </p>
               </div>
             </div>
           </DialogFooter>
