@@ -11,21 +11,21 @@ export function FavBtn({
 }: {
   isFavorited: boolean;
   size?: number;
-  onClick?: () => void;
-} & React.ComponentProps<"button">) {
+  onClick?: () => Promise<void> | void;
+} & Omit<React.ComponentProps<"button">, "onClick">) {
   const { user } = useUser();
   const [ref, hovering] = useHover();
   return (
     <button
       className={cn(props.className, " group transition-all")}
       {...props}
-      onClick={(e) => {
+      onClick={async (e) => {
         e.preventDefault();
         if (!user) {
           alert("Please log in to favorite");
           return;
         }
-        props.onClick?.();
+        await props.onClick?.();
       }}
       title={isFavorited ? "Unfavorite" : "Favorite"}
       ref={ref}

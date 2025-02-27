@@ -8,7 +8,10 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
   const stopIdNumber = z.coerce.number().parse(params.stopId);
-  const stop = await api.stops.getOneByID({ id: stopIdNumber });
+  const stop = await api.stops.getOneByID({
+    id: stopIdNumber,
+    includeHiddenBus: true,
+  });
   if (stop == null) {
     return (
       <div className=" w-full max-w-screen-lg">

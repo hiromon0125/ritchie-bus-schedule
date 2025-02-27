@@ -9,11 +9,14 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
+import WelcomePopup from "./_components/welcome";
+
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   return (
     <main className=" flex min-h-screen w-full flex-col items-center gap-3 bg-slate-100 pb-8 text-black [--margin:8px] [--sm-max-w:calc(100%-var(--margin))] xs:[--margin:24px]">
+      <WelcomePopup />
       <Header title="Home" route="home" />
       <SignedIn>
         <FavStopList />

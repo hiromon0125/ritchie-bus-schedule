@@ -11,12 +11,15 @@ import type { Bus, Stops } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
 import { track } from "@vercel/analytics/server";
 import _ from "lodash";
+import { DateTime } from "luxon";
 import { type Metadata } from "next";
 import { revalidatePath } from "next/cache";
+import Image from "next/image";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { api } from "t/server";
+import { ServiceInfoContentDecorator } from "../../_components/serviceinfo";
 
 type Props = {
   params: Promise<{ busId: string }>;
@@ -103,6 +106,9 @@ export default async function Page(props: Props) {
           <BusStatusBig busId={bus.id ?? -1} />
         </Suspense>
       </div>
+      <div>
+        <BusServiceInfo busId={bus.id} />
+      </div>
       <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
         <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
           <h1 className=" m-0 text-xl font-bold xs:text-2xl">Select Stops</h1>
@@ -187,7 +193,7 @@ async function SelectableStopInfo({
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
-            <BusStatus busId={bus.id} hideStopName />
+            <BusStatus busId={bus.id} stopId={stopObj.id} hideStopName />
           </Suspense>
         </div>
       </Link>
@@ -200,6 +206,39 @@ async function SelectableStopInfo({
           revalidatePath(`/bus/[busId]/page`);
         }}
       />
+    </div>
+  );
+}
+
+async function BusServiceInfo({ busId }: { busId: number }) {
+  const infoService = await api.serviceinfo.getAll({ busId });
+  if (!infoService || infoService.length < 1) return null;
+
+  return (
+    <div className=" flex flex-row gap-4 rounded-xl border-2 border-orange-500 bg-gradient-to-b from-orange-500/40 to-white/40 p-5">
+      <div className=" min-w-[40px] sm:min-w-[60px]">
+        <Image
+          src="/service-info-icon.png"
+          width={60}
+          height={60}
+          alt="Alert"
+        />
+      </div>
+      <div className=" pt-1">
+        {infoService.map((alert) => (
+          <div key={alert.hash} className=" flex flex-col gap-2">
+            <div className=" flex flex-row items-center gap-4">
+              <p className=" text-lg font-bold">{alert.title}</p>
+              <p className=" text-sm font-semibold text-[#63646e]">
+                {DateTime.fromJSDate(alert.createdAt).toFormat("LLL dd")}
+              </p>
+            </div>
+            <div className=" text-base">
+              <ServiceInfoContentDecorator content={alert.content} />
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
