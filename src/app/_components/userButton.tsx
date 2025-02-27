@@ -1,12 +1,17 @@
 "use client";
 import { UserButton } from "@clerk/nextjs";
-import { FaRegStar } from "react-icons/fa6";
+import { useContext } from "react";
 import { GoCodeReview } from "react-icons/go";
 import { HiHome } from "react-icons/hi2";
-import { MdDirectionsBus } from "react-icons/md";
+import { MdDirectionsBus, MdOutlineBusAlert } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
+import { cn } from "../../lib/utils";
+import { api } from "../../trpc/react";
+import { ServiceInfoContext } from "./serviceinfo";
 
 export default function ProfileButton() {
+  const { setState: openServiceInfo } = useContext(ServiceInfoContext);
+  const { data: serviceInfoCount } = api.serviceinfo.getCount.useQuery();
   return (
     <UserButton userProfileMode="navigation" userProfileUrl="/user-profile">
       <UserButton.MenuItems>
@@ -14,6 +19,21 @@ export default function ProfileButton() {
           href="/"
           label="Home"
           labelIcon={<HiHome size={16} />}
+        />
+        <UserButton.Action
+          onClick={() => openServiceInfo(true)}
+          label="Service Alert"
+          labelIcon={
+            <div
+              className={cn(
+                "flex flex-row items-center justify-center",
+                serviceInfoCount &&
+                  "m-[-4px] h-6 rounded-full border bg-red-500 text-white",
+              )}
+            >
+              <MdOutlineBusAlert className=" scale-125" />
+            </div>
+          }
         />
         <UserButton.Link
           href="/buses"
@@ -30,11 +50,12 @@ export default function ProfileButton() {
           label="About"
           labelIcon={<GoCodeReview size={16} />}
         />
+        {/* TODO: change to the official report link when implemented
         <UserButton.Link
           href="https://forms.gle/7ooRfsDzmKvHnnZ76"
           label="Rate Us!"
           labelIcon={<FaRegStar size={16} />}
-        />
+        /> */}
       </UserButton.MenuItems>
     </UserButton>
   );

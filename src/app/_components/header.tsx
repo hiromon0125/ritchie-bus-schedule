@@ -193,7 +193,7 @@ export async function AlertNavigation() {
   return (
     <ServiceInfoButton className=" flex flex-row items-center gap-1 px-3">
       {count > 0 && (
-        <div className=" aspect-square h-5 rounded-full bg-red-500 font-bold text-white">
+        <div className=" flex aspect-square h-5 flex-row items-center justify-center rounded-full bg-red-500 font-bold text-white">
           <p>{count}</p>
         </div>
       )}
