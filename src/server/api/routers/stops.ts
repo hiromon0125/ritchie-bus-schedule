@@ -11,12 +11,23 @@ export const stopsRouter = createTRPCRouter({
       z
         .object({
           includeRelatedBus: z.boolean().optional(),
+          includeHiddenBus: z.boolean().optional().default(false),
         })
         .optional(),
     )
     .query(({ ctx, input }) =>
       ctx.db.stops.findMany({
-        include: { buses: input?.includeRelatedBus ?? false },
+        include: {
+          buses: input?.includeRelatedBus
+            ? input.includeHiddenBus
+              ? true
+              : {
+                  where: {
+                    isVisible: true,
+                  },
+                }
+            : false,
+        },
         orderBy: {
           id: "asc",
         },
@@ -33,6 +44,7 @@ export const stopsRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number(),
+        includeHiddenBus: z.boolean().optional().default(false),
       }),
     )
     .query(({ ctx, input }) =>
@@ -41,7 +53,13 @@ export const stopsRouter = createTRPCRouter({
           id: input.id,
         },
         include: {
-          buses: true,
+          buses: input.includeHiddenBus
+            ? true
+            : {
+                where: {
+                  isVisible: true,
+                },
+              },
         },
       }),
     ),
