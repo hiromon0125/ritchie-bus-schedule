@@ -65,11 +65,14 @@ export function getCurrentTime(): { date: Date; isWeekend: boolean } {
   return { date: now, isWeekend: isTodayWeekend };
 }
 export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
-  const now = new Date();
   const isTodayWeekend = [6, 7].includes(
     DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
   );
   // set date to 0 so that we can compare times
+  const now = DateTime.now()
+    .setZone(NEWYORK_TIMEZONE)
+    .set({ year: 1970, month: 1, day: 1 })
+    .toJSDate();
   now.setFullYear(1970, 0, 1);
   return { date: now, isWeekend: isTodayWeekend };
 }
