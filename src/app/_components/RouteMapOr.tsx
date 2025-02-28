@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
 import Image from "next/image";
+import { useLocalStorage } from "usehooks-ts";
 import { Switch } from "~/components/ui/switch";
 
 export default function RouteMapOr({
@@ -8,32 +8,35 @@ export default function RouteMapOr({
 }: {
   children: React.ReactNode;
 }) {
-  const [isMapVisible, setMapVisible] = useState<boolean>(false);
+  const [mapType, setMapType] = useLocalStorage("mapType", "interactive");
   return (
     <>
-      <div className="m-[5px] ml-[2em] w-[--sm-max-w] md:max-w-screen-lg">
-        <label>
-          Show map{" "}
-          <Switch
-            checked={isMapVisible}
-            onClick={() => setMapVisible(!isMapVisible)}
-          />
-        </label>
-      </div>
-
-      {isMapVisible ? (
-        children
-      ) : (
-        <div className="w-[--sm-max-w] rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
-          <Image
-            src="/images/unofficial-diagram-of-the-rit-shuttle-system-v0-crop.webp"
-            alt="Unofficial diagram of the RIT shuttle system"
-            width="1080"
-            height="720"
-            className="rounded-3xl"
-          ></Image>
+      <div className="w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 bg-white md:max-w-screen-lg">
+        <div className=" flex flex-row items-center justify-between border-b-2 border-b-gray-400 px-4 py-3 md:max-w-screen-lg">
+          <h2 className=" m-0 text-xl font-bold xs:text-2xl">Map</h2>
+          <div className=" flex flex-row items-center gap-2">
+            Interactive{" "}
+            <Switch
+              checked={"interactive" === mapType}
+              onClick={() =>
+                setMapType((p) =>
+                  p === "interactive" ? "image" : "interactive",
+                )
+              }
+            />
+          </div>
         </div>
-      )}
+        {mapType === "interactive" ? (
+          children
+        ) : (
+          <Image
+            src="/images/bus-route-diagram.png"
+            alt="Unofficial diagram of the RIT shuttle system"
+            width="1728"
+            height="1008"
+          />
+        )}
+      </div>
     </>
   );
 }

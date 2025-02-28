@@ -1,7 +1,7 @@
 import { BusList, BusListSkeleton } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
-import { DotMap } from "@/Map";
 import Header from "@/header";
+import { DotMap } from "@/Map";
 import { BusTag, StopTag } from "@/tags";
 import { SignedIn } from "@clerk/nextjs";
 import _ from "lodash";
@@ -26,7 +26,7 @@ export default async function Home() {
         <BusList />
       </Suspense>
       <RouteMapOr>
-        <div className="relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
+        <div className="relative h-[60vh] overflow-hidden md:max-w-screen-lg">
           <Suspense fallback={<p>Loading map...</p>}>
             <HomeMap />
           </Suspense>
