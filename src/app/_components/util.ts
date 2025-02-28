@@ -73,7 +73,6 @@ export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
     .setZone(NEWYORK_TIMEZONE)
     .set({ year: 1970, month: 1, day: 1 })
     .toJSDate();
-  now.setFullYear(1970, 0, 1);
   return { date: now, isWeekend: isTodayWeekend };
 }
 
