@@ -88,7 +88,7 @@ async function StopView({ stopId }: { stopId: number }) {
   );
 }
 
-export async function HomeMap() {
+async function HomeMap() {
   const coors = (await api.stops.getCoorOfAllStop())
     .map((stop) => ({
       lat: stop.latitude,
