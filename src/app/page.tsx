@@ -9,6 +9,7 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
+import RouteMapOr from "./_components/RouteMapOr";
 import WelcomePopup from "./_components/welcome";
 
 export const dynamic = "force-dynamic";
@@ -24,11 +25,13 @@ export default async function Home() {
       <Suspense fallback={<BusListSkeleton />}>
         <BusList />
       </Suspense>
-      <div className=" relative mx-3 h-[60vh] w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 md:max-w-screen-lg">
-        <Suspense fallback={<p>Loading map...</p>}>
-          <HomeMap />
-        </Suspense>
-      </div>
+      <RouteMapOr>
+        <div className="relative h-[60vh] overflow-hidden md:max-w-screen-lg">
+          <Suspense fallback={<p>Loading map...</p>}>
+            <HomeMap />
+          </Suspense>
+        </div>
+      </RouteMapOr>
     </main>
   );
 }
