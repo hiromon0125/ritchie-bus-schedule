@@ -1,6 +1,5 @@
 import "~/styles/globals.css";
 
-import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
@@ -46,7 +45,6 @@ export default async function RootLayout({
           </PostHogProvider>
         </body>
       </html>
-      <Analytics />
     </ClerkProvider>
   );
 }
