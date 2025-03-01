@@ -51,6 +51,11 @@ function Footer() {
               <a className=" underline" href="https://github.com/hiromon0125">
                 Hiroto Takeuchi
               </a>
+              <br />
+              Open source assisted by{" "}
+              <a href="https://fossrit.github.io/" className=" underline">
+                FOSSRIT
+              </a>
             </p>
           </div>
           <div className=" flex w-48 flex-auto flex-row gap-3 sm:gap-8 md:justify-end">
