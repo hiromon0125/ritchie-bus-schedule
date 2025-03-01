@@ -352,9 +352,9 @@ async function Page() {
               <path
                 d="M-56.5996 26.0234H248.225C276.943 26.0234 300.225 49.3046 300.225 78.0234V515.18"
                 stroke="#21CF33"
-                stroke-width="52"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="52"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
             <div className=" relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-28">
