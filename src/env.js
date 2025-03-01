@@ -31,7 +31,8 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
+    NEXT_PUBLIC_POSTHOG_HOST: z.string().url().optional(),
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1, {
       message: "Please provide a valid Clerk publishable key.",
     }),
@@ -49,7 +50,8 @@ export const env = createEnv({
     SERVICE_INFO_LINK: process.env.SERVICE_INFO_LINK,
     SERVICE_INFO_SECRET_KEY: process.env.SERVICE_INFO_SECRET_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-    // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
+    NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POST,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
