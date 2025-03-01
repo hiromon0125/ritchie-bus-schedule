@@ -30,12 +30,15 @@ function Footer() {
               Hiroto Takeuchi
             </a>
           </p>
-          <Image
-            src="/images/speedy-bus.png"
-            alt="speedy bus"
-            width={84}
-            height={32}
-          />
+          <div className=" group">
+            <Image
+              className=" translate-x-0 transition-all duration-500 group-hover:translate-x-36 group-hover:opacity-0"
+              src="/images/speedy-bus.png"
+              alt="speedy bus"
+              width={84}
+              height={32}
+            />
+          </div>
         </div>
         <div className=" flex flex-row gap-6 border-t-2 border-t-white p-3 sm:p-6">
           <div className=" hidden w-24 flex-auto flex-col justify-between md:visible md:flex">
