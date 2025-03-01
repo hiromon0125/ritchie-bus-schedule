@@ -37,15 +37,18 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z
+      .string({
+        message:
+          "Clerk Publishable key is missing. This is a required variable",
+      })
+      .optional(), // This is not actually optional, but during load on client side the entire env object is empty which makes this throw an error that we can't do anything about.
     NEXT_PUBLIC_POSTHOG_KEY: z
       .string({ message: "PostHog Key missing" })
       .optional(),
     NEXT_PUBLIC_POSTHOG_HOST: z
       .string({ message: "PostHog Host Link missing" })
       .optional(),
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string({
-      message: "Clerk Publishable key is missing. This is a required variable",
-    }),
   },
 
   /**
