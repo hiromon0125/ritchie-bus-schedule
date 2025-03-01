@@ -15,11 +15,17 @@ export const env = createEnv({
         (str) => !str.includes("YOUR_MYSQL_URL_HERE"),
         "You forgot to change the default URL",
       ),
-    CLERK_SECRET_KEY: z.string().min(1, {
+    DIRECT_URL: z.string({ message: "Direct URL Missing" }).url().optional(),
+    CLERK_SECRET_KEY: z.string({
       message: "Please provide a valid Clerk secret key.",
     }),
-    SERVICE_INFO_LINK: z.string().url().optional(),
-    SERVICE_INFO_SECRET_KEY: z.string().optional(),
+    SERVICE_INFO_LINK: z
+      .string({ message: "Service Info link missing" })
+      .url()
+      .optional(),
+    SERVICE_INFO_SECRET_KEY: z
+      .string({ message: "Service Info key missing" })
+      .optional(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -31,10 +37,14 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
-    NEXT_PUBLIC_POSTHOG_HOST: z.string().url().optional(),
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1, {
-      message: "Please provide a valid Clerk publishable key.",
+    NEXT_PUBLIC_POSTHOG_KEY: z
+      .string({ message: "PostHog Key missing" })
+      .optional(),
+    NEXT_PUBLIC_POSTHOG_HOST: z
+      .string({ message: "PostHog Host Link missing" })
+      .optional(),
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string({
+      message: "Clerk Publishable key is missing. This is a required variable",
     }),
   },
 
@@ -44,14 +54,15 @@ export const env = createEnv({
    */
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
+    DIRECT_URL: process.env.DIRECT_URL,
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
     SERVICE_INFO_LINK: process.env.SERVICE_INFO_LINK,
     SERVICE_INFO_SECRET_KEY: process.env.SERVICE_INFO_SECRET_KEY,
     CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
-    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POST,
+    NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
