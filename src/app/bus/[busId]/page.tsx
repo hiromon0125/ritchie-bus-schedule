@@ -9,7 +9,6 @@ import { BusTag, StopTag } from "@/tags";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus, Stops } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
-import { track } from "@vercel/analytics/server";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { type Metadata } from "next";
@@ -39,7 +38,6 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   if (!bus) {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
-  await track("Bus Page Viewed", { busId: bus.id });
   return {
     title: `Ritche's Bus Schedule | ${bus.id} ${bus.name}`,
     description: bus.description,

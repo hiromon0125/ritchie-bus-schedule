@@ -1,6 +1,5 @@
 import "~/styles/globals.css";
 
-import { Analytics } from "@vercel/analytics/react";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
@@ -9,6 +8,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
 import { Toaster } from "~/components/ui/toaster";
+import { PostHogProvider } from "./_components/posthog";
 import { ServiceInfoProvider } from "./_components/serviceinfo";
 
 const inter = Inter({
@@ -34,16 +34,17 @@ export default async function RootLayout({
           className={`font-sans ${inter.variable}`}
           suppressHydrationWarning
         >
-          <TRPCReactProvider cookies={(await cookies()).toString()}>
-            <ServiceInfoProvider>
-              {children}
-              <Footer />
-              <Toaster />
-            </ServiceInfoProvider>
-          </TRPCReactProvider>
+          <PostHogProvider>
+            <TRPCReactProvider cookies={(await cookies()).toString()}>
+              <ServiceInfoProvider>
+                {children}
+                <Footer />
+                <Toaster />
+              </ServiceInfoProvider>
+            </TRPCReactProvider>
+          </PostHogProvider>
         </body>
       </html>
-      <Analytics />
     </ClerkProvider>
   );
 }

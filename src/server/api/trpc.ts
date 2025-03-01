@@ -9,10 +9,14 @@
 import { currentUser, getAuth } from "@clerk/nextjs/server";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type NextRequest } from "next/server";
+import posthog from "posthog-js";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "~/server/db";
+import { env } from "../../env";
+
+const isPosthogEnabled = env.NEXT_PUBLIC_POSTHOG_KEY != undefined;
 
 /**
  * 1. CONTEXT
@@ -101,7 +105,11 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 
   const end = Date.now();
   console.log(`[TRPC] ${path} took ${end - start}ms to execute`);
-
+  if (isPosthogEnabled)
+    posthog.capture("TRPC Procedure", {
+      path,
+      duration: end - start,
+    });
   return result;
 });
 
