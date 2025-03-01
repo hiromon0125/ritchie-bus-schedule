@@ -8,7 +8,7 @@ export default function RouteMapOr({
 }: {
   children: React.ReactNode;
 }) {
-  const [mapType, setMapType] = useLocalStorage("mapType", "interactive");
+  const [mapType, setMapType] = useLocalStorage("mapType", "image");
   return (
     <>
       <div className="w-[--sm-max-w] overflow-hidden rounded-3xl border-4 border-gray-400 bg-white md:max-w-screen-lg">

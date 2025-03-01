@@ -44,8 +44,8 @@ export default function WelcomePopup() {
               Welcome!
             </DialogTitle>
             <DialogDescription className=" pb-4 text-base">
-              Richie’s Bus Schedule is a place to quickly grab the next
-              scheduled bus stop and never be late for a bus again.
+              Richie’s Bus Schedule is a seemless tool for quickly finding the
+              next bus arrival, keeping you focused on school.
             </DialogDescription>
             <div className=" flex flex-col gap-2">
               <DialogClose asChild>
