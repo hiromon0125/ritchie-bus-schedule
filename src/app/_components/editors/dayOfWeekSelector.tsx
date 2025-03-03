@@ -2,6 +2,7 @@
 
 import type { BusOperatingDay } from "@prisma/client";
 import _ from "lodash";
+import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
@@ -43,10 +44,15 @@ export default function DayOfWeekSelector({
         onChange={(weeklyDays) => {
           const newWeeklyDays = weeklyDays.map((day) => {
             // Start from Sunday, Jan 4, 1970 (first Sunday in the epoch)
-            const dayOfWeek = new Date(Date.UTC(1970, 0, 4));
-            dayOfWeek.setUTCDate(dayOfWeek.getUTCDate() + (day % 7));
+            // Create the base date in the New York time zone
+            const baseSunday = DateTime.fromObject(
+              { year: 1970, month: 1, day: 4 },
+              { zone: "America/New_York" },
+            );
+            // Add the offset, ensuring the resulting date is still in New York time zone
+            const dayOfWeek = baseSunday.plus({ days: day % 7 });
             return {
-              day: dayOfWeek,
+              day: dayOfWeek.toUTC().toJSDate(),
               isWeekly: true,
             };
           });
