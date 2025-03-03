@@ -1,5 +1,6 @@
-import { getCurrentTimeServer } from "@/util";
+import { getCurrentTimeServer, NEWYORK_TIMEZONE } from "@/util";
 import _ from "lodash";
+import { DateTime } from "luxon";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -293,8 +294,11 @@ export const routesRouter = createTRPCRouter({
       });
       if (!res) return false;
       const opDay = _.find(res.operatingDays, (opDay) => {
-        const { day, isWeekly } = opDay;
+        const { day: dayUTC, isWeekly } = opDay;
         const nowDate = now.date;
+        const day = DateTime.fromJSDate(dayUTC)
+          .setZone(NEWYORK_TIMEZONE)
+          .toJSDate();
         return (
           (isWeekly && day.getDay() === nowDate.getDay()) ||
           isSameDate(day, nowDate)

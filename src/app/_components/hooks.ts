@@ -46,7 +46,7 @@ export function useBusStatus(
 ) {
   const { data: isOperating, isPending } = api.routes.isBusOperating.useQuery(
     {
-      busId: busId,
+      busId,
     },
     {
       staleTime: 1000 * 60 * 30, // 30 minutes doesn't really need to refetch that often
@@ -54,8 +54,8 @@ export function useBusStatus(
   );
   const { data: isRouteCompleted } = api.routes.isLastBusFinished.useQuery(
     {
-      busId: busId,
-      stopId: stopId,
+      busId,
+      stopId,
     },
     {
       staleTime: 1000 * 60 * 30, // 30 minutes doesn't really need to refetch that often
