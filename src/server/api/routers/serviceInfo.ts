@@ -77,11 +77,15 @@ export const serviceInfoRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const busNames = input.map((i) => i.buses).flat();
+      const busNamesToSearch = [
+        ...busNames.map((name) => name.replace(/^\d+\s+/, "")),
+        ...busNames.map((name) => `${name.replace(/^\d+\s+/, "")} Shuttle`),
+      ];
       const busIds = await ctx.db.bus
         .findMany({
           where: {
             name: {
-              in: busNames.map((name) => name.replace(/^\d+\s+/, "")),
+              in: busNamesToSearch,
             },
           },
           select: {
@@ -93,15 +97,24 @@ export const serviceInfoRouter = createTRPCRouter({
           buses.reduce(
             (acc, bus) => {
               acc[bus.name] = bus.id;
+              if (bus.name.endsWith(" Shuttle"))
+                acc[bus.name.replace(" Shuttle", "")] = bus.id;
               return acc;
             },
             {} as Record<string, number>,
           ),
         );
+      console.log(busNamesToSearch);
+      console.log(busIds);
+
       const mut = await Promise.allSettled(
         input
           .map((serviceInfo) =>
             serviceInfo.buses.map(async (busName) => {
+              let sanitizedBusName = busName.replace(/^\d+\s+/, "").trim();
+              if (sanitizedBusName.endsWith("shuttle")) {
+                sanitizedBusName = sanitizedBusName.replace("shuttle", "");
+              }
               const busId = busIds[busName.replace(/^\d+\s+/, "")];
               if (busId === undefined) {
                 console.error(

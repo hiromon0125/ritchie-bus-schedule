@@ -44,7 +44,15 @@ export async function GET() {
   }
   try {
     const res = await api.serviceinfo.createServiceInfo(parsed.data.data);
-    console.log(res.length);
+    const rejectedItems = res.filter((r) => r.status === "rejected");
+    if (rejectedItems.length > 0) {
+      return new Response(
+        `Failed to create service info: ${rejectedItems.map((r) => r.reason as unknown).join(", ")}`,
+        {
+          status: 500,
+        },
+      );
+    }
     return new Response(`Service info successfully updated: ${res.length}`, {
       status: 200,
       headers: {
