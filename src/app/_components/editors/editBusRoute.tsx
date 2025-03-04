@@ -33,7 +33,7 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
     ...(input[input.length - 1] ?? {
       busId,
       stopId: stops.at(0) ?? 0,
-      index: 0,
+      index: -1,
       deptTime: newDate,
     }),
   };
@@ -56,8 +56,6 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
 
   // Stop if not found or the first instance is the last instance as we can not find the diff
   if (lastInstance <= 0) return newRoute;
-  console.log(2);
-
   const lastInstanceStop = input[lastInstance];
   if (
     !lastInstanceStop ||
@@ -76,10 +74,8 @@ function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
   const instanceBeforeLast = lastInstance - stops.length;
   const instanceBeforeLastStop =
     instanceBeforeLast > 0 ? input[instanceBeforeLast] : undefined;
-  console.log(3, newRoute.deptTime);
   if (!instanceBeforeLastStop?.arriTime || !lastInstanceStop.arriTime)
     return newRoute;
-  console.log(4);
 
   newRoute.arriTime = new Date(
     lastInstanceStop.arriTime.getTime() * 2 -

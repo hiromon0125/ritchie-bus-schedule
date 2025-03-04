@@ -55,27 +55,33 @@ export function getTimeToUpdateNext(status: string | undefined) {
  * and if this bug is seen again this should be used to correct them. This can especially be problematic
  * after or before daylight savings time changes.
  */
-export function getCurrentTime(): { date: Date; isWeekend: boolean } {
+export function getCurrentTime(): {
+  date: Date;
+  isWeekend: boolean;
+  dt: DateTime;
+} {
   const isTodayWeekend = [6, 7].includes(
     DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
   );
   // set date to 0 so that we can compare times
   const now = DateTime.now()
     .setZone(NEWYORK_TIMEZONE)
-    .set({ year: 1970, month: 1, day: 1 })
-    .toJSDate();
-  return { date: now, isWeekend: isTodayWeekend };
+    .set({ year: 1970, month: 1, day: 1 });
+  return { date: now.toJSDate(), isWeekend: isTodayWeekend, dt: now };
 }
-export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
+export function getCurrentTimeServer(): {
+  date: Date;
+  isWeekend: boolean;
+  dt: DateTime;
+} {
   const isTodayWeekend = [6, 7].includes(
     DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
   );
   // set date to 0 so that we can compare times
   const now = DateTime.now()
     .setZone(NEWYORK_TIMEZONE)
-    .set({ year: 1970, month: 1, day: 1 })
-    .toJSDate();
-  return { date: now, isWeekend: isTodayWeekend };
+    .set({ year: 1970, month: 1, day: 1 });
+  return { date: now.toJSDate(), isWeekend: isTodayWeekend, dt: now };
 }
 
 /**
@@ -102,6 +108,7 @@ export function getCurrentTimeServer(): { date: Date; isWeekend: boolean } {
 export function evalStatusFromRoute(
   route: BusRoute | null | undefined,
   currentTime: ReturnType<typeof getCurrentTime>,
+  firstRouteIndex?: number,
 ): Status | undefined {
   const { date: now } = currentTime;
 
@@ -118,15 +125,20 @@ export function evalStatusFromRoute(
 
   // starting
   const arriTime = getArriTime(route);
-  const arriDT = DateTime.fromJSDate(arriTime).toLocal();
-  const deptDT = DateTime.fromJSDate(route.deptTime).toLocal();
+  const arriDT = DateTime.fromJSDate(arriTime, { zone: NEWYORK_TIMEZONE });
+  const deptDT = DateTime.fromJSDate(route.deptTime, {
+    zone: NEWYORK_TIMEZONE,
+  });
+  const nowDT = DateTime.fromJSDate(now, { zone: NEWYORK_TIMEZONE });
+  const deptDiff: number = deptDT.diff(nowDT).toMillis();
+  const arrDiff: number = arriDT.diff(nowDT).toMillis();
 
   if (
-    route.index === 1 &&
-    arriTime.getTime() - now.getTime() >= 10 * 60 * 1000
+    route.index === (firstRouteIndex ?? 0) &&
+    arrDiff >= 10 * 60 * 1000 // 10 minutes
   ) {
     return {
-      statusMessage: `Out of service • Starting at ${deptDT.toFormat("h:mm a")}`,
+      statusMessage: `Out of service • Starting at ${DateTime.fromJSDate(arriTime).toFormat("h:mm a")}`,
       location: route,
       isMoving: "starting",
       index: route.index - 0.5,
@@ -135,11 +147,10 @@ export function evalStatusFromRoute(
   }
 
   // moving
-  const arrDiff: number = arriTime.getTime() - now.getTime();
   if (arrDiff > 0) {
-    const offsetTime = getRelative(now, arriTime);
+    const offsetTime = arriDT.toRelative({ base: nowDT });
     return {
-      statusMessage: `Arriving ${offsetTime} • ${arriDT.toFormat("h:mm a")}`,
+      statusMessage: `Arriving ${offsetTime} • ${DateTime.fromJSDate(arriTime).toFormat("h:mm a")}`,
       location: route,
       isMoving: "moving",
       index: route.index - 0.5,
@@ -148,9 +159,8 @@ export function evalStatusFromRoute(
   }
 
   // stopped
-  const deptDiff: number = route.deptTime.getTime() - now.getTime();
   if (arrDiff <= 0 && deptDiff > 0) {
-    const offsetTime = getRelative(now, route.deptTime);
+    const offsetTime = deptDT.toRelative({ base: nowDT });
     return {
       statusMessage: `Departing ${offsetTime} • ${deptDT.toFormat("h:mm a")}`,
       location: route,
