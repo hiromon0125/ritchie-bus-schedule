@@ -108,6 +108,7 @@ export function getCurrentTimeServer(): {
 export function evalStatusFromRoute(
   route: BusRoute | null | undefined,
   currentTime: ReturnType<typeof getCurrentTime>,
+  firstRouteIndex?: number,
 ): Status | undefined {
   const { date: now } = currentTime;
 
@@ -133,7 +134,7 @@ export function evalStatusFromRoute(
   const arrDiff: number = arriDT.diff(nowDT).toMillis();
 
   if (
-    route.index === 0 &&
+    route.index === (firstRouteIndex ?? 0) &&
     arrDiff >= 10 * 60 * 1000 // 10 minutes
   ) {
     return {

@@ -337,4 +337,23 @@ export const routesRouter = createTRPCRouter({
       });
       return nowDateTime > lastRouteUTCDateTime;
     }),
+  getFirstRouteIndex: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+        stopId: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const res = await ctx.db.routes.findFirst({
+        where: {
+          busId: input.busId,
+          ...(input.stopId ? { stopId: input.stopId } : {}),
+        },
+        orderBy: {
+          index: "asc",
+        },
+      });
+      return res?.index ?? 0;
+    }),
 });

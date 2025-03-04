@@ -62,6 +62,13 @@ export function useBusStatus(
     { busId, stopId },
     { staleTime: 1000 * 60 * 30 },
   );
+  const { data: firstRouteIndex } = api.routes.getFirstRouteIndex.useQuery(
+    { busId, stopId },
+    {
+      enabled: !!stopId,
+      staleTime: 1000 * 60 * 30,
+    },
+  );
   const [index, setIndex] = useState(0);
   const {
     data: routes,
@@ -71,7 +78,12 @@ export function useBusStatus(
   } = useRouteByBus(busId, stopId, serverGuessedRoute);
   const fetchedRoutes = _.flatMap(routes?.pages, (page) => page.data);
   const nextRoute = fetchedRoutes[index] ?? serverGuessedRoute;
-  const status = useStatusFromRoute(nextRoute, isOperating, isRouteCompleted);
+  const status = useStatusFromRoute(
+    nextRoute,
+    isOperating,
+    isRouteCompleted,
+    stopId != undefined ? firstRouteIndex : undefined,
+  );
   useEffect(() => {
     if (!isOperating || isRouteCompleted) return;
     if (hasNextPage && !isFetching && index >= fetchedRoutes.length - 2) {
@@ -105,9 +117,10 @@ function useStatusFromRoute(
   nextRoute: BusRoute | null | undefined,
   isOperating?: boolean,
   isRouteCompleted?: boolean,
+  firstRouteIndex?: number,
 ) {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
-  const status = evalStatusFromRoute(nextRoute, currentTime);
+  const status = evalStatusFromRoute(nextRoute, currentTime, firstRouteIndex);
   useEffect(() => {
     if (!isOperating || isRouteCompleted) return;
     const interval = setTimeout(() => {
