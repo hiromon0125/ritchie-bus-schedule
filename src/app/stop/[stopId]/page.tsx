@@ -1,9 +1,5 @@
 import { TimeTableSkeleton } from "@/busPageLoaders";
-import {
-  BusInfoSkeleton,
-  BusStatus,
-  SkeletonBusStatusString,
-} from "@/busStatus";
+import { BusInfoSkeleton } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
 import Header from "@/header";
 import StopMap from "@/Map";
@@ -20,6 +16,7 @@ import { Suspense } from "react";
 import { MdDirectionsBus } from "react-icons/md";
 import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
+import { BusStatus } from "../../_components/busStatusClient";
 
 export default async function Page(props: {
   params: Promise<{ stopId: string }>;
@@ -234,9 +231,7 @@ async function SelectableBusInfo({
             </h2>
             <div className=" favbtn-placeholder h-6 w-6" />
           </div>
-          <Suspense fallback={<SkeletonBusStatusString />}>
-            <BusStatus busId={busObj.id} stopId={stopId} hideStopName />
-          </Suspense>
+          <BusStatus busId={busObj.id} stopId={stopId} hideStopName />
         </div>
       </Link>
       <FavBtn

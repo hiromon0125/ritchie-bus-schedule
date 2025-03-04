@@ -82,7 +82,7 @@ export function ServiceInfoProvider({
                   </div>
                   <div className=" flex flex-row items-center gap-2">
                     {alert.buses && alert.buses.length > 0 && (
-                      <div className="flex max-h-14 max-w-14 flex-row flex-wrap items-center gap-2">
+                      <div className="max-w-15 flex aspect-square flex-row flex-wrap items-center gap-1">
                         {alert.buses.map((bus) => (
                           <div key={bus.id}>
                             <BusTag

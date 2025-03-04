@@ -1,41 +1,34 @@
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
+"use client";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import type { Bus } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
-import React, { Suspense } from "react";
-import { type RouterOutputs } from "t/react";
-import { api } from "t/server";
+import React from "react";
+import { api } from "t/react";
 import { AnimatedDoubleList, ClickEventBlocker } from "./animatedList";
-import BusStatusString, { BusStatusStringBig } from "./busStatusString";
+import { BusStatus } from "./busStatusClient";
 import { FavBtn } from "./favBtn";
 import { BusTag } from "./tags";
 
-type BusStatusProps =
-  | {
-      busID: RouterOutputs["bus"]["getAllID"][0];
-      bus?: never;
-      isFavorited?: boolean;
-    }
-  | {
-      bus: Bus;
-      busID?: never;
-      isFavorited?: boolean;
-    };
-
-const favoriteBus = async (busId: number) => {
-  "use server";
-  return api.favorite.addBus({ busId });
-};
-const unfavoriteBus = async (busId: number) => {
-  "use server";
-  return api.favorite.delBus({ busId });
-};
-
-export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
-  const busObj = bus ?? (busID ? await api.bus.getByID({ id: busID }) : null);
-  if (!busObj) return null;
+export function BusInfo({
+  bus: busObj,
+  isFavorited,
+}: {
+  bus: Bus;
+  isFavorited?: boolean;
+}) {
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
+  const { isSignedIn } = useUser();
+  const util = api.useUtils();
+  const { mutate: favoriteMutation } = api.favorite.addBus.useMutation({
+    onSuccess: async () => {
+      await util.favorite.getAllBus.invalidate();
+    },
+  });
+  const { mutate: unfavoriteMutation } = api.favorite.delBus.useMutation({
+    onSuccess: async () => {
+      await util.favorite.getAllBus.invalidate();
+    },
+  });
 
   return (
     <div className=" relative h-full w-full">
@@ -58,9 +51,7 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
                 </h2>
                 <div className=" favbtn-placeholder h-6 w-6" />
               </div>
-              <Suspense fallback={<SkeletonBusStatusString />}>
-                <BusStatus busId={busObj.id} />
-              </Suspense>
+              <BusStatus busId={busObj.id} />
             </div>
           </div>
         </Link>
@@ -68,51 +59,22 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
       <FavBtn
         className=" absolute right-3 top-3 z-10"
         isFavorited={isFavorited ?? false}
-        onClick={async () => {
-          "use server";
-          await (isFavorited ? unfavoriteBus : favoriteBus)(busObj.id);
-          revalidatePath("/", "page");
+        onClick={() => {
+          if (!isSignedIn) {
+            alert("Please sign in to favorite this bus");
+            return;
+          }
+          if (!isFavorited) {
+            favoriteMutation({ busId: busObj.id });
+          } else {
+            unfavoriteMutation({ busId: busObj.id });
+          }
         }}
       />
     </div>
   );
 }
 
-type BusStatusProp = {
-  busId: number;
-  stopId?: number;
-  hideStopName?: boolean;
-};
-
-export async function BusStatus({
-  busId,
-  stopId,
-  hideStopName = false,
-}: BusStatusProp) {
-  const data = {
-    stopId: stopId,
-    busId: busId,
-  };
-  const currentRoute = await api.routes.getCurrentRouteOfBus({
-    busId: data.busId,
-    stopId: data.stopId,
-  });
-  return (
-    <BusStatusString
-      busId={data.busId}
-      fetchedRoute={currentRoute}
-      stopId={data.stopId}
-      hideStopName={hideStopName}
-    />
-  );
-}
-
-export async function BusStatusBig({ busId }: { busId: number }) {
-  const currentRoute = await api.routes.getCurrentRouteOfBus({
-    busId,
-  });
-  return <BusStatusStringBig busId={busId} fetchedRoute={currentRoute} />;
-}
 export function SkeletonBusStatusString() {
   return (
     <div className=" flex h-12 flex-row items-center">
@@ -156,44 +118,46 @@ export function InfoSkeleton() {
   );
 }
 
-export async function BusList() {
-  const user = await currentUser();
-  const buses = await api.bus.getAll();
-  let favBusesId: number[] = [];
-  if (user) {
-    favBusesId = (await api.favorite.getAllBus()).map((bus) => bus.busId);
-  }
+export function BusList() {
+  const { isSignedIn } = useUser();
+  const { data: favBuses } = api.favorite.getAllBus.useQuery();
+  const { data: buses, isLoading: isLoadingBuses } = api.bus.getAll.useQuery();
+  const favBusesId = favBuses?.map((bus) => bus.busId) ?? [];
   return (
     <AnimatedDoubleList
       favoritedBusKeys={favBusesId.map((favBus) => favBus.toString())}
       emptySection={
-        <>
-          <SignedIn>
-            <div className=" flex h-28 w-full flex-row items-center justify-center rounded-md p-2 text-lg font-bold text-slate-500">
-              Favorite some buses from below to see them here!
-            </div>
-          </SignedIn>
-          <SignedOut>
-            <div className=" flex h-28 w-full flex-row items-center justify-center gap-1 rounded-md bg-slate-300 p-2 text-lg font-bold text-slate-600">
-              <SignInButton>
-                <u className=" text-blue-600 underline">Sign in</u>
-              </SignInButton>
-              <p>to add your favorite buses.</p>
-            </div>
-          </SignedOut>
-        </>
-      }
-      locked={!user}
-    >
-      {buses.map((bus) => {
-        return (
-          <div className=" h-full w-full" key={bus.id}>
-            <Suspense fallback={<BusInfoSkeleton />}>
-              <BusInfo bus={bus} isFavorited={favBusesId.includes(bus.id)} />
-            </Suspense>
+        isSignedIn ? (
+          <div className=" flex h-28 w-full flex-row items-center justify-center rounded-md p-2 text-lg font-bold text-slate-500">
+            Favorite some buses from below to see them here!
           </div>
-        );
-      })}
+        ) : (
+          <div className=" flex h-28 w-full flex-row items-center justify-center gap-1 rounded-md bg-slate-300 p-2 text-lg font-bold text-slate-600">
+            <SignInButton>
+              <u className=" text-blue-600 underline">Sign in</u>
+            </SignInButton>
+            <p>to add your favorite buses.</p>
+          </div>
+        )
+      }
+      locked={!isSignedIn}
+    >
+      {isLoadingBuses
+        ? Array(6).map((_, i) => {
+            return (
+              <div
+                className=" w-auto min-w-full flex-1 md:min-w-[40%] md:max-w-[calc(50%-6px)]"
+                key={i}
+              >
+                <BusInfoSkeleton />
+              </div>
+            );
+          })
+        : (buses ?? []).map((bus) => (
+            <div className=" h-full w-full" key={bus.id}>
+              <BusInfo bus={bus} isFavorited={favBusesId.includes(bus.id)} />
+            </div>
+          ))}
     </AnimatedDoubleList>
   );
 }
@@ -205,7 +169,7 @@ export function BusListSkeleton() {
         <h1 className=" m-0 text-2xl font-bold">Favorite Buses</h1>
       </div>
       <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-3 md:min-w-80">
-        {[...Array(4).keys()]?.map((i) => (
+        {Array(4).map((_, i) => (
           <div
             className=" w-auto min-w-full flex-1 md:min-w-[40%] md:max-w-[calc(50%-6px)]"
             key={i}
@@ -218,7 +182,7 @@ export function BusListSkeleton() {
         <h1 className=" m-0 text-2xl font-bold">Buses</h1>
       </div>
       <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-3 md:min-w-80">
-        {[...Array(6).keys()]?.map((i) => (
+        {Array(6).map((_, i) => (
           <div
             className=" w-auto min-w-full flex-1 md:min-w-[40%] md:max-w-[calc(50%-6px)]"
             key={i}

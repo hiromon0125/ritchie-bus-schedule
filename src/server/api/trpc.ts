@@ -122,6 +122,16 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
 
+export const userProcedure = publicProcedure.use(async ({ ctx, next }) => {
+  const user = await currentUser();
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...ctx.session, user: user },
+    },
+  });
+});
+
 /**
  * Protected (authenticated) procedure
  *
@@ -130,19 +140,16 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
  *
  * @see https://trpc.io/docs/procedures
  */
-export const privateProcedure = t.procedure
-  .use(timingMiddleware)
-  .use(async ({ ctx, next }) => {
-    const user = await currentUser();
-    if (!user) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-      });
-    }
-    return next({
-      ctx: {
-        // infers the `session` as non-nullable
-        session: { ...ctx.session, user: user },
-      },
+export const privateProcedure = userProcedure.use(async ({ ctx, next }) => {
+  if (ctx.session.user == null) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
     });
+  }
+  return next({
+    ctx: {
+      // infers the `session` and `user` as non-nullable
+      session: { ...ctx.session, user: ctx.session.user },
+    },
   });
+});

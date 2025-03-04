@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { type ReactElement, useState } from "react";
+import { type ReactElement, useEffect, useState } from "react";
 
 export function AnimatedDoubleList({
   children,
@@ -23,9 +23,18 @@ export function AnimatedDoubleList({
     ReactElement[]
   >(
     children.filter((child) => {
-      return child.key ? !favoritedBusKeys.includes(child.key) : false;
+      return child.key ? !favoritedBusKeys.includes(child.key) : true;
     }),
   );
+  useEffect(() => {
+    const favoritedChildren = children.filter((child) => {
+      return child.key ? favoritedBusKeys.includes(child.key) : false;
+    });
+    setFavoritedChildren(favoritedChildren);
+    setUnfavoritedChildren(
+      children.filter((child) => !favoritedChildren.includes(child)),
+    );
+  }, [children, favoritedBusKeys, locked]);
 
   return (
     <div className=" flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">

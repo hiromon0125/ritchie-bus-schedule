@@ -47,28 +47,29 @@ function useRouteByBus(
   );
 }
 
+const STALETIME = 1000 * 60 * 30; // 30 minutes
+
 export function useBusStatus(
   busId: Bus["id"],
   serverGuessedRoute?: BusRoute | null,
   stopId?: number,
   isVisible?: boolean,
 ) {
-  // Cache call for 30 minutes doesn't really need to refetch that often
-  const { data: isOperating } = api.routes.isBusOperating.useQuery(
-    { busId, isVisible: isVisible ?? true },
-    { staleTime: 1000 * 60 * 30 },
-  );
-  const { data: isRouteCompleted } = api.routes.isLastBusFinished.useQuery(
-    { busId, stopId },
-    { staleTime: 1000 * 60 * 30 },
-  );
-  const { data: firstRouteIndex } = api.routes.getFirstRouteIndex.useQuery(
-    { busId, stopId },
-    {
-      enabled: !!stopId,
-      staleTime: 1000 * 60 * 30,
-    },
-  );
+  const [
+    { data: isOperating },
+    { data: isRouteCompleted },
+    { data: firstRouteIndex },
+  ] = api.useQueries((t) => [
+    t.routes.isBusOperating(
+      { busId, isVisible: isVisible ?? true },
+      { staleTime: STALETIME },
+    ),
+    t.routes.isLastBusFinished({ busId, stopId }, { staleTime: STALETIME }),
+    t.routes.getFirstRouteIndex(
+      { busId, stopId },
+      { enabled: !!stopId, staleTime: STALETIME },
+    ),
+  ]);
   const [index, setIndex] = useState(0);
   const {
     data: routes,

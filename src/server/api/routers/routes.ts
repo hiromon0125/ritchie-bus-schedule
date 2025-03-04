@@ -275,6 +275,36 @@ export const routesRouter = createTRPCRouter({
         }),
       );
     }),
+  getCurrentRouteOfStopsByBus: publicProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+        stopIds: z.array(z.number()),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const date = getCurrentTimeServer().dt.toUTC().toJSDate();
+      return Promise.all(
+        input.stopIds.map(async (stopId) => {
+          const res = await ctx.db.routes.findFirst({
+            orderBy: {
+              deptTime: "asc",
+            },
+            where: {
+              busId: input.busId,
+              stopId,
+              deptTime: {
+                gt: date,
+              },
+            },
+          });
+          return {
+            stopId,
+            route: res,
+          };
+        }),
+      );
+    }),
   isBusOperating: publicProcedure
     .input(
       z.object({

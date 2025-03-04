@@ -1,4 +1,4 @@
-import { BusList, BusListSkeleton } from "@/busStatus";
+import { BusList } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
 import Header from "@/header";
 import { DotMap } from "@/Map";
@@ -22,9 +22,7 @@ export default async function Home() {
       <SignedIn>
         <FavStopList />
       </SignedIn>
-      <Suspense fallback={<BusListSkeleton />}>
-        <BusList />
-      </Suspense>
+      <BusList />
       <RouteMapOr>
         <div className="relative h-[60vh] overflow-hidden md:max-w-screen-lg">
           <Suspense fallback={<p>Loading map...</p>}>
