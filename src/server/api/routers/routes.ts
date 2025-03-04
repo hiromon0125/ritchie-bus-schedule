@@ -15,14 +15,6 @@ function resetDate(date: Date) {
   return date;
 }
 
-function isSameDate(date: Date, date2: Date) {
-  return (
-    date.getUTCFullYear() === date2.getUTCFullYear() &&
-    date.getUTCMonth() === date2.getUTCMonth() &&
-    date.getUTCDate() === date2.getUTCDate()
-  );
-}
-
 export const routesRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => ctx.db.routes.findMany()),
   getAllByBusId: publicProcedure
@@ -53,7 +45,12 @@ export const routesRouter = createTRPCRouter({
         busId: z.number(),
         stopId: z.number().optional(),
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.number().nullish(), // id of the last fetched route
+        cursor: z
+          .object({
+            id: z.number(),
+            index: z.number(),
+          })
+          .nullish(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -67,11 +64,15 @@ export const routesRouter = createTRPCRouter({
           index: "asc",
         },
         take: limit + 1,
-        cursor: input.cursor ? { id: input.cursor } : undefined,
+        cursor: input.cursor ? { id: input.cursor.id } : undefined,
       });
       let nextCursor: typeof input.cursor = null;
       if (result.length > limit) {
-        nextCursor = result.pop()!.id;
+        const curs = result.pop()!;
+        nextCursor = {
+          id: curs.id,
+          index: curs.index,
+        };
       }
       return {
         data: result,
@@ -253,7 +254,7 @@ export const routesRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const now = getCurrentTimeServer();
+      const date = getCurrentTimeServer().dt.toUTC().toJSDate();
       return Promise.all(
         input.busIds.map(async (busId) => {
           const res = await ctx.db.routes.findFirst({
@@ -263,7 +264,7 @@ export const routesRouter = createTRPCRouter({
             where: {
               busId,
               deptTime: {
-                gt: now.date,
+                gt: date,
               },
             },
           });
@@ -282,7 +283,6 @@ export const routesRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const now = getCurrentTimeServer();
       const res = await ctx.db.bus.findFirst({
         where: {
           id: input.busId,
@@ -295,16 +295,16 @@ export const routesRouter = createTRPCRouter({
       if (!res) return false;
       const opDay = _.find(res.operatingDays, (opDay) => {
         const { day: dayUTC, isWeekly } = opDay;
-        const nowDate = now.date;
-        const day = DateTime.fromJSDate(dayUTC)
-          .setZone(NEWYORK_TIMEZONE)
-          .toJSDate();
+        const nowDate = getCurrentTimeServer().dt;
+        const day = DateTime.fromJSDate(dayUTC, {
+          zone: NEWYORK_TIMEZONE,
+        });
         return (
-          (isWeekly && day.getDay() === nowDate.getDay()) ||
-          isSameDate(day, nowDate)
+          (isWeekly && day.weekday === nowDate.weekday) ||
+          day.diff(nowDate, "days").days === 0
         );
       });
-      return Boolean(opDay);
+      return !!opDay;
     }),
   isLastBusFinished: publicProcedure
     .input(
@@ -320,7 +320,6 @@ export const routesRouter = createTRPCRouter({
        * instead interprets that as the server is unable to fetch the current route thus manually checking on the client side by
        * going from the first route of the day to the very last. This creates a flickering effect and uses unnecessary resources.
        */
-      const now = getCurrentTimeServer();
       const lastRoute = await ctx.db.routes.findFirst({
         orderBy: {
           deptTime: "desc",
@@ -330,8 +329,12 @@ export const routesRouter = createTRPCRouter({
           ...(input.stopId ? { stopId: input.stopId } : {}),
         },
       });
-      return lastRoute
-        ? lastRoute?.deptTime.getTime() < now.date.getTime()
-        : false;
+      if (!lastRoute) return false;
+      const lastRouteDate = lastRoute.deptTime;
+      const nowDateTime = getCurrentTimeServer().dt;
+      const lastRouteUTCDateTime = DateTime.fromJSDate(lastRouteDate, {
+        zone: NEWYORK_TIMEZONE,
+      });
+      return nowDateTime > lastRouteUTCDateTime;
     }),
 });
