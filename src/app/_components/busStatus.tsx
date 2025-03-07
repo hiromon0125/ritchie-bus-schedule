@@ -117,7 +117,7 @@ export function SkeletonBusStatusString() {
   return (
     <div className=" flex h-12 flex-row items-center">
       <div className=" relative ml-5 h-3 w-3">
-        <div className=" absolute left-0 top-0 h-3 w-3 rounded-full bg-[--bus-color] animation-delay-100" />
+        <div className=" absolute left-0 top-0 h-3 w-3 rounded-full bg-slate-400 animation-delay-100" />
       </div>
       <div className=" relative flex h-full w-full flex-col justify-center pl-4">
         <div className=" h-5 w-9/12 animate-pulse rounded-sm bg-slate-300 animation-delay-100" />

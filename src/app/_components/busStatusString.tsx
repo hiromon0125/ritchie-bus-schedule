@@ -35,7 +35,7 @@ export default function BusStatusString({
   });
   return (
     <div className=" relative flex h-8 min-h-max flex-row items-center overflow-hidden">
-      <div className=" ml-4 flex items-center justify-center">
+      <div className=" ml-2 flex items-center justify-center sm:ml-4">
         <StatusBlob status={isMoving} />
       </div>
       <div className=" flex h-full w-full flex-col justify-center pl-4">
@@ -80,15 +80,13 @@ export function BusStatusStringBig({
   return (
     <>
       {stopLocationMessage && stop && (
-        <>
-          <Link
-            className=" flex flex-row items-center gap-2"
-            href={`/stop/${stop.id}?busId=${busId}`}
-          >
-            <StopTag stop={stop} size="sm" />
-            <p>{stop.name ?? "Unknown"}</p>
-          </Link>
-        </>
+        <Link
+          className=" flex flex-row items-center gap-2"
+          href={`/stop/${stop.id}?busId=${busId}`}
+        >
+          <StopTag stop={stop} />
+          <p className=" text-xl font-bold">{stop.name ?? "Unknown"}</p>
+        </Link>
       )}
       <div className=" flex flex-row items-center gap-3">
         <div className=" flex items-center justify-center">
