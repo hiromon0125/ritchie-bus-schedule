@@ -16,7 +16,7 @@ const SERVICE_INFO_SCHEMA = z.object({
   ),
 });
 
-export async function GET() {
+export async function updateServiceInfo() {
   if (env.SERVICE_INFO_LINK === undefined) {
     return new Response("Service info link not set", { status: 500 });
   } else if (env.SERVICE_INFO_SECRET_KEY === undefined) {
@@ -64,4 +64,20 @@ export async function GET() {
       status: 500,
     });
   }
+}
+
+/**
+ * This function is for vercel cron job. It is also protected by a secret key.
+ * See https://vercel.com/docs/cron-jobs/manage-cron-jobs#securing-cron-jobs
+ * @param request
+ * @returns
+ */
+export async function GET(request: Request) {
+  const authHeader = request.headers.get("authorization");
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
+  return updateServiceInfo();
 }
