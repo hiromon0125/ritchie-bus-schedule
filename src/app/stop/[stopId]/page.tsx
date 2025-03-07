@@ -5,7 +5,6 @@ import {
   SkeletonBusStatusString,
 } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
-import StopMap from "@/Map";
 import { BusTag, StopTag } from "@/tags";
 import TimeTable from "@/timeTable";
 import { currentUser } from "@clerk/nextjs/server";
@@ -21,6 +20,7 @@ import { MdDirectionsBus } from "react-icons/md";
 import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
 import ClickableTooltip from "../../_components/infobtn";
+import StopMap from "../../_components/Map";
 
 export default async function Page(props: {
   params: Promise<{ stopId: string }>;
@@ -164,17 +164,6 @@ export default async function Page(props: {
             </div>
           </div>
         </div>
-      </div>
-      <div className=" flex max-w-[480px] flex-row items-center justify-between rounded-[20px] border-[8px] border-[#E2E8F0] p-3 xs:rounded-3xl md:border-[12px]">
-        <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-3xl">
-          Rate this bus
-        </h2>
-        <Link
-          href="https://forms.gle/7ooRfsDzmKvHnnZ76"
-          className=" rounded-md bg-blue-600 p-3 text-white"
-        >
-          Rate!
-        </Link>
       </div>
     </>
   );
