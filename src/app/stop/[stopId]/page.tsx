@@ -16,9 +16,11 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
+import { IoMdInformationCircle } from "react-icons/io";
 import { MdDirectionsBus } from "react-icons/md";
 import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
+import ClickableTooltip from "../../_components/infobtn";
 
 export default async function Page(props: {
   params: Promise<{ stopId: string }>;
@@ -84,6 +86,12 @@ export default async function Page(props: {
       <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
         <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
           <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
+          <ClickableTooltip tipMessage="Click on the bus route to view it's timetable below.">
+            <IoMdInformationCircle
+              size={32}
+              className=" scale-150 opacity-30"
+            />
+          </ClickableTooltip>
         </div>
         {_.sortBy(currentStop.buses, ["id"]).map((bus, i) => (
           <div
