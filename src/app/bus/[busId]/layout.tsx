@@ -40,7 +40,7 @@ export default async function Layout({
             Rate my Ride
           </h2>
           <Link
-            href="https://ritbus.info/report?route=${bus.id} - ${bus.name}"
+            href={"https://ritbus.info/report?route=" + bus.id + " - " + bus.name}
             className=" rounded-md bg-blue-600 p-3 text-white"
           >
             Rate!
