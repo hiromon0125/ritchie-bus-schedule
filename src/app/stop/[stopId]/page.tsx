@@ -163,7 +163,14 @@ export default async function Page(props: {
             Rate my Ride
           </h2>
           <Link
-            href={"https://ritbus.info/report?route=" + bus.id + " - " + bus.name + "&stop=" + currentStop.name}
+            href={
+              "https://ritbus.info/report?route=" +
+              selectedBus.id +
+              " - " +
+              selectedBus.name +
+              "&stop=" +
+              currentStop.name
+            }
             className=" rounded-md bg-blue-600 p-3 text-white"
           >
             Rate!
