@@ -1,5 +1,4 @@
 import type { PrismaClient, Stops } from "@prisma/client";
-import SuperJSON from "superjson";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -73,30 +72,24 @@ export const stopsRouter = createTRPCRouter({
       const cacheKey = `stops:all:${input?.includeRelatedBus ? "rel" : "no"}:${
         input?.includeHiddenBus ? "hid" : "vis"
       }`;
-      const cache: string | null = await ctx.cache.get(cacheKey);
-      if (cache) {
-        return SuperJSON.parse<StopsWithBuses>(cache);
-      }
+      const cache = await ctx.cacheGet<StopsWithBuses>(cacheKey);
+      if (cache) return cache;
       const stops = await getAllStop(ctx.db, {
         includeRelatedBus: !!input?.includeRelatedBus,
         includeHiddenBus: !!input?.includeHiddenBus,
       });
-      await ctx.cache.set(cacheKey, SuperJSON.stringify(stops));
-      return stops;
+      return await ctx.cacheSetReturn(cacheKey, stops);
     }),
   getAllID: publicProcedure.query(async ({ ctx }) => {
     const cacheKey = `stops:all:id`;
-    const cache: string | null = await ctx.cache.get(cacheKey);
-    if (cache) {
-      return SuperJSON.parse<{ id: number }[]>(cache);
-    }
+    const cache = await ctx.cacheGet(cacheKey);
+    if (cache) return cache;
     const stopIds = await ctx.db.stops.findMany({
       select: {
         id: true,
       },
     });
-    await ctx.cache.set(cacheKey, SuperJSON.stringify(stopIds));
-    return stopIds;
+    return await ctx.cacheSetReturn(cacheKey, stopIds);
   }),
   getOneByID: publicProcedure
     .input(
@@ -109,16 +102,13 @@ export const stopsRouter = createTRPCRouter({
       const cacheKey = `stops:${input.id}:${
         input.includeHiddenBus ? "hid" : "vis"
       }`;
-      const cache: string | null = await ctx.cache.get(cacheKey);
-      if (cache) {
-        return SuperJSON.parse<StopWithBuses>(cache);
-      }
+      const cache = await ctx.cacheGet<StopWithBuses>(cacheKey);
+      if (cache) return cache;
       const res = await getStopById(ctx.db, {
         id: input.id,
         includeHiddenBus: input.includeHiddenBus,
       });
-      await ctx.cache.set(cacheKey, SuperJSON.stringify(res));
-      return res;
+      return await ctx.cacheSetReturn(cacheKey, res);
     }),
   getStopIdsByBusID: publicProcedure
     .input(
@@ -128,38 +118,35 @@ export const stopsRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const cacheKey = `stops:bus:${input.busId}`;
-      const cache: string | null = await ctx.cache.get(cacheKey);
-      if (cache) {
-        return SuperJSON.parse<number[]>(cache);
-      }
-      const stopIds = await ctx.db.bus
-        .findFirst({
-          where: {
-            id: input.busId,
-          },
-          select: {
-            stops: {
-              select: {
-                id: true,
-              },
-              orderBy: {
-                id: "asc",
+      const cache = await ctx.cacheGet<number[]>(cacheKey);
+      if (cache) return cache;
+      const stopIds =
+        (await ctx.db.bus
+          .findFirst({
+            where: {
+              id: input.busId,
+            },
+            select: {
+              stops: {
+                select: {
+                  id: true,
+                },
+                orderBy: {
+                  id: "asc",
+                },
               },
             },
-          },
-        })
-        .then((bus) => bus?.stops.map((stop) => stop.id));
-      await ctx.cache.set(cacheKey, SuperJSON.stringify(stopIds));
-      return stopIds;
+          })
+          .then((bus) => bus?.stops.map((stop) => stop.id))) ?? null;
+      return await ctx.cacheSetReturn(cacheKey, stopIds);
     }),
   getCoorOfAllStop: publicProcedure.query(async ({ ctx }) => {
     const cacheKey = `stops:coor`;
-    const cache: string | null = await ctx.cache.get(cacheKey);
-    if (cache) {
-      return SuperJSON.parse<
+    const cache =
+      await ctx.cacheGet<
         Pick<Stops, "id" | "name" | "tag" | "latitude" | "longitude">[]
-      >(cache);
-    }
+      >(cacheKey);
+    if (cache) return cache;
     const stops = ctx.db.stops.findMany({
       select: {
         id: true,
@@ -169,8 +156,7 @@ export const stopsRouter = createTRPCRouter({
         longitude: true,
       },
     });
-    await ctx.cache.set(cacheKey, SuperJSON.stringify(stops));
-    return stops;
+    return await ctx.cacheSetReturn(cacheKey, stops);
   }),
   addBusStop: privateProcedure
     .input(

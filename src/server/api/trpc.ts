@@ -13,6 +13,7 @@ import posthog from "posthog-js";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
+import type { SetCommandOptions } from "@upstash/redis";
 import { cache, db } from "~/server/db";
 import { env } from "../../env";
 
@@ -36,10 +37,28 @@ export const createTRPCContext = async (opts: {
 }) => {
   const { req } = opts;
   const user = req ? getAuth(req) : undefined;
-
+  const cacheSetReturn = <TData>(
+    key: string,
+    value: TData,
+    opts?: SetCommandOptions,
+  ): Promise<TData> =>
+    cache.set(key, `$${superjson.stringify(value)}`, opts).then(() => value);
+  const cacheGet = async <TData extends object | null>(key: string) => {
+    const cachedData = await cache.get<string>(key);
+    if (!cachedData) return null;
+    if (!cachedData.startsWith("$")) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `Cache hit for ${key} but not superjson data. Make sure to use cacheSetReturn to cache data or use ctx.cache.set for regular string.`,
+      });
+    }
+    return superjson.parse<TData>(cachedData.slice(1));
+  };
   return {
     db,
     cache,
+    cacheSetReturn,
+    cacheGet,
     session: user,
     ...opts,
   };
