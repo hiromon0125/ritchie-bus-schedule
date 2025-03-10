@@ -16,7 +16,6 @@ function resetDate(date: Date) {
 }
 
 export const routesRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => ctx.db.routes.findMany()),
   getAllByBusId: publicProcedure
     .input(
       z.object({
@@ -79,23 +78,6 @@ export const routesRouter = createTRPCRouter({
         nextCursor,
       };
     }),
-  getAllByStopId: publicProcedure
-    .input(
-      z.object({
-        stopId: z.number(),
-        isVisible: z.boolean().default(true),
-      }),
-    )
-    .query(({ ctx, input }) =>
-      ctx.db.routes.findMany({
-        where: {
-          stopId: input.stopId,
-          bus: {
-            isVisible: input.isVisible,
-          },
-        },
-      }),
-    ),
   getAllByStopAndBus: publicProcedure
     .input(
       z.object({
@@ -194,37 +176,6 @@ export const routesRouter = createTRPCRouter({
         },
       });
     }),
-  getLastRouteOfBuses: publicProcedure
-    .input(
-      z
-        .object({
-          busId: z.number(),
-          stopId: z.number().optional(),
-        })
-        .optional(),
-    )
-    .query(async ({ ctx, input }) => {
-      const buses = input
-        ? [{ id: input.busId }]
-        : await ctx.db.bus.findMany({ select: { id: true } });
-      return Promise.all(
-        buses.map(async (bus) => {
-          const lastRoute = await ctx.db.routes.findFirst({
-            where: {
-              busId: bus.id,
-              ...(input?.stopId ? { stopId: input.stopId } : {}),
-            },
-            orderBy: {
-              deptTime: "desc",
-            },
-          });
-          return {
-            busId: bus.id,
-            lastRoute,
-          };
-        }),
-      );
-    }),
   getCurrentRouteOfBus: publicProcedure
     .input(
       z.object({
@@ -246,34 +197,6 @@ export const routesRouter = createTRPCRouter({
           ...(input.stopId ? { stopId: input.stopId } : {}),
         },
       });
-    }),
-  getCurrentRouteOfBuses: publicProcedure
-    .input(
-      z.object({
-        busIds: z.array(z.number()),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const date = getCurrentTimeServer().dt.toUTC().toJSDate();
-      return Promise.all(
-        input.busIds.map(async (busId) => {
-          const res = await ctx.db.routes.findFirst({
-            orderBy: {
-              deptTime: "asc",
-            },
-            where: {
-              busId,
-              deptTime: {
-                gt: date,
-              },
-            },
-          });
-          return {
-            busId,
-            route: res,
-          };
-        }),
-      );
     }),
   isBusOperating: publicProcedure
     .input(
