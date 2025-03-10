@@ -1,5 +1,39 @@
+import type { Bus, PrismaClient } from "@prisma/client";
+import SuperJSON from "superjson";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { LONG_CACHE_TIME_OPTION, type ThenArg } from "../cacheUtil";
+
+type UsersWithPosts = ThenArg<ReturnType<typeof getBusById>>;
+
+function getBusById(
+  prismaClient: PrismaClient,
+  params: {
+    id: number;
+    includeStops: boolean;
+    includeDays: boolean;
+    isVisible?: boolean;
+    throwIfNotFound: boolean;
+  },
+) {
+  return prismaClient.bus
+    .findUnique({
+      where: {
+        id: params.id,
+        isVisible: params.isVisible,
+      },
+      include: {
+        stops: params.includeStops,
+        operatingDays: params.includeDays,
+      },
+    })
+    .then((bus) => {
+      if (params.throwIfNotFound && !bus) {
+        throw new Error(`Bus with ID ${params.id} not found`);
+      }
+      return bus;
+    });
+}
 
 export const busRouter = createTRPCRouter({
   getAll: publicProcedure
@@ -12,16 +46,27 @@ export const busRouter = createTRPCRouter({
           isVisible: true,
         }),
     )
-    .query(({ ctx, input }) =>
-      ctx.db.bus.findMany({
+    .query(async ({ ctx, input }) => {
+      const cacheKey = `bus:all:${input.isVisible ? "vis" : "inv"}`;
+      const cache: string | null = await ctx.cache.get(cacheKey);
+      if (cache) {
+        return SuperJSON.parse<Bus[]>(cache);
+      }
+      const buses = await ctx.db.bus.findMany({
         where: {
           isVisible: input.isVisible,
         },
         orderBy: {
           id: "asc",
         },
-      }),
-    ),
+      });
+      await ctx.cache.set(
+        cacheKey,
+        SuperJSON.stringify(buses),
+        LONG_CACHE_TIME_OPTION,
+      );
+      return buses;
+    }),
   getAllID: publicProcedure
     .input(
       z
@@ -32,8 +77,13 @@ export const busRouter = createTRPCRouter({
           isVisible: true,
         }),
     )
-    .query(({ ctx, input }) =>
-      ctx.db.bus
+    .query(async ({ ctx, input }) => {
+      const cacheKey = `bus:all:id:${input.isVisible ? "vis" : "inv"}`;
+      const cache: string | null = await ctx.cache.get(cacheKey);
+      if (cache) {
+        return SuperJSON.parse<number[]>(cache);
+      }
+      const busIds = ctx.db.bus
         .findMany({
           where: {
             isVisible: input.isVisible,
@@ -42,8 +92,14 @@ export const busRouter = createTRPCRouter({
             id: true,
           },
         })
-        .then((buses) => buses.map((bus) => bus.id)),
-    ),
+        .then((buses) => buses.map((bus) => bus.id));
+      await ctx.cache.set(
+        cacheKey,
+        SuperJSON.stringify(busIds),
+        LONG_CACHE_TIME_OPTION,
+      );
+      return busIds;
+    }),
   getByID: publicProcedure
     .input(
       z.object({
@@ -54,41 +110,28 @@ export const busRouter = createTRPCRouter({
         throwIfNotFound: z.boolean().default(false),
       }),
     )
-    .query(({ ctx, input }) =>
-      ctx.db.bus
-        .findUnique({
-          where: {
-            id: input.id,
-            isVisible: input.isVisible,
-          },
-          include: {
-            stops: input.includeStops,
-            operatingDays: input.includeDays,
-          },
-        })
-        .then((bus) => {
-          if (input.throwIfNotFound && !bus) {
-            throw new Error(`Bus with ID ${input.id} not found`);
-          }
-          return bus;
-        }),
-    ),
-  getAllByStopID: publicProcedure
-    .input(
-      z.object({
-        stopId: z.number(),
-      }),
-    )
-    .query(({ ctx, input }) =>
-      ctx.db.stops.findUnique({
-        select: {
-          buses: true,
-        },
-        where: {
-          id: input.stopId,
-        },
-      }),
-    ),
+    .query(async ({ ctx, input }) => {
+      const cacheKey = `bus:${input.id}:${input.isVisible ? "vis" : "inv"}:${
+        input.includeStops ? "stops" : "nostops"
+      }:${input.includeDays ? "days" : "nodays"}`;
+      const cache: string | null = await ctx.cache.get(cacheKey);
+      if (cache) {
+        return SuperJSON.parse<UsersWithPosts | null>(cache);
+      }
+      const bus = await getBusById(ctx.db, {
+        id: input.id,
+        includeStops: input.includeStops,
+        includeDays: input.includeDays,
+        isVisible: input.isVisible,
+        throwIfNotFound: input.throwIfNotFound,
+      });
+      await ctx.cache.set(
+        cacheKey,
+        SuperJSON.stringify(bus),
+        LONG_CACHE_TIME_OPTION,
+      );
+      return bus;
+    }),
   addBus: publicProcedure
     .input(
       z.object({
@@ -99,11 +142,12 @@ export const busRouter = createTRPCRouter({
         isVisible: z.boolean().default(true),
       }),
     )
-    .mutation(({ ctx, input }) =>
-      ctx.db.bus.create({
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.bus.create({
         data: input,
-      }),
-    ),
+      });
+      await ctx.cache.del("bus:all:*", `bus:${input.id}:*`);
+    }),
   editBus: publicProcedure
     .input(
       z.object({
@@ -135,12 +179,14 @@ export const busRouter = createTRPCRouter({
           data: newOperatingDays.map((d) => ({ ...d, busId: input.id })),
         });
       }
-      return await ctx.db.bus.update({
+      const res = await ctx.db.bus.update({
         where: {
           id: input.id,
         },
         data: { ...input, operatingDays: undefined },
       });
+      await ctx.cache.del("bus:all:*", `bus:${input.id}:*`);
+      return res;
     }),
   deleteBus: publicProcedure
     .input(
@@ -148,11 +194,12 @@ export const busRouter = createTRPCRouter({
         id: z.number(),
       }),
     )
-    .mutation(async ({ ctx, input }) =>
-      ctx.db.bus.delete({
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.bus.delete({
         where: {
           id: input.id,
         },
-      }),
-    ),
+      });
+      await ctx.cache.del("bus:all:*", `bus:${input.id}:*`);
+    }),
 });

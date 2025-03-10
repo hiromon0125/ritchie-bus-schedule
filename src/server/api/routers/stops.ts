@@ -1,9 +1,63 @@
+import type { PrismaClient, Stops } from "@prisma/client";
+import SuperJSON from "superjson";
 import { z } from "zod";
 import {
   createTRPCRouter,
   privateProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import type { ThenArg } from "../cacheUtil";
+
+type StopsWithBuses = ThenArg<ReturnType<typeof getAllStop>>;
+type StopWithBuses = ThenArg<ReturnType<typeof getStopById>>;
+
+function getAllStop(
+  prismaClient: PrismaClient,
+  params: {
+    includeRelatedBus: boolean;
+    includeHiddenBus: boolean;
+  },
+) {
+  return prismaClient.stops.findMany({
+    include: {
+      buses: params.includeRelatedBus
+        ? params.includeHiddenBus
+          ? true
+          : {
+              where: {
+                isVisible: true,
+              },
+            }
+        : false,
+    },
+    orderBy: {
+      id: "asc",
+    },
+  });
+}
+
+function getStopById(
+  prismaClient: PrismaClient,
+  params: {
+    id: number;
+    includeHiddenBus: boolean;
+  },
+) {
+  return prismaClient.stops.findUnique({
+    where: {
+      id: params.id,
+    },
+    include: {
+      buses: params.includeHiddenBus
+        ? true
+        : {
+            where: {
+              isVisible: true,
+            },
+          },
+    },
+  });
+}
 
 export const stopsRouter = createTRPCRouter({
   getAll: publicProcedure
@@ -15,31 +69,35 @@ export const stopsRouter = createTRPCRouter({
         })
         .optional(),
     )
-    .query(({ ctx, input }) =>
-      ctx.db.stops.findMany({
-        include: {
-          buses: input?.includeRelatedBus
-            ? input.includeHiddenBus
-              ? true
-              : {
-                  where: {
-                    isVisible: true,
-                  },
-                }
-            : false,
-        },
-        orderBy: {
-          id: "asc",
-        },
-      }),
-    ),
-  getAllID: publicProcedure.query(({ ctx }) =>
-    ctx.db.stops.findMany({
+    .query(async ({ ctx, input }) => {
+      const cacheKey = `stops:all:${input?.includeRelatedBus ? "rel" : "no"}:${
+        input?.includeHiddenBus ? "hid" : "vis"
+      }`;
+      const cache: string | null = await ctx.cache.get(cacheKey);
+      if (cache) {
+        return SuperJSON.parse<StopsWithBuses>(cache);
+      }
+      const stops = await getAllStop(ctx.db, {
+        includeRelatedBus: !!input?.includeRelatedBus,
+        includeHiddenBus: !!input?.includeHiddenBus,
+      });
+      await ctx.cache.set(cacheKey, SuperJSON.stringify(stops));
+      return stops;
+    }),
+  getAllID: publicProcedure.query(async ({ ctx }) => {
+    const cacheKey = `stops:all:id`;
+    const cache: string | null = await ctx.cache.get(cacheKey);
+    if (cache) {
+      return SuperJSON.parse<{ id: number }[]>(cache);
+    }
+    const stopIds = await ctx.db.stops.findMany({
       select: {
         id: true,
       },
-    }),
-  ),
+    });
+    await ctx.cache.set(cacheKey, SuperJSON.stringify(stopIds));
+    return stopIds;
+  }),
   getOneByID: publicProcedure
     .input(
       z.object({
@@ -47,39 +105,20 @@ export const stopsRouter = createTRPCRouter({
         includeHiddenBus: z.boolean().optional().default(false),
       }),
     )
-    .query(({ ctx, input }) =>
-      ctx.db.stops.findUnique({
-        where: {
-          id: input.id,
-        },
-        include: {
-          buses: input.includeHiddenBus
-            ? true
-            : {
-                where: {
-                  isVisible: true,
-                },
-              },
-        },
-      }),
-    ),
-  getStopsByBusID: publicProcedure
-    .input(
-      z.object({
-        busId: z.number(),
-      }),
-    )
     .query(async ({ ctx, input }) => {
-      return ctx.db.bus
-        .findFirst({
-          where: {
-            id: input.busId,
-          },
-          select: {
-            stops: true,
-          },
-        })
-        .then((bus) => bus?.stops);
+      const cacheKey = `stops:${input.id}:${
+        input.includeHiddenBus ? "hid" : "vis"
+      }`;
+      const cache: string | null = await ctx.cache.get(cacheKey);
+      if (cache) {
+        return SuperJSON.parse<StopWithBuses>(cache);
+      }
+      const res = await getStopById(ctx.db, {
+        id: input.id,
+        includeHiddenBus: input.includeHiddenBus,
+      });
+      await ctx.cache.set(cacheKey, SuperJSON.stringify(res));
+      return res;
     }),
   getStopIdsByBusID: publicProcedure
     .input(
@@ -88,7 +127,12 @@ export const stopsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      return ctx.db.bus
+      const cacheKey = `stops:bus:${input.busId}`;
+      const cache: string | null = await ctx.cache.get(cacheKey);
+      if (cache) {
+        return SuperJSON.parse<number[]>(cache);
+      }
+      const stopIds = await ctx.db.bus
         .findFirst({
           where: {
             id: input.busId,
@@ -105,9 +149,18 @@ export const stopsRouter = createTRPCRouter({
           },
         })
         .then((bus) => bus?.stops.map((stop) => stop.id));
+      await ctx.cache.set(cacheKey, SuperJSON.stringify(stopIds));
+      return stopIds;
     }),
-  getCoorOfAllStop: publicProcedure.query(({ ctx }) =>
-    ctx.db.stops.findMany({
+  getCoorOfAllStop: publicProcedure.query(async ({ ctx }) => {
+    const cacheKey = `stops:coor`;
+    const cache: string | null = await ctx.cache.get(cacheKey);
+    if (cache) {
+      return SuperJSON.parse<
+        Pick<Stops, "id" | "name" | "tag" | "latitude" | "longitude">[]
+      >(cache);
+    }
+    const stops = ctx.db.stops.findMany({
       select: {
         id: true,
         name: true,
@@ -115,8 +168,10 @@ export const stopsRouter = createTRPCRouter({
         latitude: true,
         longitude: true,
       },
-    }),
-  ),
+    });
+    await ctx.cache.set(cacheKey, SuperJSON.stringify(stops));
+    return stops;
+  }),
   addBusStop: privateProcedure
     .input(
       z.object({
@@ -141,6 +196,14 @@ export const stopsRouter = createTRPCRouter({
           data: input,
         });
       }
+      const caches = [
+        `stops:all:*`,
+        `stops:coor`,
+        `stops:${input.id}:*`,
+        `stops:bus:*`,
+        `buses:*`,
+      ];
+      await ctx.cache.del(...caches);
     }),
   editBusStop: privateProcedure
     .input(
@@ -154,12 +217,20 @@ export const stopsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.stops.update({
+      await ctx.db.stops.update({
         where: {
           id: input.id,
         },
         data: input,
       });
+      const caches = [
+        `stops:all:*`,
+        `stops:coor`,
+        `stops:${input.id}:*`,
+        `stops:bus:*`,
+        `buses:*`,
+      ];
+      await ctx.cache.del(...caches);
     }),
   deleteBusStop: privateProcedure
     .input(
@@ -167,9 +238,17 @@ export const stopsRouter = createTRPCRouter({
         id: z.number(),
       }),
     )
-    .mutation(({ ctx, input }) =>
-      ctx.db.stops.delete({
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.stops.delete({
         where: input,
-      }),
-    ),
+      });
+      const caches = [
+        `stops:all:*`,
+        `stops:coor`,
+        `stops:${input.id}:*`,
+        `stops:bus:*`,
+        `buses:*`,
+      ];
+      await ctx.cache.del(...caches);
+    }),
 });

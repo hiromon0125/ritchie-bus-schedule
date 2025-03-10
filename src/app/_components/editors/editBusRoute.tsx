@@ -149,7 +149,6 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
     onSuccess: async () => {
       await utils.bus.getAll.invalidate();
       await utils.routes.getAllByBusId.invalidate({ busId });
-      await utils.stops.getStopsByBusID.invalidate({ busId });
     },
   });
   const [editedSelectedStops, setEditedStops] = useState(false);

@@ -13,7 +13,7 @@ import posthog from "posthog-js";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { db } from "~/server/db";
+import { cache, db } from "~/server/db";
 import { env } from "../../env";
 
 const isPosthogEnabled = env.NEXT_PUBLIC_POSTHOG_KEY != undefined;
@@ -39,6 +39,7 @@ export const createTRPCContext = async (opts: {
 
   return {
     db,
+    cache,
     session: user,
     ...opts,
   };
