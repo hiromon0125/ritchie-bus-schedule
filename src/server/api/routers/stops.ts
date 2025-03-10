@@ -147,7 +147,7 @@ export const stopsRouter = createTRPCRouter({
         Pick<Stops, "id" | "name" | "tag" | "latitude" | "longitude">[]
       >(cacheKey);
     if (cache) return cache;
-    const stops = ctx.db.stops.findMany({
+    const stops = await ctx.db.stops.findMany({
       select: {
         id: true,
         name: true,
