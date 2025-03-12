@@ -1,4 +1,5 @@
 import { getCurrentTimeServer, NEWYORK_TIMEZONE } from "@/util";
+import { type PrismaClient, type Routes } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { z } from "zod";
@@ -7,6 +8,7 @@ import {
   privateProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { LONG_CACHE_TIME_OPTION, type ThenArg } from "../cacheUtil";
 
 function resetDate(date: Date) {
   date.setUTCFullYear(1970, 0, 1);
@@ -15,18 +17,54 @@ function resetDate(date: Date) {
   return date;
 }
 
+async function getRoutePaginated(
+  db: PrismaClient,
+  input: {
+    busId: number;
+    stopId?: number;
+    limit: number;
+    cursor?: { id: number; index: number } | null;
+  },
+) {
+  const res = await db.routes.findMany({
+    where: {
+      busId: input.busId,
+      ...(input.stopId ? { stopId: input.stopId } : {}),
+    },
+    orderBy: {
+      index: "asc",
+    },
+    take: input.limit + 1,
+    cursor: input.cursor ? { id: input.cursor.id } : undefined,
+  });
+  let nextCursor: typeof input.cursor;
+  if (res.length > input.limit) {
+    const curs = res.pop()!;
+    nextCursor = {
+      id: curs.id,
+      index: curs.index,
+    };
+  }
+  return {
+    data: res,
+    nextCursor,
+  };
+}
+type ReturnGetRoutePaginated = ThenArg<ReturnType<typeof getRoutePaginated>>;
+
 export const routesRouter = createTRPCRouter({
   getAllByBusId: publicProcedure
     .input(
       z.object({
         busId: z.number(),
         stopId: z.number().optional(),
-        offset: z.number().default(0),
-        windowsize: z.number().optional(),
       }),
     )
-    .query(({ ctx, input }) =>
-      ctx.db.routes.findMany({
+    .query(async ({ ctx, input }) => {
+      const cacheKey = `routes:${input.busId}:${input.stopId ?? "undStopId"}`;
+      const cached = await ctx.cacheGet<Routes[]>(cacheKey);
+      if (cached) return cached;
+      const res = await ctx.db.routes.findMany({
         where: {
           busId: input.busId,
           ...(input.stopId ? { stopId: input.stopId } : {}),
@@ -34,16 +72,15 @@ export const routesRouter = createTRPCRouter({
         orderBy: {
           index: "asc",
         },
-        skip: input.offset,
-        take: input.windowsize,
-      }),
-    ),
+      });
+      return await ctx.cacheSetReturn(cacheKey, res, LONG_CACHE_TIME_OPTION);
+    }),
   getAllByBusIdPaginated: publicProcedure
     .input(
       z.object({
         busId: z.number(),
         stopId: z.number().optional(),
-        limit: z.number().min(1).max(100).nullish(),
+        limit: z.number().min(1).max(100).default(10),
         cursor: z
           .object({
             id: z.number(),
@@ -53,53 +90,12 @@ export const routesRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const limit = input.limit ?? 10;
-      const result = await ctx.db.routes.findMany({
-        where: {
-          busId: input.busId,
-          ...(input.stopId ? { stopId: input.stopId } : {}),
-        },
-        orderBy: {
-          index: "asc",
-        },
-        take: limit + 1,
-        cursor: input.cursor ? { id: input.cursor.id } : undefined,
-      });
-      let nextCursor: typeof input.cursor = null;
-      if (result.length > limit) {
-        const curs = result.pop()!;
-        nextCursor = {
-          id: curs.id,
-          index: curs.index,
-        };
-      }
-      return {
-        data: result,
-        nextCursor,
-      };
+      const cacheKey = `routes:${input.busId}:${input.stopId ?? "undStopId"}:${input.cursor?.id ?? "undCursor"}:${input.limit}`;
+      const cached = await ctx.cacheGet<ReturnGetRoutePaginated>(cacheKey);
+      if (cached) return cached;
+      const result = getRoutePaginated(ctx.db, input);
+      return await ctx.cacheSetReturn(cacheKey, result, LONG_CACHE_TIME_OPTION);
     }),
-  getAllByStopAndBus: publicProcedure
-    .input(
-      z.object({
-        stopId: z.number(),
-        busId: z.number(),
-        isVisible: z.boolean().default(true),
-      }),
-    )
-    .query(({ ctx, input }) =>
-      ctx.db.routes.findMany({
-        where: {
-          stopId: input.stopId,
-          busId: input.busId,
-          bus: {
-            isVisible: input.isVisible,
-          },
-        },
-        orderBy: {
-          index: "asc",
-        },
-      }),
-    ),
   updateRoutes: privateProcedure
     .input(
       z.object({
@@ -175,6 +171,12 @@ export const routesRouter = createTRPCRouter({
           },
         },
       });
+      const cachesToDel = [
+        `routes:${input.busId}:*`,
+        `stops:bus:${input.busId}`,
+        `stops:all:rel:*`,
+      ];
+      await ctx.cache.del(...cachesToDel);
     }),
   getCurrentRouteOfBus: publicProcedure
     .input(
@@ -268,6 +270,8 @@ export const routesRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
+      // This is used to determine the first route index by bus id and stop id
+      // specifically both as it is not always zero.
       const res = await ctx.db.routes.findFirst({
         where: {
           busId: input.busId,

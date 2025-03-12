@@ -182,13 +182,7 @@ export const stopsRouter = createTRPCRouter({
           data: input,
         });
       }
-      const caches = [
-        `stops:all:*`,
-        `stops:coor`,
-        `stops:${input.id}:*`,
-        `stops:bus:*`,
-        `buses:*`,
-      ];
+      const caches = [`stops:all:*`, `stops:coor`, `stops:${input.id}:*`];
       await ctx.cache.del(...caches);
     }),
   editBusStop: privateProcedure
@@ -209,13 +203,7 @@ export const stopsRouter = createTRPCRouter({
         },
         data: input,
       });
-      const caches = [
-        `stops:all:*`,
-        `stops:coor`,
-        `stops:${input.id}:*`,
-        `stops:bus:*`,
-        `buses:*`,
-      ];
+      const caches = [`stops:all:*`, `stops:coor`, `stops:${input.id}:*`];
       await ctx.cache.del(...caches);
     }),
   deleteBusStop: privateProcedure
@@ -228,13 +216,7 @@ export const stopsRouter = createTRPCRouter({
       await ctx.db.stops.delete({
         where: input,
       });
-      const caches = [
-        `stops:all:*`,
-        `stops:coor`,
-        `stops:${input.id}:*`,
-        `stops:bus:*`,
-        `buses:*`,
-      ];
+      const caches = [`stops:all:*`, `stops:coor`, `stops:${input.id}:*`];
       await ctx.cache.del(...caches);
     }),
 });

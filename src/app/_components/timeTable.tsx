@@ -25,7 +25,7 @@ export default function TimeTable({
     ? Number(searchParams.get("stopId"))
     : stopId;
   const status = useBusStatus(bus ?? -1, fetchedRoute, stop);
-  const { data: route, isLoading } = api.routes.getAllByStopAndBus.useQuery({
+  const { data: route, isLoading } = api.routes.getAllByBusId.useQuery({
     stopId: stop ?? -1,
     busId: bus ?? -1,
   });

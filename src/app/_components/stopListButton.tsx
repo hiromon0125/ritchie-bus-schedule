@@ -9,7 +9,7 @@ export function StopListButton(params: { buses: Bus[]; stopId: number }) {
   const { buses, stopId } = params;
 
   const [selectedBus, setSelectedBus] = useState<Bus | undefined>();
-  const { data: routes } = api.routes.getAllByStopAndBus.useQuery({
+  const { data: routes } = api.routes.getAllByBusId.useQuery({
     stopId: stopId,
     busId: selectedBus?.id ?? -1,
   });
