@@ -115,25 +115,33 @@ export const routesRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       // Nuke the data that is going to be updated
-      await ctx.db.routes.deleteMany({
-        where: {
-          busId: input.busId,
-        },
-      });
-      const stops = await ctx.db.stops.findMany({
-        where: {
-          id: {
-            notIn: input.stopIds,
+      const [, stops] = await Promise.all([
+        ctx.db.routes.deleteMany({
+          where: {
+            busId: input.busId,
           },
-          buses: {
-            some: {
-              id: input.busId,
+        }),
+        ctx.db.stops.findMany({
+          where: {
+            id: {
+              notIn: input.stopIds,
+            },
+            buses: {
+              some: {
+                id: input.busId,
+              },
             },
           },
-        },
-      });
-      await Promise.all(
-        stops.map(async (stop) => {
+        }),
+      ]);
+      const cachesToDel = [
+        `routes:${input.busId}:*`,
+        `stops:bus:${input.busId}`,
+        `stops:all:rel:*`,
+      ];
+      return Promise.all([
+        // Disconnect the bus from the stops that are not in the new data
+        ...stops.map(async (stop) => {
           await ctx.db.stops.update({
             where: {
               id: stop.id,
@@ -148,35 +156,31 @@ export const routesRouter = createTRPCRouter({
             },
           });
         }),
-      );
-      // Insert the new data
-      await ctx.db.routes.createMany({
-        data: input.routes.map((route) => {
-          const dep = resetDate(new Date(route.deptTime));
-          const arr = route.arriTime
-            ? resetDate(new Date(route.arriTime))
-            : undefined;
-          return { ...route, deptTime: dep, arriTime: arr };
+        // Insert the new data
+        ctx.db.routes.createMany({
+          data: input.routes.map((route) => {
+            const dep = resetDate(new Date(route.deptTime));
+            const arr = route.arriTime
+              ? resetDate(new Date(route.arriTime))
+              : undefined;
+            return { ...route, deptTime: dep, arriTime: arr };
+          }),
         }),
-      });
-      await ctx.db.bus.update({
-        where: {
-          id: input.busId,
-        },
-        data: {
-          stops: {
-            connect: input.stopIds.map((stopId) => ({
-              id: stopId,
-            })),
+        ctx.db.bus.update({
+          where: {
+            id: input.busId,
           },
-        },
-      });
-      const cachesToDel = [
-        `routes:${input.busId}:*`,
-        `stops:bus:${input.busId}`,
-        `stops:all:rel:*`,
-      ];
-      await ctx.cache.del(...cachesToDel);
+          data: {
+            stops: {
+              connect: input.stopIds.map((stopId) => ({
+                id: stopId,
+              })),
+            },
+          },
+        }),
+        // Reset cache
+        ctx.cache.del(...cachesToDel),
+      ]);
     }),
   getCurrentRouteOfBus: publicProcedure
     .input(
@@ -185,21 +189,20 @@ export const routesRouter = createTRPCRouter({
         stopId: z.number().optional(),
       }),
     )
-    .query(async ({ ctx, input }) => {
-      const now = getCurrentTimeServer();
-      return ctx.db.routes.findFirst({
+    .query(async ({ ctx, input }) =>
+      ctx.db.routes.findFirst({
         orderBy: {
           deptTime: "asc",
         },
         where: {
           busId: input.busId,
           deptTime: {
-            gt: now.date,
+            gt: getCurrentTimeServer().date,
           },
           ...(input.stopId ? { stopId: input.stopId } : {}),
         },
-      });
-    }),
+      }),
+    ),
   isBusOperating: publicProcedure
     .input(
       z.object({
