@@ -196,8 +196,8 @@ importers:
         specifier: ^15.2.2
         version: 15.2.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       pigeon-maps:
-        specifier: ^0.21.6
-        version: 0.21.6(react@19.0.0)
+        specifier: ^0.22.1
+        version: 0.22.1(react@19.0.0)
       posthog-js:
         specifier: ^1.230.4
         version: 1.230.4(@rrweb/types@2.0.0-alpha.17)
@@ -2509,8 +2509,8 @@ packages:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
 
-  pigeon-maps@0.21.6:
-    resolution: {integrity: sha512-6io58lhpbtVT/DUKDoOqsjeAFW46Nfe+gr4PX/kmD1dyJxfb8WaT4hcgwcmM8dJdkyfibgLHo59Uo2o2/xscaQ==}
+  pigeon-maps@0.22.1:
+    resolution: {integrity: sha512-mVWxgpIyhAekITeJvDGlFAo/Ytm6Fg7prpDiAuQ0Z6cJ/LwpnS8F0sF+0TDqyJu7C/DDHupkstFTNoIRqhdP5A==}
     peerDependencies:
       react: '*'
 
@@ -5480,7 +5480,7 @@ snapshots:
 
   pify@2.3.0: {}
 
-  pigeon-maps@0.21.6(react@19.0.0):
+  pigeon-maps@0.22.1(react@19.0.0):
     dependencies:
       react: 19.0.0
 

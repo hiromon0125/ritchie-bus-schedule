@@ -36,7 +36,7 @@
     "lucide-react": "^0.441.0",
     "luxon": "^3.5.0",
     "next": "^15.2.2",
-    "pigeon-maps": "^0.21.6",
+    "pigeon-maps": "^0.22.1",
     "posthog-js": "^1.230.4",
     "react": "19.0.0",
     "react-day-picker": "^9.6.2",
