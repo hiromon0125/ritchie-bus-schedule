@@ -6,7 +6,7 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { currentUser, getAuth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type NextRequest } from "next/server";
 import posthog from "posthog-js";
@@ -34,8 +34,7 @@ export const createTRPCContext = async (opts: {
   headers: Headers;
   req?: NextRequest;
 }) => {
-  const { req } = opts;
-  const user = req ? getAuth(req) : undefined;
+  const user = await auth();
 
   return {
     db,
