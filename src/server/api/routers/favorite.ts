@@ -120,7 +120,10 @@ export const favoriteRouter = createTRPCRouter({
       }
       return count;
     }),
-  getAllStop: privateProcedure.query(async ({ ctx }) => {
+  getAllStop: userProcedure.query(async ({ ctx }) => {
+    if (ctx.session?.user == undefined) {
+      return [];
+    }
     return ctx.db.favoriteStop.findMany({
       where: {
         userId: ctx.session.user.id,
