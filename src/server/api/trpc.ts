@@ -6,7 +6,7 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type NextRequest } from "next/server";
 import posthog from "posthog-js";
@@ -35,7 +35,6 @@ export const createTRPCContext = async (opts: {
   headers: Headers;
   req?: NextRequest;
 }) => {
-  const user = await auth();
   const cacheSetReturn = <TData>(
     key: string,
     value: TData,
@@ -58,7 +57,6 @@ export const createTRPCContext = async (opts: {
     cache,
     cacheSetReturn,
     cacheGet,
-    session: user,
     ...opts,
   };
 };
@@ -152,16 +150,19 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const privateProcedure = t.procedure
   .use(timingMiddleware)
   .use(async ({ ctx, next }) => {
-    const user = await currentUser();
-    if (!user) {
+    const authObj = await auth();
+    if (!authObj.userId) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
       });
     }
     return next({
       ctx: {
+        ...ctx,
         // infers the `session` as non-nullable
-        session: { ...ctx.session, user: user },
+        session: {
+          ...authObj,
+        },
       },
     });
   });

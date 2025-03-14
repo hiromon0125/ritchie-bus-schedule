@@ -82,7 +82,7 @@ export const stopsRouter = createTRPCRouter({
     }),
   getAllID: publicProcedure.query(async ({ ctx }) => {
     const cacheKey = `stops:all:id`;
-    const cache = await ctx.cacheGet(cacheKey);
+    const cache = await ctx.cacheGet<{ id: number }[]>(cacheKey);
     if (cache) return cache;
     const stopIds = await ctx.db.stops.findMany({
       select: {
