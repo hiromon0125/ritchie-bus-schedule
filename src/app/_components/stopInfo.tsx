@@ -12,11 +12,12 @@ interface StopParams {
 function StopInfo(params: StopParams) {
   const { stops, bus } = params;
   const [selectedStop, setSelectedStop] = useState<Stops>();
-  const { data: selectedRoutes, isLoading } =
-    api.routes.getAllByStopAndBus.useQuery({
+  const { data: selectedRoutes, isLoading } = api.routes.getAllByBusId.useQuery(
+    {
       stopId: selectedStop?.id ?? -1,
       busId: bus?.id ?? -1,
-    });
+    },
+  );
   return (
     <>
       <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-4xl">

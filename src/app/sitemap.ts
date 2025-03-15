@@ -1,22 +1,29 @@
 import type { MetadataRoute } from "next";
-import { api } from "t/server";
+import { db } from "../server/db";
 
 const URL = "https://rit-bus.app";
 export const dynamic = "force-static";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const busIDs = await api.bus.getAllID();
-  const stops = await api.stops.getAllID();
+  const buses = await db.bus.findMany({
+    where: { isVisible: true },
+    select: { id: true },
+  });
+  const stops = await db.stops.findMany({
+    where: { buses: { some: { isVisible: true } } },
+    select: { id: true },
+  });
+
   return [
     {
       url: `${URL}/about`,
       changeFrequency: "yearly",
       priority: 0.2,
     },
-    ...busIDs.map(
-      (busID) =>
+    ...buses.map(
+      (bus) =>
         ({
-          url: `${URL}/bus/${busID}`,
+          url: `${URL}/bus/${bus.id}`,
           changeFrequency: "monthly",
           priority: 0.5,
         }) as const,

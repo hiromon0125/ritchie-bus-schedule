@@ -17,9 +17,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
+import { IoMdInformationCircle } from "react-icons/io";
 import { api } from "t/server";
+import ClickableTooltip from "../../_components/infobtn";
 import { ServiceInfoContentDecorator } from "../../_components/serviceinfo";
-
 type Props = {
   params: Promise<{ busId: string }>;
   searchParams: Promise<{ stopId?: string | string[] | undefined }>;
@@ -90,26 +91,41 @@ export default async function Page(props: Props) {
   if (!selectedStop) {
     permanentRedirect(`/bus/${params.busId}?stopId=${stopId}`);
   }
-
   return (
     <>
-      <div className=" flex flex-row items-center gap-2 xs:mt-3">
-        <BusTag bus={bus} />
-        <p className=" text-2xl font-bold">{bus.name}</p>
-        <FavBtn isFavorited={isFavorite} />
-      </div>
-      <div className=" flex flex-col gap-1 xs:mb-2">
-        <p className=" text-lg">{bus.description}</p>
-        <Suspense fallback={<p>Loading...</p>}>
-          <BusStatusBig busId={bus.id ?? -1} />
-        </Suspense>
-      </div>
-      <div>
+      <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+        <div className=" flex w-full flex-row rounded-xl bg-white p-2 md:gap-2">
+          <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
+          <div className=" flex w-full flex-col gap-2 bg-white px-2 md:p-3">
+            <div className=" flex flex-row items-center gap-2">
+              <BusTag bus={bus} />
+              <p className=" text-lg font-bold md:text-2xl">{bus.name}</p>
+              <FavBtn isFavorited={isFavorite} />
+            </div>
+            <p className=" text-base md:text-lg">{bus.description}</p>
+          </div>
+        </div>
+        <div className=" flex w-full flex-col gap-2 rounded-xl bg-white p-2 pl-3">
+          <h2 className=" m-0 text-lg font-semibold md:text-2xl">Status</h2>
+        </div>
+        <div className=" flex w-full flex-row gap-4 rounded-xl bg-white px-2 md:p-2 md:pl-3">
+          <div className=" flex flex-col gap-2 py-2">
+            <Suspense fallback={<p>Loading...</p>}>
+              <BusStatusBig busId={bus.id ?? -1} />
+            </Suspense>
+          </div>
+        </div>
         <BusServiceInfo busId={bus.id} />
       </div>
       <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-        <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
-          <h1 className=" m-0 text-xl font-bold xs:text-2xl">Select Stops</h1>
+        <div className=" flex w-full flex-row items-center justify-between rounded-xl bg-white p-1 pl-3 pr-2 md:p-3">
+          <h2 className=" m-0 text-lg font-bold xs:text-2xl">Select Stops</h2>
+          <ClickableTooltip tipMessage="Click on the bus stop to view it's timetable below.">
+            <IoMdInformationCircle
+              size={32}
+              className=" scale-150 opacity-30"
+            />
+          </ClickableTooltip>
         </div>
         {_.sortBy(bus.stops, ["id"]).map((stop, i) => (
           <div
@@ -183,7 +199,7 @@ async function SelectableStopInfo({
       >
         <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
         <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
-          <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-4 pr-2 pt-2">
+          <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-2 pr-2 pt-2 sm:pl-4">
             <StopTag stop={stopObj} />
             <h2 className=" w-0 flex-1 overflow-hidden text-ellipsis text-nowrap text-left font-bold md:text-xl">
               {stopObj?.name}
@@ -213,29 +229,31 @@ async function BusServiceInfo({ busId }: { busId: number }) {
   if (!infoService || infoService.length < 1) return null;
 
   return (
-    <div className=" flex flex-row gap-4 rounded-xl border-2 border-orange-500 bg-gradient-to-b from-orange-500/40 to-white/40 p-5">
-      <div className=" min-w-[40px] sm:min-w-[60px]">
-        <Image
-          src="/service-info-icon.png"
-          width={60}
-          height={60}
-          alt="Alert"
-        />
-      </div>
-      <div className=" pt-1">
-        {infoService.map((alert) => (
-          <div key={alert.hash} className=" flex flex-col gap-2">
-            <div className=" flex flex-row items-center gap-4">
-              <p className=" text-lg font-bold">{alert.title}</p>
-              <p className=" text-sm font-semibold text-[#63646e]">
-                {DateTime.fromJSDate(alert.createdAt).toFormat("LLL dd")}
-              </p>
+    <div className=" rounded-xl bg-white">
+      <div className=" flex flex-row gap-4 rounded-xl border-2 border-orange-500 bg-gradient-to-b from-orange-500/40 to-white/40 p-5">
+        <div className=" min-w-[40px] sm:min-w-[60px]">
+          <Image
+            src="/service-info-icon.png"
+            width={60}
+            height={60}
+            alt="Alert"
+          />
+        </div>
+        <div className=" pt-1">
+          {infoService.map((alert) => (
+            <div key={alert.hash} className=" flex flex-col gap-2">
+              <div className=" flex flex-row items-center gap-4">
+                <p className=" text-lg font-bold">{alert.title}</p>
+                <p className=" text-sm font-semibold text-[#63646e]">
+                  {DateTime.fromJSDate(alert.createdAt).toFormat("LLL dd")}
+                </p>
+              </div>
+              <div className=" text-base">
+                <ServiceInfoContentDecorator content={alert.content} />
+              </div>
             </div>
-            <div className=" text-base">
-              <ServiceInfoContentDecorator content={alert.content} />
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

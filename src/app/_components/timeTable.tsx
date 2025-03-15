@@ -25,7 +25,7 @@ export default function TimeTable({
     ? Number(searchParams.get("stopId"))
     : stopId;
   const status = useBusStatus(bus ?? -1, fetchedRoute, stop);
-  const { data: route, isLoading } = api.routes.getAllByStopAndBus.useQuery({
+  const { data: route, isLoading } = api.routes.getAllByBusId.useQuery({
     stopId: stop ?? -1,
     busId: bus ?? -1,
   });
@@ -96,7 +96,10 @@ export default function TimeTable({
 }
 
 function formatToLocalTimeString(date: Date) {
-  return DateTime.fromJSDate(date).toLocal().toFormat("h:mm a");
+  const timezoneOffset = DateTime.local().offset / 60;
+  return DateTime.fromJSDate(date, { zone: "utc" })
+    .plus({ hours: timezoneOffset })
+    .toFormat("h:mm a");
 }
 
 function ErrorTimeTable() {

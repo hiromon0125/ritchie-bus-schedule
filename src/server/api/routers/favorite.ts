@@ -18,7 +18,7 @@ export const favoriteRouter = createTRPCRouter({
   getAllBus: privateProcedure.query(async ({ ctx }) => {
     return ctx.db.favoriteBus.findMany({
       where: {
-        userId: ctx.session.user.id,
+        userId: ctx.session.userId,
       },
     });
   }),
@@ -34,13 +34,13 @@ export const favoriteRouter = createTRPCRouter({
           priority: "desc",
         },
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
         },
       });
       const newPriority = lastBus != null ? lastBus.priority + 1 : 0;
       return ctx.db.favoriteBus.create({
         data: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
           busId: input.busId,
           priority: newPriority,
         },
@@ -51,7 +51,7 @@ export const favoriteRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const buses = await ctx.db.favoriteBus.findMany({
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
         },
       });
       const newBusesList = buses.map((bus) => ({
@@ -66,7 +66,7 @@ export const favoriteRouter = createTRPCRouter({
       }
       return ctx.db.favoriteBus.updateMany({
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
         },
         data: newBusesList,
       });
@@ -79,12 +79,12 @@ export const favoriteRouter = createTRPCRouter({
           priority: "asc",
         },
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
         },
       });
       const { count } = await ctx.db.favoriteBus.deleteMany({
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
           busId: input.busId,
         },
       });
@@ -113,7 +113,7 @@ export const favoriteRouter = createTRPCRouter({
   getAllStop: privateProcedure.query(async ({ ctx }) => {
     return ctx.db.favoriteStop.findMany({
       where: {
-        userId: ctx.session.user.id,
+        userId: ctx.session.userId,
       },
     });
   }),
@@ -129,13 +129,13 @@ export const favoriteRouter = createTRPCRouter({
           priority: "desc",
         },
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
         },
       });
       const newPriority = lastStop != null ? lastStop.priority + 1 : 0;
       return ctx.db.favoriteStop.create({
         data: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
           stopId: input.stopId,
           priority: newPriority,
         },
@@ -146,7 +146,7 @@ export const favoriteRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const stops = await ctx.db.favoriteStop.findMany({
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
         },
       });
       const newStopList = stops.map((stop) => ({
@@ -161,7 +161,7 @@ export const favoriteRouter = createTRPCRouter({
       }
       return ctx.db.favoriteBus.updateMany({
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
         },
         data: newStopList,
       });
@@ -174,12 +174,12 @@ export const favoriteRouter = createTRPCRouter({
           priority: "asc",
         },
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
         },
       });
       const { count } = await ctx.db.favoriteStop.deleteMany({
         where: {
-          userId: ctx.session.user.id,
+          userId: ctx.session.userId,
           stopId: input.stopId,
         },
       });
