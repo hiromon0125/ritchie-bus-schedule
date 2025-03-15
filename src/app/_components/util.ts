@@ -145,21 +145,23 @@ export function evalStatusFromRoute(
 
   const timezoneOffset = DateTime.local().offset / 60;
 
-  // but heres is the result of all of these methods for converting timezone for future reference
+  // // I really don't know why this shit keeps breaking when timezone changes
+  // // but heres is the result of all of these methods for converting timezone for future reference
+  // // This may be the behavior on client side code, but I can not tell you why
   // console.log("this shit sucks", {
   //   route: route.index,
   //   nowDT: nowDT.toISO(), // utc
   //   arriDT: arriDT.toISO(), // utc
   //   deptDT: deptDT.toISO(), // utc these are fine its meant to be
-  //
-  //   and these are fucked
+
+  //   // and these are fucked
   //   arriDTNY: arriDT.setZone(NEWYORK_TIMEZONE).toISO(), // -5 with and without DST
   //   deptDTNY: deptDT.setZone(NEWYORK_TIMEZONE).toISO(), // -5 with and without DST
   //   arriDTLocal: arriDT.toLocal().toISO(), // -5 with and without DST
   //   deptDTLocal: deptDT.toLocal().toISO(), // -5 with and without DST
-  //
-  //   This is what I roll currently since it works but only tested during the summer time
-  //   now: DateTime.local().offset / 60, // -5 during winter(correct) -4 during summer(correct)
+
+  //   // This is what I roll currently since it works but only tested during the summer time
+  //   timezoneOffset: DateTime.local().offset / 60, // -5 during winter(correct) -4 during summer(correct)
   //   arriDTOffset: arriDT.plus({ hours: timezoneOffset }).toISO(), // -5 during winter? -4 during summer(correct)
   //   deptDTOffset: deptDT.plus({ hours: timezoneOffset }).toISO(), // -5 during winter? -4 during summer(correct)
   // });
