@@ -96,7 +96,10 @@ export default function TimeTable({
 }
 
 function formatToLocalTimeString(date: Date) {
-  return DateTime.fromJSDate(date).toLocal().toFormat("h:mm a");
+  const timezoneOffset = DateTime.local().offset / 60;
+  return DateTime.fromJSDate(date, { zone: "utc" })
+    .plus({ hours: timezoneOffset })
+    .toFormat("h:mm a");
 }
 
 function ErrorTimeTable() {
