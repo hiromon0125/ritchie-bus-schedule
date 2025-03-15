@@ -1,4 +1,3 @@
-import { Protect } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -72,13 +71,6 @@ export default function Header({
               >
                 <AlertNavigation />
               </Suspense>
-              <Protect role="org:admin">
-                <Link href="/manage">
-                  <p className=" mx-3 text-xl text-[--sm-title-color] underline md:text-[--lg-title-color]">
-                    Manage
-                  </p>
-                </Link>
-              </Protect>
               <Suspense>
                 <ProfileBtnComponent />
               </Suspense>
@@ -89,7 +81,7 @@ export default function Header({
           <MobileHeader title={title ?? ""} route={route} />
         </div>
       </div>
-      <div className=" h-3 w-full bg-gradient-to-b from-[--sm-bg-color] md:hidden" />
+      <div className=" h-3 w-full bg-gradient-to-b from-[--sm-bg-color] to-white md:hidden" />
     </div>
   );
 }

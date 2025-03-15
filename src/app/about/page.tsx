@@ -1,9 +1,8 @@
 import Subtitle from "@/about/subtitle";
-import Header from "@/header";
 import Image from "next/image";
 import Link from "next/link";
 import aboutStyles from "~/styles/about.module.css";
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 function KeyScrollTitle() {
   return (
@@ -17,12 +16,9 @@ function KeyScrollTitle() {
   );
 }
 
-async function Page() {
+function Page() {
   return (
     <>
-      <div className=" w-full bg-slate-900">
-        <Header title="About" />
-      </div>
       <div className=" flex h-[30vh] max-h-[600px] w-screen flex-col items-center justify-center overflow-hidden bg-[#E1ECF7] md:h-[70vh]">
         <Image
           src="/ritches-bus-schedule-banner-uiux.png"
