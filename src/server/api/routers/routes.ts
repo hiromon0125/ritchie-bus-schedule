@@ -203,7 +203,6 @@ export const routesRouter = createTRPCRouter({
           ...(input.stopId ? { stopId: input.stopId } : {}),
         },
       });
-      console.log("curRoute:", res);
       return res;
     }),
   isBusOperating: publicProcedure
@@ -266,13 +265,6 @@ export const routesRouter = createTRPCRouter({
       const lastRouteUTCDateTime = DateTime.fromJSDate(lastRouteDate, {
         zone: "utc",
       });
-      console.log(
-        "lastRouteUTCDateTime",
-        lastRouteUTCDateTime.toISO(),
-        "now",
-        nowDateTime.toISO(),
-        nowDateTime > lastRouteUTCDateTime,
-      );
 
       return nowDateTime > lastRouteUTCDateTime;
     }),

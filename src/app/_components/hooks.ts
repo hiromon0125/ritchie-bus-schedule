@@ -111,9 +111,6 @@ export function useBusStatus(
     index,
     fetchNextPage,
   ]);
-  if (busId === 1)
-    console.log("status", { status, isOperating, isRouteCompleted });
-
   return status ?? LOADING_STATUS;
 }
 
@@ -132,7 +129,5 @@ function useStatusFromRoute(
     }, status?.nextUpdate ?? 2000);
     return () => clearTimeout(interval);
   }, [status, isOperating, isRouteCompleted]);
-  if (nextRoute?.busId === 1)
-    console.log("status", { status, isOperating, isRouteCompleted });
   return isOperating && !isRouteCompleted ? status : OUT_OF_SERVICE_STATUS;
 }

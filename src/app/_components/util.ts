@@ -142,16 +142,7 @@ export function evalStatusFromRoute(
 
   const deptDiff: number = deptDT.diff(nowDT).toMillis();
   const arrDiff: number = arriDT.diff(nowDT).toMillis();
-  if (route.busId === 1)
-    console.log("eval function", {
-      busId: route.busId,
-      index: route.index,
-      arriDT: arriDT.toISO(),
-      deptDT: deptDT.toISO(),
-      nowDT: nowDT.toISO(),
-      deptDiff: deptDiff,
-      arrDiff: arrDiff,
-    });
+
   if (
     route.index === (firstRouteIndex ?? 0) &&
     arrDiff >= 10 * 60 * 1000 // 10 minutes(600000 milsec)
