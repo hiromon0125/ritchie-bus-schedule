@@ -225,13 +225,13 @@ export const routesRouter = createTRPCRouter({
       if (!res) return false;
       const opDay = _.find(res.operatingDays, (opDay) => {
         const { day: dayUTC, isWeekly } = opDay;
-        const nowDate = getCurrentTimeServer().dt;
+        const nowDate = getCurrentTimeServer().nowWeekday;
         const day = DateTime.fromJSDate(dayUTC, {
           zone: NEWYORK_TIMEZONE,
         });
         return (
-          (isWeekly && day.weekday === nowDate.weekday) ||
-          day.diff(nowDate, "days").days === 0
+          (isWeekly && day.weekday === nowDate) ||
+          day.diff(DateTime.utc(), "days").days === 0
         );
       });
       return !!opDay;

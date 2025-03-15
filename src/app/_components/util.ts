@@ -69,13 +69,10 @@ export function getCurrentTime(): {
 }
 export function getCurrentTimeServer(): {
   date: Date;
-  isWeekend: boolean;
+  nowWeekday: number;
   dt: DateTime;
   dtUTC: DateTime;
 } {
-  const isTodayWeekend = [6, 7].includes(
-    DateTime.utc().setZone(NEWYORK_TIMEZONE).weekday,
-  );
   // set date to 0 so that we can compare times
   const now = DateTime.utc()
     .setZone(NEWYORK_TIMEZONE)
@@ -88,7 +85,7 @@ export function getCurrentTimeServer(): {
   // console.log("getCurrentTimeServer", now.toISO(), utcDate.toISO());
   return {
     date: now.toJSDate(),
-    isWeekend: isTodayWeekend,
+    nowWeekday: DateTime.utc().setZone(NEWYORK_TIMEZONE).weekday,
     dt: now,
     dtUTC: utcDate,
   };
