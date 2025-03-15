@@ -9,7 +9,6 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { LONG_CACHE_TIME_OPTION, type ThenArg } from "../cacheUtil";
-
 function resetDate(date: Date) {
   date.setUTCFullYear(1970, 0, 1);
   date.setUTCSeconds(0);
@@ -93,8 +92,12 @@ export const routesRouter = createTRPCRouter({
       const cacheKey = `routes:${input.busId}:${input.stopId ?? "undStopId"}:${input.cursor?.id ?? "undCursor"}:${input.limit}`;
       const cached = await ctx.cacheGet<ReturnGetRoutePaginated>(cacheKey);
       if (cached) return cached;
-      const result = getRoutePaginated(ctx.db, input);
-      return await ctx.cacheSetReturn(cacheKey, result, LONG_CACHE_TIME_OPTION);
+      const result = await getRoutePaginated(ctx.db, input);
+      return await ctx.cacheSetReturn<ReturnGetRoutePaginated>(
+        cacheKey,
+        result,
+        LONG_CACHE_TIME_OPTION,
+      );
     }),
   updateRoutes: privateProcedure
     .input(
@@ -159,10 +162,8 @@ export const routesRouter = createTRPCRouter({
         // Insert the new data
         ctx.db.routes.createMany({
           data: input.routes.map((route) => {
-            const dep = resetDate(new Date(route.deptTime));
-            const arr = route.arriTime
-              ? resetDate(new Date(route.arriTime))
-              : undefined;
+            const dep = resetDate(route.deptTime);
+            const arr = route.arriTime ? resetDate(route.arriTime) : undefined;
             return { ...route, deptTime: dep, arriTime: arr };
           }),
         }),
@@ -189,20 +190,22 @@ export const routesRouter = createTRPCRouter({
         stopId: z.number().optional(),
       }),
     )
-    .query(async ({ ctx, input }) =>
-      ctx.db.routes.findFirst({
+    .query(async ({ ctx, input }) => {
+      const res = await ctx.db.routes.findFirst({
         orderBy: {
           deptTime: "asc",
         },
         where: {
           busId: input.busId,
           deptTime: {
-            gt: getCurrentTimeServer().date,
+            gt: getCurrentTimeServer().dtUTC.toJSDate(),
           },
           ...(input.stopId ? { stopId: input.stopId } : {}),
         },
-      }),
-    ),
+      });
+      console.log("curRoute:", res);
+      return res;
+    }),
   isBusOperating: publicProcedure
     .input(
       z.object({
@@ -254,15 +257,23 @@ export const routesRouter = createTRPCRouter({
         },
         where: {
           busId: input.busId,
-          ...(input.stopId ? { stopId: input.stopId } : {}),
+          stopId: input.stopId,
         },
       });
       if (!lastRoute) return false;
       const lastRouteDate = lastRoute.deptTime;
-      const nowDateTime = getCurrentTimeServer().dt;
+      const nowDateTime = getCurrentTimeServer().dtUTC;
       const lastRouteUTCDateTime = DateTime.fromJSDate(lastRouteDate, {
-        zone: NEWYORK_TIMEZONE,
+        zone: "utc",
       });
+      console.log(
+        "lastRouteUTCDateTime",
+        lastRouteUTCDateTime.toISO(),
+        "now",
+        nowDateTime.toISO(),
+        nowDateTime > lastRouteUTCDateTime,
+      );
+
       return nowDateTime > lastRouteUTCDateTime;
     }),
   getFirstRouteIndex: publicProcedure

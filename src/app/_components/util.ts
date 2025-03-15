@@ -61,27 +61,37 @@ export function getCurrentTime(): {
   dt: DateTime;
 } {
   const isTodayWeekend = [6, 7].includes(
-    DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
+    DateTime.utc().setZone(NEWYORK_TIMEZONE).weekday,
   );
   // set date to 0 so that we can compare times
-  const now = DateTime.now()
-    .setZone(NEWYORK_TIMEZONE)
-    .set({ year: 1970, month: 1, day: 1 });
+  const now = DateTime.utc().set({ year: 1970, month: 1, day: 1 });
   return { date: now.toJSDate(), isWeekend: isTodayWeekend, dt: now };
 }
 export function getCurrentTimeServer(): {
   date: Date;
   isWeekend: boolean;
   dt: DateTime;
+  dtUTC: DateTime;
 } {
   const isTodayWeekend = [6, 7].includes(
-    DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
+    DateTime.utc().setZone(NEWYORK_TIMEZONE).weekday,
   );
   // set date to 0 so that we can compare times
-  const now = DateTime.now()
+  const now = DateTime.utc()
     .setZone(NEWYORK_TIMEZONE)
     .set({ year: 1970, month: 1, day: 1 });
-  return { date: now.toJSDate(), isWeekend: isTodayWeekend, dt: now };
+  const utcDate = DateTime.utc().set({
+    year: 1970,
+    month: 1,
+    day: 1,
+  });
+  // console.log("getCurrentTimeServer", now.toISO(), utcDate.toISO());
+  return {
+    date: now.toJSDate(),
+    isWeekend: isTodayWeekend,
+    dt: now,
+    dtUTC: utcDate,
+  };
 }
 
 /**
@@ -110,7 +120,7 @@ export function evalStatusFromRoute(
   currentTime: ReturnType<typeof getCurrentTime>,
   firstRouteIndex?: number,
 ): Status | undefined {
-  const { date: now } = currentTime;
+  const { dt: nowDT } = currentTime;
 
   // out of service
   if (!route) {
@@ -125,17 +135,26 @@ export function evalStatusFromRoute(
 
   // starting
   const arriTime = getArriTime(route);
-  const arriDT = DateTime.fromJSDate(arriTime, { zone: NEWYORK_TIMEZONE });
+  const arriDT = DateTime.fromJSDate(arriTime, { zone: "utc" });
   const deptDT = DateTime.fromJSDate(route.deptTime, {
-    zone: NEWYORK_TIMEZONE,
+    zone: "utc",
   });
-  const nowDT = DateTime.fromJSDate(now, { zone: NEWYORK_TIMEZONE });
+
   const deptDiff: number = deptDT.diff(nowDT).toMillis();
   const arrDiff: number = arriDT.diff(nowDT).toMillis();
-
+  if (route.busId === 1)
+    console.log("eval function", {
+      busId: route.busId,
+      index: route.index,
+      arriDT: arriDT.toISO(),
+      deptDT: deptDT.toISO(),
+      nowDT: nowDT.toISO(),
+      deptDiff: deptDiff,
+      arrDiff: arrDiff,
+    });
   if (
     route.index === (firstRouteIndex ?? 0) &&
-    arrDiff >= 10 * 60 * 1000 // 10 minutes
+    arrDiff >= 10 * 60 * 1000 // 10 minutes(600000 milsec)
   ) {
     return {
       statusMessage: `Out of service • Starting at ${DateTime.fromJSDate(arriTime).toFormat("h:mm a")}`,

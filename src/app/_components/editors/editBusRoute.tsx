@@ -255,7 +255,9 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
         const stopId = stopMap[k]!.stop.id;
         const time = DateTime.fromFormat(v, "h:mm a", {
           zone: NEWYORK_TIMEZONE,
-        }).toJSDate();
+        })
+          .toUTC()
+          .toJSDate();
         if (stopMap[k]?.isArrival) {
           if (res[stopId] == undefined) {
             res[stopId] = {
