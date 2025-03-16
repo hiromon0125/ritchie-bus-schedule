@@ -1,13 +1,11 @@
 import { BackBtn } from "@/backBtn";
-import Header from "@/header";
 import ScrollToTopButton from "@/scrollToTopBtn";
 import { Suspense } from "react";
 import { IoChevronBackSharp } from "react-icons/io5";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className=" flex flex-col items-center bg-slate-100">
-      <Header />
+    <main className=" flex flex-col items-center bg-slate-100">
       <div className=" w-full max-w-screen-lg px-5">
         <div className=" w-full">
           <Suspense
@@ -27,6 +25,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {children}
       </div>
       <ScrollToTopButton />
-    </div>
+    </main>
   );
 }

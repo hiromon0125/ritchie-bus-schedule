@@ -10,7 +10,7 @@ import ServiceInfoButton from "./serviceinfo";
 
 export default function Header() {
   return (
-    <div className="  top-0 z-20 w-full px-1 text-slate-900 xs:px-3 md:sticky">
+    <div className=" top-2 z-20 w-full px-1 text-slate-900 xs:px-3 md:sticky">
       <div className=" m-2 mx-auto h-24 w-full justify-center rounded-3xl bg-slate-200/60 p-3  md:max-w-screen-lg  md:shadow-md md:backdrop-blur-md">
         <div className=" top-0 m-auto flex h-full w-full max-w-screen-lg flex-row items-center gap-4">
           <Link
