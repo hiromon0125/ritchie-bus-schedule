@@ -15,7 +15,7 @@ export default async function Layout(props: {
   }
   return (
     <div>
-      <Header title="Stop" />
+      <Header />
       <div className=" m-auto flex w-full max-w-screen-lg flex-col gap-2 px-[--margin] py-2 xs:gap-4">
         {props.children}
         <div className=" flex max-w-[480px] flex-row items-center justify-between rounded-[20px] border-[8px] border-[#E2E8F0] p-3 xs:rounded-3xl md:border-[12px]">

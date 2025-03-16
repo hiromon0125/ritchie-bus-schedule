@@ -31,7 +31,7 @@ export default async function RootLayout({
     >
       <html lang="en">
         <body
-          className={`font-sans ${inter.variable}`}
+          className={` font-sans [--mobile-bottom-nav-height:96px] [--mobile-bottom-nav-margin:16px] ${inter.variable}`}
           suppressHydrationWarning
         >
           <PostHogProvider>

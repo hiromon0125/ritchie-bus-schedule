@@ -7,8 +7,8 @@ export default async function Layout({
 }) {
   return (
     <>
-      <div className=" w-full bg-slate-900">
-        <Header title="About" />
+      <div className=" w-full">
+        <Header />
       </div>
       {children}
     </>

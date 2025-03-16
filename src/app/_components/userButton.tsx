@@ -9,11 +9,21 @@ import { cn } from "../../lib/utils";
 import { api } from "../../trpc/react";
 import { ServiceInfoContext } from "./serviceinfo";
 
+const USER_BUTTON_APPEARANCE: Parameters<typeof UserButton>[0]["appearance"] = {
+  elements: {
+    userButtonAvatarBox: "w-10 h-10 rounded-full",
+  },
+} as const;
+
 export default function ProfileButton() {
   const { setState: openServiceInfo } = useContext(ServiceInfoContext);
   const { data: serviceInfoCount } = api.serviceinfo.getCount.useQuery();
   return (
-    <UserButton userProfileMode="navigation" userProfileUrl="/user-profile">
+    <UserButton
+      userProfileMode="navigation"
+      userProfileUrl="/user-profile"
+      appearance={USER_BUTTON_APPEARANCE}
+    >
       <UserButton.MenuItems>
         <UserButton.Link
           href="/"

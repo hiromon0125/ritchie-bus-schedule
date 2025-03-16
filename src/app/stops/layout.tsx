@@ -7,7 +7,7 @@ import { IoChevronBackSharp } from "react-icons/io5";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className=" flex flex-col items-center bg-slate-100">
-      <Header title="Stops" route="stop" />
+      <Header />
       <div className=" w-full max-w-screen-lg px-2 text-zinc-900 xs:px-5">
         <div>
           <Suspense fallback={<button>Back</button>}>
