@@ -16,28 +16,28 @@ export function StopTag({
   size?: TagSize;
 }) {
   return (
-    <div
+    <p
       className={cn(
-        "bg-item-background flex aspect-square flex-row items-center justify-center rounded-full border-[3px] border-(--bus-color) text-center text-lg font-bold text-black",
+        "bg-item-background text-foreground flex aspect-square flex-row items-center justify-center rounded-full border-[3px] border-(--bus-color) text-center text-lg font-bold",
         SIZES[size],
       )}
     >
       {stop.tag ?? stop.id}
-    </div>
+    </p>
   );
 }
 
 export function BusTag({ bus, size = "md" }: { bus: Bus; size?: TagSize }) {
   return (
-    <div
+    <p
       className={cn(
-        " bg-item-background flex aspect-square flex-row items-center justify-center rounded-md border-[3px] border-(--bus-color) text-center text-lg font-bold text-black",
+        "bg-item-background text-foreground flex aspect-square flex-row items-center justify-center rounded-md border-[3px] border-(--bus-color) text-center text-lg font-bold",
         SIZES[size],
       )}
       title={bus.name}
       style={{ "--bus-color": bus.color } as React.CSSProperties}
     >
       {bus.tag ?? bus.id}
-    </div>
+    </p>
   );
 }

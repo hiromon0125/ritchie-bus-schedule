@@ -20,9 +20,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --color-background: rgb(var(--background));
-  --color-border-background: rgb(var(--border-background));
+  --color-background: oklch(var(--background));
+  --color-border-background: oklch(var(--border-background));
   --color-item-background: rgb(var(--item-background));
+  --color-item-border: oklch(var(--item-border));
   --color-foreground: hsl(var(--foreground));
 
   --color-card: hsl(var(--card));
@@ -436,9 +437,10 @@
     --header-height: 96px;
     --header-margin: 16px;
 
-    --background: 241 245 249; /* --color-slate-100 */
-    --border-background: 226 232 240; /* --color-slate-200 */
+    --background: 0.968 0.007 247.896; /* --color-slate-100 */
+    --border-background: 0.929 0.013 255.508; /* --color-slate-200 */
     --item-background: 255 255 255; /* --color-white */
+    --item-border: 0.446 0.043 257.281; /* --color-gray-600 */
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -465,9 +467,10 @@
     --radius: 0.5rem;
   }
   .dark {
-    --background: 241 245 249; /* --color-slate-100 */
-    --border-background: 226 232 240; /* --color-slate-200 */
-    --item-background: 255 255 255; /* --color-white */
+    --background: 0.129 0.042 264.695; /* --color-slate-950 */
+    --border-background: 0.279 0.041 260.031; /* --color-slate-900 */
+    --item-background: 49 65 88; /* --color-white */
+    --item-border: 0.278 0.033 256.848; /* --color-gray-950 */
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
