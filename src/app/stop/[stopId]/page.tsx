@@ -71,7 +71,7 @@ export default async function Page(props: {
   });
   return (
     <>
-      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+      <div className=" bg-border-background flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)">
         <div className=" bg-item-background flex w-full flex-col gap-2 rounded-xl pl-2">
           <div className=" flex flex-row items-center gap-2 xs:mt-3">
             <StopTag stop={currentStop} />
@@ -83,7 +83,7 @@ export default async function Page(props: {
           </div>
         </div>
       </div>
-      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+      <div className=" bg-border-background flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)">
         <div className=" bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-3 pl-4">
           <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
           <ClickableTooltip tipMessage="Click on the bus route to view it's timetable below.">
@@ -110,9 +110,9 @@ export default async function Page(props: {
           </div>
         ))}
       </div>
-      <div className=" flex w-[--sm-max-w] flex-col gap-2 xs:gap-4 md:max-w-screen-lg md:flex-row">
+      <div className=" flex w-(--sm-max-w) flex-col gap-2 xs:gap-4 md:max-w-(--breakpoint-lg) md:flex-row">
         <div
-          className=" bg-border-background flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg"
+          className=" bg-border-background flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)"
           style={
             {
               "--bus-color": selectedBus?.color ?? "gray",
@@ -150,7 +150,7 @@ export default async function Page(props: {
             </Suspense>
           </div>
         </div>
-        <div className=" bg-border-background relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">
+        <div className=" bg-border-background relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-(--breakpoint-lg)">
           <div className=" h-[50vh] w-full flex-1 overflow-clip rounded-xl md:h-full">
             <Suspense fallback={<p>Loading...</p>}>
               <StopMap stops={currentStop} />
@@ -211,7 +211,7 @@ async function SelectableBusInfo({
   return (
     <div className=" relative">
       <Link
-        className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all hover:border-accent hover:shadow-md"
+        className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-(--active-border) p-1 transition-all hover:border-accent hover:shadow-md"
         style={
           {
             "--bus-color": color,
@@ -220,7 +220,7 @@ async function SelectableBusInfo({
         }
         href={href}
       >
-        <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
+        <div className=" h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
         <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
           <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-2 pr-2 pt-2 sm:pl-3">
             <BusTag bus={busObj} />

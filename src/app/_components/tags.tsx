@@ -18,7 +18,7 @@ export function StopTag({
   return (
     <div
       className={cn(
-        "bg-item-background flex aspect-square flex-row items-center justify-center rounded-full border-[3px] border-[--bus-color] text-center text-lg font-bold text-black",
+        "bg-item-background flex aspect-square flex-row items-center justify-center rounded-full border-[3px] border-(--bus-color) text-center text-lg font-bold text-black",
         SIZES[size],
       )}
     >
@@ -31,7 +31,7 @@ export function BusTag({ bus, size = "md" }: { bus: Bus; size?: TagSize }) {
   return (
     <div
       className={cn(
-        " bg-item-background flex aspect-square flex-row items-center justify-center rounded-md border-[3px] border-[--bus-color] text-center text-lg font-bold text-black",
+        " bg-item-background flex aspect-square flex-row items-center justify-center rounded-md border-[3px] border-(--bus-color) text-center text-lg font-bold text-black",
         SIZES[size],
       )}
       title={bus.name}

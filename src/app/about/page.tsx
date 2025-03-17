@@ -23,12 +23,12 @@ function Page() {
         <Image
           src="/ritches-bus-schedule-banner-uiux.png"
           alt="Ritche's Bus Schedule"
-          className=" max-w-screen-lg"
+          className=" max-w-(--breakpoint-lg)"
           width={1200}
           height={630}
         />
       </div>
-      <div className=" m-auto flex max-w-screen-lg flex-col gap-3 pb-8">
+      <div className=" m-auto flex max-w-(--breakpoint-lg) flex-col gap-3 pb-8">
         <div className=" flex flex-row-reverse gap-8 p-3">
           <div className=" hidden flex-1 items-center justify-center p-3 md:flex ">
             <Image
@@ -84,7 +84,7 @@ function Page() {
         </div>
       </div>
       <div className="z-10 w-screen bg-[#2A609B] text-white">
-        <div className=" m-auto mb-[-5rem] max-w-screen-lg translate-y-[-5rem]">
+        <div className=" m-auto mb-[-5rem] max-w-(--breakpoint-lg) translate-y-[-5rem]">
           <Subtitle white>Key Features</Subtitle>
           <div className=" mx-6 flex flex-col gap-4 lg:flex-row">
             <div className=" flex flex-1 flex-col gap-4">
@@ -98,9 +98,9 @@ function Page() {
                     width={504}
                     height={300}
                   />
-                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-gradient-to-t from-[#3374BBFF] to-[#3374BB00]" />
+                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-linear-to-t from-[#3374BBFF] to-[#3374BB00]" />
                 </div>
-                <div className=" h-24 bg-gradient-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
+                <div className=" h-24 bg-linear-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
                   <p className=" text-lg font-bold">Unified Status Page</p>
                   <p>
                     View the status of all RIT buses at a glance on a single
@@ -118,9 +118,9 @@ function Page() {
                     width={504}
                     height={300}
                   />
-                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-gradient-to-t from-[#3374BBFF] to-[#3374BB00]" />
+                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-linear-to-t from-[#3374BBFF] to-[#3374BB00]" />
                 </div>
-                <div className=" h-24 bg-gradient-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
+                <div className=" h-24 bg-linear-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
                   <p className=" text-lg font-bold">Detailed Bus Pages</p>
                   <p>Access detailed breakdowns of individual bus statuses.</p>
                 </div>
@@ -137,9 +137,9 @@ function Page() {
                     width={504}
                     height={300}
                   />
-                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-gradient-to-t from-[#3374BBFF] to-[#3374BB00]" />
+                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-linear-to-t from-[#3374BBFF] to-[#3374BB00]" />
                 </div>
-                <div className=" h-24 bg-gradient-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
+                <div className=" h-24 bg-linear-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
                   <p className=" text-lg font-bold">Stop Page</p>
                   <p>Find out which bus is coming next at a particular stop.</p>
                 </div>
@@ -154,9 +154,9 @@ function Page() {
                     width={504}
                     height={300}
                   />
-                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-gradient-to-t from-[#3374BBFF] to-[#3374BB00]" />
+                  <div className=" absolute bottom-0 left-0 h-8 w-full bg-linear-to-t from-[#3374BBFF] to-[#3374BB00]" />
                 </div>
-                <div className=" h-24 bg-gradient-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
+                <div className=" h-24 bg-linear-to-b from-[#3374BB] to-[#508DCF] p-5 pt-3">
                   <p className=" text-lg font-bold">Customization</p>
                   <p>
                     Favorite buses and stops to display on the top of the
@@ -185,7 +185,7 @@ function Page() {
           </div>
         </div>
         <div className=" mt-6 bg-slate-800">
-          <div className=" relative m-auto flex max-w-screen-lg flex-row flex-wrap justify-around gap-6 py-8">
+          <div className=" relative m-auto flex max-w-(--breakpoint-lg) flex-row flex-wrap justify-around gap-6 py-8">
             <div className=" flex min-w-[300px] flex-1 flex-row items-center justify-center rounded-lg">
               <Image
                 className={` ${aboutStyles.logo} h-[40px]`}
@@ -252,7 +252,7 @@ function Page() {
           </div>
         </div>
         <div className=" text-blac relative overflow-clip bg-background pt-6 text-black">
-          <div className=" relative m-auto max-w-screen-lg px-6 py-8">
+          <div className=" relative m-auto max-w-(--breakpoint-lg) px-6 py-8">
             <div>
               <div className={aboutStyles.parallaxTitleWrapper}>
                 <p className=" text-2xl md:text-4xl">THE APP'S</p>
@@ -372,7 +372,7 @@ function Page() {
               </div>
             </div>
           </div>
-          <div className=" relative m-auto max-w-screen-lg gap-6 px-32 py-8">
+          <div className=" relative m-auto max-w-(--breakpoint-lg) gap-6 px-32 py-8">
             <div className=" mt-12 pb-3 text-lg font-bold">
               Published 7/31/2024 By Hiroto Takeuchi
             </div>

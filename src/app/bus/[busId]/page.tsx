@@ -93,9 +93,9 @@ export default async function Page(props: Props) {
   }
   return (
     <>
-      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+      <div className=" bg-border-background flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)">
         <div className=" bg-item-background flex w-full flex-row rounded-xl p-2 md:gap-2">
-          <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
+          <div className=" h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
           <div className=" bg-item-background flex w-full flex-col gap-2 px-2 md:p-3">
             <div className=" flex flex-row items-center gap-2">
               <BusTag bus={bus} />
@@ -117,7 +117,7 @@ export default async function Page(props: Props) {
         </div>
         <BusServiceInfo busId={bus.id} />
       </div>
-      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+      <div className=" bg-border-background flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)">
         <div className=" bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-1 pl-3 pr-2 md:p-3">
           <h2 className=" m-0 text-lg font-bold xs:text-2xl">Select Stops</h2>
           <ClickableTooltip tipMessage="Click on the bus stop to view it's timetable below.">
@@ -190,10 +190,10 @@ async function SelectableStopInfo({
     <div className=" group relative">
       {isSelected && <div id="checked" className=" hidden h-0 w-0" />}
       <Link
-        className=" bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all [--active-border:white] hover:border-accent hover:shadow-md group-has-[div#checked]:[--active-border:hsl(var(--accent))]"
+        className=" bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-(--active-border) p-1 transition-all [--active-border:white] hover:border-accent hover:shadow-md group-has-[div#checked]:[--active-border:hsl(var(--accent))]"
         href={href}
       >
-        <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
+        <div className=" h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
         <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
           <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-2 pr-2 pt-2 sm:pl-4">
             <StopTag stop={stopObj} />
@@ -226,7 +226,7 @@ async function BusServiceInfo({ busId }: { busId: number }) {
 
   return (
     <div className=" bg-item-background rounded-xl">
-      <div className=" flex flex-row gap-4 rounded-xl border-2 border-orange-500 bg-gradient-to-b from-orange-500/40 to-white/40 p-5">
+      <div className=" flex flex-row gap-4 rounded-xl border-2 border-orange-500 bg-linear-to-b from-orange-500/40 to-white/40 p-5">
         <div className=" min-w-[40px] sm:min-w-[60px]">
           <Image
             src="/service-info-icon.png"

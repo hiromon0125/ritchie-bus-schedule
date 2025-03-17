@@ -24,7 +24,7 @@ export default async function Home() {
         <BusList />
       </Suspense>
       <RouteMapOr>
-        <div className="relative h-[60vh] overflow-hidden md:max-w-screen-lg">
+        <div className="relative h-[60vh] overflow-hidden md:max-w-(--breakpoint-lg)">
           <Suspense fallback={<p>Loading map...</p>}>
             <HomeMap />
           </Suspense>
@@ -38,7 +38,7 @@ async function FavStopList() {
   const favStops = await api.favorite.getAllStop();
   if (favStops.length === 0) return null;
   return (
-    <div className=" bg-border-background flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+    <div className=" bg-border-background flex w-(--sm-max-w) flex-col gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)">
       <div className=" bg-item-background flex flex-row justify-between rounded-xl p-3 py-2">
         <h1 className=" m-0 text-xl font-bold xs:text-2xl">Favorite Stop</h1>
       </div>

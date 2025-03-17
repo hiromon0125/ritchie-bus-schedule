@@ -28,11 +28,11 @@ export default async function Layout({
       style={{ "--bus-color": bus.color } as React.CSSProperties}
     >
       {children}
-      <div className=" flex w-[--sm-max-w] flex-col gap-2 xs:gap-4 md:max-w-screen-lg md:flex-row">
+      <div className=" flex w-(--sm-max-w) flex-col gap-2 xs:gap-4 md:max-w-(--breakpoint-lg) md:flex-row">
         {timetable}
         {map}
       </div>
-      <div className=" bg-border-background relative flex w-[--sm-max-w] flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">
+      <div className=" bg-border-background relative flex w-(--sm-max-w) flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-(--breakpoint-lg)">
         <div className=" bg-item-background flex w-full flex-row justify-between rounded-xl p-3">
           <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-3xl">
             Rate this bus

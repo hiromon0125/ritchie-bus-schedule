@@ -49,7 +49,7 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
             className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white p-1 transition-all hover:border-accent hover:shadow-md"
             style={{ "--bus-color": color } as React.CSSProperties}
           >
-            <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
+            <div className=" h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
             <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
               <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-2 pr-2 pt-2">
                 <BusTag bus={busObj} size="sm" />
@@ -133,7 +133,7 @@ export function BusInfoSkeleton() {
         className="bg-item-background border-bg-item-backgroundrder-white relative box-border flex h-full w-full flex-row items-stretch rounded-xl p-1"
         style={{ "--bus-color": "gray" } as React.CSSProperties}
       >
-        <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
+        <div className=" h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
         <div className=" relative flex w-full flex-1 flex-col flex-wrap justify-between">
           <div className=" mr-1 flex w-full flex-1 flex-row items-center px-4 pt-2">
             <div className=" h-4 w-full animate-pulse overflow-hidden text-ellipsis text-nowrap rounded-sm bg-slate-300 font-bold md:text-xl"></div>
@@ -200,11 +200,11 @@ export async function BusList() {
 
 export function BusListSkeleton() {
   return (
-    <div className=" bg-border-background flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+    <div className=" bg-border-background flex w-(--sm-max-w) flex-col gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)">
       <div className=" bg-item-background flex flex-row justify-between rounded-xl p-3 py-2">
         <h1 className=" m-0 text-2xl font-bold">Favorite Buses</h1>
       </div>
-      <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-3 md:min-w-80">
+      <div className=" relative flex max-w-(--breakpoint-lg) flex-row flex-wrap gap-3 md:min-w-80">
         {[...Array(4).keys()]?.map((i) => (
           <div
             className=" w-auto min-w-full flex-1 md:min-w-[40%] md:max-w-[calc(50%-6px)]"
@@ -217,7 +217,7 @@ export function BusListSkeleton() {
       <div className=" bg-item-background flex flex-row justify-between rounded-xl p-3 py-2">
         <h1 className=" m-0 text-2xl font-bold">Buses</h1>
       </div>
-      <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-3 md:min-w-80">
+      <div className=" relative flex max-w-(--breakpoint-lg) flex-row flex-wrap gap-3 md:min-w-80">
         {[...Array(6).keys()]?.map((i) => (
           <div
             className=" w-auto min-w-full flex-1 md:min-w-[40%] md:max-w-[calc(50%-6px)]"

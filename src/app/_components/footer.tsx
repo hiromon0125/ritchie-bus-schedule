@@ -14,8 +14,8 @@ import { Share } from "./share";
 function Footer() {
   return (
     <>
-      <div className=" mb-[calc(var(--mobile-footer-space)*-1)] w-full bg-slate-800 pb-[--mobile-footer-space] text-start text-base text-white [--mobile-footer-space:calc(var(--mobile-bottom-nav-height)+var(--mobile-bottom-nav-margin))] md:pb-0">
-        <div className=" m-auto flex w-full max-w-screen-lg flex-col">
+      <div className=" mb-[calc(var(--mobile-footer-space)*-1)] w-full bg-slate-800 pb-(--mobile-footer-space) text-start text-base text-white [--mobile-footer-space:calc(var(--mobile-bottom-nav-height)+var(--mobile-bottom-nav-margin))] md:pb-0">
+        <div className=" m-auto flex w-full max-w-(--breakpoint-lg) flex-col">
           <div className=" flex flex-col justify-between gap-3 px-3 pt-3 sm:px-6 sm:pt-6 md:flex-row md:items-end md:gap-8">
             <div className=" flex flex-row items-center md:gap-2 md:pb-6">
               <Image
@@ -128,8 +128,8 @@ function Footer() {
         </div>
       </div>
       <div className=" sticky bottom-0 left-0 z-10 p-2 px-1 xs:px-3 md:hidden">
-        <div className=" bg-border-background/60 mx-auto h-[--mobile-bottom-nav-height] justify-center rounded-3xl p-3 shadow-md backdrop-blur-md">
-          <div className=" top-0 m-auto flex h-full w-full max-w-screen-lg flex-row items-center gap-4">
+        <div className=" bg-border-background/60 mx-auto h-(--mobile-bottom-nav-height) justify-center rounded-3xl p-3 shadow-md backdrop-blur-md">
+          <div className=" top-0 m-auto flex h-full w-full max-w-(--breakpoint-lg) flex-row items-center gap-4">
             <div
               className=" flex h-full flex-1 flex-row items-center gap-1 rounded-xl bg-neutral-500/60 p-[5px] text-sm shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)]"
               style={

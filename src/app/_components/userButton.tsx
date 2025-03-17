@@ -17,7 +17,10 @@ import { ServiceInfoContext } from "./serviceinfo";
 
 const USER_BUTTON_APPEARANCE: Parameters<typeof UserButton>[0]["appearance"] = {
   elements: {
-    userButtonAvatarBox: "w-10 h-10 rounded-full",
+    userButtonAvatarBox: {
+      height: "2.5rem",
+      width: "2.5rem",
+    },
   },
 } as const;
 
@@ -47,7 +50,7 @@ export default function ProfileButton() {
                   "m-[-4px] h-6 rounded-full border bg-red-500 text-white",
               )}
             >
-              <MdOutlineBusAlert className=" scale-125" />
+              <MdOutlineBusAlert className="scale-125" />
             </div>
           }
         />

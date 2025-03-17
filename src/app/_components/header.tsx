@@ -11,8 +11,8 @@ import ServiceInfoButton from "./serviceinfo";
 export default function Header() {
   return (
     <div className=" top-2 z-20 w-full px-1 text-slate-900 xs:px-3 md:sticky">
-      <div className=" bg-border-background md:bg-border-background/60 m-2 mx-auto h-24 w-full justify-center rounded-3xl p-3  md:max-w-screen-lg  md:shadow-md md:backdrop-blur-md">
-        <div className=" top-0 m-auto flex h-full w-full max-w-screen-lg flex-row items-center gap-4">
+      <div className=" bg-border-background md:bg-border-background/60 m-2 mx-auto h-24 w-full justify-center rounded-3xl p-3  md:max-w-(--breakpoint-lg)  md:shadow-md md:backdrop-blur-md">
+        <div className=" top-0 m-auto flex h-full w-full max-w-(--breakpoint-lg) flex-row items-center gap-4">
           <Link
             href="/"
             className=" bg-item-background flex h-full flex-1 flex-row items-center gap-4 rounded-xl p-[10px]"
@@ -23,7 +23,7 @@ export default function Header() {
               width={48}
               height={48}
             />
-            <h1 className=" m-0 text-lg font-semibold max-[450px]:hidden min-[850px]:text-xl min-[850px]:text-[--lg-title-color] lg:text-2xl">
+            <h1 className=" m-0 text-lg font-semibold max-[450px]:hidden min-[850px]:text-xl min-[850px]:text-(--lg-title-color) lg:text-2xl">
               Ritchie's Bus Schedule
             </h1>
           </Link>

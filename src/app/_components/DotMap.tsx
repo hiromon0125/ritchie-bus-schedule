@@ -31,7 +31,7 @@ export default function DotMap({
       {markers.map((marker, i) => (
         <Marker anchor={[marker.lat, marker.lng]} offset={[-7, -7]} key={i}>
           <div
-            className=" bg-item-background flex aspect-square w-7 flex-col items-center justify-center rounded-full border-2 border-[--color] p-[2px] text-center [--color:var(--bus-color,black)]"
+            className=" bg-item-background flex aspect-square w-7 flex-col items-center justify-center rounded-full border-2 border-(--color) p-[2px] text-center [--color:var(--bus-color,black)]"
             title={marker.name}
           >
             <p>{marker.tag}</p>
