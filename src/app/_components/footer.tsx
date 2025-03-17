@@ -128,7 +128,7 @@ function Footer() {
         </div>
       </div>
       <div className=" sticky bottom-0 left-0 z-10 p-2 px-1 xs:px-3 md:hidden">
-        <div className=" mx-auto h-[--mobile-bottom-nav-height] justify-center rounded-3xl bg-slate-200/60 p-3 shadow-md backdrop-blur-md">
+        <div className=" bg-border-background/60 mx-auto h-[--mobile-bottom-nav-height] justify-center rounded-3xl p-3 shadow-md backdrop-blur-md">
           <div className=" top-0 m-auto flex h-full w-full max-w-screen-lg flex-row items-center gap-4">
             <div
               className=" flex h-full flex-1 flex-row items-center gap-1 rounded-xl bg-neutral-500/60 p-[5px] text-sm shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)]"

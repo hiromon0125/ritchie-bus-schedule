@@ -121,7 +121,7 @@ export default function EditStopList() {
         ) : (
           list.map((stop, index) => (
             <div
-              className=" flex w-full flex-row even:bg-slate-200"
+              className=" even:bg-border-background flex w-full flex-row"
               key={index}
               onMouseEnter={() => !onUserFocused && setHoveredIndex(index)}
               onMouseLeave={() => !onUserFocused && setHoveredIndex(null)}

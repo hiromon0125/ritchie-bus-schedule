@@ -406,7 +406,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
       </div>
       <br />
       <p className=" mb-2 text-lg">Bus Route</p>
-      <div className=" relative flex flex-col overflow-scroll rounded-lg border-2 border-black bg-slate-200">
+      <div className=" bg-border-background relative flex flex-col overflow-scroll rounded-lg border-2 border-black">
         <div className=" flex w-full flex-row gap-1 border-x-2 p-1 pt-2">
           <p className=" w-20">Index</p>
           <p className=" w-20">Stop ID</p>
@@ -423,7 +423,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                   key={index}
                   className="flex w-full flex-row gap-1 overflow-scroll "
                 >
-                  <div className=" flex w-20 flex-col justify-center bg-slate-200 p-1">
+                  <div className=" bg-border-background flex w-20 flex-col justify-center p-1">
                     <p>{input.at(index)?.index}</p>
                   </div>
                   <input
@@ -466,7 +466,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
       <div className=" mb-8 flex flex-row pt-2">
         <button
           onClick={handleSubmit}
-          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800 disabled:opacity-50"
+          className=" bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800 disabled:opacity-50"
           disabled={isPending}
         >
           <IoMdSave />
@@ -474,14 +474,14 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
         </button>
         <button
           onClick={addNewRoute}
-          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+          className=" bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800"
         >
           <MdAddBox />
           Add
         </button>
         <button
           onClick={addMultipleRoutes}
-          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black bg-slate-200 p-3 text-slate-800"
+          className=" bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800"
         >
           <MdAddToPhotos />
           Add multiple

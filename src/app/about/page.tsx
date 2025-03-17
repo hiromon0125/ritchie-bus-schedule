@@ -56,7 +56,7 @@ function Page() {
         </div>
         <div className=" flex flex-col items-center justify-center md:my-8 md:h-[60vh] md:max-h-96">
           <div
-            className={` ${aboutStyles.card} rounded-2xl bg-white p-3 md:border-2 md:p-8 md:drop-shadow-2xl`}
+            className={` ${aboutStyles.card} rounded-2xl bg-background p-3 md:border-2 md:p-8 md:drop-shadow-2xl`}
           >
             <Subtitle>Purpose and Motivation</Subtitle>
             <p className=" md:text-xl">
@@ -251,7 +251,7 @@ function Page() {
             </div>
           </div>
         </div>
-        <div className=" text-blac relative overflow-clip bg-white pt-6 text-black">
+        <div className=" text-blac relative overflow-clip bg-background pt-6 text-black">
           <div className=" relative m-auto max-w-screen-lg px-6 py-8">
             <div>
               <div className={aboutStyles.parallaxTitleWrapper}>
@@ -310,29 +310,29 @@ function Page() {
               <div className=" absolute flex h-[55vh] w-[51px] flex-col bg-[#1FCF33]">
                 <div className="ml-[-2px]pt-[10vh] top-[20vh] z-20 m-auto flex flex-col items-center gap-2">
                   <div className=" flex flex-col gap-0">
-                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
-                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
+                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-background before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-background motion-safe:animate-pulse" />
+                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-background before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-background motion-safe:animate-pulse motion-safe:animation-delay-500" />
+                    <div className=" h-7 w-3 translate-x-[-5px] -rotate-45 bg-background before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-background motion-safe:animate-pulse motion-safe:animation-delay-1000" />
                   </div>
-                  <div className=" m-auto h-9 w-9 rounded-full bg-white" />
+                  <div className=" m-auto h-9 w-9 rounded-full bg-background" />
                 </div>
               </div>
               <div className=" absolute top-[55vh] h-[100px] w-[100px] rounded-bl-full bg-[#1FCF33]">
-                <div className=" float-end h-[50px] w-[49px] rounded-bl-full bg-white" />
+                <div className=" float-end h-[50px] w-[49px] rounded-bl-full bg-background" />
               </div>
               <div className=" absolute top-[55vh] mt-[50px] h-[100px] w-full">
                 <div className=" mx-[100px] flex h-[50px] flex-row bg-[#1FCF33]">
                   <div className="m-auto flex flex-row items-center gap-4">
                     <div className=" flex flex-row gap-4 pt-[12px]">
-                      <div className=" h-7 w-3 -rotate-[135deg] bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse" />
-                      <div className=" h-7 w-3 -rotate-[135deg] bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-500" />
-                      <div className=" h-7 w-3 -rotate-[135deg] bg-white before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-white motion-safe:animate-pulse motion-safe:animation-delay-1000" />
+                      <div className=" h-7 w-3 -rotate-[135deg] bg-background before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-background motion-safe:animate-pulse" />
+                      <div className=" h-7 w-3 -rotate-[135deg] bg-background before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-background motion-safe:animate-pulse motion-safe:animation-delay-500" />
+                      <div className=" h-7 w-3 -rotate-[135deg] bg-background before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 before:bg-background motion-safe:animate-pulse motion-safe:animation-delay-1000" />
                     </div>
-                    <div className=" h-9 w-9 rounded-full bg-white" />
+                    <div className=" h-9 w-9 rounded-full bg-background" />
                   </div>
                 </div>
                 <div className=" float-end mt-[-50px] flex h-[100px] w-[100px] items-end justify-start rounded-tr-full bg-[#1FCF33]">
-                  <div className=" h-[50px] w-[50px] rounded-tr-full bg-white"></div>
+                  <div className=" h-[50px] w-[50px] rounded-tr-full bg-background"></div>
                 </div>
                 <div className=" absolute bottom-0 right-0 mt-[50px] h-[150px] w-[50px] translate-y-full bg-[#1FCF33]"></div>
               </div>
@@ -365,7 +365,7 @@ function Page() {
               <div className=" absolute bottom-2 right-6 flex flex-row items-center gap-4 md:right-32">
                 <Link
                   href="/"
-                  className=" rounded-bl-full rounded-tr-full bg-red-500 p-2 px-6 text-lg text-white duration-300 ease-in-out before:absolute before:block before:h-20 before:w-5 before:-translate-x-20 before:-translate-y-6 before:-rotate-[20deg] before:bg-white before:opacity-50 before:duration-500 before:ease-in-out after:absolute after:block after:h-20 after:w-3 after:-translate-x-[6.5rem] after:-translate-y-14 after:-rotate-[20deg] after:bg-white after:opacity-50 after:duration-500 after:ease-in-out hover:scale-105 hover:bg-red-400 hover:before:translate-x-[14.5rem] hover:after:translate-x-52 active:bg-red-600 md:p-4 md:px-12 md:text-2xl"
+                  className=" rounded-bl-full rounded-tr-full bg-red-500 p-2 px-6 text-lg text-white duration-300 ease-in-out before:absolute before:block before:h-20 before:w-5 before:-translate-x-20 before:-translate-y-6 before:-rotate-[20deg] before:bg-background before:opacity-50 before:duration-500 before:ease-in-out after:absolute after:block after:h-20 after:w-3 after:-translate-x-[6.5rem] after:-translate-y-14 after:-rotate-[20deg] after:bg-background after:opacity-50 after:duration-500 after:ease-in-out hover:scale-105 hover:bg-red-400 hover:before:translate-x-[14.5rem] hover:after:translate-x-52 active:bg-red-600 md:p-4 md:px-12 md:text-2xl"
                 >
                   Use the App &gt;
                 </Link>

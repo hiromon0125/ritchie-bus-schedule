@@ -34,7 +34,7 @@ export default async function BusPageList() {
           <Link
             href={`/bus/${bus.id}`}
             key={bus.id}
-            className=" group flex w-full flex-row items-center gap-3 border-t-2  p-3 transition-all hover:bg-slate-200"
+            className=" hover:bg-border-background group flex w-full flex-row items-center gap-3  border-t-2 p-3 transition-all"
             style={{ "--bus-color": bus.color } as React.CSSProperties}
           >
             <div className=" flex flex-1 flex-col gap-2">

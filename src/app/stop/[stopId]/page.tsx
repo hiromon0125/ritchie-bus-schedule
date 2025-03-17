@@ -71,7 +71,7 @@ export default async function Page(props: {
   });
   return (
     <>
-      <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
         <div className=" flex w-full flex-col gap-2 rounded-xl bg-white pl-2">
           <div className=" flex flex-row items-center gap-2 xs:mt-3">
             <StopTag stop={currentStop} />
@@ -83,7 +83,7 @@ export default async function Page(props: {
           </div>
         </div>
       </div>
-      <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
         <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
           <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
           <ClickableTooltip tipMessage="Click on the bus route to view it's timetable below.">
@@ -112,7 +112,7 @@ export default async function Page(props: {
       </div>
       <div className=" flex flex-col gap-2 xs:gap-4 md:flex-row">
         <div
-          className=" flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg"
+          className=" bg-border-background flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg"
           style={
             {
               "--bus-color": selectedBus?.color ?? "gray",
@@ -150,7 +150,7 @@ export default async function Page(props: {
             </Suspense>
           </div>
         </div>
-        <div className=" relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">
+        <div className=" bg-border-background relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">
           <div className=" h-[50vh] w-full flex-1 overflow-clip rounded-xl md:h-full">
             <Suspense fallback={<p>Loading...</p>}>
               <StopMap stops={currentStop} />

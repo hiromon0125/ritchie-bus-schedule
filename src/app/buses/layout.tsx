@@ -5,7 +5,7 @@ import { IoChevronBackSharp } from "react-icons/io5";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className=" flex flex-col items-center bg-slate-100">
+    <main className=" flex flex-col items-center">
       <div className=" w-full max-w-screen-lg px-5">
         <div className=" w-full">
           <Suspense

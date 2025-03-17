@@ -200,7 +200,7 @@ export async function BusList() {
 
 export function BusListSkeleton() {
   return (
-    <div className=" flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+    <div className=" bg-border-background flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
       <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
         <h1 className=" m-0 text-2xl font-bold">Favorite Buses</h1>
       </div>

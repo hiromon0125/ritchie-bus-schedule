@@ -356,7 +356,13 @@ template {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --mobile-bottom-nav-height: 96px;
+    --mobile-bottom-nav-margin: 16px;
+    --header-height: 96px;
+    --header-margin: 16px;
+
+    --background: 210 40% 96%; /* --color-slate-100 */
+    --border-background: 226 232 240; /* --color-slate-200 */
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
