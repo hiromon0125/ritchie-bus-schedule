@@ -1,17 +1,20 @@
 "use client";
 
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { TbLogin2 } from "react-icons/tb";
 import ProfileButton from "./userButton";
 
 export default function ProfileBtn() {
   return (
-    <div className="flex flex-none flex-row items-center justify-end text-lg">
+    <div className="flex h-full w-full flex-none flex-col items-center justify-center rounded-lg text-lg has-[div#loggedout]:border-2 has-[div#loggedout]:border-accent">
       <SignedOut>
-        <div className=" bg-item-background rounded-full border-2 border-blue-600 px-4 py-2">
-          <SignInButton>
-            <button className=" text-blue-600">Sign In</button>
-          </SignInButton>
-        </div>
+        <div id="loggedout" className="hidden" />
+        <SignInButton>
+          <>
+            <TbLogin2 size={24} color="hsl(var(--accent))" />
+            <button className=" text-base text-accent xs:text-sm">Login</button>
+          </>
+        </SignInButton>
       </SignedOut>
       <SignedIn>
         <div
