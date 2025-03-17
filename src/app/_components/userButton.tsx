@@ -1,9 +1,15 @@
 "use client";
 import { UserButton } from "@clerk/nextjs";
+import Cookies from "js-cookie";
 import { useContext } from "react";
 import { GoCodeReview } from "react-icons/go";
 import { HiHome } from "react-icons/hi2";
-import { MdDirectionsBus, MdOutlineBusAlert } from "react-icons/md";
+import {
+  MdDirectionsBus,
+  MdOutlineBusAlert,
+  MdOutlineLightMode,
+  MdOutlineNightlight,
+} from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
 import { cn } from "../../lib/utils";
 import { api } from "../../trpc/react";
@@ -59,6 +65,25 @@ export default function ProfileButton() {
           href="/about"
           label="About"
           labelIcon={<GoCodeReview size={16} />}
+        />
+        <UserButton.Action
+          label="Appearance"
+          labelIcon={
+            Cookies.get("theme") === "dark" ? (
+              <MdOutlineNightlight />
+            ) : (
+              <MdOutlineLightMode />
+            )
+          }
+          onClick={() => {
+            if (Cookies.get("theme") === "light") {
+              Cookies.set("theme", "dark", { expires: new Date(2038, 0, 19) });
+            } else {
+              Cookies.set("theme", "light", { expires: new Date(2038, 0, 19) });
+            }
+            console.log(document.getElementsByTagName("html")[0]?.classList);
+            document.getElementsByTagName("html")[0]?.classList.toggle("dark");
+          }}
         />
         {/* TODO: change to the official report link when implemented
         <UserButton.Link

@@ -22,6 +22,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookie = await cookies();
   return (
     <ClerkProvider
       appearance={{
@@ -30,23 +31,23 @@ export default async function RootLayout({
         },
       }}
     >
-      <html lang="en">
-        <body
-          className={` font-sans ${inter.variable}`}
-          suppressHydrationWarning
-        >
-          <PostHogProvider>
-            <TRPCReactProvider cookies={(await cookies()).toString()}>
-              <ServiceInfoProvider>
+      <PostHogProvider>
+        <TRPCReactProvider cookies={cookie.toString()}>
+          <ServiceInfoProvider>
+            <html
+              lang="en"
+              className={cookie.get("theme")?.value === "dark" ? "dark" : ""}
+            >
+              <body className={` font-sans ${inter.variable}`}>
                 <Header />
                 {children}
                 <Footer />
                 <Toaster />
-              </ServiceInfoProvider>
-            </TRPCReactProvider>
-          </PostHogProvider>
-        </body>
-      </html>
+              </body>
+            </html>
+          </ServiceInfoProvider>
+        </TRPCReactProvider>
+      </PostHogProvider>
     </ClerkProvider>
   );
 }
