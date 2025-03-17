@@ -26,7 +26,7 @@ export default async function StopList() {
       <Link
         href={`/stop/${stop.id}`}
         key={stop.id}
-        className=" group flex w-full flex-row items-center gap-2 border-t-2 p-1 transition-all hover:bg-slate-200 xs:gap-3 xs:p-3"
+        className=" hover:bg-border-background group flex w-full flex-row items-center gap-2 border-t-2 p-1 transition-all xs:gap-3 xs:p-3"
       >
         <div className=" flex flex-1 flex-col gap-2">
           <div className=" flex w-full flex-row items-center">

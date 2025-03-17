@@ -8,6 +8,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
 import { Toaster } from "~/components/ui/toaster";
+import Header from "./_components/header";
 import { PostHogProvider } from "./_components/posthog";
 import { ServiceInfoProvider } from "./_components/serviceinfo";
 
@@ -31,12 +32,13 @@ export default async function RootLayout({
     >
       <html lang="en">
         <body
-          className={`font-sans ${inter.variable}`}
+          className={` font-sans ${inter.variable}`}
           suppressHydrationWarning
         >
           <PostHogProvider>
             <TRPCReactProvider cookies={(await cookies()).toString()}>
               <ServiceInfoProvider>
+                <Header />
                 {children}
                 <Footer />
                 <Toaster />

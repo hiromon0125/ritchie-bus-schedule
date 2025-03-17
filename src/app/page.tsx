@@ -1,6 +1,5 @@
 import { BusList, BusListSkeleton } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
-import Header from "@/header";
 import { DotMap } from "@/Map";
 import { BusTag, StopTag } from "@/tags";
 import { SignedIn } from "@clerk/nextjs";
@@ -16,9 +15,8 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   return (
-    <main className=" flex min-h-screen w-full flex-col items-center gap-3 bg-slate-100 pb-8 text-black [--margin:8px] [--sm-max-w:calc(100%-var(--margin))] xs:[--margin:24px]">
+    <main className=" flex min-h-screen w-full flex-col items-center gap-3 py-2 text-black [--margin:8px] [--sm-max-w:calc(100%-var(--margin))] xs:[--margin:24px]">
       <WelcomePopup />
-      <Header title="Home" route="home" />
       <SignedIn>
         <FavStopList />
       </SignedIn>
@@ -40,8 +38,8 @@ async function FavStopList() {
   const favStops = await api.favorite.getAllStop();
   if (favStops.length === 0) return null;
   return (
-    <div className=" flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-      <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
+    <div className=" bg-border-background flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+      <div className=" bg-item-background flex flex-row justify-between rounded-xl p-3 py-2">
         <h1 className=" m-0 text-xl font-bold xs:text-2xl">Favorite Stop</h1>
       </div>
       {favStops.map((stop) => (
@@ -60,7 +58,7 @@ async function StopView({ stopId }: { stopId: number }) {
   return (
     <div className=" relative">
       <Link href={`/stop/${stop.id}`}>
-        <div className="relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white bg-white p-1 transition-all hover:border-[#1567ea] hover:shadow-md">
+        <div className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white p-1 transition-all hover:border-accent hover:shadow-md">
           <div className=" h-auto min-w-3 rounded-l-md bg-slate-700" />
           <div className=" flex flex-col gap-2 p-2">
             <div className=" flex flex-row items-center gap-2">

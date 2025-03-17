@@ -1,6 +1,6 @@
 export function TimeTableSkeleton() {
   return (
-    <div className=" max-h-[50vh] w-full overflow-scroll bg-white">
+    <div className=" bg-item-background max-h-[50vh] w-full overflow-scroll">
       <div className=" flex flex-row items-stretch border-b">
         <div className="relative flex h-auto flex-col pt-2">
           <div className=" h-1 w-5 bg-black" />
@@ -16,7 +16,7 @@ export function TimeTableSkeleton() {
         <div key={i} className="flex flex-row items-stretch gap-1 border-b">
           <div className=" relative h-auto">
             <div className=" mx-[6px] h-full w-2 bg-black" />
-            <div className=" absolute left-1/2 top-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700 bg-white" />
+            <div className=" bg-item-background absolute left-1/2 top-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700" />
           </div>
           <div className=" m-auto mx-0 mr-3 h-3 w-[62px] animate-pulse rounded-sm bg-gray-400 py-2" />
           <p className=" py-2 pr-2">-</p>

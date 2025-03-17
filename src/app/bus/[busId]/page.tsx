@@ -93,10 +93,10 @@ export default async function Page(props: Props) {
   }
   return (
     <>
-      <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-        <div className=" flex w-full flex-row rounded-xl bg-white p-2 md:gap-2">
+      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+        <div className=" bg-item-background flex w-full flex-row rounded-xl p-2 md:gap-2">
           <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
-          <div className=" flex w-full flex-col gap-2 bg-white px-2 md:p-3">
+          <div className=" bg-item-background flex w-full flex-col gap-2 px-2 md:p-3">
             <div className=" flex flex-row items-center gap-2">
               <BusTag bus={bus} />
               <p className=" text-lg font-bold md:text-2xl">{bus.name}</p>
@@ -105,10 +105,10 @@ export default async function Page(props: Props) {
             <p className=" text-base md:text-lg">{bus.description}</p>
           </div>
         </div>
-        <div className=" flex w-full flex-col gap-2 rounded-xl bg-white p-2 pl-3">
+        <div className=" bg-item-background flex w-full flex-col gap-2 rounded-xl p-2 pl-3">
           <h2 className=" m-0 text-lg font-semibold md:text-2xl">Status</h2>
         </div>
-        <div className=" flex w-full flex-row gap-4 rounded-xl bg-white px-2 md:p-2 md:pl-3">
+        <div className=" bg-item-background flex w-full flex-row gap-4 rounded-xl px-2 md:p-2 md:pl-3">
           <div className=" flex flex-col gap-2 py-2">
             <Suspense fallback={<p>Loading...</p>}>
               <BusStatusBig busId={bus.id ?? -1} />
@@ -117,8 +117,8 @@ export default async function Page(props: Props) {
         </div>
         <BusServiceInfo busId={bus.id} />
       </div>
-      <div className=" flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] bg-slate-200 p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-        <div className=" flex w-full flex-row items-center justify-between rounded-xl bg-white p-1 pl-3 pr-2 md:p-3">
+      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
+        <div className=" bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-1 pl-3 pr-2 md:p-3">
           <h2 className=" m-0 text-lg font-bold xs:text-2xl">Select Stops</h2>
           <ClickableTooltip tipMessage="Click on the bus stop to view it's timetable below.">
             <IoMdInformationCircle
@@ -187,14 +187,10 @@ async function SelectableStopInfo({
   if (!stopObj) return null;
 
   return (
-    <div className=" relative">
+    <div className=" group relative">
+      {isSelected && <div id="checked" className=" hidden h-0 w-0" />}
       <Link
-        className="relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] bg-white p-1 transition-all hover:border-[#1567ea] hover:shadow-md"
-        style={
-          {
-            "--active-border": isSelected ? "#1567ea" : "white",
-          } as React.CSSProperties
-        }
+        className=" bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all [--active-border:white] hover:border-accent hover:shadow-md group-has-[div#checked]:[--active-border:hsl(var(--accent))]"
         href={href}
       >
         <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
@@ -229,7 +225,7 @@ async function BusServiceInfo({ busId }: { busId: number }) {
   if (!infoService || infoService.length < 1) return null;
 
   return (
-    <div className=" rounded-xl bg-white">
+    <div className=" bg-item-background rounded-xl">
       <div className=" flex flex-row gap-4 rounded-xl border-2 border-orange-500 bg-gradient-to-b from-orange-500/40 to-white/40 p-5">
         <div className=" min-w-[40px] sm:min-w-[60px]">
           <Image

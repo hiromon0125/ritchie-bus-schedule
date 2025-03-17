@@ -1,4 +1,3 @@
-import Header from "@/header";
 import { TRPCClientError } from "@trpc/client";
 import Link from "next/link";
 import { api } from "../../../trpc/server";
@@ -14,11 +13,10 @@ export default async function Layout(props: {
     throw TRPCClientError.from(Error(`Stop not found (stop id: ${stopId})`));
   }
   return (
-    <div>
-      <Header title="Stop" />
-      <div className=" m-auto flex w-full max-w-screen-lg flex-col gap-2 px-[--margin] py-2 xs:gap-4">
-        {props.children}
-        <div className=" flex max-w-[480px] flex-row items-center justify-between rounded-[20px] border-[8px] border-[#E2E8F0] p-3 xs:rounded-3xl md:border-[12px]">
+    <main className=" flex min-h-screen w-full flex-col items-center gap-3 py-2 text-black [--margin:8px] [--sm-max-w:calc(100%-var(--margin))] xs:[--margin:24px]">
+      {props.children}
+      <div className=" bg-border-background relative flex w-[--sm-max-w] flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">
+        <div className=" bg-item-background flex w-full flex-row justify-between rounded-xl p-3">
           <h2 className=" text-lg font-bold xs:text-xl sm:mb-2 sm:text-3xl">
             Rate this bus
           </h2>
@@ -30,6 +28,6 @@ export default async function Layout(props: {
           </Link>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
