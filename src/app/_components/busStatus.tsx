@@ -46,7 +46,7 @@ export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
           className=" relative h-full"
         >
           <div
-            className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white p-1 transition-all hover:border-[#1567ea] hover:shadow-md"
+            className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white p-1 transition-all hover:border-accent hover:shadow-md"
             style={{ "--bus-color": color } as React.CSSProperties}
           >
             <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />

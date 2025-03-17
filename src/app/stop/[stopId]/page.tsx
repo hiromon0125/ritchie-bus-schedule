@@ -110,7 +110,7 @@ export default async function Page(props: {
           </div>
         ))}
       </div>
-      <div className=" flex flex-col gap-2 xs:gap-4 md:flex-row">
+      <div className=" flex w-[--sm-max-w] flex-col gap-2 xs:gap-4 md:max-w-screen-lg md:flex-row">
         <div
           className=" bg-border-background flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg"
           style={
@@ -211,7 +211,7 @@ async function SelectableBusInfo({
   return (
     <div className=" relative">
       <Link
-        className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all hover:border-[#1567ea] hover:shadow-md"
+        className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all hover:border-accent hover:shadow-md"
         style={
           {
             "--bus-color": color,

@@ -187,14 +187,10 @@ async function SelectableStopInfo({
   if (!stopObj) return null;
 
   return (
-    <div className=" relative">
+    <div className=" group relative">
+      {isSelected && <div id="checked" className=" hidden h-0 w-0" />}
       <Link
-        className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all hover:border-[#1567ea] hover:shadow-md"
-        style={
-          {
-            "--active-border": isSelected ? "#1567ea" : "white",
-          } as React.CSSProperties
-        }
+        className=" bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all [--active-border:white] hover:border-accent hover:shadow-md group-has-[div#checked]:[--active-border:hsl(var(--accent))]"
         href={href}
       >
         <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />

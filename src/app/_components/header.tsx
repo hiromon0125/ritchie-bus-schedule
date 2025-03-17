@@ -40,21 +40,21 @@ export default function Header() {
           >
             <Link
               href="/buses"
-              className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
+              className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-accent hover:shadow-md"
             >
               <MdDirectionsBus size={24} color="#0f172a" />
               <p>Buses</p>
             </Link>
             <Link
               href="/stops"
-              className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
+              className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-accent hover:shadow-md"
             >
               <TbRoute size={24} color="#0f172a" />
               <p>Stops</p>
             </Link>
             <Suspense
               fallback={
-                <ServiceInfoButton className=" bg-item-background flex h-full flex-row items-center justify-center rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md">
+                <ServiceInfoButton className=" bg-item-background flex h-full flex-row items-center justify-center rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-accent hover:shadow-md">
                   <LuClockAlert size={24} color="#0f172a" />
                   <p>Alert</p>
                 </ServiceInfoButton>
@@ -78,7 +78,7 @@ export default function Header() {
 async function AlertNavigation() {
   const count = await api.serviceinfo.getCount();
   return (
-    <ServiceInfoButton className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md">
+    <ServiceInfoButton className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-accent hover:shadow-md">
       <LuClockAlert size={24} color="#0f172a" />
       <div className=" relative">
         <p>Alert</p>

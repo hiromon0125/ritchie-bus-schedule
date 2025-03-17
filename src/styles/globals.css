@@ -375,7 +375,7 @@ template {
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 217, 91%, 60%;
+    --accent: 217 84% 50%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -390,7 +390,7 @@ template {
     --radius: 0.5rem;
   }
   .dark {
-    --background: 222.2 84% 4.9%;
+    /* --background: 222.2 84% 4.9%; */
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;

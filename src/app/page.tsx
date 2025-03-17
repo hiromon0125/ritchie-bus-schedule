@@ -58,7 +58,7 @@ async function StopView({ stopId }: { stopId: number }) {
   return (
     <div className=" relative">
       <Link href={`/stop/${stop.id}`}>
-        <div className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white p-1 transition-all hover:border-[#1567ea] hover:shadow-md">
+        <div className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white p-1 transition-all hover:border-accent hover:shadow-md">
           <div className=" h-auto min-w-3 rounded-l-md bg-slate-700" />
           <div className=" flex flex-col gap-2 p-2">
             <div className=" flex flex-row items-center gap-2">
