@@ -84,7 +84,7 @@ export default async function Page(props: {
         </div>
       </div>
       <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-        <div className=" bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
+        <div className=" bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-3 pl-4">
           <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
           <ClickableTooltip tipMessage="Click on the bus route to view it's timetable below.">
             <IoMdInformationCircle
