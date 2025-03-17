@@ -143,21 +143,21 @@ function Footer() {
             >
               <Link
                 href="/buses"
-                className=" flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] border-white bg-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
+                className=" bg-item-background flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
               >
                 <MdDirectionsBus size={24} color="#0f172a" />
                 <p>Buses</p>
               </Link>
               <Link
                 href="/"
-                className=" flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] border-white bg-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
+                className=" bg-item-background flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
               >
                 <FaHome size={24} color="#0f172a" />
                 <p>Home</p>
               </Link>
               <Link
                 href="/stops"
-                className=" flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] border-white bg-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
+                className=" bg-item-background flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
               >
                 <TbRoute size={24} color="#0f172a" />
                 <p>Stops</p>
@@ -165,7 +165,7 @@ function Footer() {
               <ServiceInfoBtn />
             </div>
             <div className=" h-14 w-[2px] bg-neutral-700 max-xs:hidden" />
-            <div className=" flex aspect-square h-full items-center justify-center rounded-xl bg-white shadow-md max-xs:hidden">
+            <div className=" bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md max-xs:hidden">
               <Suspense>
                 <ProfileBtnComponent />
               </Suspense>
@@ -181,7 +181,7 @@ function ServiceInfoBtn() {
   return (
     <Suspense
       fallback={
-        <ServiceInfoButton className=" flex h-full flex-1 flex-col items-center justify-center rounded-lg border-[3px] border-white bg-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md max-xs:hidden">
+        <ServiceInfoButton className=" bg-item-background flex h-full flex-1 flex-col items-center justify-center rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md max-xs:hidden">
           <LuClockAlert size={24} color="#0f172a" />
           <p>Alert</p>
         </ServiceInfoButton>
@@ -195,7 +195,7 @@ function ServiceInfoBtn() {
 async function AlertNavigation() {
   const count = await api.serviceinfo.getCount();
   return (
-    <ServiceInfoButton className=" flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] border-white bg-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md max-xs:hidden">
+    <ServiceInfoButton className=" bg-item-background flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md max-xs:hidden">
       <LuClockAlert size={24} color="#0f172a" />
       <div className=" relative">
         <p>Alert</p>

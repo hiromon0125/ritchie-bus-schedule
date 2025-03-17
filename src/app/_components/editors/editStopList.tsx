@@ -151,12 +151,12 @@ export default function EditStopList() {
                 <>
                   <Link
                     href={`/manage/stop/${stop.id}`}
-                    className=" text-black-600 mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-black bg-white px-1"
+                    className=" text-black-600 bg-item-background mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-black px-1"
                   >
                     Edit
                   </Link>
                   <button
-                    className=" mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-red-600 bg-white px-1 text-red-600"
+                    className=" bg-item-background mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-red-600 px-1 text-red-600"
                     onClick={() => onDelete(index)}
                   >
                     <FaTrash color="red" />

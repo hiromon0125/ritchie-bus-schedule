@@ -9,7 +9,7 @@ export default async function Page({
         {children}
       </div>
       <div className=" absolute left-0 top-0 flex w-full flex-row justify-between p-4 xs:p-5">
-        <div className=" w-full rounded-md bg-white p-2">
+        <div className=" bg-item-background w-full rounded-md p-2">
           <h2 className=" m-0 text-xl font-bold xs:text-2xl">
             Bus Stop Location
           </h2>

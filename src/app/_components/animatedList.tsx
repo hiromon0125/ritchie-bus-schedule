@@ -29,7 +29,7 @@ export function AnimatedDoubleList({
 
   return (
     <div className=" bg-border-background flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-      <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
+      <div className=" bg-item-background flex flex-row justify-between rounded-xl p-3 py-2">
         <h1 className=" m-0 text-xl font-bold xs:text-2xl">Favorite Buses</h1>
       </div>
       <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-2 xs:gap-3 md:min-w-80">
@@ -54,7 +54,7 @@ export function AnimatedDoubleList({
               ))}
         </AnimatePresence>
       </div>
-      <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
+      <div className=" bg-item-background flex flex-row justify-between rounded-xl p-3 py-2">
         <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
       </div>
       <div className=" relative flex max-w-screen-lg flex-row flex-wrap gap-2 xs:gap-3 md:min-w-80">

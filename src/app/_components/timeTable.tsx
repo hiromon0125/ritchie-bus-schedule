@@ -35,7 +35,7 @@ export default function TimeTable({
   if (!route) return <ErrorTimeTable />;
 
   return (
-    <div className=" max-h-[50vh] w-full overflow-x-visible overflow-y-scroll bg-white">
+    <div className=" bg-item-background max-h-[50vh] w-full overflow-x-visible overflow-y-scroll">
       <div className=" flex flex-row items-stretch border-b">
         <div className="relative flex h-auto flex-col pt-2">
           <div className=" h-1 w-5 bg-[--bus-color]" />
@@ -73,7 +73,7 @@ export default function TimeTable({
                   )}
                 <div className=" mx-[6px] h-full w-2 bg-[--bus-color]" />
                 {!(currentStatus && status.isMoving === "stopped") && (
-                  <div className=" absolute left-1/2 top-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700 bg-white" />
+                  <div className=" bg-item-background absolute left-1/2 top-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700" />
                 )}
               </div>
               <p className=" w-[74px] py-2">
@@ -104,7 +104,7 @@ function formatToLocalTimeString(date: Date) {
 
 function ErrorTimeTable() {
   return (
-    <div className=" max-h-[500px] rounded-md bg-white">
+    <div className=" bg-item-background max-h-[500px] rounded-md">
       <h3 className=" text-2xl font-bold">Times not found</h3>
     </div>
   );

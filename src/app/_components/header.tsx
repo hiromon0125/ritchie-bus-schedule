@@ -15,7 +15,7 @@ export default function Header() {
         <div className=" top-0 m-auto flex h-full w-full max-w-screen-lg flex-row items-center gap-4">
           <Link
             href="/"
-            className=" flex h-full flex-1 flex-row items-center gap-4 rounded-xl bg-white p-[10px]"
+            className=" bg-item-background flex h-full flex-1 flex-row items-center gap-4 rounded-xl p-[10px]"
           >
             <Image
               src="/icons/bus-512x512.png"
@@ -40,21 +40,21 @@ export default function Header() {
           >
             <Link
               href="/buses"
-              className=" flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white bg-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
+              className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
             >
               <MdDirectionsBus size={24} color="#0f172a" />
               <p>Buses</p>
             </Link>
             <Link
               href="/stops"
-              className=" flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white bg-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
+              className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md"
             >
               <TbRoute size={24} color="#0f172a" />
               <p>Stops</p>
             </Link>
             <Suspense
               fallback={
-                <ServiceInfoButton className=" flex h-full flex-row items-center justify-center rounded-lg border-[3px] border-white bg-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md">
+                <ServiceInfoButton className=" bg-item-background flex h-full flex-row items-center justify-center rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md">
                   <LuClockAlert size={24} color="#0f172a" />
                   <p>Alert</p>
                 </ServiceInfoButton>
@@ -64,7 +64,7 @@ export default function Header() {
             </Suspense>
           </div>
           <div className=" h-14 w-[2px] bg-neutral-700" />
-          <div className=" flex aspect-square h-full items-center justify-center rounded-xl bg-white shadow-md">
+          <div className=" bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
             <Suspense>
               <ProfileBtnComponent />
             </Suspense>
@@ -78,7 +78,7 @@ export default function Header() {
 async function AlertNavigation() {
   const count = await api.serviceinfo.getCount();
   return (
-    <ServiceInfoButton className=" flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white bg-white px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md">
+    <ServiceInfoButton className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-[#1567ea] hover:shadow-md">
       <LuClockAlert size={24} color="#0f172a" />
       <div className=" relative">
         <p>Alert</p>

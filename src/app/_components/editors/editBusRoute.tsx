@@ -433,7 +433,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                     value={route.stopId ?? 0}
                     onChange={(e) => handleStopIdChange(e, index)}
                   />
-                  <div className=" flex flex-1 flex-row gap-1 bg-white">
+                  <div className=" bg-item-background flex flex-1 flex-row gap-1">
                     <input
                       type="time"
                       className=" flex-1 p-1"

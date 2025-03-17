@@ -7,7 +7,7 @@ export default function ProfileBtn() {
   return (
     <div className="flex flex-none flex-row items-center justify-end text-lg">
       <SignedOut>
-        <div className=" rounded-full border-2 border-blue-600 bg-white px-4 py-2">
+        <div className=" bg-item-background rounded-full border-2 border-blue-600 px-4 py-2">
           <SignInButton>
             <button className=" text-blue-600">Sign In</button>
           </SignInButton>

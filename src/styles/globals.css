@@ -361,8 +361,9 @@ template {
     --header-height: 96px;
     --header-margin: 16px;
 
-    --background: 210 40% 96%; /* --color-slate-100 */
+    --background: 241 245 249; /* --color-slate-100 */
     --border-background: 226 232 240; /* --color-slate-200 */
+    --item-background: 255 255 255; /* --color-white */
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;

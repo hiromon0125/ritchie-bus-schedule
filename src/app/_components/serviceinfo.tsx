@@ -47,7 +47,7 @@ export function ServiceInfoProvider({
         {children}
       </ServiceInfoContext.Provider>
       <Dialog open={state} onOpenChange={setState}>
-        <DialogContent className=" rounded-3xl border-4 border-orange-500 bg-white">
+        <DialogContent className=" bg-item-background rounded-3xl border-4 border-orange-500">
           <DialogHeader>
             <div className=" relative flex h-[140px] w-full flex-col items-center justify-center bg-gradient-to-b from-orange-500/40 to-white">
               <Image
@@ -118,7 +118,7 @@ export function ServiceInfoProvider({
                 for accurate information
               </p>
               <DialogClose asChild>
-                <Button className=" border-2 border-black bg-white text-black hover:bg-gray-800 hover:text-white">
+                <Button className=" bg-item-background border-2 border-black text-black hover:bg-gray-800 hover:text-white">
                   Close
                 </Button>
               </DialogClose>

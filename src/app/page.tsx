@@ -39,7 +39,7 @@ async function FavStopList() {
   if (favStops.length === 0) return null;
   return (
     <div className=" bg-border-background flex w-[--sm-max-w] flex-col gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-      <div className=" flex flex-row justify-between rounded-xl bg-white p-3 py-2">
+      <div className=" bg-item-background flex flex-row justify-between rounded-xl p-3 py-2">
         <h1 className=" m-0 text-xl font-bold xs:text-2xl">Favorite Stop</h1>
       </div>
       {favStops.map((stop) => (
@@ -58,7 +58,7 @@ async function StopView({ stopId }: { stopId: number }) {
   return (
     <div className=" relative">
       <Link href={`/stop/${stop.id}`}>
-        <div className="relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white bg-white p-1 transition-all hover:border-[#1567ea] hover:shadow-md">
+        <div className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-white p-1 transition-all hover:border-[#1567ea] hover:shadow-md">
           <div className=" h-auto min-w-3 rounded-l-md bg-slate-700" />
           <div className=" flex flex-col gap-2 p-2">
             <div className=" flex flex-row items-center gap-2">

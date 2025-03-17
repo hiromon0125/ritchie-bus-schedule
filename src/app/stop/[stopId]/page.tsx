@@ -72,7 +72,7 @@ export default async function Page(props: {
   return (
     <>
       <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-        <div className=" flex w-full flex-col gap-2 rounded-xl bg-white pl-2">
+        <div className=" bg-item-background flex w-full flex-col gap-2 rounded-xl pl-2">
           <div className=" flex flex-row items-center gap-2 xs:mt-3">
             <StopTag stop={currentStop} />
             <p className=" text-2xl font-bold">{currentStop.name}</p>
@@ -84,7 +84,7 @@ export default async function Page(props: {
         </div>
       </div>
       <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-        <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
+        <div className=" bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
           <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
           <ClickableTooltip tipMessage="Click on the bus route to view it's timetable below.">
             <IoMdInformationCircle
@@ -119,7 +119,7 @@ export default async function Page(props: {
             } as React.CSSProperties
           }
         >
-          <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
+          <div className=" bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
             <div className=" flex flex-col gap-2 pb-1">
               <h2 className=" m-0 pl-2 font-bold text-gray-700 xs:text-lg">
                 Timetable
@@ -140,7 +140,7 @@ export default async function Page(props: {
               <p className=" text-sm text-[gray]">View</p>
             </Link>
           </div>
-          <div className=" flex w-full flex-row justify-between rounded-xl bg-white p-3 py-2">
+          <div className=" bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
             <Suspense fallback={<TimeTableSkeleton />}>
               <TimeTable
                 stopId={stopId}
@@ -157,7 +157,7 @@ export default async function Page(props: {
             </Suspense>
           </div>
           <div className=" absolute left-0 top-0 flex w-full flex-row justify-between p-4 xs:p-5">
-            <div className=" w-full rounded-md bg-white p-2">
+            <div className=" bg-item-background w-full rounded-md p-2">
               <h2 className=" m-0 text-xl font-bold xs:text-2xl">
                 Bus Stop Location
               </h2>
@@ -211,7 +211,7 @@ async function SelectableBusInfo({
   return (
     <div className=" relative">
       <Link
-        className="relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] bg-white p-1 transition-all hover:border-[#1567ea] hover:shadow-md"
+        className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all hover:border-[#1567ea] hover:shadow-md"
         style={
           {
             "--bus-color": color,
