@@ -215,7 +215,7 @@ async function SelectableBusInfo({
         style={
           {
             "--bus-color": color,
-            "--active-border": isSelected ? "#1567ea" : "white",
+            "--active-border": isSelected ? "hsl(var(--accent))" : "white",
           } as React.CSSProperties
         }
         href={href}
