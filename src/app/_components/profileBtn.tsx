@@ -10,10 +10,10 @@ export default function ProfileBtn() {
       <SignedOut>
         <div id="loggedout" className="hidden" />
         <SignInButton>
-          <>
+          <div className=" flex flex-col items-center justify-center gap-1">
             <TbLogin2 size={24} color="hsl(var(--accent))" />
             <button className=" text-base text-accent xs:text-sm">Login</button>
-          </>
+          </div>
         </SignInButton>
       </SignedOut>
       <SignedIn>
