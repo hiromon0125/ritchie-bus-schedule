@@ -15,7 +15,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   return (
-    <main className=" flex min-h-screen w-full flex-col items-center gap-3 py-8 text-black [--margin:8px] [--sm-max-w:calc(100%-var(--margin))] xs:[--margin:24px]">
+    <main className=" flex min-h-screen w-full flex-col items-center gap-3 py-2 text-black [--margin:8px] [--sm-max-w:calc(100%-var(--margin))] xs:[--margin:24px]">
       <WelcomePopup />
       <SignedIn>
         <FavStopList />
