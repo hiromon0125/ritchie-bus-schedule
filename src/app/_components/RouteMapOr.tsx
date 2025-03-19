@@ -32,7 +32,7 @@ export default function RouteMapOr({
           <Image
             src="/images/bus-route-diagram.png"
             // This is a pretty arbitrary color rotation to make the image look "better"
-            className="dark:brightness-90 dark:grayscale-30 dark:hue-rotate-345 dark:invert-100 dark:saturate-95"
+            className="dark:brightness-115 dark:grayscale-30 dark:hue-rotate-345 dark:invert-100 dark:saturate-120"
             alt="Unofficial diagram of the RIT shuttle system"
             width="1728"
             height="1008"

@@ -28,7 +28,7 @@ export default function Header() {
             </h1>
           </Link>
           <div
-            className="hidden h-full flex-row items-center gap-[5px] rounded-xl bg-neutral-500/60 p-[5px] text-xl shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex dark:bg-neutral-950/60"
+            className="hidden h-full flex-row items-center gap-[5px] rounded-xl bg-neutral-500/60 p-[5px] text-xl shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex dark:bg-neutral-950/60 dark:shadow-none"
             style={
               // This is a workaround because I couldn't get the opacity to work with the tailwind var classes
               {
@@ -40,22 +40,30 @@ export default function Header() {
           >
             <Link
               href="/buses"
-              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md"
+              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md dark:shadow-none"
             >
-              <MdDirectionsBus size={24} color="#0f172a" />
+              <MdDirectionsBus
+                size={24}
+                color="black"
+                className="dark:invert-100"
+              />
               <p>Buses</p>
             </Link>
             <Link
               href="/stops"
-              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md"
+              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md dark:shadow-none"
             >
-              <TbRoute size={24} color="#0f172a" />
+              <TbRoute size={24} color="black" className="dark:invert-100" />
               <p>Stops</p>
             </Link>
             <Suspense
               fallback={
-                <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center rounded-lg border-[3px] shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md">
-                  <LuClockAlert size={24} color="#0f172a" />
+                <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md dark:shadow-none">
+                  <LuClockAlert
+                    size={24}
+                    color="black"
+                    className="dark:invert-100"
+                  />
                   <p>Alert</p>
                 </ServiceInfoButton>
               }
@@ -63,7 +71,7 @@ export default function Header() {
               <AlertNavigation />
             </Suspense>
           </div>
-          <div className="h-14 w-[2px] bg-neutral-700" />
+          <div className="h-14 w-[2px] bg-neutral-700 dark:bg-neutral-300" />
           <div className="bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
             <Suspense>
               <ProfileBtnComponent />
@@ -78,8 +86,8 @@ export default function Header() {
 async function AlertNavigation() {
   const count = await api.serviceinfo.getCount();
   return (
-    <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md">
-      <LuClockAlert size={24} color="#0f172a" />
+    <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md dark:shadow-none">
+      <LuClockAlert size={24} color="black" className="dark:invert-100" />
       <div className="relative">
         <p>Alert</p>
         {count > 0 && (
