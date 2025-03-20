@@ -11,7 +11,7 @@ import ServiceInfoButton from "./serviceinfo";
 export default function Header() {
   return (
     <div className="xs:px-3 text-foreground top-2 z-20 w-full px-1 md:sticky">
-      <div className="bg-border-background md:bg-border-background/60 m-2 mx-auto h-24 w-full justify-center rounded-3xl p-3 md:max-w-(--breakpoint-lg) md:shadow-md md:backdrop-blur-md">
+      <div className="bg-border-background md:bg-border-background/60 m-2 mx-auto h-24 w-full justify-center rounded-3xl border-slate-700 p-3 md:max-w-(--breakpoint-lg) md:backdrop-blur-md not-dark:md:shadow-md dark:border">
         <div className="top-0 m-auto flex h-full w-full max-w-(--breakpoint-lg) flex-row items-center gap-4">
           <Link
             href="/"
@@ -28,7 +28,7 @@ export default function Header() {
             </h1>
           </Link>
           <div
-            className="hidden h-full flex-row items-center gap-[5px] rounded-xl bg-neutral-500/60 p-[5px] text-xl shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex dark:bg-neutral-950/60 dark:shadow-none"
+            className="hidden h-full flex-row items-center gap-[5px] rounded-xl bg-neutral-500/60 p-[5px] text-xl not-dark:shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex dark:bg-slate-950/60"
             style={
               // This is a workaround because I couldn't get the opacity to work with the tailwind var classes
               {
@@ -40,7 +40,7 @@ export default function Header() {
           >
             <Link
               href="/buses"
-              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md dark:shadow-none"
+              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md"
             >
               <MdDirectionsBus
                 size={24}
@@ -51,14 +51,14 @@ export default function Header() {
             </Link>
             <Link
               href="/stops"
-              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md dark:shadow-none"
+              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md"
             >
               <TbRoute size={24} color="black" className="dark:invert-100" />
               <p>Stops</p>
             </Link>
             <Suspense
               fallback={
-                <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md dark:shadow-none">
+                <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
                   <LuClockAlert
                     size={24}
                     color="black"
@@ -71,7 +71,7 @@ export default function Header() {
               <AlertNavigation />
             </Suspense>
           </div>
-          <div className="h-14 w-[2px] bg-neutral-700 dark:bg-neutral-300" />
+          <div className="h-14 w-[2px] rounded-full bg-neutral-700 dark:bg-neutral-300" />
           <div className="bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
             <Suspense>
               <ProfileBtnComponent />
@@ -86,7 +86,7 @@ export default function Header() {
 async function AlertNavigation() {
   const count = await api.serviceinfo.getCount();
   return (
-    <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md dark:shadow-none">
+    <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
       <LuClockAlert size={24} color="black" className="dark:invert-100" />
       <div className="relative">
         <p>Alert</p>

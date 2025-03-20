@@ -128,10 +128,10 @@ function Footer() {
         </div>
       </div>
       <div className="xs:px-3 sticky bottom-0 left-0 z-10 p-2 px-1 md:hidden">
-        <div className="bg-border-background/60 mx-auto h-(--mobile-bottom-nav-height) justify-center rounded-3xl p-3 shadow-md backdrop-blur-md">
+        <div className="bg-border-background/60 mx-auto h-(--mobile-bottom-nav-height) justify-center rounded-3xl border-slate-700 p-3 shadow-md backdrop-blur-md dark:border">
           <div className="top-0 m-auto flex h-full w-full max-w-(--breakpoint-lg) flex-row items-center gap-4">
             <div
-              className="flex h-full flex-1 flex-row items-center gap-1 rounded-xl bg-neutral-500/60 p-[5px] text-sm shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)]"
+              className="flex h-full flex-1 flex-row items-center gap-1 rounded-xl bg-neutral-500/60 p-[5px] text-base shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] dark:bg-slate-950/60 dark:shadow-none"
               style={
                 // This is a workaround because I couldn't get the opacity to work with the tailwind var classes
                 {
@@ -143,24 +143,30 @@ function Footer() {
             >
               <Link
                 href="/buses"
-                className="bg-item-background border-item-background hover:border-accent flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md"
+                className="bg-item-background border-item-background hover:border-accent flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md"
               >
-                <MdDirectionsBus size={24} color="#0f172a" />
-                <p>Buses</p>
+                <MdDirectionsBus
+                  size={24}
+                  color="black"
+                  className="dark:invert-100"
+                />
+                <p className="leading-[1.15]">Buses</p>
               </Link>
               <Link
                 href="/"
-                className="bg-item-background border-item-background hover:border-accent flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md"
+                className="bg-item-background border-item-background hover:border-accent flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md"
               >
-                <FaHome size={24} color="#0f172a" />
-                <p>Home</p>
+                <FaHome size={24} color="black" className="dark:invert-100" />
+                <p className="leading-[1.15]">Home</p>
               </Link>
               <Link
                 href="/stops"
-                className="bg-item-background border-item-background hover:border-accent flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md"
+                className="bg-item-background border-item-background hover:border-accent flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md"
               >
-                <TbRoute size={24} color="#0f172a" />
-                <p>Stops</p>
+                <TbRoute size={24} color="black" className="dark:invert-100" />
+                <div className="relative">
+                  <p className="leading-[1.15]">Stops</p>
+                </div>
               </Link>
               <ServiceInfoBtn />
             </div>
@@ -181,8 +187,8 @@ function ServiceInfoBtn() {
   return (
     <Suspense
       fallback={
-        <ServiceInfoButton className="bg-item-background border-item-background hover:border-accent max-xs:hidden flex h-full flex-1 flex-col items-center justify-center rounded-lg border-[3px] shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md">
-          <LuClockAlert size={24} color="#0f172a" />
+        <ServiceInfoButton className="bg-item-background border-item-background hover:border-accent max-xs:hidden flex h-full flex-1 flex-col items-center justify-center rounded-lg border-[3px] transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
+          <LuClockAlert size={24} color="black" className="dark:invert-100" />
           <p>Alert</p>
         </ServiceInfoButton>
       }
@@ -195,8 +201,8 @@ function ServiceInfoBtn() {
 async function AlertNavigation() {
   const count = await api.serviceinfo.getCount();
   return (
-    <ServiceInfoButton className="bg-item-background border-item-background hover:border-accent max-xs:hidden flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:shadow-md">
-      <LuClockAlert size={24} color="#0f172a" />
+    <ServiceInfoButton className="bg-item-background border-item-background hover:border-accent max-xs:hidden flex h-full flex-1 flex-col items-center justify-center gap-1 rounded-lg border-[3px] transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
+      <LuClockAlert size={24} color="black" className="dark:invert-100" />
       <div className="relative">
         <p>Alert</p>
         {count > 0 && (
