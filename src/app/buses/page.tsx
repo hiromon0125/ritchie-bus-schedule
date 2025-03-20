@@ -34,12 +34,14 @@ export default async function BusPageList() {
           <Link
             href={`/bus/${bus.id}`}
             key={bus.id}
-            className=" hover:bg-border-background group flex w-full flex-row items-center gap-3  border-t-2 p-3 transition-all"
+            className="bg-item-background hover:border-accent border-item-background flex w-full flex-row items-center justify-between rounded-xl border-[3px] p-3 pl-4 transition-all"
             style={{ "--bus-color": bus.color } as React.CSSProperties}
           >
-            <div className=" flex flex-1 flex-col gap-2">
-              <div className=" flex flex-row items-center gap-2">
-                <div className=" flex w-0 flex-row items-center justify-center overflow-hidden opacity-0 transition-all group-hover:w-8 group-hover:opacity-100">
+            <div className="flex flex-1 flex-col gap-2">
+              <div className="flex flex-row items-center gap-2">
+                <BusTag bus={bus} />
+                <span className="font-bold md:text-lg">{bus.name}</span>
+                <div className="flex flex-row items-center justify-center overflow-hidden opacity-0 transition-all">
                   <FavBtn
                     isFavorited={isFav}
                     onClick={async () => {
@@ -48,12 +50,8 @@ export default async function BusPageList() {
                     }}
                   />
                 </div>
-                <BusTag bus={bus} />
-                <span className=" font-bold md:text-lg"> {bus.name}</span>
               </div>
-              <p className=" text-left text-sm md:text-lg ">
-                {bus.description}
-              </p>
+              <p className="text-left text-sm md:text-lg">{bus.description}</p>
             </div>
             <IoChevronForwardSharp size={24} />
           </Link>
