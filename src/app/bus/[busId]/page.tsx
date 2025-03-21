@@ -93,23 +93,23 @@ export default async function Page(props: Props) {
   }
   return (
     <>
-      <div className=" bg-border-background flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)">
-        <div className=" bg-item-background flex w-full flex-row rounded-xl p-2 md:gap-2">
-          <div className=" h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
-          <div className=" bg-item-background flex w-full flex-col gap-2 px-2 md:p-3">
-            <div className=" flex flex-row items-center gap-2">
+      <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
+        <div className="bg-item-background flex w-full flex-row rounded-xl p-2 md:gap-2">
+          <div className="h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
+          <div className="bg-item-background flex w-full flex-col gap-2 px-2 md:p-3">
+            <div className="flex flex-row items-center gap-2">
               <BusTag bus={bus} />
-              <p className=" text-lg font-bold md:text-2xl">{bus.name}</p>
+              <p className="text-lg font-bold md:text-2xl">{bus.name}</p>
               <FavBtn isFavorited={isFavorite} />
             </div>
-            <p className=" text-base md:text-lg">{bus.description}</p>
+            <p className="text-base md:text-lg">{bus.description}</p>
           </div>
         </div>
-        <div className=" bg-item-background flex w-full flex-col gap-2 rounded-xl p-2 pl-3">
-          <h2 className=" m-0 text-lg font-semibold md:text-2xl">Status</h2>
+        <div className="bg-item-background flex w-full flex-col gap-2 rounded-xl p-2 pl-3">
+          <h2 className="m-0 text-lg font-semibold md:text-2xl">Status</h2>
         </div>
-        <div className=" bg-item-background flex w-full flex-row gap-4 rounded-xl px-2 md:p-2 md:pl-3">
-          <div className=" flex flex-col gap-2 py-2">
+        <div className="bg-item-background flex w-full flex-row gap-4 rounded-xl px-2 md:p-2 md:pl-3">
+          <div className="flex flex-col gap-2 py-2">
             <Suspense fallback={<p>Loading...</p>}>
               <BusStatusBig busId={bus.id ?? -1} />
             </Suspense>
@@ -117,19 +117,16 @@ export default async function Page(props: Props) {
         </div>
         <BusServiceInfo busId={bus.id} />
       </div>
-      <div className=" bg-border-background flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-(--breakpoint-lg)">
-        <div className=" bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-1 pl-3 pr-2 md:p-3">
-          <h2 className=" m-0 text-lg font-bold xs:text-2xl">Select Stops</h2>
+      <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
+        <div className="bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-1 pr-2 pl-3 md:p-3">
+          <h2 className="xs:text-2xl m-0 text-lg font-bold">Select Stops</h2>
           <ClickableTooltip tipMessage="Click on the bus stop to view it's timetable below.">
-            <IoMdInformationCircle
-              size={32}
-              className=" scale-150 opacity-30"
-            />
+            <IoMdInformationCircle size={32} className="scale-150 opacity-30" />
           </ClickableTooltip>
         </div>
         {_.sortBy(bus.stops, ["id"]).map((stop, i) => (
           <div
-            className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
+            className="min-w-[calc(100vw-48px)] flex-1 md:w-auto md:max-w-[calc(50%-5px)] md:min-w-[300px] lg:min-w-[calc(50%-12px)]"
             key={i}
           >
             <Suspense fallback={<BusInfoSkeleton />}>
@@ -187,20 +184,19 @@ async function SelectableStopInfo({
   if (!stopObj) return null;
 
   return (
-    <div className=" group relative">
-      {isSelected && <div id="checked" className=" hidden h-0 w-0" />}
+    <div className={`group relative ${isSelected ? "selected" : ""}`}>
       <Link
-        className=" bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-(--active-border) p-1 transition-all [--active-border:white] hover:border-accent hover:shadow-md group-has-[div#checked]:[--active-border:hsl(var(--accent))]"
+        className="bg-item-background hover:border-accent border-item-background group-[.checked]:border-accent relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] p-1 transition-all hover:shadow-md"
         href={href}
       >
-        <div className=" h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
-        <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
-          <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-2 pr-2 pt-2 sm:pl-4">
+        <div className="h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
+        <div className="relative flex w-min flex-1 flex-col flex-wrap justify-between">
+          <div className="mr-1 flex flex-1 flex-row items-center gap-2 pt-2 pr-2 pl-2 sm:pl-4">
             <StopTag stop={stopObj} />
-            <h2 className=" w-0 flex-1 overflow-hidden text-ellipsis text-nowrap text-left font-bold md:text-xl">
+            <h2 className="w-0 flex-1 overflow-hidden text-left font-bold text-nowrap text-ellipsis md:text-xl">
               {stopObj?.name}
             </h2>
-            <div className=" favbtn-placeholder h-6 w-6" />
+            <div className="favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
             <BusStatus busId={bus.id} stopId={stopObj.id} hideStopName />
@@ -208,7 +204,7 @@ async function SelectableStopInfo({
         </div>
       </Link>
       <FavBtn
-        className=" absolute right-3 top-3 z-10"
+        className="absolute top-3 right-3 z-10"
         isFavorited={isFavorited ?? false}
         onClick={async () => {
           "use server";
@@ -225,9 +221,9 @@ async function BusServiceInfo({ busId }: { busId: number }) {
   if (!infoService || infoService.length < 1) return null;
 
   return (
-    <div className=" bg-item-background rounded-xl">
-      <div className=" flex flex-row gap-4 rounded-xl border-2 border-orange-500 bg-linear-to-b from-orange-500/40 to-white/40 p-5">
-        <div className=" min-w-[40px] sm:min-w-[60px]">
+    <div className="bg-item-background rounded-xl">
+      <div className="flex flex-row gap-4 rounded-xl border-2 border-orange-500 bg-linear-to-b from-orange-500/40 to-white/40 p-5">
+        <div className="min-w-[40px] sm:min-w-[60px]">
           <Image
             src="/service-info-icon.png"
             width={60}
@@ -235,16 +231,16 @@ async function BusServiceInfo({ busId }: { busId: number }) {
             alt="Alert"
           />
         </div>
-        <div className=" pt-1">
+        <div className="pt-1">
           {infoService.map((alert) => (
-            <div key={alert.hash} className=" flex flex-col gap-2">
-              <div className=" flex flex-row items-center gap-4">
-                <p className=" text-lg font-bold">{alert.title}</p>
-                <p className=" text-sm font-semibold text-[#63646e]">
+            <div key={alert.hash} className="flex flex-col gap-2">
+              <div className="flex flex-row items-center gap-4">
+                <p className="text-lg font-bold">{alert.title}</p>
+                <p className="text-sm font-semibold text-[#63646e]">
                   {DateTime.fromJSDate(alert.createdAt).toFormat("LLL dd")}
                 </p>
               </div>
-              <div className=" text-base">
+              <div className="text-base">
                 <ServiceInfoContentDecorator content={alert.content} />
               </div>
             </div>

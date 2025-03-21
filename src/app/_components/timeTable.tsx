@@ -53,28 +53,14 @@ export default function TimeTable({
         return (
           <div
             key={r.id}
-            className={`relative ${currentStatus && status.isMoving === "stopped" && "rounded-lg border-4 border-blue-600"}`}
+            className={`group ${currentStatus?.isMoving ?? "irrelevant"} relative ${currentStatus?.isMoving === "stopped" && "border-accent rounded-lg border-4"}`}
           >
-            {currentStatus &&
-              (status.isMoving === "starting" ||
-                status.isMoving === "moving") && (
-                <div
-                  className={`absolute top-[-2px] left-0 z-10 h-1 w-full rounded-full ${status.isMoving === "moving" ? "bg-blue-600" : "bg-gray-600"}`}
-                />
-              )}
+            <div className="group-[.moving]:bg-accent absolute top-[-2px] left-0 z-10 hidden h-1 w-full rounded-full bg-amber-500 group-[.moving]:block group-[.starting]:block" />
             <div className="flex flex-row items-stretch gap-1 border-b">
               <div className="relative h-auto">
-                {currentStatus &&
-                  (status.isMoving === "starting" ||
-                    status.isMoving === "moving") && (
-                    <div
-                      className={`absolute top-[-6px] left-1/2 aspect-square w-3 -translate-x-1/2 rounded-full border-[3px] ${status.isMoving === "moving" ? "border-blue-600 bg-blue-600" : "border-gray-600 bg-gray-600"} `}
-                    />
-                  )}
+                <div className="group-[.moving]:border-accent group-[.moving]:bg-accent absolute top-[-6px] left-1/2 hidden aspect-square w-3 -translate-x-1/2 rounded-full border-[3px] border-amber-500 bg-amber-500 group-[.moving]:block group-[.starting]:block" />
                 <div className="mx-[6px] h-full w-2 bg-(--bus-color)" />
-                {!(currentStatus && status.isMoving === "stopped") && (
-                  <div className="bg-item-background absolute top-1/2 left-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700" />
-                )}
+                <div className="bg-item-background invisible absolute top-1/2 left-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700 group-[.stopped]:block" />
               </div>
               <p className="w-[74px] py-2">
                 {formatToLocalTimeString(arriTime)}
