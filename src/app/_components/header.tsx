@@ -10,12 +10,12 @@ import ServiceInfoButton from "./serviceinfo";
 
 export default function Header() {
   return (
-    <div className=" top-2 z-20 w-full px-1 text-slate-900 xs:px-3 md:sticky">
-      <div className=" bg-border-background md:bg-border-background/60 m-2 mx-auto h-24 w-full justify-center rounded-3xl p-3  md:max-w-screen-lg  md:shadow-md md:backdrop-blur-md">
-        <div className=" top-0 m-auto flex h-full w-full max-w-screen-lg flex-row items-center gap-4">
+    <div className="xs:px-3 text-foreground top-2 z-20 w-full px-1 md:sticky">
+      <div className="bg-border-background md:bg-border-background/60 m-2 mx-auto h-24 w-full justify-center rounded-3xl border-slate-700 p-3 md:max-w-(--breakpoint-lg) md:backdrop-blur-md not-dark:md:shadow-md dark:border">
+        <div className="top-0 m-auto flex h-full w-full max-w-(--breakpoint-lg) flex-row items-center gap-4">
           <Link
             href="/"
-            className=" bg-item-background flex h-full flex-1 flex-row items-center gap-4 rounded-xl p-[10px]"
+            className="bg-item-background flex h-full flex-1 flex-row items-center gap-4 rounded-xl p-[10px]"
           >
             <Image
               src="/icons/bus-512x512.png"
@@ -23,12 +23,12 @@ export default function Header() {
               width={48}
               height={48}
             />
-            <h1 className=" m-0 text-lg font-semibold max-[450px]:hidden min-[850px]:text-xl min-[850px]:text-[--lg-title-color] lg:text-2xl">
+            <h1 className="m-0 text-lg font-semibold max-[450px]:hidden min-[850px]:text-xl lg:text-2xl">
               Ritchie's Bus Schedule
             </h1>
           </Link>
           <div
-            className=" hidden h-full flex-row items-center gap-[5px] rounded-xl bg-neutral-500/60 p-[5px] text-xl shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex"
+            className="hidden h-full flex-row items-center gap-[5px] rounded-xl bg-neutral-500/60 p-[5px] text-xl not-dark:shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex dark:bg-slate-950/60"
             style={
               // This is a workaround because I couldn't get the opacity to work with the tailwind var classes
               {
@@ -40,22 +40,30 @@ export default function Header() {
           >
             <Link
               href="/buses"
-              className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-accent hover:shadow-md"
+              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md"
             >
-              <MdDirectionsBus size={24} color="#0f172a" />
+              <MdDirectionsBus
+                size={24}
+                color="black"
+                className="dark:invert-100"
+              />
               <p>Buses</p>
             </Link>
             <Link
               href="/stops"
-              className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white pl-3 pr-4 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-accent hover:shadow-md"
+              className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] pr-4 pl-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md"
             >
-              <TbRoute size={24} color="#0f172a" />
+              <TbRoute size={24} color="black" className="dark:invert-100" />
               <p>Stops</p>
             </Link>
             <Suspense
               fallback={
-                <ServiceInfoButton className=" bg-item-background flex h-full flex-row items-center justify-center rounded-lg border-[3px] border-white shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-accent hover:shadow-md">
-                  <LuClockAlert size={24} color="#0f172a" />
+                <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
+                  <LuClockAlert
+                    size={24}
+                    color="black"
+                    className="dark:invert-100"
+                  />
                   <p>Alert</p>
                 </ServiceInfoButton>
               }
@@ -63,8 +71,8 @@ export default function Header() {
               <AlertNavigation />
             </Suspense>
           </div>
-          <div className=" h-14 w-[2px] bg-neutral-700" />
-          <div className=" bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
+          <div className="h-14 w-[2px] rounded-full bg-neutral-700 dark:bg-neutral-300" />
+          <div className="bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
             <Suspense>
               <ProfileBtnComponent />
             </Suspense>
@@ -78,12 +86,12 @@ export default function Header() {
 async function AlertNavigation() {
   const count = await api.serviceinfo.getCount();
   return (
-    <ServiceInfoButton className=" bg-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] border-white px-3 shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] transition-all hover:border-accent hover:shadow-md">
-      <LuClockAlert size={24} color="#0f172a" />
-      <div className=" relative">
+    <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
+      <LuClockAlert size={24} color="black" className="dark:invert-100" />
+      <div className="relative">
         <p>Alert</p>
         {count > 0 && (
-          <div className=" absolute right-[-8px] top-[-5px] flex aspect-square h-4 flex-row items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
+          <div className="absolute top-[-5px] right-[-8px] flex aspect-square h-4 flex-row items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
             <p>{count}</p>
           </div>
         )}

@@ -140,6 +140,26 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 export const publicProcedure = t.procedure.use(timingMiddleware);
 
 /**
+ * User procedure
+ *
+ * This is a procedure that can be used with unauthenticated users as well as authenticated users.
+ * Where the difference is that this will not error for unauthenticated users, but will provide the
+ * user object if they are authenticated.
+ */
+export const userProcedure = publicProcedure.use(async ({ ctx, next }) => {
+  const authObj = await auth();
+  return next({
+    ctx: {
+      ...ctx,
+      // infers the `session` as nullable
+      session: {
+        ...authObj,
+      },
+    },
+  });
+});
+
+/**
  * Protected (authenticated) procedure
  *
  * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies

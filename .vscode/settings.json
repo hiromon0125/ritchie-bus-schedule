@@ -1,3 +1,6 @@
 {
-  "eslint.useFlatConfig": false
+  "eslint.useFlatConfig": false,
+  "files.associations": {
+    "*css": "tailwindcss"
+  }
 }

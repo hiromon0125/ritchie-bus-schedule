@@ -3,6 +3,7 @@ import { useUser } from "@clerk/nextjs";
 import { useHover } from "@uidotdev/usehooks";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { cn } from "../../lib/utils";
+import { api } from "../../trpc/react";
 
 export function FavBtn({
   isFavorited,
@@ -17,11 +18,11 @@ export function FavBtn({
   const [ref, hovering] = useHover();
   return (
     <button
-      className={cn(props.className, " group transition-all")}
+      className={cn(props.className, "group transition-all")}
       {...props}
       onClick={async (e) => {
         e.preventDefault();
-        if (!user) {
+        if (props.onClick && !user) {
           alert("Please log in to favorite");
           return;
         }
@@ -34,11 +35,39 @@ export function FavBtn({
         <MdFavorite
           size={size}
           color="#FF78AE"
-          className=" transition-all hover:drop-shadow-md"
+          className="transition-all hover:drop-shadow-md"
         />
       ) : (
         <MdFavoriteBorder size={size} color="gray" />
       )}
     </button>
   );
+}
+
+export function SpecificFavBtn({
+  busId,
+  stopId,
+}:
+  | {
+      busId: number;
+      stopId?: never;
+    }
+  | {
+      busId?: never;
+      stopId: number;
+    }) {
+  const { data: isBusFavorited } = api.favorite.isBusFavorited.useQuery(
+    busId ?? -1,
+    {
+      enabled: busId != undefined,
+    },
+  );
+  const { data: isStopFavorited } = api.favorite.isStopFavorited.useQuery(
+    stopId ?? -1,
+    {
+      enabled: stopId != undefined,
+    },
+  );
+  const isFavorited = busId != null ? isBusFavorited : isStopFavorited;
+  return <FavBtn isFavorited={isFavorited ?? false} size={24} />;
 }

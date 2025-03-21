@@ -49,7 +49,7 @@ export function ServiceInfoProvider({
       <Dialog open={state} onOpenChange={setState}>
         <DialogContent className=" bg-item-background rounded-3xl border-4 border-orange-500">
           <DialogHeader>
-            <div className=" relative flex h-[140px] w-full flex-col items-center justify-center bg-gradient-to-b from-orange-500/40 to-white">
+            <div className=" relative flex h-[140px] w-full flex-col items-center justify-center bg-linear-to-b from-orange-500/40 to-white">
               <Image
                 className=" mt-2 h-[100px] object-contain"
                 src="/service-info-icon.png"

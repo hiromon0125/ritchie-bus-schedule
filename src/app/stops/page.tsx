@@ -7,7 +7,7 @@ import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "t/server";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "auto";
 
 async function handleFavorite(stopId: number, isFav: boolean) {
   await api.favorite[isFav ? "delStop" : "addStop"]({ stopId });
@@ -26,11 +26,11 @@ export default async function StopList() {
       <Link
         href={`/stop/${stop.id}`}
         key={stop.id}
-        className=" hover:bg-border-background group flex w-full flex-row items-center gap-2 border-t-2 p-1 transition-all xs:gap-3 xs:p-3"
+        className="bg-item-background hover:border-accent border-item-background flex w-full flex-row items-center justify-between rounded-xl border-[3px] p-3 pl-4 transition-all"
       >
-        <div className=" flex flex-1 flex-col gap-2">
-          <div className=" flex w-full flex-row items-center">
-            <div className=" flex w-0 flex-row items-center justify-center overflow-hidden opacity-0 transition-all group-hover:w-8 group-hover:opacity-100">
+        <div className="flex flex-1 flex-col gap-2">
+          <div className="flex w-full flex-row items-center">
+            <div className="flex w-0 flex-row items-center justify-center overflow-hidden opacity-0 transition-all group-hover:w-8 group-hover:opacity-100">
               <FavBtn
                 isFavorited={isFav}
                 onClick={async () => {
@@ -40,18 +40,18 @@ export default async function StopList() {
               />
             </div>
             <StopTag stop={stop} />
-            <span className=" ml-1 w-0 flex-1 overflow-clip text-ellipsis text-nowrap text-lg font-bold xs:ml-2">
+            <span className="xs:ml-2 ml-1 w-0 flex-1 overflow-clip text-lg font-bold text-nowrap text-ellipsis">
               {" "}
               {stop.name}
             </span>
           </div>
-          <div className=" flex flex-row flex-wrap gap-1">
+          <div className="flex flex-row flex-wrap gap-1">
             {stop.buses.length > 0 &&
               _.orderBy(stop.buses, ["id"], "asc").map((bus) => {
                 return <BusTag bus={bus} key={bus.id} size="sm" />;
               })}
           </div>
-          <p className=" text-left text-lg">{stop.description}</p>
+          <p className="text-left text-lg">{stop.description}</p>
         </div>
         <IoChevronForwardSharp size={24} />
       </Link>

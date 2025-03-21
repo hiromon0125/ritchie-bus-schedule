@@ -72,7 +72,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
   }
 
   return (
-    <div className=" flex w-full max-w-screen-lg flex-col gap-3">
+    <div className=" flex w-full max-w-(--breakpoint-lg) flex-col gap-3">
       <div className=" relative flex h-[85px] w-full flex-row gap-5 py-2 pl-0">
         <label htmlFor="color" className=" flex h-full flex-col gap-1">
           <p>Color</p>

@@ -1,6 +1,6 @@
 export default async function Page() {
   return (
-    <div className=" m-auto w-full max-w-screen-lg pb-12 opacity-80">
+    <div className=" m-auto w-full max-w-(--breakpoint-lg) pb-12 opacity-80">
       <h1 className=" font-bold">Privacy Policy</h1>
       <div className=" flex flex-col gap-4">
         <div className=" flex flex-col gap-1">

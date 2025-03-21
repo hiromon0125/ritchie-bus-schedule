@@ -36,7 +36,7 @@ export default function WelcomePopup() {
               width={630}
             />
           </div>
-          <div className=" h-3 w-full bg-gradient-to-b from-[#e1ecf7] to-[#e1ecf700]" />
+          <div className=" h-3 w-full bg-linear-to-b from-[#e1ecf7] to-[#e1ecf700]" />
         </div>
         <div className=" flex flex-col gap-4 p-4 pb-3 pt-0">
           <DialogHeader>

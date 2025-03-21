@@ -10,7 +10,7 @@ async function Page(props: { params: Promise<{ busId: string }> }) {
   await api.bus.getByID.prefetch({ id: busIdNumber });
 
   return (
-    <div className=" w-full max-w-screen-lg px-6">
+    <div className=" w-full max-w-(--breakpoint-lg) px-6">
       <div className=" flex flex-row items-center gap-3">
         <h1>Edit Bus Detail</h1>
         <SaveStatus />
