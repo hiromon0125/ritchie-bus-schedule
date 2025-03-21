@@ -2,7 +2,7 @@ import Subtitle from "@/about/subtitle";
 import Image from "next/image";
 import Link from "next/link";
 import aboutStyles from "~/styles/about.module.css";
-export const dynamic = "force-static";
+export const dynamic = "auto";
 
 function KeyScrollTitle() {
   return (

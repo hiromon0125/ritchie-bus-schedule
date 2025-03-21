@@ -3,7 +3,7 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 export default function BusPageListSkeleton() {
   return (
     <>
-      {[...Array(6).keys()].map((count) => (
+      {Array.from({ length: 6 }, (_, count) => (
         <div
           key={count}
           className="bg-item-background hover:border-accent border-item-background flex w-full flex-row items-center justify-between rounded-xl border-[3px] p-3 pl-4 transition-all"

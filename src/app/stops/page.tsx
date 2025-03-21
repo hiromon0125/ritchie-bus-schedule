@@ -7,7 +7,7 @@ import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "t/server";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "auto";
 
 async function handleFavorite(stopId: number, isFav: boolean) {
   await api.favorite[isFav ? "delStop" : "addStop"]({ stopId });
