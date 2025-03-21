@@ -39,8 +39,6 @@ export default function TimeTable({
   if (isLoading) return <TimeTableSkeleton />;
   if (!route) return <ErrorTimeTable />;
 
-  console.log(status.location, route[0]);
-
   return (
     <div className="bg-item-background max-h-[50vh] w-full overflow-x-visible overflow-y-scroll">
       <div className="flex flex-row items-stretch border-b">
