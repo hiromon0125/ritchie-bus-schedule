@@ -186,7 +186,7 @@ async function SelectableStopInfo({
   return (
     <div className={`group relative ${isSelected ? "selected" : ""}`}>
       <Link
-        className="bg-item-background hover:border-accent border-item-background group-[.checked]:border-accent relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] p-1 transition-all hover:shadow-md"
+        className="bg-item-background hover:border-accent border-item-background group-[.selected]:border-accent relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] p-1 transition-all hover:shadow-md"
         href={href}
       >
         <div className="h-auto min-w-3 rounded-l-md bg-(--bus-color)" />

@@ -107,65 +107,61 @@ export default async function Page(props: {
           </div>
         ))}
       </div>
-      <div className="xs:gap-4 flex w-(--sm-max-w) flex-col gap-2 md:max-w-(--breakpoint-lg) md:flex-row">
-        <div
-          className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)"
-          style={
-            {
-              "--bus-color": selectedBus?.color ?? "gray",
-            } as React.CSSProperties
-          }
-        >
-          <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
-            <div className="bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
-              <div className="flex flex-col gap-2">
-                <h2 className="xs:text-lg m-0 pl-2 font-bold opacity-70">
-                  Timetable
-                </h2>
-                <Link
-                  href={`/bus/${selectedBus.id}`}
-                  className="flex flex-row items-center gap-2"
-                >
-                  <BusTag bus={selectedBus} size="md" />
-                  <p className="xs:text-2xl font-semibold">
-                    {selectedBus.name}
-                  </p>
-                </Link>
-              </div>
+      <div
+        className="xs:gap-4 flex w-(--sm-max-w) flex-col gap-2 md:max-w-(--breakpoint-lg) md:flex-row"
+        style={
+          {
+            "--bus-color": selectedBus?.color ?? "gray",
+          } as React.CSSProperties
+        }
+      >
+        <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
+          <div className="bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
+            <div className="flex flex-col gap-2">
+              <h2 className="xs:text-lg m-0 pl-2 font-bold opacity-70">
+                Timetable
+              </h2>
               <Link
                 href={`/bus/${selectedBus.id}`}
-                className="text-foreground mr-2 flex flex-col items-center justify-center"
+                className="flex flex-row items-center gap-2"
               >
-                <MdDirectionsBus
-                  size={24}
-                  color="inherit"
-                  className="opacity-70"
-                />
-                <p className="text-sm opacity-70">View</p>
+                <BusTag bus={selectedBus} size="md" />
+                <p className="xs:text-2xl font-semibold">{selectedBus.name}</p>
               </Link>
             </div>
-            <div className="bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
-              <Suspense fallback={<TimeTableSkeleton />}>
-                <TimeTable
-                  stopId={stopId}
-                  busId={selectedBus.id}
-                  fetchedRoute={currentRoute}
-                />
-              </Suspense>
-            </div>
+            <Link
+              href={`/bus/${selectedBus.id}`}
+              className="text-foreground mr-2 flex flex-col items-center justify-center"
+            >
+              <MdDirectionsBus
+                size={24}
+                color="inherit"
+                className="opacity-70"
+              />
+              <p className="text-sm opacity-70">View</p>
+            </Link>
           </div>
-          <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:min-h-0 md:max-w-(--breakpoint-lg)">
-            <div className="h-[50vh] w-full flex-1 overflow-clip rounded-xl md:h-full">
-              <Suspense fallback={<p>Loading...</p>}>
-                <StopMap stops={currentStop} />
-              </Suspense>
-            </div>
-            <div className="xs:p-5 absolute top-0 left-0 flex w-full flex-row justify-between p-4">
-              <div className="bg-item-background w-full rounded-md p-2">
-                <h2 className="xs:text-2xl m-0 text-xl font-bold">
-                  Bus Stop Location
-                </h2>
-              </div>
+          <div className="bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
+            <Suspense fallback={<TimeTableSkeleton />}>
+              <TimeTable
+                stopId={stopId}
+                busId={selectedBus.id}
+                fetchedRoute={currentRoute}
+              />
+            </Suspense>
+          </div>
+        </div>
+        <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:min-h-0 md:max-w-(--breakpoint-lg)">
+          <div className="h-[50vh] w-full flex-1 overflow-clip rounded-xl md:h-full">
+            <Suspense fallback={<p>Loading...</p>}>
+              <StopMap stops={currentStop} />
+            </Suspense>
+          </div>
+          <div className="xs:p-5 absolute top-0 left-0 flex w-full flex-row justify-between p-4">
+            <div className="bg-item-background w-full rounded-md p-2">
+              <h2 className="xs:text-2xl m-0 text-xl font-bold">
+                Bus Stop Location
+              </h2>
             </div>
           </div>
         </div>

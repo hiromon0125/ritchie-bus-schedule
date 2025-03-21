@@ -19,20 +19,27 @@ export default function TimeTable({
 }) {
   const searchParams = useSearchParams();
   const bus =
-    (searchParams.get("busId") ? Number(searchParams.get("busId")) : busId) ??
+    busId ??
+    (searchParams.get("busId")
+      ? Number(searchParams.get("busId"))
+      : undefined) ??
     -1;
-  const stop = searchParams.get("stopId")
-    ? Number(searchParams.get("stopId"))
-    : stopId;
-  const status = useBusStatus(bus ?? -1, fetchedRoute, stop);
+  const stop =
+    stopId ??
+    (searchParams.get("stopId") != null
+      ? Number(searchParams.get("stopId"))
+      : undefined);
+  const status = useBusStatus(bus, fetchedRoute, stop);
   const { data: route, isLoading } = api.routes.getAllByBusId.useQuery({
     stopId: stop ?? -1,
-    busId: bus ?? -1,
+    busId: bus,
   });
 
   if (bus === undefined || stop === undefined) return <ErrorTimeTable />;
   if (isLoading) return <TimeTableSkeleton />;
   if (!route) return <ErrorTimeTable />;
+
+  console.log(status.location, route[0]);
 
   return (
     <div className="bg-item-background max-h-[50vh] w-full overflow-x-visible overflow-y-scroll">
@@ -49,7 +56,8 @@ export default function TimeTable({
       </div>
       {route.map((r, i) => {
         const arriTime = getArriTime(r, i > 0 ? route[i - 1] : undefined);
-        const currentStatus = status?.location?.id === r.id ? status : null;
+        const currentStatus =
+          status?.location?.index === r.index ? status : null;
         return (
           <div
             key={r.id}
@@ -60,7 +68,7 @@ export default function TimeTable({
               <div className="relative h-auto">
                 <div className="group-[.moving]:border-accent group-[.moving]:bg-accent absolute top-[-6px] left-1/2 hidden aspect-square w-3 -translate-x-1/2 rounded-full border-[3px] border-amber-500 bg-amber-500 group-[.moving]:block group-[.starting]:block" />
                 <div className="mx-[6px] h-full w-2 bg-(--bus-color)" />
-                <div className="bg-item-background invisible absolute top-1/2 left-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700 group-[.stopped]:block" />
+                <div className="bg-item-background absolute top-1/2 left-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700 dark:border-slate-50" />
               </div>
               <p className="w-[74px] py-2">
                 {formatToLocalTimeString(arriTime)}
