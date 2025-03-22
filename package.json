@@ -37,7 +37,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.479.0",
     "luxon": "^3.5.0",
-    "next": "^15.2.2",
+    "next": "^15.2.3",
     "pigeon-maps": "^0.22.1",
     "posthog-js": "^1.230.4",
     "react": "19.0.0",
