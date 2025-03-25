@@ -166,6 +166,19 @@ export default async function Page(props: {
           </div>
         </div>
       </div>
+      <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 relative flex w-(--sm-max-w) flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:min-h-0 md:max-w-(--breakpoint-lg)">
+        <div className="bg-item-background flex w-full flex-row justify-between rounded-xl p-3">
+          <h2 className="xs:text-xl text-lg font-bold sm:mb-2 sm:text-3xl">
+            Rate this bus
+          </h2>
+          <Link
+            href={`https://ritbus.info/report?redirect=rit-bus.app&stop=${currentStop.name.replace(" ", "%20")}&route=${selectedBus.id}%20-%20${selectedBus.name.replace(" ", "%20")}`}
+            className="rounded-md bg-blue-600 p-3 text-white"
+          >
+            Rate!
+          </Link>
+        </div>
+      </div>
     </>
   );
 }
