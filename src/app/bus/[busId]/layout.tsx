@@ -38,7 +38,7 @@ export default async function Layout({
             Rate My Ride
           </h2>
           <Link
-            href={`https://ritbus.info/report?redirect=rit-bus.app&route=${bus.id}%20-%20${bus.name.replace(
+            href={`https://ritbus.info/report?redirect=rit-bus.app/bus/${bus.id}&route=${bus.id}%20-%20${bus.name.replace(
               / /g,
               "%20",
             )}`}

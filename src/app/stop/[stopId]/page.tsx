@@ -172,7 +172,7 @@ export default async function Page(props: {
             Rate this bus
           </h2>
           <Link
-            href={`https://ritbus.info/report?redirect=rit-bus.app&stop=${currentStop.name.replace(" ", "%20")}&route=${selectedBus.id}%20-%20${selectedBus.name.replace(" ", "%20")}`}
+            href={`https://ritbus.info/report?redirect=rit-bus.app/stop/${currentStop.id}&stop=${currentStop.name.replace(" ", "%20")}&route=${selectedBus.id}%20-%20${selectedBus.name.replace(" ", "%20")}`}
             className="rounded-md bg-blue-600 p-3 text-white"
           >
             Rate!
