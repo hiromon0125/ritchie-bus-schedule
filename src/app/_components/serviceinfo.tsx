@@ -118,7 +118,7 @@ export function ServiceInfoProvider({
                 for accurate information
               </p>
               <DialogClose asChild>
-                <Button className="border-2 border-black bg-gray-600 dark:bg-slate-300 dark:hover:bg-slate-200">
+                <Button className="border-2 border-black bg-gray-600 dark:border-slate-200 dark:bg-slate-300 dark:hover:bg-slate-200">
                   Close
                 </Button>
               </DialogClose>
