@@ -2,6 +2,8 @@ import { type NextRequest } from "next/server";
 import { env } from "process";
 import { updateServiceInfo } from "../_util";
 
+export const dynamic = "force-dynamic";
+
 async function handler(
   _: NextRequest,
   { params }: { params: Promise<{ secretkey: string }> },
