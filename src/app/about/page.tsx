@@ -251,7 +251,7 @@ function Page() {
             </div>
           </div>
         </div>
-        <div className="text-blac bg-background relative overflow-clip pt-6 text-black">
+        <div className="text-blac bg-background relative overflow-clip pt-6 not-dark:text-black">
           <div className="relative m-auto max-w-(--breakpoint-lg) px-6 py-8">
             <div>
               <div className={aboutStyles.parallaxTitleWrapper}>
