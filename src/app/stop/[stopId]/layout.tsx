@@ -4,7 +4,6 @@ import { api } from "../../../trpc/server";
 export default async function Layout(props: {
   children: React.ReactNode;
   params: Promise<{ stopId?: string }>;
-  searchParams: Promise<{ busId?: string }>;
 }) {
   const { stopId } = await props.params;
   const currentStop = await api.stops.getOneByID({ id: Number(stopId) });
