@@ -32,9 +32,9 @@ export default async function Layout(props: {
           </h2>
           <Link
             href={
-              `https://ritbus.info/report?stop=${currentStop.name}` +
+              `https://ritbus.info/report?redirect=rit-bus.app&stop=${currentStop.name.replace(" ", "%20")}` +
               (selectedBus != null
-                ? `&bus=${selectedBus.id} ${selectedBus.name}`
+                ? `&bus=${selectedBus.id}%20-%20${selectedBus.name.replace(" ", "%20")}`
                 : "")
             }
             className="rounded-md bg-blue-600 p-3 text-white"
