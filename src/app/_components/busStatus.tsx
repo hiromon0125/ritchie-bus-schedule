@@ -169,14 +169,16 @@ export async function BusList() {
       emptySection={
         <>
           <SignedIn>
-            <div className="flex h-28 w-full flex-row items-center justify-center rounded-md p-2 text-lg font-bold text-slate-500">
+            <div className="flex h-28 w-full flex-row items-center justify-center rounded-md p-2 text-lg font-bold">
               Favorite some buses from below to see them here!
             </div>
           </SignedIn>
           <SignedOut>
-            <div className="flex h-28 w-full flex-row items-center justify-center gap-1 rounded-md bg-slate-300 p-2 text-lg font-bold text-slate-600">
+            <div className="bg-item-background flex h-28 w-full flex-row items-center justify-center gap-1 rounded-md p-2 text-lg font-bold">
               <SignInButton>
-                <u className="text-blue-600 underline">Sign in</u>
+                <u className="text-blue-600 underline dark:text-blue-400">
+                  Sign in
+                </u>
               </SignInButton>
               <p>to add your favorite buses.</p>
             </div>

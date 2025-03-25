@@ -31,7 +31,7 @@ export function BusTag({ bus, size = "md" }: { bus: Bus; size?: TagSize }) {
   return (
     <p
       className={cn(
-        "bg-item-background text-foreground flex aspect-square flex-row items-center justify-center rounded-md border-[3px] border-(--bus-color) text-center text-lg font-bold",
+        "text-foreground flex aspect-square flex-row items-center justify-center rounded-md border-[3px] border-(--bus-color) bg-transparent text-center text-lg font-bold",
         SIZES[size],
       )}
       title={bus.name}
