@@ -5,9 +5,11 @@ import { cookies } from "next/headers";
 
 import Footer from "@/footer";
 import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
 import { Toaster } from "~/components/ui/toaster";
+import Header from "./_components/header";
 import { PostHogProvider } from "./_components/posthog";
 import { ServiceInfoProvider } from "./_components/serviceinfo";
 
@@ -21,30 +23,37 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookie = await cookies();
   return (
     <ClerkProvider
       appearance={{
         layout: {
           privacyPageUrl: "/pp",
         },
+        ...(cookie.get("theme")?.value === "dark"
+          ? {
+              baseTheme: dark,
+            }
+          : {}),
       }}
     >
-      <html lang="en">
-        <body
-          className={`font-sans ${inter.variable}`}
-          suppressHydrationWarning
-        >
-          <PostHogProvider>
-            <TRPCReactProvider cookies={(await cookies()).toString()}>
-              <ServiceInfoProvider>
+      <PostHogProvider>
+        <TRPCReactProvider cookies={cookie.toString()}>
+          <ServiceInfoProvider>
+            <html
+              lang="en"
+              className={cookie.get("theme")?.value === "dark" ? "dark" : ""}
+            >
+              <body className={`font-sans ${inter.variable}`}>
+                <Header />
                 {children}
                 <Footer />
                 <Toaster />
-              </ServiceInfoProvider>
-            </TRPCReactProvider>
-          </PostHogProvider>
-        </body>
-      </html>
+              </body>
+            </html>
+          </ServiceInfoProvider>
+        </TRPCReactProvider>
+      </PostHogProvider>
     </ClerkProvider>
   );
 }
@@ -94,33 +103,11 @@ export const metadata: Metadata = {
     "RIT Bus Schedule Online",
     "RIT Bus Schedule Mobile",
     "RIT Bus Schedule Web",
-    "RIT Bus Schedule App",
     "RIT Bus Schedule Application",
     "RIT Bus Schedule Software",
     "RIT Bus Schedule Platform",
     "RIT Bus Schedule System",
     "RIT Bus Schedule Tool",
-    "Apex Stop",
-    "Apex Bus",
-    "Apex Bus Schedule",
-    "Province Stop",
-    "Province Bus",
-    "Province Bus Schedule",
-    "Park Point Stop",
-    "Park Point Bus",
-    "Park Point Bus Schedule",
-    "Perkins Stop",
-    "Perkins Bus",
-    "Perkins Bus Schedule",
-    "RIT Inn Stop",
-    "RIT Inn Bus",
-    "RIT Inn Bus Schedule",
-    "RIT Off Campus Bus",
-    "RIT Off Campus Bus Schedule",
-    "RIT Campus Bus",
-    "RIT Campus Bus Schedule",
-    "RIT Shuttle Bus",
-    "RIT Shuttle Bus Schedule",
   ],
   robots: "index, follow",
   openGraph: {

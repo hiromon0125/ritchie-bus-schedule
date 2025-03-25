@@ -88,7 +88,7 @@ export default function EditRoutesByFile({
   return (
     <div
       className={cn(
-        " flex h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-700 bg-white",
+        " bg-item-background flex h-40 w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-gray-700",
         isDragging ? " border-blue-500 bg-blue-100" : "",
       )}
       onDrop={handleDrop}
@@ -131,7 +131,7 @@ export default function EditRoutesByFile({
       )}
       <div className=" flex flex-row gap-2">
         <button
-          className=" rounded-md border-2 border-blue-500 bg-white px-6 py-3 font-bold text-blue-500"
+          className=" bg-item-background rounded-md border-2 border-blue-500 px-6 py-3 font-bold text-blue-500"
           onClick={() => inputFileRef.current?.click()}
         >
           Choose File

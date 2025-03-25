@@ -6,14 +6,15 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { currentUser, getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type NextRequest } from "next/server";
 import posthog from "posthog-js";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { db } from "~/server/db";
+import type { SetCommandOptions } from "@upstash/redis";
+import { cache, db } from "~/server/db";
 import { env } from "../../env";
 
 const isPosthogEnabled = env.NEXT_PUBLIC_POSTHOG_KEY != undefined;
@@ -34,12 +35,28 @@ export const createTRPCContext = async (opts: {
   headers: Headers;
   req?: NextRequest;
 }) => {
-  const { req } = opts;
-  const user = req ? getAuth(req) : undefined;
-
+  const cacheSetReturn = <TData>(
+    key: string,
+    value: TData,
+    opts?: SetCommandOptions,
+  ): Promise<TData> =>
+    cache.set(key, `$${superjson.stringify(value)}`, opts).then(() => value);
+  const cacheGet = async <TData extends object | null>(key: string) => {
+    const cachedData = await cache.get<string>(key);
+    if (!cachedData) return null;
+    if (!cachedData.startsWith("$")) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `Cache hit for ${key} but not superjson data. Make sure to use cacheSetReturn to cache data or use ctx.cache.set for regular string.`,
+      });
+    }
+    return superjson.parse<TData>(cachedData.slice(1));
+  };
   return {
     db,
-    session: user,
+    cache,
+    cacheSetReturn,
+    cacheGet,
     ...opts,
   };
 };
@@ -123,6 +140,26 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 export const publicProcedure = t.procedure.use(timingMiddleware);
 
 /**
+ * User procedure
+ *
+ * This is a procedure that can be used with unauthenticated users as well as authenticated users.
+ * Where the difference is that this will not error for unauthenticated users, but will provide the
+ * user object if they are authenticated.
+ */
+export const userProcedure = publicProcedure.use(async ({ ctx, next }) => {
+  const authObj = await auth();
+  return next({
+    ctx: {
+      ...ctx,
+      // infers the `session` as nullable
+      session: {
+        ...authObj,
+      },
+    },
+  });
+});
+
+/**
  * Protected (authenticated) procedure
  *
  * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
@@ -133,16 +170,19 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
 export const privateProcedure = t.procedure
   .use(timingMiddleware)
   .use(async ({ ctx, next }) => {
-    const user = await currentUser();
-    if (!user) {
+    const authObj = await auth();
+    if (!authObj.userId) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
       });
     }
     return next({
       ctx: {
+        ...ctx,
         // infers the `session` as non-nullable
-        session: { ...ctx.session, user: user },
+        session: {
+          ...authObj,
+        },
       },
     });
   });

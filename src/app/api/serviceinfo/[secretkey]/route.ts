@@ -1,6 +1,6 @@
 import { type NextRequest } from "next/server";
 import { env } from "process";
-import { updateServiceInfo } from "../route";
+import { updateServiceInfo } from "../_util";
 
 async function handler(
   _: NextRequest,

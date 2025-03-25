@@ -72,7 +72,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
   }
 
   return (
-    <div className=" flex w-full max-w-screen-lg flex-col gap-3">
+    <div className=" flex w-full max-w-(--breakpoint-lg) flex-col gap-3">
       <div className=" relative flex h-[85px] w-full flex-row gap-5 py-2 pl-0">
         <label htmlFor="color" className=" flex h-full flex-col gap-1">
           <p>Color</p>
@@ -81,7 +81,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
             value={newData?.color ?? "#000000"}
             onChange={(e) => newData && handleInput({ color: e.target.value })}
             type="color"
-            className=" h-full rounded-md border-2 border-black bg-white text-xl"
+            className=" bg-item-background h-full rounded-md border-2 border-black text-xl"
           />
         </label>
         <label htmlFor="name" className=" flex flex-1 flex-col gap-1">
@@ -90,7 +90,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
             id="name"
             value={newData?.name ?? ""}
             onChange={(e) => newData && handleInput({ name: e.target.value })}
-            className=" flex-1 rounded-md border-2 border-black bg-white p-2 text-xl"
+            className=" bg-item-background flex-1 rounded-md border-2 border-black p-2 text-xl"
           />
         </label>
       </div>
@@ -102,7 +102,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
           onChange={(e) =>
             newData && handleInput({ description: e.target.value })
           }
-          className=" text-md h-32 w-full resize-none rounded-md border-2 border-black bg-white p-2"
+          className=" text-md bg-item-background h-32 w-full resize-none rounded-md border-2 border-black p-2"
         />
       </label>
       <div className=" flex flex-col gap-3">

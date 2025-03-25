@@ -61,27 +61,34 @@ export function getCurrentTime(): {
   dt: DateTime;
 } {
   const isTodayWeekend = [6, 7].includes(
-    DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
+    DateTime.utc().setZone(NEWYORK_TIMEZONE).weekday,
   );
   // set date to 0 so that we can compare times
-  const now = DateTime.now()
-    .setZone(NEWYORK_TIMEZONE)
-    .set({ year: 1970, month: 1, day: 1 });
+  const now = DateTime.utc().set({ year: 1970, month: 1, day: 1 });
   return { date: now.toJSDate(), isWeekend: isTodayWeekend, dt: now };
 }
 export function getCurrentTimeServer(): {
   date: Date;
-  isWeekend: boolean;
+  nowWeekday: number;
   dt: DateTime;
+  dtUTC: DateTime;
 } {
-  const isTodayWeekend = [6, 7].includes(
-    DateTime.now().setZone(NEWYORK_TIMEZONE).weekday,
-  );
   // set date to 0 so that we can compare times
-  const now = DateTime.now()
+  const now = DateTime.utc()
     .setZone(NEWYORK_TIMEZONE)
     .set({ year: 1970, month: 1, day: 1 });
-  return { date: now.toJSDate(), isWeekend: isTodayWeekend, dt: now };
+  const utcDate = DateTime.utc().set({
+    year: 1970,
+    month: 1,
+    day: 1,
+  });
+  // console.log("getCurrentTimeServer", now.toISO(), utcDate.toISO());
+  return {
+    date: now.toJSDate(),
+    nowWeekday: DateTime.utc().setZone(NEWYORK_TIMEZONE).weekday,
+    dt: now,
+    dtUTC: utcDate,
+  };
 }
 
 /**
@@ -110,7 +117,7 @@ export function evalStatusFromRoute(
   currentTime: ReturnType<typeof getCurrentTime>,
   firstRouteIndex?: number,
 ): Status | undefined {
-  const { date: now } = currentTime;
+  const { dt: nowDT } = currentTime;
 
   // out of service
   if (!route) {
@@ -125,20 +132,45 @@ export function evalStatusFromRoute(
 
   // starting
   const arriTime = getArriTime(route);
-  const arriDT = DateTime.fromJSDate(arriTime, { zone: NEWYORK_TIMEZONE });
+  const arriDT = DateTime.fromJSDate(arriTime, { zone: "utc" });
   const deptDT = DateTime.fromJSDate(route.deptTime, {
-    zone: NEWYORK_TIMEZONE,
+    zone: "utc",
   });
-  const nowDT = DateTime.fromJSDate(now, { zone: NEWYORK_TIMEZONE });
+
   const deptDiff: number = deptDT.diff(nowDT).toMillis();
   const arrDiff: number = arriDT.diff(nowDT).toMillis();
 
+  const timezoneOffset = DateTime.local().offset / 60;
+
+  // // I really don't know why this shit keeps breaking when timezone changes
+  // // but heres is the result of all of these methods for converting timezone for future reference
+  // // This may be the behavior on client side code, but I can not tell you why
+  // console.log("this shit sucks", {
+  //   route: route.index,
+  //   nowDT: nowDT.toISO(), // utc
+  //   arriDT: arriDT.toISO(), // utc
+  //   deptDT: deptDT.toISO(), // utc these are fine its meant to be
+
+  //   // and these are fucked
+  //   arriDTNY: arriDT.setZone(NEWYORK_TIMEZONE).toISO(), // -5 with and without DST
+  //   deptDTNY: deptDT.setZone(NEWYORK_TIMEZONE).toISO(), // -5 with and without DST
+  //   arriDTLocal: arriDT.toLocal().toISO(), // -5 with and without DST
+  //   deptDTLocal: deptDT.toLocal().toISO(), // -5 with and without DST
+
+  //   // This is what I roll currently since it works but only tested during the summer time
+  //   timezoneOffset: DateTime.local().offset / 60, // -5 during winter(correct) -4 during summer(correct)
+  //   arriDTOffset: arriDT.plus({ hours: timezoneOffset }).toISO(), // -5 during winter? -4 during summer(correct)
+  //   deptDTOffset: deptDT.plus({ hours: timezoneOffset }).toISO(), // -5 during winter? -4 during summer(correct)
+  // });
+
   if (
     route.index === (firstRouteIndex ?? 0) &&
-    arrDiff >= 10 * 60 * 1000 // 10 minutes
+    arrDiff >= 10 * 60 * 1000 // 10 minutes(600000 milsec)
   ) {
     return {
-      statusMessage: `Out of service • Starting at ${DateTime.fromJSDate(arriTime).toFormat("h:mm a")}`,
+      statusMessage: `Out of service • Starting at ${arriDT
+        .plus({ hours: timezoneOffset }) // offset to local time
+        .toFormat("h:mm a")}`,
       location: route,
       isMoving: "starting",
       index: route.index - 0.5,
@@ -150,7 +182,7 @@ export function evalStatusFromRoute(
   if (arrDiff > 0) {
     const offsetTime = arriDT.toRelative({ base: nowDT });
     return {
-      statusMessage: `Arriving ${offsetTime} • ${DateTime.fromJSDate(arriTime).toFormat("h:mm a")}`,
+      statusMessage: `Arriving ${offsetTime} • ${arriDT.plus({ hours: timezoneOffset }).toFormat("h:mm a")}`,
       location: route,
       isMoving: "moving",
       index: route.index - 0.5,
@@ -162,7 +194,7 @@ export function evalStatusFromRoute(
   if (arrDiff <= 0 && deptDiff > 0) {
     const offsetTime = deptDT.toRelative({ base: nowDT });
     return {
-      statusMessage: `Departing ${offsetTime} • ${deptDT.toFormat("h:mm a")}`,
+      statusMessage: `Departing ${offsetTime} • ${deptDT.plus({ hours: timezoneOffset }).toFormat("h:mm a")}`,
       location: route,
       isMoving: "stopped",
       index: route.index,

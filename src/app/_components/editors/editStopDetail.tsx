@@ -46,8 +46,8 @@ export default function EditStopDetail({ stop }: { stop: DetailedStop }) {
           setEditedStop({ ...editedStop, description: e.target.value })
         }
       />
-      <div className=" mt-4 rounded-md border-2 border-black bg-white p-2">
-        <h2 className=" ml-2 mt-[-22px] w-min rounded-md border-2 border-black bg-white px-2 text-lg">
+      <div className=" bg-item-background mt-4 rounded-md border-2 border-black p-2">
+        <h2 className=" bg-item-background ml-2 mt-[-22px] w-min rounded-md border-2 border-black px-2 text-lg">
           Buses
         </h2>
         <div className=" flex flex-row flex-wrap gap-1 pt-2">

@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import { api, type RouterOutputs } from "t/react";
 import type { BusRoute } from "./types";
-import { evalStatusFromRoute, getCurrentTime, NEWYORK_TIMEZONE } from "./util";
+import { evalStatusFromRoute, getCurrentTime } from "./util";
 
 const OUT_OF_SERVICE_STATUS = {
   statusMessage: "Out of service",
@@ -34,15 +34,11 @@ function useRouteByBus(
       stopId,
     },
     {
-      getNextPageParam: (lastPage) =>
-        (lastPage.nextCursor?.index ?? 0) > (initialRoute?.index ?? 0)
-          ? lastPage.nextCursor
-          : initialRoute
-            ? { id: initialRoute.id, index: initialRoute.index }
-            : lastPage.nextCursor!,
-      initialCursor: initialRoute
-        ? { id: initialRoute.id, index: initialRoute.index }
-        : undefined,
+      getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+      initialCursor:
+        initialRoute != null
+          ? { id: initialRoute.id, index: initialRoute.index }
+          : undefined,
     },
   );
 }
@@ -87,12 +83,12 @@ export function useBusStatus(
   useEffect(() => {
     if (!isOperating || isRouteCompleted) return;
     if (hasNextPage && !isFetching && index >= fetchedRoutes.length - 2) {
-      fetchNextPage().catch((e) => console.error(e));
+      fetchNextPage()?.catch((e) => console.error(e));
     }
     if (nextRoute) {
       const now = getCurrentTime().dt;
       const dept = DateTime.fromJSDate(nextRoute.deptTime, {
-        zone: NEWYORK_TIMEZONE,
+        zone: "utc",
       });
       const updateTime = dept.diff(now);
       const timeout = setTimeout(() => {

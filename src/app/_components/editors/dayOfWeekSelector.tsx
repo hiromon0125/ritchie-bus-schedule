@@ -92,7 +92,7 @@ function WeeklyPicker({
             className={cn(
               selectedDays.includes(index)
                 ? "bg-black text-white"
-                : "bg-white text-black opacity-50",
+                : "bg-item-background text-black opacity-50",
               " aspect-square min-w-11 rounded-full border-2 border-black py-1",
             )}
             onClick={() => {
@@ -123,7 +123,7 @@ function NonWeeklyPicker({
   return (
     <div className=" flex flex-col gap-2 rounded-md border-2 border-black p-2">
       <p>Operating Specifically on</p>
-      <div className=" w-min rounded-sm bg-white p-2">
+      <div className=" bg-item-background w-min rounded-sm p-2">
         <DayPicker
           mode="multiple"
           selected={inputDays}

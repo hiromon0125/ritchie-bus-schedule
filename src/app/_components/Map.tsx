@@ -25,8 +25,8 @@ export default function StopMap({ stops }: { stops: Stops[] | Stops }) {
   ).filter((coor) => coor.lat !== 0 && coor.lng !== 0);
   if (stopCoors.length === 0) {
     return (
-      <div className=" flex flex-col items-center justify-center overflow-hidden rounded-xl bg-slate-200">
-        <p className=" text-gray-700">Unknown Location</p>
+      <div className="bg-border-background flex flex-col items-center justify-center overflow-hidden rounded-xl">
+        <p className="text-muted-foreground">Unknown Location</p>
       </div>
     );
   }
