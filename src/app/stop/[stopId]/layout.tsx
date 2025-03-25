@@ -21,7 +21,7 @@ export default async function Layout(props: {
             Rate this bus
           </h2>
           <Link
-            href="https://forms.gle/7ooRfsDzmKvHnnZ76"
+            href={`https://ritbus.info/report?stop=${currentStop.name}`}
             className="rounded-md bg-blue-600 p-3 text-white"
           >
             Rate!
