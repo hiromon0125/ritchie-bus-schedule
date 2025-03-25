@@ -35,10 +35,13 @@ export default async function Layout({
       <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 relative flex w-(--sm-max-w) flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:min-h-0 md:max-w-(--breakpoint-lg)">
         <div className="bg-item-background flex w-full flex-row justify-between rounded-xl p-3">
           <h2 className="xs:text-xl text-lg font-bold sm:mb-2 sm:text-3xl">
-            Rate this bus
+            Rate My Ride
           </h2>
           <Link
-            href="https://forms.gle/7ooRfsDzmKvHnnZ76"
+            href={`https://ritbus.info/report?redirect=rit-bus.app/bus/${bus.id}&route=${bus.id}%20-%20${bus.name.replace(
+              / /g,
+              "%20",
+            )}`}
             className="bg-accent rounded-md p-3"
           >
             Rate!

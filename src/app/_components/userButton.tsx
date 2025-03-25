@@ -3,6 +3,7 @@ import { UserButton } from "@clerk/nextjs";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
+import { FaRegStar } from "react-icons/fa";
 import { GoCodeReview } from "react-icons/go";
 import { HiHome } from "react-icons/hi2";
 import {
@@ -89,12 +90,11 @@ export default function ProfileButton() {
             router.refresh();
           }}
         />
-        {/* TODO: change to the official report link when implemented
         <UserButton.Link
-          href="https://forms.gle/7ooRfsDzmKvHnnZ76"
-          label="Rate Us!"
+          href="https://ritbus.info/report?redirect=rit-bus.app"
+          label="Rate My Ride!"
           labelIcon={<FaRegStar size={16} />}
-        /> */}
+        />
       </UserButton.MenuItems>
     </UserButton>
   );
