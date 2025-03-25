@@ -4,5 +4,11 @@
       "path": "/api/serviceinfo",
       "schedule": "0 5 * * *"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/ingest/:match*",
+      "destination": "https://us.i.posthog.com/:match*"
+    }
   ]
 }

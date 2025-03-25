@@ -142,6 +142,7 @@ export const routesRouter = createTRPCRouter({
         `stops:bus:${input.busId}`,
         `stops:all:rel:*`,
       ];
+      const keys = await Promise.all(cachesToDel.map((k) => ctx.cache.keys(k)));
       return Promise.all([
         // Disconnect the bus from the stops that are not in the new data
         ...stops.map(async (stop) => {
@@ -180,7 +181,7 @@ export const routesRouter = createTRPCRouter({
           },
         }),
         // Reset cache
-        ctx.cache.del(...cachesToDel),
+        ctx.cache.del(...keys.flat()),
       ]);
     }),
   getCurrentRouteOfBus: publicProcedure

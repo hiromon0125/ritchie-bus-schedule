@@ -107,11 +107,11 @@ export function StatusBlob({ status }: { status?: BusMovingStatus }) {
     >
       {status && ACTIVE_STATUS.includes(status) ? (
         <>
-          <div className=" h-3 w-3 animate-ping rounded-full bg-[--status-color]" />
-          <div className=" absolute left-0 top-0 h-3 w-3 animate-pulse rounded-full bg-[--status-color] animation-delay-100" />
+          <div className=" h-3 w-3 animate-ping rounded-full bg-(--status-color)" />
+          <div className=" absolute left-0 top-0 h-3 w-3 animate-pulse rounded-full bg-(--status-color) animation-delay-100" />
         </>
       ) : (
-        <div className=" h-3 w-3 rounded-full bg-[--status-color] animation-delay-100" />
+        <div className=" h-3 w-3 rounded-full bg-(--status-color) animation-delay-100" />
       )}
     </div>
   );

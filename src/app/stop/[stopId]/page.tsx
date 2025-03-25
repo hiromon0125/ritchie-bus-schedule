@@ -71,31 +71,28 @@ export default async function Page(props: {
   });
   return (
     <>
-      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-        <div className=" bg-item-background flex w-full flex-col gap-2 rounded-xl pl-2">
-          <div className=" flex flex-row items-center gap-2 xs:mt-3">
+      <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
+        <div className="bg-item-background flex w-full flex-col gap-2 rounded-xl pl-2">
+          <div className="xs:mt-3 flex flex-row items-center gap-2">
             <StopTag stop={currentStop} />
-            <p className=" text-2xl font-bold">{currentStop.name}</p>
+            <p className="text-2xl font-bold">{currentStop.name}</p>
             <FavBtn isFavorited={isFavorite} />
           </div>
-          <div className=" mb-2">
-            <p className=" text-lg">{currentStop.description}</p>
+          <div className="mb-2">
+            <p className="text-lg">{currentStop.description}</p>
           </div>
         </div>
       </div>
-      <div className=" bg-border-background flex w-[--sm-max-w] flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg">
-        <div className=" bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-3 pl-4">
-          <h1 className=" m-0 text-xl font-bold xs:text-2xl">Buses</h1>
+      <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
+        <div className="bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-3 pl-4">
+          <h1 className="xs:text-2xl m-0 text-xl font-bold">Buses</h1>
           <ClickableTooltip tipMessage="Click on the bus route to view it's timetable below.">
-            <IoMdInformationCircle
-              size={32}
-              className=" scale-150 opacity-30"
-            />
+            <IoMdInformationCircle size={32} className="scale-150 opacity-50" />
           </ClickableTooltip>
         </div>
         {_.sortBy(currentStop.buses, ["id"]).map((bus, i) => (
           <div
-            className=" min-w-[calc(100vw-48px)] flex-1 md:w-auto md:min-w-[300px] md:max-w-[calc(50%-5px)] lg:min-w-[calc(50%-12px)]"
+            className="min-w-[calc(100vw-48px)] flex-1 md:w-auto md:max-w-[calc(50%-5px)] md:min-w-[300px] lg:min-w-[calc(50%-12px)]"
             key={i}
           >
             <Suspense fallback={<BusInfoSkeleton />}>
@@ -110,37 +107,41 @@ export default async function Page(props: {
           </div>
         ))}
       </div>
-      <div className=" flex w-[--sm-max-w] flex-col gap-2 xs:gap-4 md:max-w-screen-lg md:flex-row">
-        <div
-          className=" bg-border-background flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:max-w-screen-lg"
-          style={
-            {
-              "--bus-color": selectedBus?.color ?? "gray",
-            } as React.CSSProperties
-          }
-        >
-          <div className=" bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
-            <div className=" flex flex-col gap-2 pb-1">
-              <h2 className=" m-0 pl-2 font-bold text-gray-700 xs:text-lg">
+      <div
+        className="xs:gap-4 flex w-(--sm-max-w) flex-col gap-2 md:max-w-(--breakpoint-lg) md:flex-row"
+        style={
+          {
+            "--bus-color": selectedBus?.color ?? "gray",
+          } as React.CSSProperties
+        }
+      >
+        <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
+          <div className="bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
+            <div className="flex flex-col gap-2">
+              <h2 className="xs:text-lg m-0 pl-2 font-bold opacity-70">
                 Timetable
               </h2>
               <Link
                 href={`/bus/${selectedBus.id}`}
-                className=" flex flex-row items-center gap-2"
+                className="flex flex-row items-center gap-2"
               >
                 <BusTag bus={selectedBus} size="md" />
-                <p className=" font-semibold xs:text-2xl">{selectedBus.name}</p>
+                <p className="xs:text-2xl font-semibold">{selectedBus.name}</p>
               </Link>
             </div>
             <Link
               href={`/bus/${selectedBus.id}`}
-              className=" mr-2 flex flex-col items-center justify-center"
+              className="text-foreground mr-2 flex flex-col items-center justify-center"
             >
-              <MdDirectionsBus size={24} color="gray" />
-              <p className=" text-sm text-[gray]">View</p>
+              <MdDirectionsBus
+                size={24}
+                color="inherit"
+                className="opacity-70"
+              />
+              <p className="text-sm opacity-70">View</p>
             </Link>
           </div>
-          <div className=" bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
+          <div className="bg-item-background flex w-full flex-row justify-between rounded-xl p-3 py-2">
             <Suspense fallback={<TimeTableSkeleton />}>
               <TimeTable
                 stopId={stopId}
@@ -150,15 +151,15 @@ export default async function Page(props: {
             </Suspense>
           </div>
         </div>
-        <div className=" bg-border-background relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 xs:gap-3 xs:rounded-3xl xs:p-3 md:min-h-0 md:max-w-screen-lg">
-          <div className=" h-[50vh] w-full flex-1 overflow-clip rounded-xl md:h-full">
+        <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 relative flex flex-1 flex-row flex-wrap gap-2 rounded-[20px] p-2 md:min-h-0 md:max-w-(--breakpoint-lg)">
+          <div className="h-[50vh] w-full flex-1 overflow-clip rounded-xl md:h-full">
             <Suspense fallback={<p>Loading...</p>}>
               <StopMap stops={currentStop} />
             </Suspense>
           </div>
-          <div className=" absolute left-0 top-0 flex w-full flex-row justify-between p-4 xs:p-5">
-            <div className=" bg-item-background w-full rounded-md p-2">
-              <h2 className=" m-0 text-xl font-bold xs:text-2xl">
+          <div className="xs:p-5 absolute top-0 left-0 flex w-full flex-row justify-between p-4">
+            <div className="bg-item-background w-full rounded-md p-2">
+              <h2 className="xs:text-2xl m-0 text-xl font-bold">
                 Bus Stop Location
               </h2>
             </div>
@@ -209,25 +210,24 @@ async function SelectableBusInfo({
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
 
   return (
-    <div className=" relative">
+    <div className={`group relative ${isSelected ? "selected" : ""}`}>
       <Link
-        className="bg-item-background relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] border-[--active-border] p-1 transition-all hover:border-accent hover:shadow-md"
+        className="bg-item-background border-item-background group-[.selected]:border-accent hover:border-accent relative box-border flex h-full w-full flex-row items-stretch rounded-xl border-[3px] p-1 transition-all hover:shadow-md"
         style={
           {
             "--bus-color": color,
-            "--active-border": isSelected ? "hsl(var(--accent))" : "white",
           } as React.CSSProperties
         }
         href={href}
       >
-        <div className=" h-auto min-w-3 rounded-l-md bg-[--bus-color]" />
-        <div className=" relative flex w-min flex-1 flex-col flex-wrap justify-between">
-          <div className=" mr-1 flex flex-1 flex-row items-center gap-2 pl-2 pr-2 pt-2 sm:pl-3">
+        <div className="h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
+        <div className="relative flex w-min flex-1 flex-col flex-wrap justify-between">
+          <div className="mr-1 flex flex-1 flex-row items-center gap-2 pt-2 pr-2 pl-2 sm:pl-3">
             <BusTag bus={busObj} />
-            <h2 className=" w-0 flex-1 overflow-hidden text-ellipsis text-nowrap text-left font-bold md:text-xl">
+            <h2 className="w-0 flex-1 overflow-hidden text-left font-bold text-nowrap text-ellipsis md:text-xl">
               {busObj?.name}
             </h2>
-            <div className=" favbtn-placeholder h-6 w-6" />
+            <div className="favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
             <BusStatus busId={busObj.id} stopId={stopId} hideStopName />
@@ -235,7 +235,7 @@ async function SelectableBusInfo({
         </div>
       </Link>
       <FavBtn
-        className=" absolute right-3 top-3 z-10"
+        className="absolute top-3 right-3 z-10"
         isFavorited={isFavorited ?? false}
         onClick={async () => {
           "use server";

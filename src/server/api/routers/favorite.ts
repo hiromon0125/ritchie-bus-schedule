@@ -3,7 +3,11 @@ import type { FavoriteBus, FavoriteStop } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import _ from "lodash";
 import { z } from "zod";
-import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  userProcedure,
+} from "~/server/api/trpc";
 
 function isValidPriority<T extends { priority: number }>(
   list: PartialKey<T, "priority">[],
@@ -45,6 +49,34 @@ export const favoriteRouter = createTRPCRouter({
           priority: newPriority,
         },
       });
+    }),
+  isBusFavorited: userProcedure
+    .input(z.number())
+    .query(async ({ ctx, input }) => {
+      if (ctx.session.userId == null) {
+        return false;
+      }
+      const bus = await ctx.db.favoriteBus.findFirst({
+        where: {
+          userId: ctx.session.userId,
+          busId: input,
+        },
+      });
+      return bus != null;
+    }),
+  isStopFavorited: userProcedure
+    .input(z.number())
+    .query(async ({ ctx, input }) => {
+      if (ctx.session.userId == null) {
+        return false;
+      }
+      const stop = await ctx.db.favoriteStop.findFirst({
+        where: {
+          userId: ctx.session.userId,
+          stopId: input,
+        },
+      });
+      return stop != null;
     }),
   reorderBus: privateProcedure
     .input(z.object({ priority: z.record(z.number()) }))
