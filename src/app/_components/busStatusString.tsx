@@ -34,22 +34,22 @@ export default function BusStatusString({
     id: location?.stopId ?? -1,
   });
   return (
-    <div className=" relative flex h-8 min-h-max flex-row items-center overflow-hidden">
-      <div className=" ml-2 flex items-center justify-center sm:ml-4">
+    <div className="relative flex h-8 min-h-max flex-row items-center overflow-hidden">
+      <div className="ml-2 flex items-center justify-center sm:ml-4">
         <StatusBlob status={isMoving} />
       </div>
-      <div className=" flex h-full w-full flex-col justify-center pl-4">
+      <div className="flex h-full w-full flex-col justify-center pl-4">
         {isMoving === "loading" ? (
-          <div className=" h-4 w-9/12 animate-pulse rounded-sm bg-slate-300 animation-delay-100" />
+          <div className="animation-delay-100 h-4 w-9/12 animate-pulse rounded-sm bg-slate-300" />
         ) : (
-          <h3 className=" text-left text-sm">{statusMessage}</h3>
+          <p className="text-left text-sm">{statusMessage}</p>
         )}
         {!hideStopName &&
           ACTIVE_STATUS.includes(isMoving) &&
           (stopObj ? (
-            <p className=" m-0 text-left text-sm">{stopObj?.name}</p>
+            <p className="m-0 text-left text-sm">{stopObj?.name}</p>
           ) : (
-            <div className="mt-1 h-4 w-3/6 animate-pulse rounded-sm bg-slate-300 animation-delay-150" />
+            <div className="animation-delay-150 mt-1 h-4 w-3/6 animate-pulse rounded-sm bg-slate-300" />
           ))}
       </div>
     </div>
@@ -81,15 +81,15 @@ export function BusStatusStringBig({
     <>
       {stopLocationMessage && stop && (
         <Link
-          className=" flex flex-row items-center gap-2"
+          className="flex flex-row items-center gap-2"
           href={`/stop/${stop.id}?busId=${busId}`}
         >
           <StopTag stop={stop} />
-          <p className=" text-xl font-bold">{stop.name ?? "Unknown"}</p>
+          <p className="text-xl font-bold">{stop.name ?? "Unknown"}</p>
         </Link>
       )}
-      <div className=" flex flex-row items-center gap-3">
-        <div className=" flex items-center justify-center">
+      <div className="flex flex-row items-center gap-3">
+        <div className="flex items-center justify-center">
           <StatusBlob status={status?.isMoving} />
         </div>
         <p>{status?.statusMessage}</p>
@@ -102,16 +102,16 @@ export function StatusBlob({ status }: { status?: BusMovingStatus }) {
   const activityColor = ACTIVITY_COLOR[status ?? "out-of-service"];
   return (
     <div
-      className=" relative ml-2 h-3 w-3"
+      className="relative ml-2 h-3 w-3"
       style={{ "--status-color": activityColor } as React.CSSProperties}
     >
       {status && ACTIVE_STATUS.includes(status) ? (
         <>
-          <div className=" h-3 w-3 animate-ping rounded-full bg-(--status-color)" />
-          <div className=" absolute left-0 top-0 h-3 w-3 animate-pulse rounded-full bg-(--status-color) animation-delay-100" />
+          <div className="h-3 w-3 animate-ping rounded-full bg-(--status-color)" />
+          <div className="animation-delay-100 absolute top-0 left-0 h-3 w-3 animate-pulse rounded-full bg-(--status-color)" />
         </>
       ) : (
-        <div className=" h-3 w-3 rounded-full bg-(--status-color) animation-delay-100" />
+        <div className="animation-delay-100 h-3 w-3 rounded-full bg-(--status-color)" />
       )}
     </div>
   );

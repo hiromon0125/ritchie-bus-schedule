@@ -75,7 +75,7 @@ export default async function Page(props: {
         <div className="bg-item-background flex w-full flex-col gap-2 rounded-xl pl-2">
           <div className="xs:mt-3 flex flex-row items-center gap-2">
             <StopTag stop={currentStop} />
-            <p className="text-2xl font-bold">{currentStop.name}</p>
+            <h1 className="text-2xl font-bold">{currentStop.name}</h1>
             <FavBtn isFavorited={isFavorite} />
           </div>
           <div className="mb-2">
@@ -85,7 +85,7 @@ export default async function Page(props: {
       </div>
       <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
         <div className="bg-item-background flex w-full flex-row items-center justify-between rounded-xl p-3 pl-4">
-          <h1 className="xs:text-2xl m-0 text-xl font-bold">Buses</h1>
+          <h2 className="xs:text-2xl m-0 text-xl font-bold">Buses</h2>
           <ClickableTooltip tipMessage="Click on the bus route to view it's timetable below.">
             <IoMdInformationCircle size={32} className="scale-150 opacity-50" />
           </ClickableTooltip>
@@ -237,9 +237,9 @@ async function SelectableBusInfo({
         <div className="relative flex w-min flex-1 flex-col flex-wrap justify-between">
           <div className="mr-1 flex flex-1 flex-row items-center gap-2 pt-2 pr-2 pl-2 sm:pl-3">
             <BusTag bus={busObj} />
-            <h2 className="w-0 flex-1 overflow-hidden text-left font-bold text-nowrap text-ellipsis md:text-xl">
+            <h3 className="w-0 flex-1 overflow-hidden text-left font-bold text-nowrap text-ellipsis md:text-xl">
               {busObj?.name}
-            </h2>
+            </h3>
             <div className="favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
