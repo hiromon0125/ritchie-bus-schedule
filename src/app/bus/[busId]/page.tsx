@@ -99,7 +99,7 @@ export default async function Page(props: Props) {
           <div className="bg-item-background flex w-full flex-col gap-2 px-2 md:p-3">
             <div className="flex flex-row items-center gap-2">
               <BusTag bus={bus} />
-              <p className="text-lg font-bold md:text-2xl">{bus.name}</p>
+              <h1 className="text-lg font-bold md:text-2xl">{bus.name}</h1>
               <FavBtn isFavorited={isFavorite} />
             </div>
             <p className="text-base md:text-lg">{bus.description}</p>
