@@ -72,14 +72,17 @@ export default async function Page(props: {
   return (
     <>
       <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
-        <div className="bg-item-background flex w-full flex-col gap-2 rounded-xl pl-2">
-          <div className="xs:mt-3 flex flex-row items-center gap-2">
-            <StopTag stop={currentStop} />
-            <h1 className="text-2xl font-bold">{currentStop.name}</h1>
-            <FavBtn isFavorited={isFavorite} />
-          </div>
-          <div className="mb-2">
-            <p className="text-lg">{currentStop.description}</p>
+        <div className="bg-item-background flex w-full flex-row gap-2 rounded-xl p-2">
+          <div className="bg-foreground h-auto min-w-3 rounded-l-md" />
+          <div>
+            <div className="xs:mt-3 flex flex-row items-center gap-2">
+              <StopTag stop={currentStop} />
+              <h1 className="my-1.5 text-2xl font-bold">{currentStop.name}</h1>
+              <FavBtn isFavorited={isFavorite} />
+            </div>
+            <div className="mb-2">
+              <p className="text-lg">{currentStop.description}</p>
+            </div>
           </div>
         </div>
       </div>
