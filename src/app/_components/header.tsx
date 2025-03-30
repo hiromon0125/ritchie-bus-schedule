@@ -22,6 +22,7 @@ export default function Header() {
               alt="Logo"
               width={48}
               height={48}
+              title="Ritchie's Bus Schedule Logo"
             />
             <p className="m-0 text-lg font-semibold max-[450px]:hidden min-[850px]:text-xl lg:text-2xl">
               Ritchie's Bus Schedule

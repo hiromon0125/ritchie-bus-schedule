@@ -58,6 +58,13 @@ export default async function RootLayout({
   );
 }
 
+export async function generateViewport() {
+  const cookie = await cookies();
+  return {
+    themeColor: cookie.get("theme")?.value === "dark" ? "#020618" : "#f1f5f9",
+  };
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://rit-bus.app"),
   title: "Ritchie's Bus Schedule",
