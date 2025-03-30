@@ -193,9 +193,9 @@ async function SelectableStopInfo({
         <div className="relative flex w-min flex-1 flex-col flex-wrap justify-between">
           <div className="mr-1 flex flex-1 flex-row items-center gap-2 pt-2 pr-2 pl-2 sm:pl-4">
             <StopTag stop={stopObj} />
-            <h2 className="w-0 flex-1 overflow-hidden text-left font-bold text-nowrap text-ellipsis md:text-xl">
+            <p className="w-0 flex-1 overflow-hidden text-left font-bold text-nowrap text-ellipsis md:text-xl">
               {stopObj?.name}
-            </h2>
+            </p>
             <div className="favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
