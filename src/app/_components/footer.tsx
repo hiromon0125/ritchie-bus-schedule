@@ -5,7 +5,7 @@ import { FaHome } from "react-icons/fa";
 import { LuClockAlert } from "react-icons/lu";
 import { MdDirectionsBus } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
-import { api } from "../../trpc/server";
+import { api } from "t/server";
 import Coffee from "./buymecoffee";
 import { ProfileBtnComponent } from "./profileBtnWrapper";
 import ServiceInfoButton from "./serviceinfo";

@@ -13,8 +13,8 @@ import {
   MdOutlineNightlight,
 } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
+import { api } from "t/react";
 import { cn } from "../../lib/utils";
-import { api } from "../../trpc/react";
 import { ServiceInfoContext } from "./serviceinfo";
 
 const USER_BUTTON_APPEARANCE: Parameters<typeof UserButton>[0]["appearance"] = {

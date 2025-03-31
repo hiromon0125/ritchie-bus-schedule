@@ -1,6 +1,6 @@
+import { api } from "t/server";
 import { z } from "zod";
 import { env } from "../../../env";
-import { api } from "../../../trpc/server";
 
 const SERVICE_INFO_SCHEMA = z.object({
   targetUrl: z.string(),

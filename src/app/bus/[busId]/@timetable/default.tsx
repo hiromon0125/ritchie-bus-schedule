@@ -8,7 +8,7 @@ import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { MdDirectionsBus } from "react-icons/md";
-import { api } from "../../../../trpc/server";
+import { api } from "t/server";
 
 type Props = {
   params: Promise<{ busId: string }>;

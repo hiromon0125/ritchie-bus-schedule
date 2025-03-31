@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { api } from "t/react";
 import {
   Dialog,
   DialogContent,
@@ -17,7 +18,6 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import { Button } from "../../components/ui/button";
-import { api } from "../../trpc/react";
 import { BusTag } from "./tags";
 import { splitByKeywords } from "./util";
 

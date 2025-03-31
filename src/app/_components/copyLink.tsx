@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { FaLink } from "react-icons/fa";
 import { toast } from "sonner";
+import { getBaseUrl } from "t/react";
 import { Button } from "../../components/ui/button";
-import { getBaseUrl } from "../../trpc/react";
 
 export default function CopyLink({ link }: { link: string }) {
   const [isLoading, setIsLoading] = useState(false);

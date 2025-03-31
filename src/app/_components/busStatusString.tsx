@@ -2,7 +2,7 @@
 import type { Bus, Stops } from "@prisma/client";
 import Link from "next/link";
 import React from "react";
-import { api } from "../../trpc/react";
+import { api } from "t/react";
 import { useBusStatus } from "./hooks";
 import { StopTag } from "./tags";
 import type { BusMovingStatus, BusRoute } from "./types";
