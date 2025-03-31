@@ -5,7 +5,7 @@ import { FaHome } from "react-icons/fa";
 import { LuClockAlert } from "react-icons/lu";
 import { MdDirectionsBus } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
-import { api } from "../../trpc/server";
+import { api } from "t/server";
 import Coffee from "./buymecoffee";
 import { ProfileBtnComponent } from "./profileBtnWrapper";
 import ServiceInfoButton from "./serviceinfo";
@@ -24,6 +24,7 @@ function Footer() {
                 width={60}
                 height={60}
                 className="scale-75 md:scale-100"
+                title="Ritchie's Bus Schedule Logo"
               />
               <h2 className="text-lg text-slate-200 md:text-2xl">
                 Ritchie's Bus Schedule
@@ -46,6 +47,7 @@ function Footer() {
                 alt="speedy bus"
                 width={84}
                 height={32}
+                title="Speedy Bus"
               />
             </div>
           </div>

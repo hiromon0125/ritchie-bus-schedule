@@ -1,14 +1,23 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
-import { LuClockAlert } from "react-icons/lu";
+import { usePathname } from "next/navigation";
+import { type JSX } from "react";
 import { MdDirectionsBus } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
-import { api } from "../../trpc/server";
 import { ProfileBtnComponent } from "./profileBtnWrapper";
-import ServiceInfoButton from "./serviceinfo";
 
-export default function Header() {
+const PATH_TO_HEADER_TAG: Record<string, keyof JSX.IntrinsicElements> = {
+  "/": "h1",
+};
+
+export default function Header({
+  serviceNavigation,
+}: {
+  serviceNavigation?: React.ReactNode;
+}) {
+  const path = usePathname();
+  const TitleTag = PATH_TO_HEADER_TAG[path] ?? "p";
   return (
     <div className="xs:px-3 text-foreground top-2 z-20 w-full px-1 md:sticky">
       <div className="bg-border-background md:bg-border-background/60 m-2 mx-auto h-24 w-full justify-center rounded-3xl border-slate-700 p-3 md:max-w-(--breakpoint-lg) md:backdrop-blur-md not-dark:md:shadow-md dark:border">
@@ -22,12 +31,14 @@ export default function Header() {
               alt="Logo"
               width={48}
               height={48}
+              title="Ritchie's Bus Schedule Logo"
+              loading="eager"
             />
-            <h1 className="m-0 text-lg font-semibold max-[450px]:hidden min-[850px]:text-xl lg:text-2xl">
+            <TitleTag className="m-0 text-lg font-semibold max-[450px]:hidden min-[850px]:text-xl lg:text-2xl">
               Ritchie's Bus Schedule
-            </h1>
+            </TitleTag>
           </Link>
-          <div
+          <nav
             className="hidden h-full flex-row items-center gap-[5px] rounded-xl bg-neutral-500/60 p-[5px] text-xl not-dark:shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex dark:bg-slate-950/60"
             style={
               // This is a workaround because I couldn't get the opacity to work with the tailwind var classes
@@ -56,46 +67,14 @@ export default function Header() {
               <TbRoute size={24} color="black" className="dark:invert-100" />
               <p>Stops</p>
             </Link>
-            <Suspense
-              fallback={
-                <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
-                  <LuClockAlert
-                    size={24}
-                    color="black"
-                    className="dark:invert-100"
-                  />
-                  <p>Alert</p>
-                </ServiceInfoButton>
-              }
-            >
-              <AlertNavigation />
-            </Suspense>
-          </div>
+            {serviceNavigation}
+          </nav>
           <div className="h-14 w-[2px] rounded-full bg-neutral-700 dark:bg-neutral-300" />
           <div className="bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
-            <Suspense>
-              <ProfileBtnComponent />
-            </Suspense>
+            <ProfileBtnComponent />
           </div>
         </div>
       </div>
     </div>
-  );
-}
-
-async function AlertNavigation() {
-  const count = await api.serviceinfo.getCount();
-  return (
-    <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
-      <LuClockAlert size={24} color="black" className="dark:invert-100" />
-      <div className="relative">
-        <p>Alert</p>
-        {count > 0 && (
-          <div className="absolute top-[-5px] right-[-8px] flex aspect-square h-4 flex-row items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
-            <p>{count}</p>
-          </div>
-        )}
-      </div>
-    </ServiceInfoButton>
   );
 }

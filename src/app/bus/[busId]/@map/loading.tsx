@@ -1,4 +1,4 @@
-import { MapSkeleton } from "../../../_components/busPageLoaders";
+import { MapSkeleton } from "@/busPageLoaders";
 
 export default function Page() {
   return <MapSkeleton />;

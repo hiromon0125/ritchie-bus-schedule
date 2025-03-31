@@ -5,6 +5,8 @@ import {
   SkeletonBusStatusString,
 } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
+import ClickableTooltip from "@/infobtn";
+import { ServiceInfoContentDecorator } from "@/serviceinfo";
 import { BusTag, StopTag } from "@/tags";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus, Stops } from "@prisma/client";
@@ -19,8 +21,6 @@ import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { IoMdInformationCircle } from "react-icons/io";
 import { api } from "t/server";
-import ClickableTooltip from "../../_components/infobtn";
-import { ServiceInfoContentDecorator } from "../../_components/serviceinfo";
 type Props = {
   params: Promise<{ busId: string }>;
   searchParams: Promise<{ stopId?: string | string[] | undefined }>;
@@ -99,7 +99,9 @@ export default async function Page(props: Props) {
           <div className="bg-item-background flex w-full flex-col gap-2 px-2 md:p-3">
             <div className="flex flex-row items-center gap-2">
               <BusTag bus={bus} />
-              <p className="text-lg font-bold md:text-2xl">{bus.name}</p>
+              <h1 className="my-1.5 text-lg font-bold md:text-2xl">
+                {bus.name}
+              </h1>
               <FavBtn isFavorited={isFavorite} />
             </div>
             <p className="text-base md:text-lg">{bus.description}</p>
@@ -193,9 +195,9 @@ async function SelectableStopInfo({
         <div className="relative flex w-min flex-1 flex-col flex-wrap justify-between">
           <div className="mr-1 flex flex-1 flex-row items-center gap-2 pt-2 pr-2 pl-2 sm:pl-4">
             <StopTag stop={stopObj} />
-            <h2 className="w-0 flex-1 overflow-hidden text-left font-bold text-nowrap text-ellipsis md:text-xl">
+            <p className="w-0 flex-1 overflow-hidden text-left font-bold text-nowrap text-ellipsis md:text-xl">
               {stopObj?.name}
-            </h2>
+            </p>
             <div className="favbtn-placeholder h-6 w-6" />
           </div>
           <Suspense fallback={<SkeletonBusStatusString />}>
