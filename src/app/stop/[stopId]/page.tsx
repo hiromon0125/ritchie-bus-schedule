@@ -17,8 +17,9 @@ import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { IoMdInformationCircle } from "react-icons/io";
 import { MdDirectionsBus } from "react-icons/md";
-import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
+import type { RouterOutputs } from "../../../trpc/react";
+import CopyLink from "../../_components/copyLink";
 import ClickableTooltip from "../../_components/infobtn";
 import StopMap from "../../_components/Map";
 
@@ -74,7 +75,7 @@ export default async function Page(props: {
       <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
         <div className="bg-item-background flex w-full flex-row gap-2 rounded-xl p-2">
           <div className="bg-foreground h-auto min-w-3 rounded-l-md" />
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-auto flex-col gap-2">
             <div className="xs:mt-3 flex flex-row items-center gap-2">
               <StopTag stop={currentStop} />
               <h1 className="my-1.5 text-2xl font-bold">{currentStop.name}</h1>
@@ -82,6 +83,7 @@ export default async function Page(props: {
             </div>
             <p className="mb-2 text-lg">{currentStop.description}</p>
           </div>
+          <CopyLink link={`/stop/${currentStop.id}`} />
         </div>
       </div>
       <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-row flex-wrap gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
