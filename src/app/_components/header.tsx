@@ -1,19 +1,23 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import { type JSX, Suspense } from "react";
-import { LuClockAlert } from "react-icons/lu";
+import { usePathname } from "next/navigation";
+import { type JSX } from "react";
 import { MdDirectionsBus } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
-import { api } from "../../trpc/server";
 import { ProfileBtnComponent } from "./profileBtnWrapper";
-import ServiceInfoButton from "./serviceinfo";
+
+const PATH_TO_HEADER_TAG: Record<string, keyof JSX.IntrinsicElements> = {
+  "/": "h1",
+};
 
 export default function Header({
-  headerTag,
+  serviceNavigation,
 }: {
-  headerTag?: keyof JSX.IntrinsicElements;
+  serviceNavigation?: React.ReactNode;
 }) {
-  const Header = headerTag ?? "p";
+  const path = usePathname();
+  const Header = PATH_TO_HEADER_TAG[path] ?? "p";
   return (
     <div className="xs:px-3 text-foreground top-2 z-20 w-full px-1 md:sticky">
       <div className="bg-border-background md:bg-border-background/60 m-2 mx-auto h-24 w-full justify-center rounded-3xl border-slate-700 p-3 md:max-w-(--breakpoint-lg) md:backdrop-blur-md not-dark:md:shadow-md dark:border">
@@ -63,20 +67,7 @@ export default function Header({
               <TbRoute size={24} color="black" className="dark:invert-100" />
               <p>Stops</p>
             </Link>
-            <Suspense
-              fallback={
-                <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
-                  <LuClockAlert
-                    size={24}
-                    color="black"
-                    className="dark:invert-100"
-                  />
-                  <p>Alert</p>
-                </ServiceInfoButton>
-              }
-            >
-              <AlertNavigation />
-            </Suspense>
+            {serviceNavigation}
           </nav>
           <div className="h-14 w-[2px] rounded-full bg-neutral-700 dark:bg-neutral-300" />
           <div className="bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
@@ -85,22 +76,5 @@ export default function Header({
         </div>
       </div>
     </div>
-  );
-}
-
-async function AlertNavigation() {
-  const count = await api.serviceinfo.getCount();
-  return (
-    <ServiceInfoButton className="bg-item-background hover:border-accent border-item-background flex h-full flex-row items-center justify-center gap-1 rounded-lg border-[3px] px-3 transition-all not-dark:shadow-[0_4px_4px_0_var(--black-shadow-color),0_-1px_2px_0_var(--white-shadow-color)] hover:shadow-md">
-      <LuClockAlert size={24} color="black" className="dark:invert-100" />
-      <div className="relative">
-        <p>Alert</p>
-        {count > 0 && (
-          <div className="absolute top-[-5px] right-[-8px] flex aspect-square h-4 flex-row items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
-            <p>{count}</p>
-          </div>
-        )}
-      </div>
-    </ServiceInfoButton>
   );
 }

@@ -1,6 +1,5 @@
 import { BusList, BusListSkeleton } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
-import Header from "@/header";
 import { DotMap } from "@/Map";
 import RouteMapOr from "@/RouteMapOr";
 import { BusTag, StopTag } from "@/tags";
@@ -16,25 +15,22 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   return (
-    <>
-      <Header headerTag="h1" />
-      <main className="text-foreground xs:[--margin:24px] flex min-h-screen w-full flex-col items-center gap-3 py-2 [--margin:8px] [--sm-max-w:calc(100%-var(--margin))]">
-        <WelcomePopup />
-        <SignedIn>
-          <FavStopList />
-        </SignedIn>
-        <Suspense fallback={<BusListSkeleton />}>
-          <BusList />
-        </Suspense>
-        <RouteMapOr>
-          <div className="relative h-[60vh] overflow-hidden md:max-w-(--breakpoint-lg)">
-            <Suspense fallback={<p>Loading map...</p>}>
-              <HomeMap />
-            </Suspense>
-          </div>
-        </RouteMapOr>
-      </main>
-    </>
+    <main className="text-foreground xs:[--margin:24px] flex min-h-screen w-full flex-col items-center gap-3 py-2 [--margin:8px] [--sm-max-w:calc(100%-var(--margin))]">
+      <WelcomePopup />
+      <SignedIn>
+        <FavStopList />
+      </SignedIn>
+      <Suspense fallback={<BusListSkeleton />}>
+        <BusList />
+      </Suspense>
+      <RouteMapOr>
+        <div className="relative h-[60vh] overflow-hidden md:max-w-(--breakpoint-lg)">
+          <Suspense fallback={<p>Loading map...</p>}>
+            <HomeMap />
+          </Suspense>
+        </div>
+      </RouteMapOr>
+    </main>
   );
 }
 
