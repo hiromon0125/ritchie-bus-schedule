@@ -67,8 +67,9 @@ export function ServiceInfoProvider({
               Loading alert for today...
             </div>
           ) : !data || data.length == 0 ? (
-            <div className="text-center text-base">
-              No alert for today! Have a nice day.
+            <div className="py-12 text-center text-base">
+              No alert for today! <br />
+              Have a nice day.
             </div>
           ) : (
             <div className="flex flex-col gap-2 p-3 pb-0">
