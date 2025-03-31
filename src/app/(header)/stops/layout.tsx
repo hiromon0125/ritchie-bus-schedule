@@ -1,7 +1,7 @@
 import { BackBtn } from "@/backBtn";
+import CopyLink from "@/copyLink";
 import ScrollToTopButton from "@/scrollToTopBtn";
 import { IoChevronBackSharp } from "react-icons/io5";
-import CopyLink from "../_components/copyLink";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

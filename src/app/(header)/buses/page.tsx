@@ -2,7 +2,7 @@ import { SpecificFavBtn } from "@/favBtn";
 import { BusTag } from "@/tags";
 import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
-import { api } from "../../trpc/server";
+import { api } from "t/server";
 
 export const dynamic = "auto";
 

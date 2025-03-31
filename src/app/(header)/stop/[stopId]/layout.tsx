@@ -1,5 +1,5 @@
 import { TRPCClientError } from "@trpc/client";
-import { api } from "../../../trpc/server";
+import { api } from "t/server";
 
 export default async function Layout(props: {
   children: React.ReactNode;

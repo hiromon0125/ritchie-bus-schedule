@@ -5,6 +5,8 @@ import {
   SkeletonBusStatusString,
 } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
+import ClickableTooltip from "@/infobtn";
+import { ServiceInfoContentDecorator } from "@/serviceinfo";
 import { BusTag, StopTag } from "@/tags";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus, Stops } from "@prisma/client";
@@ -19,8 +21,6 @@ import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { IoMdInformationCircle } from "react-icons/io";
 import { api } from "t/server";
-import ClickableTooltip from "../../_components/infobtn";
-import { ServiceInfoContentDecorator } from "../../_components/serviceinfo";
 type Props = {
   params: Promise<{ busId: string }>;
   searchParams: Promise<{ stopId?: string | string[] | undefined }>;

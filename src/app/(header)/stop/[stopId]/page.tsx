@@ -4,7 +4,10 @@ import {
   BusStatus,
   SkeletonBusStatusString,
 } from "@/busStatus";
+import CopyLink from "@/copyLink";
 import { FavBtn } from "@/favBtn";
+import ClickableTooltip from "@/infobtn";
+import StopMap from "@/Map";
 import { BusTag, StopTag } from "@/tags";
 import TimeTable from "@/timeTable";
 import { currentUser } from "@clerk/nextjs/server";
@@ -17,11 +20,8 @@ import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { IoMdInformationCircle } from "react-icons/io";
 import { MdDirectionsBus } from "react-icons/md";
+import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
-import type { RouterOutputs } from "../../../trpc/react";
-import CopyLink from "../../_components/copyLink";
-import ClickableTooltip from "../../_components/infobtn";
-import StopMap from "../../_components/Map";
 
 export default async function Page(props: {
   params: Promise<{ stopId: string }>;

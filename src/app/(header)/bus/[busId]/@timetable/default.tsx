@@ -1,14 +1,14 @@
 import { currentUser } from "@clerk/nextjs/server";
 
+import { TimeTableSkeleton } from "@/busPageLoaders";
+import { StopTag } from "@/tags";
+import TimeTable from "@/timeTable";
 import { TRPCClientError } from "@trpc/client";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { MdDirectionsBus } from "react-icons/md";
 import { api } from "../../../../trpc/server";
-import { TimeTableSkeleton } from "../../../_components/busPageLoaders";
-import { StopTag } from "../../../_components/tags";
-import TimeTable from "../../../_components/timeTable";
 
 type Props = {
   params: Promise<{ busId: string }>;

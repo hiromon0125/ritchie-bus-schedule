@@ -1,5 +1,5 @@
+import { TimeTableSkeleton } from "@/busPageLoaders";
 import { MdDirectionsBus } from "react-icons/md";
-import { TimeTableSkeleton } from "../../../_components/busPageLoaders";
 
 export default function Page() {
   return (

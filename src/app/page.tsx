@@ -1,36 +1,40 @@
 import { BusList, BusListSkeleton } from "@/busStatus";
 import { FavBtn } from "@/favBtn";
+import Header from "@/header";
 import { DotMap } from "@/Map";
+import RouteMapOr from "@/RouteMapOr";
 import { BusTag, StopTag } from "@/tags";
+import WelcomePopup from "@/welcome";
 import { SignedIn } from "@clerk/nextjs";
 import _ from "lodash";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
-import RouteMapOr from "./_components/RouteMapOr";
-import WelcomePopup from "./_components/welcome";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   return (
-    <main className="text-foreground xs:[--margin:24px] flex min-h-screen w-full flex-col items-center gap-3 py-2 [--margin:8px] [--sm-max-w:calc(100%-var(--margin))]">
-      <WelcomePopup />
-      <SignedIn>
-        <FavStopList />
-      </SignedIn>
-      <Suspense fallback={<BusListSkeleton />}>
-        <BusList />
-      </Suspense>
-      <RouteMapOr>
-        <div className="relative h-[60vh] overflow-hidden md:max-w-(--breakpoint-lg)">
-          <Suspense fallback={<p>Loading map...</p>}>
-            <HomeMap />
-          </Suspense>
-        </div>
-      </RouteMapOr>
-    </main>
+    <>
+      <Header headerTag="h1" />
+      <main className="text-foreground xs:[--margin:24px] flex min-h-screen w-full flex-col items-center gap-3 py-2 [--margin:8px] [--sm-max-w:calc(100%-var(--margin))]">
+        <WelcomePopup />
+        <SignedIn>
+          <FavStopList />
+        </SignedIn>
+        <Suspense fallback={<BusListSkeleton />}>
+          <BusList />
+        </Suspense>
+        <RouteMapOr>
+          <div className="relative h-[60vh] overflow-hidden md:max-w-(--breakpoint-lg)">
+            <Suspense fallback={<p>Loading map...</p>}>
+              <HomeMap />
+            </Suspense>
+          </div>
+        </RouteMapOr>
+      </main>
+    </>
   );
 }
 
@@ -40,7 +44,7 @@ async function FavStopList() {
   return (
     <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-col gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
       <div className="bg-item-background flex flex-row justify-between rounded-xl p-3 py-2">
-        <h1 className="xs:text-2xl m-0 text-xl font-bold">Favorite Stop</h1>
+        <h2 className="xs:text-2xl m-0 text-xl font-bold">Favorite Stop</h2>
       </div>
       {favStops.map((stop) => (
         <StopView key={stop.stopId} stopId={stop.stopId} />
@@ -63,7 +67,7 @@ async function StopView({ stopId }: { stopId: number }) {
           <div className="flex flex-col gap-2 p-2">
             <div className="flex flex-row items-center gap-2">
               <StopTag stop={stop} size="sm" />
-              <h2 className="font-bold md:text-xl">{stop.name}</h2>
+              <h3 className="font-bold md:text-xl">{stop.name}</h3>
             </div>
             <div className="flex flex-row flex-wrap gap-1">
               {_.orderBy(buses, ["id"], "asc").map((bus) => {

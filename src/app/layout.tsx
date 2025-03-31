@@ -4,14 +4,13 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
 import Footer from "@/footer";
+import { PostHogProvider } from "@/posthog";
+import { ServiceInfoProvider } from "@/serviceinfo";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
 import { Toaster } from "~/components/ui/sonner";
-import Header from "./_components/header";
-import { PostHogProvider } from "./_components/posthog";
-import { ServiceInfoProvider } from "./_components/serviceinfo";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,7 +44,6 @@ export default async function RootLayout({
               className={cookie.get("theme")?.value === "dark" ? "dark" : ""}
             >
               <body className={`font-sans ${inter.variable}`}>
-                <Header />
                 {children}
                 <Footer />
                 <Toaster />
