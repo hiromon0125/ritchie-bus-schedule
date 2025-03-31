@@ -15,10 +15,11 @@ export default async function BusPageList() {
           <Link
             href={`/bus/${bus.id}`}
             key={bus.id}
-            className="bg-item-background hover:border-accent border-item-background flex w-full flex-row items-center justify-between rounded-xl border-[3px] p-3 pl-4 transition-all"
+            className="bg-item-background hover:border-accent border-item-background flex w-full flex-row items-center justify-between gap-4 rounded-xl border-[3px] p-1 transition-all"
             style={{ "--bus-color": bus.color } as React.CSSProperties}
           >
-            <div className="flex flex-1 flex-col gap-2">
+            <div className="h-full w-3 rounded-l-md bg-(--bus-color)" />
+            <div className="flex flex-1 flex-col gap-3 pt-4 pb-2">
               <div className="flex flex-row items-center gap-2">
                 <BusTag bus={bus} />
                 <span className="font-bold md:text-lg">{bus.name}</span>
