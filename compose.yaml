@@ -1,0 +1,15 @@
+services:
+  db:
+    image: "postgres:14.17"
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+    volumes:
+      - ./etc/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - database:/var/lib/postgresql/data
+
+volumes:
+  database:
