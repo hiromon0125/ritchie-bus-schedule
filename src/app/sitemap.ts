@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { db } from "../server/db";
 
-const URL = `https://${process.env.VERCEL_URL}`;
+const URL = `https://www.rit-bus.app`;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buses = await db.bus.findMany({
