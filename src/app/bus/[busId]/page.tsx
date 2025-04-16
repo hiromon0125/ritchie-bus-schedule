@@ -40,7 +40,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
   return {
-    title: `Ritche's Bus Schedule | ${bus.id} ${bus.name}`,
+    title: `${bus.tag??bus.id} ${bus.name} | RIT Bus Schedule`,
     description: bus.description,
   };
 }
