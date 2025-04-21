@@ -1,8 +1,8 @@
-import { getBaseUrl } from "../../../../trpc/react";
+import { getServerBaseUrl } from "../../../../trpc/server";
 
 /* eslint-disable @next/next/no-img-element */
 export function StopQRCode({ stopId }: { stopId: string }) {
-  const baseUrl = getBaseUrl();
+  const baseUrl = getServerBaseUrl();
   const url = new URL(`/stop/${stopId}`, baseUrl);
   return (
     <div
