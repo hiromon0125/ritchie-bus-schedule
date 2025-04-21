@@ -1,9 +1,9 @@
+import { getBaseUrl } from "../../../../trpc/react";
+
 /* eslint-disable @next/next/no-img-element */
 export function StopQRCode({ stopId }: { stopId: string }) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const baseUrl = getBaseUrl();
   const url = new URL(`/stop/${stopId}`, baseUrl);
-  console.log(`URL shared: ${url.toString()}`);
-
   return (
     <div
       style={{
