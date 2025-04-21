@@ -1,4 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
+import { getServerBaseUrl } from "../../../../trpc/server";
 import { StopQRCode } from "./_qrcode";
 
 async function image(
@@ -6,6 +8,8 @@ async function image(
   { params }: { params: Promise<{ stopId: string }> },
 ) {
   const { stopId } = await params;
+  const baseUrl = getServerBaseUrl();
+  const logo = new URL("/icons/bus-192x192.png", baseUrl).toString();
   return new ImageResponse(
     (
       <div
@@ -20,22 +24,40 @@ async function image(
           color: "#000",
         }}
       >
-        <h1
+        <div
           style={{
-            fontSize: 35,
-            marginBottom: 0,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
           }}
         >
-          Need a bus schedule?
-        </h1>
-        <p
-          style={{
-            fontSize: 30,
-            marginTop: 5,
-          }}
-        >
-          Try Ritchie's Bus Schedule!
-        </p>
+          <img src={logo} alt="logo" width={100} height={100} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginLeft: 20,
+            }}
+          >
+            <h1
+              style={{
+                fontSize: 35,
+                marginBottom: 0,
+              }}
+            >
+              Need a bus schedule?
+            </h1>
+            <p
+              style={{
+                fontSize: 30,
+                marginTop: 5,
+                marginBottom: 35,
+              }}
+            >
+              Try Ritchie's Bus Schedule!
+            </p>
+          </div>
+        </div>
         <StopQRCode stopId={stopId} />
       </div>
     ),
