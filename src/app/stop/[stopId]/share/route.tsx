@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
-import { getServerBaseUrl } from "../../../../trpc/server";
-import { StopQRCode } from "./_qrcode";
+import type { NextRequest } from "next/server";
+import { createURL, StopQRCode } from "./_qrcode";
+
+export const runtime = "edge";
 
 async function image(
-  req: Request,
+  req: NextRequest,
   { params }: { params: Promise<{ stopId: string }> },
 ) {
   const { stopId } = await params;
-  const baseUrl = getServerBaseUrl();
-  const logo = new URL("/icons/bus-192x192.png", baseUrl).toString();
+  const logo = createURL(req, "/icons/bus-192x192.png", 100, 100);
   return new ImageResponse(
     (
       <div
@@ -24,29 +25,21 @@ async function image(
           color: "#000",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <img src={logo} alt="logo" width={100} height={100} />
-          <div
+        <div tw="flex flex-col items-center justify-center">
+          <img
+            src={logo}
+            alt="logo"
+            width={80}
+            height={80}
             style={{
-              display: "flex",
-              flexDirection: "column",
-              marginLeft: 20,
+              height: 80,
+              width: 80,
+              objectFit: "cover",
+              objectPosition: "center",
             }}
-          >
-            <h1
-              style={{
-                fontSize: 35,
-                marginBottom: 0,
-              }}
-            >
-              Need a bus schedule?
-            </h1>
+          />
+          <div tw="flex flex-col ml-5">
+            <h1 tw="text-3xl font-bold mb-0">Need a bus schedule?</h1>
             <p
               style={{
                 fontSize: 30,
@@ -58,12 +51,12 @@ async function image(
             </p>
           </div>
         </div>
-        <StopQRCode stopId={stopId} />
+        <StopQRCode req={req} stopId={stopId} />
       </div>
     ),
     {
       width: 630,
-      height: 800,
+      height: 850,
     },
   );
 }
