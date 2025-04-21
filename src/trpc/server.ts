@@ -29,3 +29,8 @@ export const { trpc: api, HydrateClient } = createHydrationHelpers<AppRouter>(
   caller,
   getQueryClient,
 );
+
+export function getServerBaseUrl() {
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+}
