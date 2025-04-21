@@ -1,23 +1,5 @@
 import type { NextRequest } from "next/server";
 
-export function createURL(
-  req: NextRequest,
-  filePath: string,
-  w: number,
-  h: number,
-  q = 75,
-) {
-  const { protocol, host } = new URL(req.url);
-
-  const url = new URL(`${protocol}//${host}/_next/image`);
-  url.searchParams.set("url", encodeURIComponent(filePath));
-  url.searchParams.set("w", w.toString());
-  url.searchParams.set("h", h.toString());
-  url.searchParams.set("q", q.toString());
-  url.searchParams.set("type", "png");
-  return url.toString();
-}
-
 /* eslint-disable @next/next/no-img-element */
 export function StopQRCode({
   req,
