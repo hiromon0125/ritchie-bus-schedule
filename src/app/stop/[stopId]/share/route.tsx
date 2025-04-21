@@ -37,6 +37,7 @@ async function image(
               objectFit: "cover",
               objectPosition: "center",
             }}
+            itemType="image/png"
           />
           <div tw="flex flex-col ml-5">
             <h1 tw="text-4xl font-bold mb-0 mt-0">Need a bus schedule?</h1>
