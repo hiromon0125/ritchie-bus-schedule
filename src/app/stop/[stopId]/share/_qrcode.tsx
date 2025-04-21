@@ -2,6 +2,7 @@
 export function StopQRCode({ stopId }: { stopId: string }) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const url = new URL(`/stop/${stopId}`, baseUrl);
+  console.log(`URL shared: ${url.toString()}`);
 
   return (
     <div
@@ -27,7 +28,7 @@ export function StopQRCode({ stopId }: { stopId: string }) {
             top: 0,
             left: 0,
           }}
-          src={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${url.toString() + "?ref=qr"}`}
+          src={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${url.toString()}?ref=qr`}
           alt={`QR code for stop ${stopId}`}
           width={400}
           height={400}
