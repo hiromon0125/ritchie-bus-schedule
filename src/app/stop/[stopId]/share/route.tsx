@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
+import fs from "fs/promises";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
+import path from "path";
 import { StopQRCode } from "./_qrcode";
 
 async function image(
@@ -10,7 +12,18 @@ async function image(
   const { protocol, host } = new URL(req.url);
   const baseUrl = `${protocol}//${host}`;
   const { stopId } = await params;
-  const logo = `${baseUrl}/icons/bus-192x192.png`;
+  // Get the full path to your static image
+  const imagePath = path.join(
+    process.cwd(),
+    "public",
+    "icons",
+    "bus-192x192.png",
+  );
+  // Read the image as a buffer
+  const imageBuffer = await fs.readFile(imagePath);
+  // Convert buffer to base64
+  const base64Image = imageBuffer.toString("base64");
+  const logo = `data:image/png;base64,${base64Image}`;
   return new ImageResponse(
     (
       <div
