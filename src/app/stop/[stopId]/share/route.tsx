@@ -3,8 +3,6 @@ import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import { StopQRCode } from "./_qrcode";
 
-export const runtime = "edge";
-
 async function image(
   req: NextRequest,
   { params }: { params: Promise<{ stopId: string }> },
