@@ -406,14 +406,14 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
       </div>
       <br />
       <p className="mb-2 text-lg">Bus Route</p>
-      <div className="bg-border-background relative flex flex-col overflow-scroll rounded-lg border-2 border-black">
+      <div className="border-primary relative flex flex-col overflow-scroll rounded-lg border-2 bg-transparent">
         <div className="flex w-full flex-row gap-1 border-x-2 p-1 pt-2">
           <p className="w-20">Index</p>
           <p className="w-20">Stop ID</p>
           <p className="flex-1">Arrival Time</p>
           <p className="flex-1">Departure Time</p>
         </div>
-        <div className="border-t-2 border-black bg-slate-300 p-1">
+        <div className="border-primary border-t-2 bg-transparent p-1 not-dark:bg-slate-300">
           <div className="flex flex-col gap-1 overflow-hidden rounded-b-sm">
             {input.length == 0 ? (
               <div className="p-8 text-center">No recorded stops</div>
@@ -428,7 +428,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                   </div>
                   <input
                     type="number"
-                    className="w-20 p-1"
+                    className="bg-item-background w-20 p-1"
                     placeholder="Stop ID"
                     value={route.stopId ?? 0}
                     onChange={(e) => handleStopIdChange(e, index)}
@@ -453,7 +453,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                   <input
                     placeholder="--:--"
                     type="time"
-                    className="flex-1 p-1"
+                    className="bg-item-background flex-1 p-1"
                     value={dateInput.at(index)?.dep}
                     onChange={(e) => handleDepartureTimeChange(e, index)}
                   />
@@ -466,7 +466,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
       <div className="mb-8 flex flex-row pt-2">
         <button
           onClick={handleSubmit}
-          className="bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800 disabled:opacity-50"
+          className="bg-primary border-primary-foreground text-primary-foreground mr-3 flex flex-row items-center gap-1 rounded-md border-2 p-3 disabled:opacity-50"
           disabled={isPending}
         >
           <IoMdSave />
@@ -474,14 +474,14 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
         </button>
         <button
           onClick={addNewRoute}
-          className="bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800"
+          className="bg-primary border-primary-foreground text-primary-foreground mr-3 flex flex-row items-center gap-1 rounded-md border-2 p-3"
         >
           <MdAddBox />
           Add
         </button>
         <button
           onClick={addMultipleRoutes}
-          className="bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800"
+          className="bg-primary border-primary-foreground text-primary-foreground mr-3 flex flex-row items-center gap-1 rounded-md border-2 p-3"
         >
           <MdAddToPhotos />
           Add multiple

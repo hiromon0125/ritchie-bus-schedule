@@ -25,12 +25,12 @@ export default function EditStopDetail({ stop }: { stop: DetailedStop }) {
   const { toast } = useToast();
 
   return (
-    <div className=" relative flex flex-col gap-2">
-      <h1 className=" my-0 mt-3 text-xl">Stop ID: {stop.id}</h1>
-      <div className=" flex w-full flex-row gap-3">
+    <div className="relative flex flex-col gap-2">
+      <h1 className="my-0 mt-3 text-xl">Stop ID: {stop.id}</h1>
+      <div className="flex w-full flex-row gap-3">
         <input
           type="text"
-          className=" w-full text-nowrap rounded-lg border-2 border-black p-2 text-3xl"
+          className="border-primary w-full rounded-lg border-2 p-2 text-3xl text-nowrap"
           placeholder="Name"
           value={editedStop.name}
           onChange={(e) =>
@@ -39,22 +39,22 @@ export default function EditStopDetail({ stop }: { stop: DetailedStop }) {
         />
       </div>
       <textarea
-        className=" min-h-24 text-wrap rounded-lg border-2 border-black p-2 text-xl"
+        className="border-primary min-h-24 rounded-lg border-2 p-2 text-xl text-wrap"
         value={editedStop.description}
         placeholder="Description"
         onChange={(e) =>
           setEditedStop({ ...editedStop, description: e.target.value })
         }
       />
-      <div className=" bg-item-background mt-4 rounded-md border-2 border-black p-2">
-        <h2 className=" bg-item-background ml-2 mt-[-22px] w-min rounded-md border-2 border-black px-2 text-lg">
+      <div className="bg-item-background border-primary mt-4 rounded-md border-2 p-2">
+        <h2 className="bg-item-background border-primary mt-[-22px] ml-2 w-min rounded-md border-2 px-2 text-lg">
           Buses
         </h2>
-        <div className=" flex flex-row flex-wrap gap-1 pt-2">
+        <div className="flex flex-row flex-wrap gap-1 pt-2">
           {stop.buses.map((bus) => (
             <div
               key={bus.id}
-              className=" flex min-w-max flex-row gap-3 rounded-md border-2 p-2"
+              className="flex min-w-max flex-row gap-3 rounded-md border-2 p-2"
               style={{ borderColor: bus.color }}
             >
               <p>{bus.id}</p>
@@ -73,10 +73,10 @@ export default function EditStopDetail({ stop }: { stop: DetailedStop }) {
           }));
         }}
       />
-      <div className=" mt-3 flex flex-row justify-end gap-3">
+      <div className="mt-3 flex flex-row justify-end gap-3">
         <NavigateToStop stop={stop} edited={_.isEqual(editedStop, stop)} />
         <button
-          className=" rounded-md bg-black p-3 px-6 font-bold text-white hover:bg-slate-800"
+          className="bg-primary hover:bg-primary text-primary-foreground rounded-md p-3 px-6 font-bold"
           onClick={async () => {
             const { dismiss } = toast({ title: "Saving..." });
             try {
@@ -103,7 +103,7 @@ export default function EditStopDetail({ stop }: { stop: DetailedStop }) {
         <button
           disabled={stop.buses.length != 0}
           onClick={async () => await deleteStop({ id: editedStop.id })}
-          className=" rounded-md bg-red-600 p-3 px-6 font-bold text-white hover:bg-red-400 disabled:bg-red-300"
+          className="bg-destructive rounded-md p-3 px-6 font-bold text-white hover:bg-red-400 disabled:opacity-50"
         >
           Delete
         </button>
@@ -120,7 +120,7 @@ function EditLocation({
   setLocation: (loc: { lat: number; lon: number }) => void;
 }) {
   return (
-    <div className=" h-[403px] w-full overflow-clip rounded-md border-2 border-black">
+    <div className="border-primary h-[403px] w-full overflow-clip rounded-md border-2">
       <Map
         defaultCenter={[RIT_CENTER.lat, RIT_CENTER.lng]}
         zoom={14}
@@ -162,9 +162,9 @@ function NavigateToStop({
   const router = useRouter();
   const selectedStop = _.find(stops, { id: stopId });
   return (
-    <div className=" relative flex flex-row justify-center rounded-md bg-black">
+    <div className="bg-primary relative flex flex-row justify-center rounded-md">
       <Select<{ value: number; label: string }>
-        className=" w-48"
+        className="w-48"
         options={stops?.map((stop) => ({
           value: stop.id,
           label: `${stop.id} ${stop.name}`,
@@ -180,7 +180,7 @@ function NavigateToStop({
         placeholder="Select stops..."
       />
       <button
-        className=" rounded-r-md bg-black p-2 px-4 text-white disabled:bg-slate-600"
+        className="bg-primary text-primary-foreground rounded-r-md p-2 px-4 disabled:opacity-50"
         onClick={() => {
           if (
             edited &&

@@ -72,29 +72,29 @@ export default function EditBusDetail({ busId }: { busId: number }) {
   }
 
   return (
-    <div className=" flex w-full max-w-(--breakpoint-lg) flex-col gap-3">
-      <div className=" relative flex h-[85px] w-full flex-row gap-5 py-2 pl-0">
-        <label htmlFor="color" className=" flex h-full flex-col gap-1">
+    <div className="flex w-full max-w-(--breakpoint-lg) flex-col gap-3">
+      <div className="relative flex h-[85px] w-full flex-row gap-5 py-2 pl-0">
+        <label htmlFor="color" className="flex h-full flex-col gap-1">
           <p>Color</p>
           <input
             id="color"
             value={newData?.color ?? "#000000"}
             onChange={(e) => newData && handleInput({ color: e.target.value })}
             type="color"
-            className=" bg-item-background h-full rounded-md border-2 border-black text-xl"
+            className="bg-item-background border-primary h-full rounded-md border-2 text-xl"
           />
         </label>
-        <label htmlFor="name" className=" flex flex-1 flex-col gap-1">
+        <label htmlFor="name" className="flex flex-1 flex-col gap-1">
           <p>Name</p>
           <input
             id="name"
             value={newData?.name ?? ""}
             onChange={(e) => newData && handleInput({ name: e.target.value })}
-            className=" bg-item-background flex-1 rounded-md border-2 border-black p-2 text-xl"
+            className="bg-item-background border-primary flex-1 rounded-md border-2 p-2 text-xl"
           />
         </label>
       </div>
-      <label htmlFor="description" className=" flex flex-col gap-1">
+      <label htmlFor="description" className="flex flex-col gap-1">
         <p>Description</p>
         <textarea
           id="description"
@@ -102,11 +102,11 @@ export default function EditBusDetail({ busId }: { busId: number }) {
           onChange={(e) =>
             newData && handleInput({ description: e.target.value })
           }
-          className=" text-md bg-item-background h-32 w-full resize-none rounded-md border-2 border-black p-2"
+          className="text-md bg-item-background border-primary h-32 w-full resize-none rounded-md border-2 p-2"
         />
       </label>
-      <div className=" flex flex-col gap-3">
-        <div className=" flex flex-row items-center gap-3">
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-row items-center gap-3">
           <p>Visible</p>
           <Switch
             checked={newData?.isVisible}
@@ -115,7 +115,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
             }
           />
         </div>
-        <div className=" flex flex-col gap-3">
+        <div className="flex flex-col gap-3">
           <DayOfWeekSelector
             operatingDays={data.operatingDays}
             onChange={(newDays) =>
