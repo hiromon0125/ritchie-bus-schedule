@@ -91,7 +91,7 @@ function WeeklyPicker({
             key={dayName}
             className={cn(
               selectedDays.includes(index)
-                ? "bg-accent text-accent-foreground"
+                ? "bg-primary text-primary-foreground"
                 : "opacity-50",
               "border-primary aspect-square min-w-11 rounded-full border-2 py-1",
             )}
