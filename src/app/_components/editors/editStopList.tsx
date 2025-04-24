@@ -99,10 +99,10 @@ export default function EditStopList() {
   }, [savedList]);
 
   return (
-    <div className=" flex w-full flex-col flex-wrap gap-2 bg-transparent">
-      <div className=" flex flex-row items-center gap-3 rounded-md border-2 border-black bg-transparent px-4 py-2">
+    <div className="flex w-full flex-col flex-wrap gap-2 bg-transparent">
+      <div className="border-primary flex flex-row items-center gap-3 rounded-md border-2 bg-transparent px-4 py-2">
         <button
-          className=" w-12 border-r-2 border-black pr-3"
+          className="border-primary w-12 border-r-2 pr-3"
           onClick={addNewStop}
         >
           Add
@@ -111,27 +111,27 @@ export default function EditStopList() {
           Save
         </button>
       </div>
-      <div className=" flex flex-col items-start rounded-md border-2 border-black bg-transparent px-4 py-2">
-        <div className=" flex w-full flex-row gap-3 border-b-2 border-black">
-          <p className=" w-12 border-r-2 border-black">ID</p>
+      <div className="border-primary flex flex-col items-start rounded-md border-2 bg-transparent px-4 py-2">
+        <div className="border-primary flex w-full flex-row gap-3 border-b-2">
+          <p className="border-primary w-12 border-r-2">ID</p>
           <p>Name</p>
         </div>
         {list.length == 0 ? (
-          <div className=" p-2 pl-0">No Stops</div>
+          <div className="p-2 pl-0">No Stops</div>
         ) : (
           list.map((stop, index) => (
             <div
-              className=" even:bg-border-background flex w-full flex-row"
+              className="even:bg-border-background flex w-full flex-row"
               key={index}
               onMouseEnter={() => !onUserFocused && setHoveredIndex(index)}
               onMouseLeave={() => !onUserFocused && setHoveredIndex(null)}
             >
-              <p className=" w-12 border-r-2 border-black py-1">
+              <p className="border-primary w-12 border-r-2 py-1">
                 {stop.id ?? "--"}
               </p>
               <input
                 placeholder="Stop Name"
-                className=" stop-input flex-1 bg-transparent py-1 pl-3"
+                className="stop-input flex-1 bg-transparent py-1 pl-3"
                 value={stop.name}
                 onChange={(e) =>
                   setList((ls) => {
@@ -151,12 +151,12 @@ export default function EditStopList() {
                 <>
                   <Link
                     href={`/manage/stop/${stop.id}`}
-                    className=" text-black-600 bg-item-background mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-black px-1"
+                    className="text-black-600 bg-item-background border-primary mr-1 flex flex-row items-center gap-2 rounded-md border-2 px-1"
                   >
                     Edit
                   </Link>
                   <button
-                    className=" bg-item-background mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-red-600 px-1 text-red-600"
+                    className="bg-item-background mr-1 flex flex-row items-center gap-2 rounded-md border-2 border-red-600 px-1 text-red-600"
                     onClick={() => onDelete(index)}
                   >
                     <FaTrash color="red" />

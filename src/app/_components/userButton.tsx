@@ -1,11 +1,11 @@
 "use client";
-import { UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { FaRegStar } from "react-icons/fa";
 import { GoCodeReview } from "react-icons/go";
-import { HiHome } from "react-icons/hi2";
+import { HiHome, HiMiniWrench } from "react-icons/hi2";
 import {
   MdDirectionsBus,
   MdOutlineBusAlert,
@@ -30,6 +30,9 @@ export default function ProfileButton() {
   const router = useRouter();
   const { setState: openServiceInfo } = useContext(ServiceInfoContext);
   const { data: serviceInfoCount } = api.serviceinfo.getCount.useQuery();
+  const { has } = useAuth();
+  console.log(has?.({ role: "org:admin" }));
+
   return (
     <UserButton
       userProfileMode="navigation"
@@ -95,6 +98,13 @@ export default function ProfileButton() {
           label="Rate My Ride!"
           labelIcon={<FaRegStar size={16} />}
         />
+        {has?.({ role: "org:admin" }) && (
+          <UserButton.Link
+            href="/manage"
+            label="Manage Buses"
+            labelIcon={<HiMiniWrench size={16} />}
+          />
+        )}
       </UserButton.MenuItems>
     </UserButton>
   );
