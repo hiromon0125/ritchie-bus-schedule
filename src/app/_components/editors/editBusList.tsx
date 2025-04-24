@@ -46,8 +46,8 @@ function EditBusList() {
 
   return (
     <>
-      <div className=" flex w-full flex-row flex-wrap gap-2 bg-transparent">
-        <div className=" flex flex-row items-center gap-3 rounded-md border-2 border-black bg-transparent px-4 py-2">
+      <div className="flex w-full flex-row flex-wrap gap-2 bg-transparent">
+        <div className="border-primary flex flex-row items-center gap-3 rounded-md border-2 bg-transparent px-4 py-2">
           <p>Color</p>
           <input
             className=" "
@@ -64,7 +64,7 @@ function EditBusList() {
           />
         </div>
         <input
-          className=" w-20 rounded-md border-2 border-black bg-transparent px-4 py-2"
+          className="border-primary w-20 rounded-md border-2 bg-transparent px-4 py-2"
           type="number"
           placeholder="ID"
           value={newBus.id}
@@ -77,7 +77,7 @@ function EditBusList() {
           disabled={loading}
         />
         <input
-          className=" grow-2 rounded-md border-2 border-black bg-transparent px-4 py-2"
+          className="border-primary grow-2 rounded-md border-2 bg-transparent px-4 py-2"
           type="text"
           placeholder="Name"
           value={newBus.name}
@@ -90,7 +90,7 @@ function EditBusList() {
           disabled={loading}
         />
         <input
-          className=" min-w-80 grow-4 rounded-md border-2 border-black bg-transparent px-4 py-2"
+          className="border-primary min-w-80 grow-4 rounded-md border-2 bg-transparent px-4 py-2"
           type="text"
           placeholder="Description"
           value={newBus.description}
@@ -104,16 +104,14 @@ function EditBusList() {
         />
         <button
           onClick={handleSubmit}
-          className=" rounded-lg border-2 border-black bg-black p-2 text-white"
+          className="border-primary bg-accent text-accent-foreground rounded-lg border-2 p-2"
           style={
             !validation || loading
               ? {
                   opacity: 0.5,
-                  color: "grey",
                 }
               : {
                   opacity: 1,
-                  color: "white",
                 }
           }
           disabled={!validation || loading}
@@ -121,18 +119,18 @@ function EditBusList() {
           Add Bus
         </button>
       </div>
-      <div className=" mt-4 overflow-clip rounded-md border-2 border-black">
+      <div className="border-primary mt-4 overflow-clip rounded-md border-2">
         {data?.map((bus, index) => (
           <div key={bus.id}>
             <div
               key={bus.id}
-              className=" relative flex h-10 w-full flex-row items-center gap-3"
+              className="relative flex h-10 w-full flex-row items-center gap-3"
             >
               <div
-                className=" h-full w-8"
+                className="h-full w-8"
                 style={{ backgroundColor: bus.color ?? "#000000" }}
               />
-              <p className=" flex-1 text-nowrap">
+              <p className="flex-1 text-nowrap">
                 {bus.id} {bus.name}
               </p>
               <Switch
@@ -145,22 +143,22 @@ function EditBusList() {
                   await refetch();
                 }}
               />
-              <p className=" text-slate-800">Visible</p>
+              <p>Visible</p>
               <button
                 onClick={() => router.push(`/manage/bus/${bus.id}`)}
-                className=" m-2 rounded-sm border border-black px-2 py-1 hover:bg-slate-300"
+                className="border-primary m-2 rounded-sm border px-2 py-1 hover:bg-slate-300"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(bus)}
-                className=" m-2 ml-[-12px] rounded-sm border border-red-500 px-2 py-1 text-red-500 hover:bg-red-100"
+                className="m-2 ml-[-12px] rounded-sm border border-red-500 px-2 py-1 text-red-500 hover:bg-red-100"
               >
                 Delete
               </button>
             </div>
             {index !== data.length - 1 && (
-              <hr className=" border-1 border-black" />
+              <hr className="border-primary border-1" />
             )}
           </div>
         ))}

@@ -2,8 +2,8 @@
 import { useUser } from "@clerk/nextjs";
 import { useHover } from "@uidotdev/usehooks";
 import { MdFavorite, MdFavoriteBorder } from "react-icons/md";
+import { api } from "t/react";
 import { cn } from "../../lib/utils";
-import { api } from "../../trpc/react";
 
 export function FavBtn({
   isFavorited,

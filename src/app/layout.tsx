@@ -4,14 +4,15 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
 import Footer from "@/footer";
+import Header from "@/header";
+import { PostHogProvider } from "@/posthog";
+import { ServiceInfoProvider } from "@/serviceinfo";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
-import { Toaster } from "~/components/ui/toaster";
-import Header from "./_components/header";
-import { PostHogProvider } from "./_components/posthog";
-import { ServiceInfoProvider } from "./_components/serviceinfo";
+import { Toaster } from "~/components/ui/sonner";
+import { AlertNavBtn } from "./_components/alertNavigationBtn";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,7 +46,7 @@ export default async function RootLayout({
               className={cookie.get("theme")?.value === "dark" ? "dark" : ""}
             >
               <body className={`font-sans ${inter.variable}`}>
-                <Header />
+                <Header serviceNavigation={<AlertNavBtn />} />
                 {children}
                 <Footer />
                 <Toaster />
@@ -56,6 +57,13 @@ export default async function RootLayout({
       </PostHogProvider>
     </ClerkProvider>
   );
+}
+
+export async function generateViewport() {
+  const cookie = await cookies();
+  return {
+    themeColor: cookie.get("theme")?.value === "dark" ? "#020618" : "#f1f5f9",
+  };
 }
 
 export const metadata: Metadata = {
@@ -81,33 +89,7 @@ export const metadata: Metadata = {
     "Schedule",
     "Ritchie",
     "Rochester Institute of Technology",
-    "RIT Bus",
-    "RIT Bus App",
-    "RIT Bus Tracker",
     "RIT Bus Schedule",
-    "RIT Bus Schedule App",
-    "RIT Bus Schedule Tracker",
-    "RIT Bus Schedule Checker",
-    "RIT Bus Schedule Finder",
-    "RIT Bus Schedule Map",
-    "RIT Bus Schedule Timetable",
-    "RIT Bus Schedule Information",
-    "RIT Bus Schedule Updates",
-    "RIT Bus Schedule Alerts",
-    "RIT Bus Schedule Notifications",
-    "RIT Bus Schedule Service",
-    "RIT Bus Schedule Routes",
-    "RIT Bus Schedule Stops",
-    "RIT Bus Schedule Buses",
-    "RIT Bus Schedule Live",
-    "RIT Bus Schedule Online",
-    "RIT Bus Schedule Mobile",
-    "RIT Bus Schedule Web",
-    "RIT Bus Schedule Application",
-    "RIT Bus Schedule Software",
-    "RIT Bus Schedule Platform",
-    "RIT Bus Schedule System",
-    "RIT Bus Schedule Tool",
   ],
   robots: "index, follow",
   openGraph: {

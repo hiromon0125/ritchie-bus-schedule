@@ -1,4 +1,5 @@
 import type { Bus, Stops } from "@prisma/client";
+import type { JSX } from "react";
 import { cn } from "../../lib/utils";
 
 type TagSize = "sm" | "md" | "lg";
@@ -27,9 +28,18 @@ export function StopTag({
   );
 }
 
-export function BusTag({ bus, size = "md" }: { bus: Bus; size?: TagSize }) {
+export function BusTag({
+  bus,
+  size = "md",
+  tag = "p",
+}: {
+  bus: Bus;
+  size?: TagSize;
+  tag?: keyof JSX.IntrinsicElements;
+}) {
+  const Tag = tag;
   return (
-    <p
+    <Tag
       className={cn(
         "text-foreground flex aspect-square flex-row items-center justify-center rounded-md border-[3px] border-(--bus-color) bg-transparent text-center text-lg font-bold",
         SIZES[size],
@@ -38,6 +48,6 @@ export function BusTag({ bus, size = "md" }: { bus: Bus; size?: TagSize }) {
       style={{ "--bus-color": bus.color } as React.CSSProperties}
     >
       {bus.tag ?? bus.id}
-    </p>
+    </Tag>
   );
 }

@@ -22,14 +22,14 @@
 
   --color-background: oklch(var(--background));
   --color-border-background: oklch(var(--border-background));
-  --color-item-background: rgb(var(--item-background));
+  --color-item-background: oklch(var(--item-background));
   --color-item-border: oklch(var(--item-border));
   --color-foreground: hsl(var(--foreground));
 
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
 
-  --color-popover: hsl(var(--popover));
+  --color-popover: oklch(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
 
   --color-primary: hsl(var(--primary));
@@ -439,12 +439,12 @@
 
     --background: 0.968 0.007 247.896; /* --color-slate-100 */
     --border-background: 0.929 0.013 255.508; /* --color-slate-200 */
-    --item-background: 255 255 255; /* --color-white */
+    --item-background: 1 0 0; /* --color-white */
     --item-border: 0.929 0.013 255.508; /* --color-gray-600 */
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
+    --popover: 1 0 0;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
@@ -469,12 +469,12 @@
   .dark {
     --background: 0.129 0.042 264.695; /* --color-slate-950 */
     --border-background: 0.279 0.041 260.031; /* --color-slate-900 */
-    --item-background: 49 65 88; /* --color-white */
+    --item-background: 0.37 0.0449 257.42;
     --item-border: 0.278 0.033 256.848; /* --color-gray-950 */
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 0.37 0.0449 257.42;
     --popover-foreground: 210 40% 98%;
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;

@@ -15,6 +15,7 @@ function Coffee({ size = "default" }: { size?: keyof typeof SIZESTYLE }) {
         alt="Buy Me A Coffee"
         width={SIZESTYLE[size].width}
         height={SIZESTYLE[size].height}
+        title="Buy me a coffee"
       />
     </a>
   );

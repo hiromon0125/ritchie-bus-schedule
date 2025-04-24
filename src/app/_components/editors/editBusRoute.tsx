@@ -361,7 +361,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
   ) => {
     setDateInput((prev) => {
       const i = [...prev];
-      if (!i[index]) i[index] = { arr: "", dep: e.target.value };
+      i[index] ??= { arr: "", dep: e.target.value };
       i[index].dep ??= "";
       return i;
     });
@@ -376,9 +376,9 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
 
   return (
     <>
-      <div className=" mt-4 flex flex-col gap-2">
-        <div className=" flex flex-row items-center gap-1">
-          <p className=" text-lg">Bus Stop List </p>
+      <div className="mt-4 flex flex-col gap-2">
+        <div className="flex flex-row items-center gap-1">
+          <p className="text-lg">Bus Stop List </p>
           <a
             data-tooltip-id="bus-list-info"
             data-tooltip-content="This selection will be used to auto fill stops for the bus route."
@@ -405,38 +405,38 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
         />
       </div>
       <br />
-      <p className=" mb-2 text-lg">Bus Route</p>
-      <div className=" bg-border-background relative flex flex-col overflow-scroll rounded-lg border-2 border-black">
-        <div className=" flex w-full flex-row gap-1 border-x-2 p-1 pt-2">
-          <p className=" w-20">Index</p>
-          <p className=" w-20">Stop ID</p>
-          <p className=" flex-1">Arrival Time</p>
-          <p className=" flex-1">Departure Time</p>
+      <p className="mb-2 text-lg">Bus Route</p>
+      <div className="border-primary relative flex flex-col overflow-scroll rounded-lg border-2 bg-transparent">
+        <div className="flex w-full flex-row gap-1 border-x-2 p-1 pt-2">
+          <p className="w-20">Index</p>
+          <p className="w-20">Stop ID</p>
+          <p className="flex-1">Arrival Time</p>
+          <p className="flex-1">Departure Time</p>
         </div>
-        <div className=" border-t-2 border-black bg-slate-300 p-1">
-          <div className=" flex flex-col gap-1 overflow-hidden rounded-b-sm">
+        <div className="border-primary border-t-2 bg-transparent p-1 not-dark:bg-slate-300">
+          <div className="flex flex-col gap-1 overflow-hidden rounded-b-sm">
             {input.length == 0 ? (
-              <div className=" p-8 text-center">No recorded stops</div>
+              <div className="p-8 text-center">No recorded stops</div>
             ) : (
               input.map((route, index) => (
                 <div
                   key={index}
-                  className="flex w-full flex-row gap-1 overflow-scroll "
+                  className="flex w-full flex-row gap-1 overflow-scroll"
                 >
-                  <div className=" bg-border-background flex w-20 flex-col justify-center p-1">
+                  <div className="bg-border-background flex w-20 flex-col justify-center p-1">
                     <p>{input.at(index)?.index}</p>
                   </div>
                   <input
                     type="number"
-                    className="w-20 p-1"
+                    className="bg-item-background w-20 p-1"
                     placeholder="Stop ID"
                     value={route.stopId ?? 0}
                     onChange={(e) => handleStopIdChange(e, index)}
                   />
-                  <div className=" bg-item-background flex flex-1 flex-row gap-1">
+                  <div className="bg-item-background flex flex-1 flex-row gap-1">
                     <input
                       type="time"
-                      className=" flex-1 p-1"
+                      className="flex-1 p-1"
                       id={`arr-${index}`}
                       placeholder="--:--"
                       value={dateInput.at(index)?.arr}
@@ -444,7 +444,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                     />
                     <button
                       title="Clear Arrival Time"
-                      className=" pr-2"
+                      className="pr-2"
                       onClick={() => handleClearArrivalTime(index)}
                     >
                       <MdOutlineClear />
@@ -453,7 +453,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                   <input
                     placeholder="--:--"
                     type="time"
-                    className="flex-1 p-1"
+                    className="bg-item-background flex-1 p-1"
                     value={dateInput.at(index)?.dep}
                     onChange={(e) => handleDepartureTimeChange(e, index)}
                   />
@@ -463,10 +463,10 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
           </div>
         </div>
       </div>
-      <div className=" mb-8 flex flex-row pt-2">
+      <div className="mb-8 flex flex-row pt-2">
         <button
           onClick={handleSubmit}
-          className=" bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800 disabled:opacity-50"
+          className="bg-primary border-primary-foreground text-primary-foreground mr-3 flex flex-row items-center gap-1 rounded-md border-2 p-3 disabled:opacity-50"
           disabled={isPending}
         >
           <IoMdSave />
@@ -474,35 +474,35 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
         </button>
         <button
           onClick={addNewRoute}
-          className=" bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800"
+          className="bg-primary border-primary-foreground text-primary-foreground mr-3 flex flex-row items-center gap-1 rounded-md border-2 p-3"
         >
           <MdAddBox />
           Add
         </button>
         <button
           onClick={addMultipleRoutes}
-          className=" bg-border-background mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-black p-3 text-slate-800"
+          className="bg-primary border-primary-foreground text-primary-foreground mr-3 flex flex-row items-center gap-1 rounded-md border-2 p-3"
         >
           <MdAddToPhotos />
           Add multiple
         </button>
         <button
           onClick={rmLastRoute}
-          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
+          className="mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
         >
           <IoMdTrash color="rgb(239 68 68 / var(--tw-border-opacity))" />
           Remove
         </button>
         <button
           onClick={rmAllRoute}
-          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
+          className="mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
         >
           <IoMdTrash color="rgb(239 68 68 / var(--tw-border-opacity))" />
           Remove All
         </button>
         <button
           onClick={() => router.refresh()}
-          className=" mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
+          className="mr-3 flex flex-row items-center gap-1 rounded-md border-2 border-red-500 bg-red-100 p-3 text-red-500"
         >
           <IoMdRefreshCircle color="rgb(239 68 68 / var(--tw-border-opacity))" />
           Revert Changes

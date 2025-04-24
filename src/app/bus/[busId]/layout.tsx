@@ -1,6 +1,6 @@
 import { TRPCClientError } from "@trpc/client";
 import Link from "next/link";
-import { api } from "../../../trpc/server";
+import { api } from "t/server";
 
 export default async function Layout({
   children,

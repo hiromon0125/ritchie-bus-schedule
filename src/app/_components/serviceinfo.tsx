@@ -9,6 +9,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { api } from "t/react";
 import {
   Dialog,
   DialogContent,
@@ -17,7 +18,6 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import { Button } from "../../components/ui/button";
-import { api } from "../../trpc/react";
 import { BusTag } from "./tags";
 import { splitByKeywords } from "./util";
 
@@ -67,8 +67,9 @@ export function ServiceInfoProvider({
               Loading alert for today...
             </div>
           ) : !data || data.length == 0 ? (
-            <div className="text-center text-base">
-              No alert for today! Have a nice day.
+            <div className="py-12 text-center text-base">
+              No alert for today! <br />
+              Have a nice day.
             </div>
           ) : (
             <div className="flex flex-col gap-2 p-3 pb-0">
