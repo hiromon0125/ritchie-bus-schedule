@@ -14,6 +14,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import type { Bus } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
 import _ from "lodash";
+import { type Metadata } from "next";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
@@ -22,11 +23,30 @@ import { IoMdInformationCircle } from "react-icons/io";
 import { MdDirectionsBus } from "react-icons/md";
 import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
-
-export default async function Page(props: {
+type Props = {
   params: Promise<{ stopId: string }>;
   searchParams: Promise<{ busId?: string }>;
-}) {
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
+  const stopId = parseInt(params.stopId);
+  if (Number.isNaN(stopId)) {
+    throw TRPCClientError.from(
+      Error(`Stop not found (stop id: ${params.stopId})`),
+    );
+  }
+  const stop = await api.stops.getOneByID({ id: stopId });
+  if (!stop) {
+    throw TRPCClientError.from(Error(`Stop not found (stop id: ${stopId})`));
+  }
+  return {
+    title: `${stop.tag??stop.id} ${stop.name} | RIT Bus Schedule`,
+    description: stop.description,
+  };
+}
+
+export default async function Page(props: Props) {
   const searchParams = await props.searchParams;
 
   const { busId: rawSelectedBusId } = searchParams;
