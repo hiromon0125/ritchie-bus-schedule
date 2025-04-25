@@ -9,7 +9,7 @@ export const dynamic = "auto";
 
 export const metadata: Metadata = {
   title: "Bus Routes | RIT Bus Schedule",
-  description: "Discover all available bus routes and navigate to detailed pages for each route. Stay informed about bus schedules, stops, and more."
+  description: "Discover all available bus routes and navigate to detailed pages for each route. Stay informed about bus schedules, stops, and more.",
 }
 
 export default async function BusPageList() {

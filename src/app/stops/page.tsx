@@ -2,12 +2,18 @@ import { FavBtn } from "@/favBtn";
 import { BusTag, StopTag } from "@/tags";
 import { currentUser } from "@clerk/nextjs/server";
 import _ from "lodash";
+import { type Metadata } from "next";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "t/server";
 
 export const dynamic = "auto";
+
+export const metadata: Metadata = {
+  title: "Bus Stops | RIT Bus Schedule",
+  description: "Discover all available bus stops and navigate to detailed pages for each stop. Stay informed about bus schedules, stops, and more.",
+}
 
 async function handleFavorite(stopId: number, isFav: boolean) {
   await api.favorite[isFav ? "delStop" : "addStop"]({ stopId });
