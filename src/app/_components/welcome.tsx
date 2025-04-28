@@ -40,6 +40,7 @@ export default function WelcomePopup() {
               alt="banner"
               height={1201}
               width={630}
+              loading="eager"
             />
           </div>
           <div className="h-3 w-full bg-linear-to-b from-[#e1ecf7] to-[#e1ecf700]" />
