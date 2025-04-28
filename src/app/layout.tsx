@@ -71,6 +71,9 @@ export const metadata: Metadata = {
   title: "Ritchie's Bus Schedule",
   description:
     "Best application to check the Rochester Institute of Technology Bus Schedule",
+  alternates: {
+    canonical: "/",
+  },
   applicationName: "Ritchie's Bus Schedule",
   appleWebApp: true,
   authors: [
@@ -82,14 +85,6 @@ export const metadata: Metadata = {
       name: "Sam Ruan",
       url: "https://github.com/0SMA0",
     },
-  ],
-  keywords: [
-    "RIT",
-    "Bus",
-    "Schedule",
-    "Ritchie",
-    "Rochester Institute of Technology",
-    "RIT Bus Schedule",
   ],
   robots: "index, follow",
   openGraph: {
