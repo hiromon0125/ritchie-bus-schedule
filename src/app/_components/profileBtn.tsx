@@ -1,5 +1,3 @@
-"use client";
-
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { TbLogin2 } from "react-icons/tb";
 import ProfileButton from "./userButton";
@@ -17,10 +15,7 @@ export default function ProfileBtn() {
         </SignInButton>
       </SignedOut>
       <SignedIn>
-        <div
-          className="flex h-12 w-12 flex-col items-center justify-center rounded-full"
-          suppressHydrationWarning
-        >
+        <div className="flex h-12 w-12 flex-col items-center justify-center rounded-full">
           <ProfileButton />
         </div>
       </SignedIn>

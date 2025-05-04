@@ -4,127 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@clerk/nextjs':
-    specifier: ^4.29.12
-    version: 4.29.12(next@14.1.4)(react-dom@18.2.0)(react@18.2.0)
-  '@prisma/client':
-    specifier: ^5.13.0
-    version: 5.13.0(prisma@5.13.0)
-  '@t3-oss/env-nextjs':
-    specifier: ^0.7.3
-    version: 0.7.3(typescript@5.4.4)(zod@3.22.4)
-  '@tanstack/react-query':
-    specifier: ^4.36.1
-    version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
-  '@trpc/client':
-    specifier: ^10.45.2
-    version: 10.45.2(@trpc/server@10.45.2)
-  '@trpc/next':
-    specifier: ^10.45.2
-    version: 10.45.2(@tanstack/react-query@4.36.1)(@trpc/client@10.45.2)(@trpc/react-query@10.45.2)(@trpc/server@10.45.2)(next@14.1.4)(react-dom@18.2.0)(react@18.2.0)
-  '@trpc/react-query':
-    specifier: ^10.45.2
-    version: 10.45.2(@tanstack/react-query@4.36.1)(@trpc/client@10.45.2)(@trpc/server@10.45.2)(react-dom@18.2.0)(react@18.2.0)
-  '@trpc/server':
-    specifier: ^10.45.2
-    version: 10.45.2
-  '@types/lodash':
-    specifier: ^4.17.0
-    version: 4.17.0
-  '@uidotdev/usehooks':
-    specifier: ^2.4.1
-    version: 2.4.1(react-dom@18.2.0)(react@18.2.0)
-  lodash:
-    specifier: ^4.17.21
-    version: 4.17.21
-  luxon:
-    specifier: ^3.4.4
-    version: 3.4.4
-  moment:
-    specifier: ^2.30.1
-    version: 2.30.1
-  next:
-    specifier: ^14.1.4
-    version: 14.1.4(react-dom@18.2.0)(react@18.2.0)
-  react:
-    specifier: 18.2.0
-    version: 18.2.0
-  react-dom:
-    specifier: 18.2.0
-    version: 18.2.0(react@18.2.0)
-  react-fast-marquee:
-    specifier: ^1.6.4
-    version: 1.6.4(react-dom@18.2.0)(react@18.2.0)
-  react-icons:
-    specifier: ^4.12.0
-    version: 4.12.0(react@18.2.0)
-  react-select:
-    specifier: ^5.8.0
-    version: 5.8.0(@types/react@18.2.74)(react-dom@18.2.0)(react@18.2.0)
-  react-tooltip:
-    specifier: ^5.26.4
-    version: 5.26.4(react-dom@18.2.0)(react@18.2.0)
-  server-only:
-    specifier: ^0.0.1
-    version: 0.0.1
-  superjson:
-    specifier: ^2.2.1
-    version: 2.2.1
-  zod:
-    specifier: ^3.22.4
-    version: 3.22.4
-
-devDependencies:
-  '@next/eslint-plugin-next':
-    specifier: ^14.1.4
-    version: 14.1.4
-  '@types/eslint':
-    specifier: ^8.56.7
-    version: 8.56.7
-  '@types/luxon':
-    specifier: ^3.4.2
-    version: 3.4.2
-  '@types/node':
-    specifier: ^18.19.30
-    version: 18.19.30
-  '@types/react':
-    specifier: ^18.2.74
-    version: 18.2.74
-  '@types/react-dom':
-    specifier: ^18.2.24
-    version: 18.2.24
-  '@typescript-eslint/eslint-plugin':
-    specifier: ^6.21.0
-    version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(typescript@5.4.4)
-  '@typescript-eslint/parser':
-    specifier: ^6.21.0
-    version: 6.21.0(eslint@8.57.0)(typescript@5.4.4)
-  autoprefixer:
-    specifier: ^10.4.19
-    version: 10.4.19(postcss@8.4.38)
-  eslint:
-    specifier: ^8.57.0
-    version: 8.57.0
-  postcss:
-    specifier: ^8.4.38
-    version: 8.4.38
-  prettier:
-    specifier: ^3.2.5
-    version: 3.2.5
-  prettier-plugin-tailwindcss:
-    specifier: ^0.5.13
-    version: 0.5.13(prettier@3.2.5)
-  prisma:
-    specifier: ^5.13.0
-    version: 5.13.0
-  tailwindcss:
-    specifier: ^3.4.3
-    version: 3.4.3
-  typescript:
-    specifier: ^5.4.4
-    version: 5.4.4
-
 importers:
 
   .:
@@ -167,13 +46,13 @@ importers:
         version: 5.71.0(react@19.1.0)
       '@trpc/client':
         specifier: 11.0.1
-        version: 11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2)
+        version: 11.0.1(@trpc/server@11.1.1(typescript@5.8.2))(typescript@5.8.2)
       '@trpc/react-query':
         specifier: 11.0.1
-        version: 11.0.1(@tanstack/react-query@5.71.0(react@19.1.0))(@trpc/client@11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.0.1(typescript@5.8.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
+        version: 11.0.1(@tanstack/react-query@5.71.0(react@19.1.0))(@trpc/client@11.0.1(@trpc/server@11.1.1(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.1.1(typescript@5.8.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
       '@trpc/server':
-        specifier: 11.0.1
-        version: 11.0.1(typescript@5.8.2)
+        specifier: 11.1.1
+        version: 11.1.1(typescript@5.8.2)
       '@types/lodash':
         specifier: ^4.17.16
         version: 4.17.16
@@ -1375,8 +1254,8 @@ packages:
       react-dom: '>=18.2.0'
       typescript: '>=5.7.2'
 
-  '@trpc/server@11.0.1':
-    resolution: {integrity: sha512-DZS3+bONLno4oJjHBMrS3xRPtoZsnmBImDH/Mmo1QhaFt3Xp/S0Riu7WU/oofsLTVj2m1UO5LlgLJFumvlSNoQ==}
+  '@trpc/server@11.1.1':
+    resolution: {integrity: sha512-ZjPN3ypBHvGMAlMgeZPrxlRcH/3dn4AK0s5Ph1z+E6uiAvIQVCj7ZoMlXeeBsIy4THGDAk953jHVW2kMnlbb4g==}
     peerDependencies:
       typescript: '>=5.7.2'
 
@@ -3197,6 +3076,127 @@ packages:
   zod@3.24.2:
     resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
 
+dependencies:
+  '@clerk/nextjs':
+    specifier: ^4.29.12
+    version: 4.29.12(next@14.1.4)(react-dom@18.2.0)(react@18.2.0)
+  '@prisma/client':
+    specifier: ^5.13.0
+    version: 5.13.0(prisma@5.13.0)
+  '@t3-oss/env-nextjs':
+    specifier: ^0.7.3
+    version: 0.7.3(typescript@5.4.4)(zod@3.22.4)
+  '@tanstack/react-query':
+    specifier: ^4.36.1
+    version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
+  '@trpc/client':
+    specifier: ^10.45.2
+    version: 10.45.2(@trpc/server@10.45.2)
+  '@trpc/next':
+    specifier: ^10.45.2
+    version: 10.45.2(@tanstack/react-query@4.36.1)(@trpc/client@10.45.2)(@trpc/react-query@10.45.2)(@trpc/server@10.45.2)(next@14.1.4)(react-dom@18.2.0)(react@18.2.0)
+  '@trpc/react-query':
+    specifier: ^10.45.2
+    version: 10.45.2(@tanstack/react-query@4.36.1)(@trpc/client@10.45.2)(@trpc/server@10.45.2)(react-dom@18.2.0)(react@18.2.0)
+  '@trpc/server':
+    specifier: ^10.45.2
+    version: 10.45.2
+  '@types/lodash':
+    specifier: ^4.17.0
+    version: 4.17.0
+  '@uidotdev/usehooks':
+    specifier: ^2.4.1
+    version: 2.4.1(react-dom@18.2.0)(react@18.2.0)
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
+  luxon:
+    specifier: ^3.4.4
+    version: 3.4.4
+  moment:
+    specifier: ^2.30.1
+    version: 2.30.1
+  next:
+    specifier: ^14.1.4
+    version: 14.1.4(react-dom@18.2.0)(react@18.2.0)
+  react:
+    specifier: 18.2.0
+    version: 18.2.0
+  react-dom:
+    specifier: 18.2.0
+    version: 18.2.0(react@18.2.0)
+  react-fast-marquee:
+    specifier: ^1.6.4
+    version: 1.6.4(react-dom@18.2.0)(react@18.2.0)
+  react-icons:
+    specifier: ^4.12.0
+    version: 4.12.0(react@18.2.0)
+  react-select:
+    specifier: ^5.8.0
+    version: 5.8.0(@types/react@18.2.74)(react-dom@18.2.0)(react@18.2.0)
+  react-tooltip:
+    specifier: ^5.26.4
+    version: 5.26.4(react-dom@18.2.0)(react@18.2.0)
+  server-only:
+    specifier: ^0.0.1
+    version: 0.0.1
+  superjson:
+    specifier: ^2.2.1
+    version: 2.2.1
+  zod:
+    specifier: ^3.22.4
+    version: 3.22.4
+
+devDependencies:
+  '@next/eslint-plugin-next':
+    specifier: ^14.1.4
+    version: 14.1.4
+  '@types/eslint':
+    specifier: ^8.56.7
+    version: 8.56.7
+  '@types/luxon':
+    specifier: ^3.4.2
+    version: 3.4.2
+  '@types/node':
+    specifier: ^18.19.30
+    version: 18.19.30
+  '@types/react':
+    specifier: ^18.2.74
+    version: 18.2.74
+  '@types/react-dom':
+    specifier: ^18.2.24
+    version: 18.2.24
+  '@typescript-eslint/eslint-plugin':
+    specifier: ^6.21.0
+    version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.57.0)(typescript@5.4.4)
+  '@typescript-eslint/parser':
+    specifier: ^6.21.0
+    version: 6.21.0(eslint@8.57.0)(typescript@5.4.4)
+  autoprefixer:
+    specifier: ^10.4.19
+    version: 10.4.19(postcss@8.4.38)
+  eslint:
+    specifier: ^8.57.0
+    version: 8.57.0
+  postcss:
+    specifier: ^8.4.38
+    version: 8.4.38
+  prettier:
+    specifier: ^3.2.5
+    version: 3.2.5
+  prettier-plugin-tailwindcss:
+    specifier: ^0.5.13
+    version: 0.5.13(prettier@3.2.5)
+  prisma:
+    specifier: ^5.13.0
+    version: 5.13.0
+  tailwindcss:
+    specifier: ^3.4.3
+    version: 3.4.3
+  typescript:
+    specifier: ^5.4.4
+    version: 5.4.4
+
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
@@ -4119,21 +4119,21 @@ snapshots:
       '@tanstack/query-core': 5.71.0
       react: 19.1.0
 
-  '@trpc/client@11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2)':
+  '@trpc/client@11.0.1(@trpc/server@11.1.1(typescript@5.8.2))(typescript@5.8.2)':
     dependencies:
-      '@trpc/server': 11.0.1(typescript@5.8.2)
+      '@trpc/server': 11.1.1(typescript@5.8.2)
       typescript: 5.8.2
 
-  '@trpc/react-query@11.0.1(@tanstack/react-query@5.71.0(react@19.1.0))(@trpc/client@11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.0.1(typescript@5.8.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.2)':
+  '@trpc/react-query@11.0.1(@tanstack/react-query@5.71.0(react@19.1.0))(@trpc/client@11.0.1(@trpc/server@11.1.1(typescript@5.8.2))(typescript@5.8.2))(@trpc/server@11.1.1(typescript@5.8.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.2)':
     dependencies:
       '@tanstack/react-query': 5.71.0(react@19.1.0)
-      '@trpc/client': 11.0.1(@trpc/server@11.0.1(typescript@5.8.2))(typescript@5.8.2)
-      '@trpc/server': 11.0.1(typescript@5.8.2)
+      '@trpc/client': 11.0.1(@trpc/server@11.1.1(typescript@5.8.2))(typescript@5.8.2)
+      '@trpc/server': 11.1.1(typescript@5.8.2)
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
       typescript: 5.8.2
 
-  '@trpc/server@11.0.1(typescript@5.8.2)':
+  '@trpc/server@11.1.1(typescript@5.8.2)':
     dependencies:
       typescript: 5.8.2
 
