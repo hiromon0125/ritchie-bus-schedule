@@ -14,8 +14,8 @@ export default function NotFound() {
   return (
     <main className="text-foreground xs:[--margin:24px] flex min-h-screen w-full flex-col items-center gap-3 py-2 [--margin:8px] [--sm-max-w:calc(100%-var(--margin))]">
       <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-col gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">
-        <div className="bg-item-background rounded-xl p-3">
-          <div className="flex flex-row items-center">
+        <div className="bg-item-background flex flex-col gap-3 rounded-xl p-3">
+          <div className="flex flex-col items-center not-md:pb-2 sm:flex-row">
             <Image
               src="/images/big-sad-bus.png"
               alt="Sad Bus"
@@ -25,17 +25,17 @@ export default function NotFound() {
               loading="eager"
             />
             <div className="flex flex-col gap-2">
-              <h1 className="xs:text-5xl m-0 text-xl font-bold">
+              <h1 className="xs:text-2xl m-0 text-xl font-bold md:text-5xl">
                 404 Page Not Found
               </h1>
-              <p className="text-xl font-bold">
+              <p className="text-base font-bold md:text-xl">
                 Sorry, the page you are looking for does not exist...
               </p>
             </div>
           </div>
-          <div className="flex flex-row items-end justify-between">
-            <div className="flex flex-row items-center gap-3">
-              <Button className="bg-accent" asChild>
+          <div className="flex flex-col items-end justify-between gap-4 sm:flex-row">
+            <div className="flex w-full flex-col items-center gap-3 sm:flex-row">
+              <Button className="bg-accent not-sm:w-full" asChild>
                 <Link href="/">
                   <HiMiniHome />
                   Home
@@ -43,7 +43,7 @@ export default function NotFound() {
               </Button>
               <Button
                 variant="outline"
-                className="border-primary border-2"
+                className="border-primary border-2 not-sm:w-full"
                 asChild
               >
                 <BackBtn>
