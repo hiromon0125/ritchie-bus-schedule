@@ -5,6 +5,7 @@ import { TiArrowBack } from "react-icons/ti";
 import { version } from "../../package.json";
 import { Button } from "../components/ui/button";
 import { BackBtn } from "./_components/backBtn";
+
 export default function NotFound() {
   return (
     <main className="text-foreground xs:[--margin:24px] flex min-h-screen w-full flex-col items-center gap-3 py-2 [--margin:8px] [--sm-max-w:calc(100%-var(--margin))]">
@@ -16,11 +17,13 @@ export default function NotFound() {
               alt="Sad Bus"
               width={160}
               height={160}
+              title="Sad Bus"
+              loading="eager"
             />
             <div className="flex flex-col gap-2">
-              <h2 className="xs:text-5xl m-0 text-xl font-bold">
-                404 Not Found
-              </h2>
+              <h1 className="xs:text-5xl m-0 text-xl font-bold">
+                404 Page Not Found
+              </h1>
               <p className="text-xl font-bold">
                 Sorry, the page you are looking for does not exist...
               </p>
