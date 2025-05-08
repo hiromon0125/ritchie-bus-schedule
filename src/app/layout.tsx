@@ -12,6 +12,7 @@ import { dark } from "@clerk/themes";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
 import { Toaster } from "~/components/ui/sonner";
+import { APPCONFIG } from "../appconfig";
 import { AlertNavBtn } from "./_components/alertNavigationBtn";
 
 const inter = Inter({
@@ -67,14 +68,13 @@ export async function generateViewport() {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rit-bus.app"),
-  title: "Ritchie's Bus Schedule",
-  description:
-    "Best application to check the Rochester Institute of Technology Bus Schedule",
+  metadataBase: new URL(APPCONFIG.DOMAIN),
+  title: APPCONFIG.APP_NAME,
+  applicationName: APPCONFIG.APP_NAME,
+  description: APPCONFIG.DESCRIPTION_LONG,
   alternates: {
     canonical: "/",
   },
-  applicationName: "Ritchie's Bus Schedule",
   appleWebApp: true,
   authors: [
     {
@@ -91,11 +91,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "/",
-    siteName: "Ritchie's Bus Schedule",
+    siteName: APPCONFIG.APP_NAME,
     images: [
       {
         url: "/ritches-bus-schedule-banner.png",
-        alt: "RIT Bus Schedule",
+        alt: APPCONFIG.APP_TITLE,
       },
     ],
   },
@@ -103,13 +103,12 @@ export const metadata: Metadata = {
     site: "@ritbus",
     card: "summary_large_image",
     creator: "@takeuchi_hiroto",
-    title: "Ritchie's Bus Schedule",
-    description:
-      "Best application to check the Rochester Institute of Technology Bus Schedule",
+    title: APPCONFIG.APP_NAME,
+    description: APPCONFIG.DESCRIPTION_LONG,
     images: [
       {
         url: "/ritches-bus-schedule-banner.png",
-        alt: "RIT Bus Schedule",
+        alt: APPCONFIG.APP_TITLE,
       },
     ],
   },

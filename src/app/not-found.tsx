@@ -2,12 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { HiMiniHome } from "react-icons/hi2";
 import { TiArrowBack } from "react-icons/ti";
-import { version } from "../../package.json";
+import { APPCONFIG } from "../appconfig";
 import { Button } from "../components/ui/button";
 import { BackBtn } from "./_components/backBtn";
 
 export const metadata = {
-  title: "404 Not found | Ritchie's Bus Schedule",
+  title: `404 Not found | ${APPCONFIG.APP_TITLE}`,
 };
 
 export default function NotFound() {
@@ -53,13 +53,9 @@ export default function NotFound() {
               </Button>
             </div>
             <div className="flex flex-col items-end">
-              <p className="px-4 text-sm">Version: {version}</p>
+              <p className="px-4 text-sm">Version: {APPCONFIG.VERSION}</p>
               <Button variant="link" asChild>
-                <Link
-                  href={
-                    "https://github.com/hiromon0125/ritchie-bus-schedule/issues"
-                  }
-                >
+                <Link href={APPCONFIG.GITHUB_ISSUE}>
                   Report a broken link...
                 </Link>
               </Button>

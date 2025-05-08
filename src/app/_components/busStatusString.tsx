@@ -98,7 +98,7 @@ export function BusStatusStringBig({
   );
 }
 
-export function StatusBlob({ status }: { status?: BusMovingStatus }) {
+function StatusBlob({ status }: { status?: BusMovingStatus }) {
   const activityColor = ACTIVITY_COLOR[status ?? "out-of-service"];
   return (
     <div

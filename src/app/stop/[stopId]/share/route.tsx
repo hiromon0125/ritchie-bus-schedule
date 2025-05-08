@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 import path from "path";
+import { APPCONFIG } from "../../../../appconfig";
 import { StopQRCode } from "./_qrcode";
 
 async function image(
@@ -53,7 +54,7 @@ async function image(
           />
           <div tw="flex flex-col ml-5">
             <h1 tw="text-4xl font-bold mb-0 mt-0">Need a bus schedule?</h1>
-            <p tw="text-3xl font-bold mb-0 mt-0">Try Ritchie's Bus Schedule!</p>
+            <p tw="text-3xl font-bold mb-0 mt-0">Try {APPCONFIG.APP_NAME}!</p>
           </div>
         </div>
         <StopQRCode req={req} stopId={stopId} />

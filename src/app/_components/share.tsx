@@ -12,8 +12,9 @@ import {
   TwitterShareButton,
   XIcon,
 } from "react-share";
+import { APPCONFIG } from "../../appconfig";
 export function Share() {
-  const url = "rit-bus.app";
+  const url = APPCONFIG.DOMAIN;
   const title = "Check this new RIT bus app I found!";
   const hashtags = ["RIT"];
   return (
@@ -21,7 +22,7 @@ export function Share() {
       <RedditShareButton
         title={title}
         url={url}
-        className=" flex flex-row items-center gap-3"
+        className="flex flex-row items-center gap-3"
         aria-label="Share on Reddit"
       >
         <RedditIcon round size={36} />

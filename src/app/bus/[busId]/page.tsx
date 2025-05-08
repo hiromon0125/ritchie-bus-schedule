@@ -21,14 +21,16 @@ import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { IoMdInformationCircle } from "react-icons/io";
 import { api } from "t/server";
+import { APPCONFIG } from "../../../appconfig";
 type Props = {
   params: Promise<{ busId: string }>;
-  searchParams: Promise<{ stopId?: string | string[] | undefined }>;
+  searchParams: Promise<{ stopId?: string | undefined }>;
   timetable: React.ReactNode;
 };
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
+  const { stopId } = await props.searchParams;
   const busId = parseInt(params.busId);
   if (Number.isNaN(busId)) {
     throw TRPCClientError.from(
@@ -40,8 +42,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     throw TRPCClientError.from(Error(`Bus not found (bus id: ${busId})`));
   }
   return {
-    title: `${bus.tag??bus.id} ${bus.name} | RIT Bus Schedule`,
+    title: `${bus.tag ?? bus.id} ${bus.name} | ${APPCONFIG.APP_TITLE}`,
     description: bus.description,
+    alternates: {
+      canonical: `/bus/${busId}${stopId ? `?stopId=${stopId}` : ""}`,
+    },
   };
 }
 

@@ -1,6 +1,7 @@
 import { TRPCClientError } from "@trpc/client";
 import Link from "next/link";
 import { api } from "t/server";
+import { APPCONFIG } from "../../../appconfig";
 
 export default async function Layout({
   children,
@@ -38,7 +39,7 @@ export default async function Layout({
             Rate My Ride
           </h2>
           <Link
-            href={`https://ritbus.info/report?redirect=rit-bus.app/bus/${bus.id}&route=${bus.id}%20-%20${bus.name.replace(
+            href={`${APPCONFIG.RATE}?redirect=${APPCONFIG.DOMAIN}/bus/${bus.id}&route=${bus.id}%20-%20${bus.name.replace(
               / /g,
               "%20",
             )}`}

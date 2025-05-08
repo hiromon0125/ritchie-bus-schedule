@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
+import { APPCONFIG } from "../appconfig";
 import { db } from "../server/db";
 
-const URL = `https://www.rit-bus.app`;
+const URL = APPCONFIG.DOMAIN;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const buses = await db.bus.findMany({

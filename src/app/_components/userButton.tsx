@@ -14,6 +14,7 @@ import {
 } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
 import { api } from "t/react";
+import { APPCONFIG } from "../../appconfig";
 import { cn } from "../../lib/utils";
 import { ServiceInfoContext } from "./serviceinfo";
 
@@ -94,7 +95,7 @@ export default function ProfileButton() {
           }}
         />
         <UserButton.Link
-          href="https://ritbus.info/report?redirect=rit-bus.app"
+          href={`${APPCONFIG.RATE}?redirect=${APPCONFIG.DOMAIN}`}
           label="Rate My Ride!"
           labelIcon={<FaRegStar size={16} />}
         />
