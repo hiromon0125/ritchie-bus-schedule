@@ -7,13 +7,18 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "t/server";
+import { APPCONFIG } from "../../appconfig";
 
 export const dynamic = "auto";
 
 export const metadata: Metadata = {
-  title: "Bus Stops | RIT Bus Schedule",
-  description: "Discover all available bus stops and navigate to detailed pages for each stop. Stay informed about bus schedules, stops, and more.",
-}
+  title: `Bus Stops | ${APPCONFIG.APP_TITLE}`,
+  description:
+    "Discover all available bus stops and navigate to detailed pages for each stop. Stay informed about bus schedules, stops, and more.",
+  alternates: {
+    canonical: "/stops",
+  },
+};
 
 async function handleFavorite(stopId: number, isFav: boolean) {
   await api.favorite[isFav ? "delStop" : "addStop"]({ stopId });

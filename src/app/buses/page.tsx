@@ -4,13 +4,18 @@ import { type Metadata } from "next";
 import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "t/server";
+import { APPCONFIG } from "../../appconfig";
 
 export const dynamic = "auto";
 
 export const metadata: Metadata = {
-  title: "Bus Routes | RIT Bus Schedule",
-  description: "Discover all available bus routes and navigate to detailed pages for each route. Stay informed about bus schedules, stops, and more.",
-}
+  title: `Bus Routes | ${APPCONFIG.APP_TITLE}`,
+  description:
+    "Discover all available bus routes and navigate to detailed pages for each route. Stay informed about bus schedules, stops, and more.",
+  alternates: {
+    canonical: "/buses",
+  },
+};
 
 export default async function BusPageList() {
   const buses = await api.bus.getAll();

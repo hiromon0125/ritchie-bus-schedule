@@ -6,6 +6,7 @@ import { LuClockAlert } from "react-icons/lu";
 import { MdDirectionsBus } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
 import { api } from "t/server";
+import { APPCONFIG } from "../../appconfig";
 import Coffee from "./buymecoffee";
 import { ProfileBtnComponent } from "./profileBtnWrapper";
 import ServiceInfoButton from "./serviceinfo";
@@ -24,10 +25,10 @@ function Footer() {
                 width={60}
                 height={60}
                 className="scale-75 md:scale-100"
-                title="Ritchie's Bus Schedule Logo"
+                title={`${APPCONFIG.APP_NAME} Logo`}
               />
               <h2 className="text-lg text-slate-200 md:text-2xl">
-                Ritchie's Bus Schedule
+                {APPCONFIG.APP_NAME}
               </h2>
             </div>
             <p className="text-sm sm:text-base md:hidden">
@@ -90,16 +91,10 @@ function Footer() {
                 <Link className="text-slate-300" href="/about">
                   About
                 </Link>
-                <a
-                  className="text-slate-300"
-                  href="https://github.com/hiromon0125/ritchie-bus-schedule"
-                >
+                <a className="text-slate-300" href={APPCONFIG.GITHUB_REPO}>
                   Repository
                 </a>
-                <a
-                  className="text-slate-300"
-                  href="https://github.com/hiromon0125/ritchie-bus-schedule/issues"
-                >
+                <a className="text-slate-300" href={APPCONFIG.GITHUB_ISSUE}>
                   Report Issues
                 </a>
               </div>

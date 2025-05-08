@@ -23,13 +23,15 @@ import { IoMdInformationCircle } from "react-icons/io";
 import { MdDirectionsBus } from "react-icons/md";
 import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
+import { APPCONFIG } from "../../../appconfig";
 type Props = {
   params: Promise<{ stopId: string }>;
   searchParams: Promise<{ busId?: string }>;
-}
+};
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
+  const { busId } = await props.searchParams;
   const stopId = parseInt(params.stopId);
   if (Number.isNaN(stopId)) {
     throw TRPCClientError.from(
@@ -41,8 +43,11 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     throw TRPCClientError.from(Error(`Stop not found (stop id: ${stopId})`));
   }
   return {
-    title: `${stop.tag??stop.id} ${stop.name} | RIT Bus Schedule`,
+    title: `${stop.tag ?? stop.id} ${stop.name} | ${APPCONFIG.APP_TITLE}`,
     description: stop.description,
+    alternates: {
+      canonical: `/stop/${stop.id}${busId ? `?busId=${busId}` : ""}`,
+    },
   };
 }
 
@@ -195,7 +200,7 @@ export default async function Page(props: Props) {
             Rate this bus
           </h2>
           <Link
-            href={`https://ritbus.info/report?redirect=rit-bus.app/stop/${currentStop.id}&stop=${currentStop.name.replace(" ", "%20")}&route=${selectedBus.id}%20-%20${selectedBus.name.replace(" ", "%20")}`}
+            href={`${APPCONFIG.RATE}?redirect=${APPCONFIG.DOMAIN}/stop/${currentStop.id}&stop=${currentStop.name.replace(" ", "%20")}&route=${selectedBus.id}%20-%20${selectedBus.name.replace(" ", "%20")}`}
             className="rounded-md bg-blue-600 p-3 text-white"
           >
             Rate!

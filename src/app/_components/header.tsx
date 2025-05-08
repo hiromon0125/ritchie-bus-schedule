@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { type JSX } from "react";
 import { MdDirectionsBus } from "react-icons/md";
 import { TbRoute } from "react-icons/tb";
+import { APPCONFIG } from "../../appconfig";
 import { ProfileBtnComponent } from "./profileBtnWrapper";
 
 const PATH_TO_HEADER_TAG: Record<string, keyof JSX.IntrinsicElements> = {
@@ -31,11 +32,11 @@ export default function Header({
               alt="Logo"
               width={48}
               height={48}
-              title="Ritchie's Bus Schedule Logo"
+              title={`${APPCONFIG.APP_NAME} Logo`}
               loading="eager"
             />
             <TitleTag className="m-0 text-lg font-semibold max-[450px]:hidden min-[850px]:text-xl lg:text-2xl">
-              Ritchie's Bus Schedule
+              {APPCONFIG.APP_NAME}
             </TitleTag>
           </Link>
           <nav

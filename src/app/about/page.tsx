@@ -1,8 +1,19 @@
 import Subtitle from "@/about/subtitle";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import aboutStyles from "~/styles/about.module.css";
+import { APPCONFIG } from "../../appconfig";
 export const dynamic = "auto";
+
+export const metadata: Metadata = {
+  title: `About This App | ${APPCONFIG.APP_TITLE}`,
+  description:
+    "Learn more about the app, its purpose, and the development journey.",
+  alternates: {
+    canonical: "/about",
+  },
+};
 
 function KeyScrollTitle() {
   return (
@@ -22,7 +33,7 @@ function Page() {
       <div className="flex h-[30vh] max-h-[600px] w-screen flex-col items-center justify-center overflow-hidden bg-[#E1ECF7] md:h-[70vh]">
         <Image
           src="/ritches-bus-schedule-banner-uiux.png"
-          alt="Ritche's Bus Schedule"
+          alt={APPCONFIG.APP_NAME}
           className="max-w-(--breakpoint-lg)"
           width={1200}
           height={630}
@@ -44,12 +55,12 @@ function Page() {
             <div className="rounded-md">
               <Subtitle>Welcome!</Subtitle>
               <p className="md:text-xl">
-                Welcome to Ritchie&#39;s Bus Schedule! <br /> This web app is
-                dedicated to helping students at Rochester Institute of
-                Technology (RIT) navigate the campus bus system more
-                efficiently. If you&#39;ve ever found yourself frustrated with
-                missing the bus or spending too much time navigating the RIT
-                website to find bus schedules, this app is designed for you.
+                Welcome to {APPCONFIG.APP_NAME} <br /> This web app is dedicated
+                to helping students at Rochester Institute of Technology (RIT)
+                navigate the campus bus system more efficiently. If you&#39;ve
+                ever found yourself frustrated with missing the bus or spending
+                too much time navigating the RIT website to find bus schedules,
+                this app is designed for you.
               </p>
             </div>
           </div>
@@ -60,7 +71,7 @@ function Page() {
           >
             <Subtitle>Purpose and Motivation</Subtitle>
             <p className="md:text-xl">
-              The primary goal of Ritchie&#39;s Bus Schedule is to provide a
+              The primary goal of {APPCONFIG.APP_NAME} is to provide a
               convenient and user-friendly way for students to determine the
               current status of RIT buses based on the time schedule provided by
               RIT. The motivation for this project stemmed from personal
@@ -176,9 +187,9 @@ function Page() {
               team has recently expanded to include another developer, Sam Ruan.
             </p>
             <p className="text-lg">
-              Ritchie&#39;s Bus Schedule leverages the powerful t3 tech stack,
-              which includes Next.js, React, and Tailwind for the frontend, tRPC
-              for remote procedure calls, Drizzle ORM for database interactions,
+              {APPCONFIG.APP_NAME} leverages the powerful t3 tech stack, which
+              includes Next.js, React, and Tailwind for the frontend, tRPC for
+              remote procedure calls, Drizzle ORM for database interactions,
               Vercel for API and hosting, and Supabase as the database. This
               modern stack ensures a robust and scalable application.
             </p>
@@ -188,7 +199,7 @@ function Page() {
           <div className="relative m-auto flex max-w-(--breakpoint-lg) flex-row flex-wrap justify-around gap-6 py-8">
             <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center rounded-lg">
               <Image
-                className={` ${aboutStyles.logo} h-[40px]`}
+                className={`${aboutStyles.logo} h-[40px]`}
                 src="/logo/nextjs.svg"
                 alt="next js"
                 width={(394 / 80) * 150}
@@ -206,7 +217,7 @@ function Page() {
             </div>
             <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className={` ${aboutStyles.logo} h-[50px]`}
+                className={`${aboutStyles.logo} h-[50px]`}
                 src="/logo/tailwindtype.svg"
                 alt="tailwind"
                 width={(263 / 34) * 150}
@@ -215,7 +226,7 @@ function Page() {
             </div>
             <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className={` ${aboutStyles.logo} h-[50px]`}
+                className={`${aboutStyles.logo} h-[50px]`}
                 src="/logo/supabase.svg"
                 alt="supabase"
                 width={(581 / 113) * 150}
@@ -224,7 +235,7 @@ function Page() {
             </div>
             <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center pt-[6px]">
               <Image
-                className={` ${aboutStyles.logo} h-[50px]`}
+                className={`${aboutStyles.logo} h-[50px]`}
                 src="/logo/drizzle.svg"
                 alt="drizzle"
                 width={(732 / 80) * 150}
@@ -233,7 +244,7 @@ function Page() {
             </div>
             <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className={` ${aboutStyles.logo} h-[50px]`}
+                className={`${aboutStyles.logo} h-[50px]`}
                 src="/logo/trpc.svg"
                 alt="trpc"
                 width={(429 / 128) * 150}
@@ -242,7 +253,7 @@ function Page() {
             </div>
             <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
               <Image
-                className={` ${aboutStyles.logo} h-[45px]`}
+                className={`${aboutStyles.logo} h-[45px]`}
                 src="/logo/vercel.svg"
                 alt="vercel"
                 width={(4438 / 1000) * 150}
@@ -356,11 +367,11 @@ function Page() {
             <div className="relative ml-24 flex h-[57vh] flex-col justify-center gap-2 pt-28">
               <p className="text-4xl">Try the App!</p>
               <p className="md:text-xl">
-                Ritchie&#39;s Bus Schedule is a testament to the power of
-                innovation driven by personal need and community benefit. As the
-                app continues to evolve, it promises to make navigating the RIT
-                bus system easier and more efficient for all students. We hope
-                you find the app as useful and transformative as we do.
+                {APPCONFIG.APP_NAME} is a testament to the power of innovation
+                driven by personal need and community benefit. As the app
+                continues to evolve, it promises to make navigating the RIT bus
+                system easier and more efficient for all students. We hope you
+                find the app as useful and transformative as we do.
               </p>
               <div className="absolute right-6 bottom-2 flex flex-row items-center gap-4 md:right-32">
                 <Link

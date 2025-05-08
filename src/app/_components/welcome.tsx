@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
+import { APPCONFIG } from "../../appconfig";
 import Coffee from "./buymecoffee";
 import ServiceInfoButton, { ServiceInfoContext } from "./serviceinfo";
 
@@ -49,7 +50,7 @@ export default function WelcomePopup() {
           <DialogHeader>
             <DialogTitle className="text-center text-2xl">Welcome!</DialogTitle>
             <DialogDescription className="pb-4 text-base">
-              Richie’s Bus Schedule is a seemless tool for quickly finding the
+              {APPCONFIG.APP_NAME} is a seemless tool for quickly finding the
               next bus arrival, keeping you focused on school.
             </DialogDescription>
             <div className="flex flex-col gap-2">
@@ -98,7 +99,7 @@ export default function WelcomePopup() {
                     size="sm"
                     className="aspect-square rounded-lg border-2 border-black p-0 font-mono text-lg text-black hover:bg-black hover:text-white"
                   >
-                    <a href="https://github.com/hiromon0125/ritchie-bus-schedule">
+                    <a href={APPCONFIG.GITHUB_REPO} target="_blank">
                       <VscGithubInverted className="scale-125" />
                     </a>
                   </Button>

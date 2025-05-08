@@ -12,11 +12,11 @@ export default function ScrollToTopButton({
   return (
     ((y ?? 0) > 1000 && (
       <button
-        className=" fixed bottom-[calc(var(--mobile-bottom-nav-height)+var(--mobile-bottom-nav-margin))] right-4 flex items-center justify-center rounded-full border-[3px] border-black md:bottom-4"
+        className="fixed right-4 bottom-[calc(var(--mobile-bottom-nav-height)+var(--mobile-bottom-nav-margin))] flex items-center justify-center rounded-full border-[3px] border-black md:bottom-4"
         onClick={() => scrollTo({ left: 0, top: 0, behavior: "smooth" })}
         style={{ backgroundColor: bgColor }}
       >
-        <div className=" translate-y-[-2px]">
+        <div className="translate-y-[-2px]">
           <IoIosArrowUp size={48} />
         </div>
       </button>

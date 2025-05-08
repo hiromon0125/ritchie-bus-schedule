@@ -1,0 +1,10 @@
+{
+  "DOMAIN": "https://www.rit-bus.app",
+  "APP_NAME": "Ritchie's Bus Schedule",
+  "APP_TITLE": "RIT Bus Schedule",
+  "DESCRIPTION_LONG": "Best application to check the Rochester Institute of Technology Bus Schedule",
+  "DESCRIPTION_SHORT": "RIT shuttle schedule web app",
+  "GITHUB_REPO": "https://github.com/hiromon0125/ritchie-bus-schedule",
+  "GITHUB_ISSUE": "https://github.com/hiromon0125/ritchie-bus-schedule/issues",
+  "RATE": "https://ritbus.info/report"
+}
