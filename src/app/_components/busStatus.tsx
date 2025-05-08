@@ -32,7 +32,7 @@ const unfavoriteBus = async (busId: number) => {
   return api.favorite.delBus({ busId });
 };
 
-export async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
+async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
   const busObj = bus ?? (busID ? await api.bus.getByID({ id: busID }) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
@@ -141,17 +141,6 @@ export function BusInfoSkeleton() {
           <SkeletonBusStatusString />
         </div>
       </div>
-    </div>
-  );
-}
-
-export function InfoSkeleton() {
-  return (
-    <div className="relative flex w-full flex-1 flex-col flex-wrap justify-between">
-      <div className="mr-1 flex w-full flex-1 flex-row items-center px-4 pt-2">
-        <div className="h-4 w-full animate-pulse overflow-hidden rounded-sm bg-slate-300 font-bold text-nowrap text-ellipsis md:text-xl"></div>
-      </div>
-      <SkeletonBusStatusString />
     </div>
   );
 }

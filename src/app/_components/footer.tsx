@@ -12,7 +12,7 @@ import { ProfileBtnComponent } from "./profileBtnWrapper";
 import ServiceInfoButton from "./serviceinfo";
 import { Share } from "./share";
 
-function Footer() {
+export default function Footer() {
   return (
     <>
       <div className="mb-[calc(var(--mobile-footer-space)*-1)] w-full bg-slate-800 pb-(--mobile-footer-space) text-start text-base text-white [--mobile-footer-space:calc(var(--mobile-bottom-nav-height)+var(--mobile-bottom-nav-margin))] md:pb-0">
@@ -211,5 +211,3 @@ async function AlertNavigation() {
     </ServiceInfoButton>
   );
 }
-
-export default Footer;
