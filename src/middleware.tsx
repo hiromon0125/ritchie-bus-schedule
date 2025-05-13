@@ -1,6 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-const isAdminPrivate = createRouteMatcher(["/manage/(.*)"]);
+const isAdminPrivate = createRouteMatcher(["/manage", "/manage/(.*)"]);
 
 // This example protects all routes including api/trpc routes
 // Please edit this to allow other routes to be public as needed.

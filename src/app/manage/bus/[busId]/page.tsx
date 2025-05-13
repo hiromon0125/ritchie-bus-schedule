@@ -7,16 +7,19 @@ import { z } from "zod";
 async function Page(props: { params: Promise<{ busId: string }> }) {
   const params = await props.params;
   const busIdNumber = z.coerce.number().parse(params.busId);
-  await api.bus.getByID.prefetch({ id: busIdNumber });
+  await api.bus.getByID.prefetch({
+    id: busIdNumber,
+    isVisible: undefined,
+  });
 
   return (
-    <div className=" w-full max-w-(--breakpoint-lg) px-6">
-      <div className=" flex flex-row items-center gap-3">
+    <div className="w-full max-w-(--breakpoint-lg) px-6">
+      <div className="flex flex-row items-center gap-3">
         <h1>Edit Bus Detail</h1>
         <SaveStatus />
       </div>
       <EditBusDetail busId={busIdNumber} />
-      <div className=" mt-12">
+      <div className="mt-12">
         <h1>Edit Bus Route</h1>
       </div>
       <EditBusRoute busId={busIdNumber} />
