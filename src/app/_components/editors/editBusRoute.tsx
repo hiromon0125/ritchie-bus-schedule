@@ -11,13 +11,15 @@ import {
   MdInfoOutline,
   MdOutlineClear,
 } from "react-icons/md";
-import Select, { type MultiValue } from "react-select";
+
+import type { MultiValue } from "react-select";
 import { Tooltip } from "react-tooltip";
 import type { RouterOutputs } from "t/react";
 import { api } from "t/react";
 import { z } from "zod";
 import selectStyles from "~/styles/selectStyle";
 import { NEWYORK_TIMEZONE } from "../util";
+import Select from "./customSelect";
 import EditRoutesByFile from "./editByFile";
 
 type RouteObj = Routes;
@@ -253,9 +255,17 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
       Object.entries(row).forEach(([k, v], index) => {
         if (v === "") return undefined;
         const stopId = stopMap[k]!.stop.id;
-        const time = DateTime.fromFormat(v, "h:mm a", {
+        const firstDay = DateTime.now().set({ day: 1, month: 1, year: 1970 });
+        const rawTime = DateTime.fromFormat(v, "h:mm a", {
           zone: NEWYORK_TIMEZONE,
-        })
+        });
+        const time = firstDay
+          .set({
+            hour: rawTime.hour,
+            minute: rawTime.minute,
+            second: 0,
+            millisecond: 0,
+          })
           .toUTC()
           .toJSDate();
         if (stopMap[k]?.isArrival) {
@@ -399,7 +409,16 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
             value: stop,
             label: `${stop} ${stops?.find((s) => s.id === stop)?.name}`,
           }))}
-          onChange={handleSelectedStopChange}
+          // Some dynamic import causes the generic type to be lost
+          // Dynamic import is done to prevent hydration errors
+          onChange={(val) =>
+            handleSelectedStopChange(
+              val as MultiValue<{
+                value: number;
+                label: string;
+              }>,
+            )
+          }
           styles={selectStyles}
           placeholder="Select stops..."
         />

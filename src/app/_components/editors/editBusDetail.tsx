@@ -26,13 +26,7 @@ export default function EditBusDetail({ busId }: { busId: number }) {
     isVisible: undefined,
     includeDays: true,
   });
-  const utils = api.useUtils();
-  const { mutate } = api.bus.editBus.useMutation({
-    onSuccess: async () => {
-      await utils.bus.getAll.invalidate();
-      await utils.bus.getByID.invalidate({ id: busId });
-    },
-  });
+  const { mutate } = api.bus.editBus.useMutation();
   const [newData, setNewData] = useState<Bus | null | undefined>(() => data);
   const [unsavedData, setUnsavedData] = useState<IdLessBus>({});
   const [debouncedUnsavedData] = useDebounceValue(unsavedData, 1000);
