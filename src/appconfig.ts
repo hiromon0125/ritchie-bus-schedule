@@ -1,5 +1,5 @@
 import config from "../appconfig.json";
-import { version } from "../package.json";
+import packageInfo from "../package.json";
 interface AppConfig {
   DOMAIN: string;
   APP_NAME: string;
@@ -14,5 +14,5 @@ interface AppConfig {
 
 export const APPCONFIG: AppConfig = {
   ...config,
-  VERSION: version,
+  VERSION: packageInfo.version,
 } as const;
