@@ -17,6 +17,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       api_host: env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com",
       person_profiles: "always", // or 'always' to create profiles for anonymous users as well
       capture_pageview: false, // Disable automatic pageview capture, as we capture manually
+      capture_pageleave: true, // Capture pageleave events
+      capture_dead_clicks: true, // Capture dead clicks
     });
   }, []);
 
