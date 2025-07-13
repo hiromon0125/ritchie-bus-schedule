@@ -14,7 +14,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.19.4",
+    "@clerk/nextjs": "^6.23.3",
     "@clerk/themes": "^2.2.45",
     "@prisma/client": "^6.8.2",
     "@radix-ui/react-dialog": "^1.1.13",
