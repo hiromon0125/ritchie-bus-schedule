@@ -181,7 +181,11 @@ export const routesRouter = createTRPCRouter({
           },
         }),
         // Reset cache
-        ctx.cache.del(...keys.flat()),
+        async () => {
+          const delKeys = keys.flat();
+          if (delKeys.length === 0) return;
+          await ctx.cache.del(...delKeys);
+        },
       ]);
     }),
   getCurrentRouteOfBus: publicProcedure

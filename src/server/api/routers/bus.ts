@@ -124,13 +124,8 @@ export const busRouter = createTRPCRouter({
       await ctx.db.bus.create({
         data: input,
       });
-      const keys = (
-        await Promise.all(
-          ["bus:all:*", `bus:${input.id}:*`].map((k) => ctx.cache.keys(k)),
-        )
-      ).flat();
-      if (keys.length === 0) return;
-      await ctx.cache.del(...keys);
+      const caches = [`bus:all:*`, `bus:${input.id}:*`];
+      await ctx.cacheDel(caches);
     }),
   editBus: publicProcedure
     .input(
@@ -169,14 +164,8 @@ export const busRouter = createTRPCRouter({
         },
         data: { ...input, operatingDays: undefined },
       });
-      const keys = await Promise.allSettled(
-        ["bus:all:*", `bus:${input.id}:*`].map((k) => ctx.cache.keys(k)),
-      );
-      const foundKeys = keys
-        .filter((k) => k.status === "fulfilled")
-        .map((k) => k.value)
-        .flat();
-      if (foundKeys.length !== 0) await ctx.cache.del(...foundKeys);
+      const caches = [`bus:all:*`, `bus:${input.id}:*`];
+      await ctx.cacheDel(caches);
       return res;
     }),
   deleteBus: publicProcedure
@@ -191,12 +180,7 @@ export const busRouter = createTRPCRouter({
           id: input.id,
         },
       });
-      const keys = (
-        await Promise.all(
-          ["bus:all:*", `bus:${input.id}:*`].map((k) => ctx.cache.keys(k)),
-        )
-      ).flat();
-      if (keys.length === 0) return;
-      await ctx.cache.del(...keys);
+      const caches = [`bus:all:*`, `bus:${input.id}:*`];
+      await ctx.cacheDel(caches);
     }),
 });

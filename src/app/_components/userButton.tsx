@@ -32,8 +32,6 @@ export default function ProfileButton() {
   const { setState: openServiceInfo } = useContext(ServiceInfoContext);
   const { data: serviceInfoCount } = api.serviceinfo.getCount.useQuery();
   const { has } = useAuth();
-  console.log(has?.({ role: "org:admin" }));
-
   return (
     <UserButton
       userProfileMode="navigation"

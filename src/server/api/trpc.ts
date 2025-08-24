@@ -52,11 +52,19 @@ export const createTRPCContext = async (opts: {
     }
     return superjson.parse<TData>(cachedData.slice(1));
   };
+  const cacheDel = async (cacheKeys: string[]) => {
+    const keys = (
+      await Promise.all(cacheKeys.map((k) => cache.keys(k)))
+    ).flat();
+    if (keys.length === 0) return;
+    await cache.del(...keys.flat());
+  };
   return {
     db,
     cache,
     cacheSetReturn,
     cacheGet,
+    cacheDel,
     ...opts,
   };
 };
