@@ -1,7 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { type ReactElement, useState } from "react";
+import React, { type ReactElement, useState } from "react";
+
+type ChildDataProp = {
+  "data-bus-id"?: string;
+};
 
 export function AnimatedDoubleList({
   children,
@@ -16,14 +20,20 @@ export function AnimatedDoubleList({
 }) {
   const [favoritedChildren, setFavoritedChildren] = useState<ReactElement[]>(
     children.filter((child) => {
-      return child.key ? favoritedBusKeys.includes(child.key) : false;
+      const busId =
+        React.isValidElement(child) &&
+        (child.props as ChildDataProp)["data-bus-id"];
+      return busId ? favoritedBusKeys.includes(busId) : false;
     }),
   );
   const [unfavoritedChildren, setUnfavoritedChildren] = useState<
     ReactElement[]
   >(
     children.filter((child) => {
-      return child.key ? !favoritedBusKeys.includes(child.key) : false;
+      const busId =
+        React.isValidElement(child) &&
+        (child.props as ChildDataProp)["data-bus-id"];
+      return busId ? !favoritedBusKeys.includes(busId) : true;
     }),
   );
 
