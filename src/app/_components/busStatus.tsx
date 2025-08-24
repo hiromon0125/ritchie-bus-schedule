@@ -176,15 +176,17 @@ export async function BusList() {
       }
       locked={!user}
     >
-      {buses.map((bus) => {
-        return (
-          <div className="h-full w-full" key={bus.id}>
-            <Suspense fallback={<BusInfoSkeleton />}>
-              <BusInfo bus={bus} isFavorited={favBusesId.includes(bus.id)} />
-            </Suspense>
-          </div>
-        );
-      })}
+      {buses.map((bus) => (
+        <div
+          className="h-full w-full"
+          key={bus.id}
+          data-bus-id={bus.id.toString()}
+        >
+          <Suspense fallback={<BusInfoSkeleton />}>
+            <BusInfo bus={bus} isFavorited={favBusesId.includes(bus.id)} />
+          </Suspense>
+        </div>
+      ))}
     </AnimatedDoubleList>
   );
 }
