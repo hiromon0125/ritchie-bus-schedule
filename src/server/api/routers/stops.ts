@@ -183,8 +183,7 @@ export const stopsRouter = createTRPCRouter({
         });
       }
       const caches = [`stops:all:*`, `stops:coor`, `stops:${input.id}:*`];
-      const keys = await Promise.all(caches.map((k) => ctx.cache.keys(k)));
-      await ctx.cache.del(...keys.flat());
+      await ctx.cacheDel(caches);
     }),
   editBusStop: privateProcedure
     .input(
@@ -205,8 +204,7 @@ export const stopsRouter = createTRPCRouter({
         data: input,
       });
       const caches = [`stops:all:*`, `stops:coor`, `stops:${input.id}:*`];
-      const keys = await Promise.all(caches.map((k) => ctx.cache.keys(k)));
-      await ctx.cache.del(...keys.flat());
+      await ctx.cacheDel(caches);
     }),
   deleteBusStop: privateProcedure
     .input(
@@ -219,7 +217,6 @@ export const stopsRouter = createTRPCRouter({
         where: input,
       });
       const caches = [`stops:all:*`, `stops:coor`, `stops:${input.id}:*`];
-      const keys = await Promise.all(caches.map((k) => ctx.cache.keys(k)));
-      await ctx.cache.del(...keys.flat());
+      await ctx.cacheDel(caches);
     }),
 });
