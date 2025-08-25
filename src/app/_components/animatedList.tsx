@@ -33,7 +33,6 @@ export function AnimatedDoubleList({
       const busId =
         React.isValidElement(child) &&
         (child.props as ChildDataProp)["data-bus-id"];
-      console.log(child.props);
       return busId ? !favoritedBusKeys.includes(busId) : true;
     }),
   );
