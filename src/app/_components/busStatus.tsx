@@ -182,9 +182,7 @@ export async function BusList() {
           key={bus.id}
           data-bus-id={bus.id.toString()}
         >
-          <Suspense fallback={<BusInfoSkeleton />}>
-            <BusInfo bus={bus} isFavorited={favBusesId.includes(bus.id)} />
-          </Suspense>
+          <BusInfo bus={bus} isFavorited={favBusesId.includes(bus.id)} />
         </div>
       ))}
     </AnimatedDoubleList>
