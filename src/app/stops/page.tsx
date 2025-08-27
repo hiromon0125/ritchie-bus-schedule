@@ -1,9 +1,7 @@
-import { FavBtn } from "@/favBtn";
+import { SpecificFavBtn } from "@/favBtn";
 import { BusTag, StopTag } from "@/tags";
-import { currentUser } from "@clerk/nextjs/server";
 import _ from "lodash";
 import { type Metadata } from "next";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { IoChevronForwardSharp } from "react-icons/io5";
 import { api } from "t/server";
@@ -20,19 +18,9 @@ export const metadata: Metadata = {
   },
 };
 
-async function handleFavorite(stopId: number, isFav: boolean) {
-  await api.favorite[isFav ? "delStop" : "addStop"]({ stopId });
-  revalidatePath("/stops");
-}
-
 export default async function StopList() {
-  const user = await currentUser();
   const stops = await api.stops.getAll({ includeRelatedBus: true });
-  const favStop = !user
-    ? []
-    : (await api.favorite.getAllStop()).map((stop) => stop.stopId);
   return stops.map((stop) => {
-    const isFav = favStop.includes(stop.id);
     return (
       <Link
         href={`/stop/${stop.id}`}
@@ -42,13 +30,7 @@ export default async function StopList() {
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex w-full flex-row items-center">
             <div className="flex w-0 flex-row items-center justify-center overflow-hidden opacity-0 transition-all group-hover:w-8 group-hover:opacity-100">
-              <FavBtn
-                isFavorited={isFav}
-                onClick={async () => {
-                  "use server";
-                  await handleFavorite(stop.id, isFav);
-                }}
-              />
+              <SpecificFavBtn stopId={stop.id} />
             </div>
             <StopTag stop={stop} />
             <span className="xs:ml-2 ml-1 w-0 flex-1 overflow-clip text-lg font-bold text-nowrap text-ellipsis">

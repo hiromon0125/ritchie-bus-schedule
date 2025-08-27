@@ -1,10 +1,11 @@
+"use server";
 import {
   BusInfoSkeleton,
   BusStatus,
   BusStatusBig,
   SkeletonBusStatusString,
 } from "@/busStatus";
-import { FavBtn } from "@/favBtn";
+import { SpecificFavBtn } from "@/favBtn";
 import ClickableTooltip from "@/infobtn";
 import { ServiceInfoContentDecorator } from "@/serviceinfo";
 import { BusTag, StopTag } from "@/tags";
@@ -14,7 +15,6 @@ import { TRPCClientError } from "@trpc/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { type Metadata } from "next";
-import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
@@ -67,15 +67,10 @@ export default async function Page(props: Props) {
     );
   }
 
-  let isFavorite = false;
   let favoriteStops: number[] = [];
   if (user) {
     const stopIds = bus.stops.map((b) => b.id);
-    const [allBus, allStop] = await Promise.all([
-      api.favorite.getAllBus(),
-      api.favorite.getAllStop(),
-    ]);
-    isFavorite = allBus.map((e) => e.busId).includes(bus.id);
+    const allStop = await api.favorite.getAllStop();
     favoriteStops = allStop
       .map((stop) => stop.stopId)
       .filter((bid) => stopIds.includes(bid))
@@ -107,7 +102,7 @@ export default async function Page(props: Props) {
               <h1 className="my-1.5 text-lg font-bold md:text-2xl">
                 {bus.name}
               </h1>
-              <FavBtn isFavorited={isFavorite} />
+              <SpecificFavBtn busId={bus.id} togglable />
             </div>
             <p className="text-base md:text-lg">{bus.description}</p>
           </div>
@@ -139,7 +134,6 @@ export default async function Page(props: Props) {
             <Suspense fallback={<BusInfoSkeleton />}>
               <SelectableStopInfo
                 isSelected={selectedStop.id === stop.id}
-                isFavorited={favoriteStops.includes(stop.id)}
                 bus={bus}
                 stopID={stop.id}
                 href={`/bus/${bus.id}?stopId=${stop.id}`}
@@ -170,19 +164,9 @@ type BusStatusProps =
       href: string;
     };
 
-const favoriteStop = async (stopId: number) => {
-  "use server";
-  return api.favorite.addStop({ stopId });
-};
-const unfavoriteStop = async (stopId: number) => {
-  "use server";
-  return api.favorite.delStop({ stopId });
-};
-
 async function SelectableStopInfo({
   stopID,
   stop,
-  isFavorited,
   isSelected,
   bus,
   href,
@@ -210,15 +194,9 @@ async function SelectableStopInfo({
           </Suspense>
         </div>
       </Link>
-      <FavBtn
-        className="absolute top-3 right-3 z-10"
-        isFavorited={isFavorited ?? false}
-        onClick={async () => {
-          "use server";
-          await (isFavorited ? unfavoriteStop : favoriteStop)(stopObj.id);
-          revalidatePath(`/bus/[busId]/page`);
-        }}
-      />
+      <div className="absolute top-0 right-0 z-10">
+        <SpecificFavBtn stopId={stopObj.id} togglable className="p-2" />
+      </div>
     </div>
   );
 }

@@ -50,10 +50,68 @@ export const favoriteRouter = createTRPCRouter({
         },
       });
     }),
-  isBusFavorited: userProcedure
-    .input(z.number())
-    .query(async ({ ctx, input }) => {
+  toggleBus: userProcedure
+    .input(
+      z.object({
+        busId: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       if (ctx.session.userId == null) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not logged in",
+        });
+      }
+      const userId = ctx.session.userId;
+      const { busId } = input;
+      if (
+        (await ctx.db.favoriteBus.findFirst({ where: { userId, busId } })) !=
+        null
+      ) {
+        return ctx.db.favoriteBus.deleteMany({ where: { userId, busId } });
+      }
+      return ctx.db.favoriteBus.create({
+        data: {
+          userId,
+          busId,
+          priority: await ctx.db.favoriteBus.count({ where: { userId } }),
+        },
+      });
+    }),
+  toggleStop: userProcedure
+    .input(
+      z.object({
+        stopId: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.session.userId == null) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User not logged in",
+        });
+      }
+      const userId = ctx.session.userId;
+      const { stopId } = input;
+      if (
+        (await ctx.db.favoriteStop.findFirst({ where: { userId, stopId } })) !=
+        null
+      ) {
+        return ctx.db.favoriteStop.deleteMany({ where: { userId, stopId } });
+      }
+      return ctx.db.favoriteStop.create({
+        data: {
+          userId,
+          stopId,
+          priority: await ctx.db.favoriteStop.count({ where: { userId } }),
+        },
+      });
+    }),
+  isBusFavorited: userProcedure
+    .input(z.number().nullable())
+    .query(async ({ ctx, input }) => {
+      if (ctx.session.userId == null || input == null) {
         return false;
       }
       const bus = await ctx.db.favoriteBus.findFirst({
@@ -65,9 +123,9 @@ export const favoriteRouter = createTRPCRouter({
       return bus != null;
     }),
   isStopFavorited: userProcedure
-    .input(z.number())
+    .input(z.number().nullable())
     .query(async ({ ctx, input }) => {
-      if (ctx.session.userId == null) {
+      if (ctx.session.userId == null || input == null) {
         return false;
       }
       const stop = await ctx.db.favoriteStop.findFirst({
@@ -156,20 +214,13 @@ export const favoriteRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const lastStop = await ctx.db.favoriteStop.findFirst({
-        orderBy: {
-          priority: "desc",
-        },
-        where: {
-          userId: ctx.session.userId,
-        },
-      });
-      const newPriority = lastStop != null ? lastStop.priority + 1 : 0;
       return ctx.db.favoriteStop.create({
         data: {
           userId: ctx.session.userId,
           stopId: input.stopId,
-          priority: newPriority,
+          priority: await ctx.db.favoriteStop.count({
+            where: { userId: ctx.session.userId },
+          }),
         },
       });
     }),
