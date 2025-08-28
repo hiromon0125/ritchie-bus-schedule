@@ -29,14 +29,22 @@ export default function RouteMapOr({
         {mapType === "interactive" ? (
           children
         ) : (
-          <Image
-            src="/images/bus-route-diagram.png"
-            // This is a pretty arbitrary color rotation to make the image look "better"
-            className="dark:brightness-115 dark:grayscale-30 dark:hue-rotate-345 dark:invert-100 dark:saturate-120"
-            alt="Unofficial diagram of the RIT shuttle system"
-            width="1728"
-            height="1008"
-          />
+          <>
+            <Image
+              src="/map/ritbusmap_light.png"
+              className="dark:hidden"
+              alt="Unofficial diagram of the RIT shuttle system"
+              width="1728"
+              height="1008"
+            />
+            <Image
+              src="/map/ritbusmap_dark.png"
+              className="hidden dark:block"
+              alt="Unofficial diagram of the RIT shuttle system"
+              width="1728"
+              height="1008"
+            />
+          </>
         )}
       </div>
     </>
