@@ -106,10 +106,10 @@ function savedRouteToDateInput(data: {
 }): { arr: string; dep: string } {
   return {
     arr: data.arriTime
-      ? DateTime.fromJSDate(data.arriTime, { zone: "utc" }).toFormat("HH:mm")
+      ? DateTime.fromJSDate(data.arriTime).toFormat("HH:mm")
       : "",
     dep: data.deptTime
-      ? DateTime.fromJSDate(data.deptTime, { zone: "utc" }).toFormat("HH:mm")
+      ? DateTime.fromJSDate(data.deptTime).toFormat("HH:mm")
       : "",
   };
 }
