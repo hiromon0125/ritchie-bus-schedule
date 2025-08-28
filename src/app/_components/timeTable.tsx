@@ -3,7 +3,7 @@
 import { TimeTableSkeleton } from "@/busPageLoaders";
 import { useBusStatus } from "@/hooks";
 import type { BusRoute } from "@/types";
-import { formatToLocalTimeString, getArriTime } from "@/util";
+import { formatToTimeString, getArriTime } from "@/util";
 import { useSearchParams } from "next/navigation";
 import { api } from "t/react";
 
@@ -67,13 +67,9 @@ export default function TimeTable({
                 <div className="mx-[6px] h-full w-2 bg-(--bus-color)" />
                 <div className="bg-item-background absolute top-1/2 left-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700 dark:border-slate-50" />
               </div>
-              <p className="w-[74px] py-2">
-                {formatToLocalTimeString(arriTime)}
-              </p>
+              <p className="w-[74px] py-2">{formatToTimeString(arriTime)}</p>
               <p className="py-2 pr-2">-</p>
-              <p className="w-[74px] py-2">
-                {formatToLocalTimeString(r.deptTime)}
-              </p>
+              <p className="w-[74px] py-2">{formatToTimeString(r.deptTime)}</p>
             </div>
           </div>
         );
