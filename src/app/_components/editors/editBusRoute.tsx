@@ -18,7 +18,6 @@ import type { RouterOutputs } from "t/react";
 import { api } from "t/react";
 import { z } from "zod";
 import selectStyles from "~/styles/selectStyle";
-import { NEWYORK_TIMEZONE } from "../util";
 import Select from "./customSelect";
 import EditRoutesByFile from "./editByFile";
 
@@ -107,14 +106,13 @@ function savedRouteToDateInput(data: {
 }): { arr: string; dep: string } {
   return {
     arr: data.arriTime
-      ? DateTime.fromJSDate(data.arriTime).toFormat("HH:mm")
+      ? DateTime.fromJSDate(data.arriTime, { zone: "utc" }).toFormat("HH:mm")
       : "",
     dep: data.deptTime
-      ? DateTime.fromJSDate(data.deptTime).toFormat("HH:mm")
+      ? DateTime.fromJSDate(data.deptTime, { zone: "utc" }).toFormat("HH:mm")
       : "",
   };
 }
-
 function savedRoutesToDateInputs(
   data: RouterOutputs["routes"]["getAllByBusId"] | undefined,
 ): { arr: string; dep: string }[] {
@@ -200,7 +198,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
   const addMultipleRoutes = () => {
     const inputArr: { arr: string; dep: string }[] = [];
     const currInput = [...input];
-    (selectedStops ?? []).forEach((_) => {
+    selectedStops?.forEach((_) => {
       const i = createNewRoute(selectedStops ?? [], currInput, busId);
       currInput.push(i);
       inputArr.push(savedRouteToDateInput(i));
@@ -255,18 +253,17 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
       Object.entries(row).forEach(([k, v], index) => {
         if (v === "") return undefined;
         const stopId = stopMap[k]!.stop.id;
-        const firstDay = DateTime.now().set({ day: 1, month: 1, year: 1970 });
-        const rawTime = DateTime.fromFormat(v, "h:mm a", {
-          zone: NEWYORK_TIMEZONE,
+        const timeDT = DateTime.fromFormat(v, "h:mm a", {
+          zone: "utc",
         });
-        const time = firstDay
+        const time = timeDT
           .set({
-            hour: rawTime.hour,
-            minute: rawTime.minute,
+            year: 1970,
+            month: 1,
+            day: 1,
             second: 0,
             millisecond: 0,
           })
-          .toUTC()
           .toJSDate();
         if (stopMap[k]?.isArrival) {
           if (res[stopId] == undefined) {
@@ -350,7 +347,7 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
     if (e.target.valueAsDate == null) return;
     const newInput = [...input];
     const localDateTime = DateTime.fromFormat(e.target.value, "HH:mm", {
-      zone: NEWYORK_TIMEZONE,
+      zone: "utc",
     });
     newInput[index]!.arriTime = localDateTime.toJSDate();
     setInput(newInput);
@@ -372,13 +369,13 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
     setDateInput((prev) => {
       const i = [...prev];
       i[index] ??= { arr: "", dep: e.target.value };
-      i[index].dep ??= "";
+      i[index].dep = e.target.value;
       return i;
     });
     if (e.target.value == "") return;
     const newInput = [...input];
     const fixedDateTime = DateTime.fromFormat(e.target.value, "HH:mm", {
-      zone: NEWYORK_TIMEZONE,
+      zone: "utc",
     });
     newInput[index]!.deptTime = fixedDateTime.toJSDate();
     setInput(newInput);

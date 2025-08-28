@@ -1,38 +1,26 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Bus } from "@prisma/client";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import React, { Suspense } from "react";
 import { type RouterOutputs } from "t/react";
 import { api } from "t/server";
 import { AnimatedDoubleList, ClickEventBlocker } from "./animatedList";
 import BusStatusString, { BusStatusStringBig } from "./busStatusString";
-import { FavBtn } from "./favBtn";
+import { SpecificFavBtn } from "./favBtn";
 import { BusTag } from "./tags";
 
 type BusStatusProps =
   | {
       busID: RouterOutputs["bus"]["getAllID"][0];
       bus?: never;
-      isFavorited?: boolean;
     }
   | {
       bus: Bus;
       busID?: never;
-      isFavorited?: boolean;
     };
 
-const favoriteBus = async (busId: number) => {
-  "use server";
-  return api.favorite.addBus({ busId });
-};
-const unfavoriteBus = async (busId: number) => {
-  "use server";
-  return api.favorite.delBus({ busId });
-};
-
-async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
+async function BusInfo({ busID, bus }: BusStatusProps) {
   const busObj = bus ?? (busID ? await api.bus.getByID({ id: busID }) : null);
   if (!busObj) return null;
   const color = (busObj.color?.toLowerCase() as `#${string}`) ?? "#000000";
@@ -65,14 +53,10 @@ async function BusInfo({ busID, bus, isFavorited }: BusStatusProps) {
           </div>
         </Link>
       </ClickEventBlocker>
-      <FavBtn
-        className="absolute top-3 right-3 z-10"
-        isFavorited={isFavorited ?? false}
-        onClick={async () => {
-          "use server";
-          await (isFavorited ? unfavoriteBus : favoriteBus)(busObj.id);
-          revalidatePath("/", "page");
-        }}
+      <SpecificFavBtn
+        className="absolute top-0 right-0 p-3"
+        busId={busObj.id}
+        togglable
       />
     </div>
   );
@@ -130,7 +114,7 @@ export function BusInfoSkeleton() {
   return (
     <div className="relative -z-0">
       <div
-        className="bg-item-background border-bg-item-backgroundrder-white relative box-border flex h-full w-full flex-row items-stretch rounded-xl p-1"
+        className="bg-item-background border-bg-item-backgroundrder-white relative box-border flex h-full w-full flex-row items-stretch rounded-xl p-2"
         style={{ "--bus-color": "gray" } as React.CSSProperties}
       >
         <div className="h-auto min-w-3 rounded-l-md bg-(--bus-color)" />
@@ -150,7 +134,17 @@ export async function BusList() {
   const buses = await api.bus.getAll();
   let favBusesId: number[] = [];
   if (user) {
-    favBusesId = (await api.favorite.getAllBus()).map((bus) => bus.busId);
+    favBusesId = await Promise.allSettled(
+      buses.map(async (b) =>
+        (await api.favorite.isBusFavorited(b.id)) ? b.id : undefined,
+      ),
+    ).then((results) =>
+      results
+        .map((result) =>
+          result.status === "fulfilled" ? result.value : undefined,
+        )
+        .filter((id): id is number => id !== undefined),
+    );
   }
   return (
     <AnimatedDoubleList
@@ -182,7 +176,7 @@ export async function BusList() {
           key={bus.id}
           data-bus-id={bus.id.toString()}
         >
-          <BusInfo bus={bus} isFavorited={favBusesId.includes(bus.id)} />
+          <BusInfo bus={bus} />
         </div>
       ))}
     </AnimatedDoubleList>

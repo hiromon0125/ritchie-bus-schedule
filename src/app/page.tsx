@@ -1,12 +1,11 @@
 import { BusList, BusListSkeleton } from "@/busStatus";
-import { FavBtn } from "@/favBtn";
+import { SpecificFavBtn } from "@/favBtn";
 import { DotMap } from "@/Map";
 import RouteMapOr from "@/RouteMapOr";
 import { BusTag, StopTag } from "@/tags";
 import WelcomePopup from "@/welcome";
 import { SignedIn } from "@clerk/nextjs";
 import _ from "lodash";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Suspense } from "react";
 import { api } from "t/server";
@@ -52,6 +51,7 @@ async function FavStopList() {
 async function StopView({ stopId }: { stopId: number }) {
   const stopBus = await api.stops.getOneByID({
     id: stopId,
+    includeHiddenBus: false,
   });
   if (!stopBus) return null;
   const { buses, ...stop } = stopBus;
@@ -73,14 +73,10 @@ async function StopView({ stopId }: { stopId: number }) {
           </div>
         </div>
       </Link>
-      <FavBtn
-        className="absolute top-3 right-3"
-        isFavorited
-        onClick={async () => {
-          "use server";
-          await api.favorite.delStop({ stopId });
-          revalidatePath("/"); // revalidate the home page
-        }}
+      <SpecificFavBtn
+        className="absolute top-0 right-0 p-3"
+        stopId={stopId}
+        togglable
       />
     </div>
   );

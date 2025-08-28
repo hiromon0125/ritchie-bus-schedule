@@ -5,7 +5,7 @@ import {
   SkeletonBusStatusString,
 } from "@/busStatus";
 import CopyLink from "@/copyLink";
-import { FavBtn } from "@/favBtn";
+import { SpecificFavBtn } from "@/favBtn";
 import ClickableTooltip from "@/infobtn";
 import StopMap from "@/Map";
 import { BusTag, StopTag } from "@/tags";
@@ -15,7 +15,6 @@ import type { Bus } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
 import _ from "lodash";
 import { type Metadata } from "next";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
@@ -66,12 +65,8 @@ export default async function Page(props: Props) {
   if (!currentStop) {
     throw TRPCClientError.from(Error(`Stop not found (stop id: ${stopId})`));
   }
-  let isFavorite = false;
   let favoriteBuses: number[] = [];
   if (user) {
-    isFavorite = (await api.favorite.getAllStop())
-      .map((e) => e.stopId)
-      .includes(stopId);
     favoriteBuses = (await api.favorite.getAllBus())
       .map((bus) => bus.busId)
       .filter((bid) => currentStop.buses.map((b) => b.id).includes(bid))
@@ -104,7 +99,7 @@ export default async function Page(props: Props) {
             <div className="xs:mt-3 flex flex-row items-center gap-2">
               <StopTag stop={currentStop} />
               <h1 className="my-1.5 text-2xl font-bold">{currentStop.name}</h1>
-              <FavBtn isFavorited={isFavorite} />
+              <SpecificFavBtn stopId={currentStop.id} togglable />
             </div>
             <p className="mb-2 text-lg">{currentStop.description}</p>
           </div>
@@ -126,7 +121,6 @@ export default async function Page(props: Props) {
             <Suspense fallback={<BusInfoSkeleton />}>
               <SelectableBusInfo
                 isSelected={selectedBus.id === bus.id}
-                isFavorited={favoriteBuses.includes(bus.id)}
                 bus={bus}
                 stopId={stopId}
                 href={`/stop/${stopId}?busId=${bus.id}`}
@@ -215,7 +209,6 @@ type BusStatusProps =
   | {
       busID: RouterOutputs["bus"]["getAllID"][0];
       bus?: never;
-      isFavorited?: boolean;
       isSelected?: boolean;
       stopId: number;
       href: string;
@@ -223,25 +216,14 @@ type BusStatusProps =
   | {
       bus: Bus;
       busID?: never;
-      isFavorited?: boolean;
       isSelected?: boolean;
       stopId: number;
       href: string;
     };
 
-const favoriteBus = async (busId: number) => {
-  "use server";
-  return api.favorite.addBus({ busId });
-};
-const unfavoriteBus = async (busId: number) => {
-  "use server";
-  return api.favorite.delBus({ busId });
-};
-
 async function SelectableBusInfo({
   busID,
   bus,
-  isFavorited,
   isSelected,
   stopId,
   href,
@@ -275,14 +257,10 @@ async function SelectableBusInfo({
           </Suspense>
         </div>
       </Link>
-      <FavBtn
-        className="absolute top-3 right-3 z-10"
-        isFavorited={isFavorited ?? false}
-        onClick={async () => {
-          "use server";
-          await (isFavorited ? unfavoriteBus : favoriteBus)(busObj.id);
-          revalidatePath(`/stop/[stopId]/page`);
-        }}
+      <SpecificFavBtn
+        className="absolute top-0 right-0 z-10 p-3"
+        busId={busObj.id}
+        togglable
       />
     </div>
   );

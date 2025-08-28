@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import React, { type ReactElement, useState } from "react";
+import React, { type ReactElement, useEffect, useState } from "react";
 
 type ChildDataProp = {
   "data-bus-id"?: string;
@@ -19,23 +19,27 @@ export function AnimatedDoubleList({
   locked?: boolean;
 }) {
   const [favoritedChildren, setFavoritedChildren] = useState<ReactElement[]>(
-    children.filter((child) => {
-      const busId =
-        React.isValidElement(child) &&
-        (child.props as ChildDataProp)["data-bus-id"];
-      return busId ? favoritedBusKeys.includes(busId) : false;
-    }),
+    [],
   );
   const [unfavoritedChildren, setUnfavoritedChildren] = useState<
     ReactElement[]
-  >(
-    children.filter((child) => {
-      const busId =
-        React.isValidElement(child) &&
-        (child.props as ChildDataProp)["data-bus-id"];
-      return busId ? !favoritedBusKeys.includes(busId) : true;
-    }),
-  );
+  >([]);
+
+  useEffect(() => {
+    const childrenArray = React.Children.toArray(children) as ReactElement[];
+    const fav: ReactElement[] = [];
+    const unfav: ReactElement[] = [];
+
+    for (const child of childrenArray) {
+      if (!React.isValidElement(child)) continue;
+      const busId = (child.props as ChildDataProp)["data-bus-id"];
+      if (busId && favoritedBusKeys.includes(busId)) fav.push(child);
+      else unfav.push(child);
+    }
+
+    setFavoritedChildren(fav);
+    setUnfavoritedChildren(unfav);
+  }, [children, favoritedBusKeys]);
 
   return (
     <div className="bg-border-background xs:gap-3 xs:rounded-3xl xs:p-3 flex w-(--sm-max-w) flex-col gap-2 rounded-[20px] p-2 md:max-w-(--breakpoint-lg)">

@@ -203,7 +203,7 @@ export const routesRouter = createTRPCRouter({
         where: {
           busId: input.busId,
           deptTime: {
-            gt: getCurrentTimeServer().dtUTC.toJSDate(),
+            gt: getCurrentTimeServer().dt.toJSDate(),
           },
           ...(input.stopId ? { stopId: input.stopId } : {}),
         },
@@ -266,7 +266,7 @@ export const routesRouter = createTRPCRouter({
       });
       if (!lastRoute) return false;
       const lastRouteDate = lastRoute.deptTime;
-      const nowDateTime = getCurrentTimeServer().dtUTC;
+      const nowDateTime = getCurrentTimeServer().dt;
       const lastRouteUTCDateTime = DateTime.fromJSDate(lastRouteDate, {
         zone: "utc",
       });

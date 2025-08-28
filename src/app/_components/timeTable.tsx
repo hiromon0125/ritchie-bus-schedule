@@ -3,8 +3,7 @@
 import { TimeTableSkeleton } from "@/busPageLoaders";
 import { useBusStatus } from "@/hooks";
 import type { BusRoute } from "@/types";
-import { getArriTime } from "@/util";
-import { DateTime } from "luxon";
+import { formatToLocalTimeString, getArriTime } from "@/util";
 import { useSearchParams } from "next/navigation";
 import { api } from "t/react";
 
@@ -85,13 +84,6 @@ export default function TimeTable({
       </div>
     </div>
   );
-}
-
-function formatToLocalTimeString(date: Date) {
-  const timezoneOffset = DateTime.local().offset / 60;
-  return DateTime.fromJSDate(date, { zone: "utc" })
-    .plus({ hours: timezoneOffset })
-    .toFormat("h:mm a");
 }
 
 function ErrorTimeTable() {
