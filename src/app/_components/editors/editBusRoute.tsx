@@ -25,64 +25,116 @@ type RouteObj = Routes;
 type RouteInput = Partial<RouteObj> & Pick<RouteObj, "index" | "busId">;
 type RoutesArr = RouteInput[];
 
-function createNewRoute(stops: number[], input: RoutesArr, busId: number) {
-  const newDate = new Date();
-  newDate.setFullYear(1970, 0, 1);
-  newDate.setSeconds(0);
-  newDate.setMilliseconds(0);
-  const newRoute = {
-    ...(input[input.length - 1] ?? {
-      busId,
-      stopId: stops.at(0) ?? 0,
-      index: -1,
-      deptTime: newDate,
-    }),
-  };
-  newRoute.index += 1;
-  newRoute.arriTime = undefined;
-  const indStop = newRoute.stopId ? stops.indexOf(newRoute.stopId) + 1 : 0;
-  const stopId = stops.at(indStop) ?? stops.at(0);
-  newRoute.stopId = stopId;
+/**
+ * default route when there is no route in the list
+ * Uses the local time's hour and minute but with the date set to Jan 1, 1970 UTC
+ * Returns the utc date object
+ * @param busId
+ * @param stopId
+ * @returns
+ */
+function defaultRouteDeptTime() {
+  const currLocal = DateTime.now();
+  const newDate = DateTime.utc(
+    1970,
+    1,
+    1,
+    currLocal.hour,
+    currLocal.minute,
+    0,
+    0,
+  );
+  return newDate.toJSDate();
+}
 
-  if (stopId == undefined) {
-    newRoute.stopId = 0;
-    return newRoute;
-  }
-
-  // Find the last instance of the next stop to calculate the time difference
-  const lastInstance = _.findLastIndex(
+function getDeptTimeByLastStopRoute(
+  input: RoutesArr,
+  stopId?: number,
+  lastDept?: Date,
+): Date | undefined {
+  if (!stopId || !lastDept) return undefined;
+  const lastStopInstance = _.findLastIndex(
     input,
-    (route) => route.stopId === newRoute.stopId,
+    (route) => route.stopId === stopId,
   );
 
-  // Stop if not found or the first instance is the last instance as we can not find the diff
-  if (lastInstance <= 0) return newRoute;
-  const lastInstanceStop = input[lastInstance];
+  if (lastStopInstance <= 0) return undefined;
+  const lastInstanceStop = input[lastStopInstance];
+  const lastLastInstanceStop = input[lastStopInstance - 1];
   if (
-    !lastInstanceStop ||
-    !lastInstanceStop.deptTime ||
-    !input[lastInstance - 1]?.deptTime
+    lastInstanceStop?.deptTime == undefined ||
+    lastLastInstanceStop?.deptTime == undefined
   )
-    return newRoute;
+    return undefined;
 
-  // Set the departure time to the last instance of the stop plus the time difference between the last instance and the stop before it
   const timeDiff =
     lastInstanceStop.deptTime.getTime() -
-    input[lastInstance - 1]!.deptTime!.getTime();
-  newRoute.deptTime = new Date((newRoute.deptTime?.getTime() ?? 0) + timeDiff);
+    lastLastInstanceStop.deptTime.getTime();
+  const dt = DateTime.fromJSDate(lastDept, { zone: "utc" }).plus({
+    milliseconds: timeDiff,
+  });
+  return dt.toJSDate();
+}
 
-  // Set the arrival time to the last instance of the stop plus the time difference between the last instance and the instance before that
-  const instanceBeforeLast = lastInstance - stops.length;
-  const instanceBeforeLastStop =
-    instanceBeforeLast > 0 ? input[instanceBeforeLast] : undefined;
-  if (!instanceBeforeLastStop?.arriTime || !lastInstanceStop.arriTime)
-    return newRoute;
-
-  newRoute.arriTime = new Date(
-    lastInstanceStop.arriTime.getTime() * 2 -
-      instanceBeforeLastStop.arriTime.getTime(),
+function getArriTimeByLastStopRoute(
+  input: RoutesArr,
+  stopsCount: number,
+  stopId?: number,
+  lastArri?: Date | null,
+): Date | undefined {
+  if (!stopId || !lastArri) return undefined;
+  const lastStopInstance = _.findLastIndex(
+    input,
+    (route) => route.stopId === stopId,
   );
-  return newRoute;
+
+  if (lastStopInstance <= 0) return undefined;
+  const lastInstanceStop = input[lastStopInstance];
+  const instanceBeforeLastStop =
+    stopsCount < lastStopInstance
+      ? input[lastStopInstance - stopsCount]
+      : undefined;
+  if (
+    lastInstanceStop?.arriTime == undefined ||
+    instanceBeforeLastStop?.arriTime == undefined
+  )
+    return undefined;
+
+  const diff =
+    lastInstanceStop.arriTime.getTime() -
+    instanceBeforeLastStop.arriTime.getTime();
+  const dt = DateTime.fromJSDate(lastInstanceStop.arriTime, {
+    zone: "utc",
+  }).plus({
+    milliseconds: diff,
+  });
+  return dt.toJSDate();
+}
+
+function createNewRoute(
+  stops: number[],
+  input: RoutesArr,
+  busId: number,
+): RouteInput {
+  const lastRoute = input[input.length - 1];
+  const newStopIdIndex = lastRoute?.stopId
+    ? (stops.indexOf(lastRoute.stopId) + 1) % stops.length
+    : 0;
+  const stopId = stops.at(newStopIdIndex);
+  return {
+    busId,
+    stopId,
+    index: lastRoute ? lastRoute.index + 1 : 0,
+    deptTime:
+      getDeptTimeByLastStopRoute(input, stopId, lastRoute?.deptTime) ??
+      defaultRouteDeptTime(),
+    arriTime: getArriTimeByLastStopRoute(
+      input,
+      stops.length,
+      stopId,
+      lastRoute?.arriTime,
+    ),
+  };
 }
 
 function savedRouteToInput(
@@ -106,10 +158,10 @@ function savedRouteToDateInput(data: {
 }): { arr: string; dep: string } {
   return {
     arr: data.arriTime
-      ? DateTime.fromJSDate(data.arriTime).toFormat("HH:mm")
+      ? DateTime.fromJSDate(data.arriTime, { zone: "utc" }).toFormat("HH:mm")
       : "",
     dep: data.deptTime
-      ? DateTime.fromJSDate(data.deptTime).toFormat("HH:mm")
+      ? DateTime.fromJSDate(data.deptTime, { zone: "utc" }).toFormat("HH:mm")
       : "",
   };
 }
@@ -395,30 +447,32 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
           </a>
           <Tooltip id="bus-list-info" />
         </div>
-        <Select
-          isMulti
-          closeMenuOnSelect={false}
-          options={stops?.map((stop) => ({
-            value: stop.id,
-            label: `${stop.id} ${stop.name}`,
-          }))}
-          value={(selectedStops ?? []).map((stop) => ({
-            value: stop,
-            label: `${stop} ${stops?.find((s) => s.id === stop)?.name}`,
-          }))}
-          // Some dynamic import causes the generic type to be lost
-          // Dynamic import is done to prevent hydration errors
-          onChange={(val) =>
-            handleSelectedStopChange(
-              val as MultiValue<{
-                value: number;
-                label: string;
-              }>,
-            )
-          }
-          styles={selectStyles}
-          placeholder="Select stops..."
-        />
+        <div className="text-black">
+          <Select
+            isMulti
+            closeMenuOnSelect={false}
+            options={stops?.map((stop) => ({
+              value: stop.id,
+              label: `${stop.id} ${stop.name}`,
+            }))}
+            value={(selectedStops ?? []).map((stop) => ({
+              value: stop,
+              label: `${stop} ${stops?.find((s) => s.id === stop)?.name}`,
+            }))}
+            // Some dynamic import causes the generic type to be lost
+            // Dynamic import is done to prevent hydration errors
+            onChange={(val) =>
+              handleSelectedStopChange(
+                val as MultiValue<{
+                  value: number;
+                  label: string;
+                }>,
+              )
+            }
+            styles={selectStyles}
+            placeholder="Select stops..."
+          />
+        </div>
       </div>
       <br />
       <p className="mb-2 text-lg">Bus Route</p>
@@ -448,6 +502,14 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                     placeholder="Stop ID"
                     value={route.stopId ?? 0}
                     onChange={(e) => handleStopIdChange(e, index)}
+                    onKeyDown={(e) => {
+                      if (e.key != "Enter") return;
+                      if (e.metaKey) {
+                        addMultipleRoutes();
+                        return;
+                      }
+                      addNewRoute();
+                    }}
                   />
                   <div className="bg-item-background flex flex-1 flex-row gap-1">
                     <input
@@ -457,6 +519,14 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                       placeholder="--:--"
                       value={dateInput.at(index)?.arr}
                       onChange={(e) => handleArrivalTimeChange(e, index)}
+                      onKeyDown={(e) => {
+                        if (e.key != "Enter") return;
+                        if (e.metaKey) {
+                          addMultipleRoutes();
+                          return;
+                        }
+                        addNewRoute();
+                      }}
                     />
                     <button
                       title="Clear Arrival Time"
@@ -472,6 +542,14 @@ function EditBusRoute({ busId }: { busId: Bus["id"] }) {
                     className="bg-item-background flex-1 p-1"
                     value={dateInput.at(index)?.dep}
                     onChange={(e) => handleDepartureTimeChange(e, index)}
+                    onKeyDown={(e) => {
+                      if (e.key != "Enter") return;
+                      if (e.metaKey) {
+                        addMultipleRoutes();
+                        return;
+                      }
+                      addNewRoute();
+                    }}
                   />
                 </div>
               ))
