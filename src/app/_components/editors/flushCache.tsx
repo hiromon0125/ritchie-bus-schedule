@@ -11,7 +11,7 @@ export function FlushCacheBtn() {
       mounted.current = true;
       return;
     }
-    alert(`Flushed ${count} cache entries`);
+    if (count != 0) alert(`Flushed ${count} cache entries`);
   }, [isPending, count]);
   return (
     <form action={formAction}>

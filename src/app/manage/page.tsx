@@ -10,7 +10,7 @@ async function Page() {
       <EditBusList />
       <h2 className="mt-10 text-2xl">Station List</h2>
       <EditStopList />
-      <div className="mt-10 flex flex-col gap-2 rounded-md border-2 border-red-400 bg-red-100 p-3">
+      <div className="mt-10 flex flex-col gap-2 rounded-md border-2 border-red-400 p-3 dark:bg-red-500/15">
         <h2 className="text-2xl">Reset Cache</h2>
         <p className="font-light">
           Use this in case any old cache gets left behind after editing. Do not

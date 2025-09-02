@@ -237,5 +237,5 @@ export function splitByKeywords(
 }
 
 export function formatToTimeString(date: Date) {
-  return DateTime.fromJSDate(date).toFormat("h:mm a");
+  return DateTime.fromJSDate(date, { zone: "utc" }).toFormat("h:mm a");
 }
