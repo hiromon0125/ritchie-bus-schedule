@@ -64,6 +64,8 @@ export default async function Page(props: Props) {
   const currentStop = await api.stops.getOneByID({ id: stopId });
   if (!currentStop) {
     throw TRPCClientError.from(Error(`Stop not found (stop id: ${stopId})`));
+  } else if (currentStop.buses.length === 0) {
+    permanentRedirect(`/stop/${stopId}/empty`);
   }
   let favoriteBuses: number[] = [];
   if (user) {
@@ -87,7 +89,7 @@ export default async function Page(props: Props) {
   }
 
   const currentRoute = await api.routes.getCurrentRouteOfBus({
-    busId: selectedBus.id,
+    busId: selectedBus?.id,
     stopId: currentStop.id,
   });
   return (
