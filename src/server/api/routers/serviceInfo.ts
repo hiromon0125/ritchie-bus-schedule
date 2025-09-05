@@ -1,4 +1,5 @@
 import { type Bus } from "@prisma/client";
+import _ from "lodash";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -23,8 +24,8 @@ export const serviceInfoRouter = createTRPCRouter({
             createdAt: "desc",
           },
         })
-        .then((serviceInfo) => {
-          return serviceInfo.reduce(
+        .then((serviceInfo) =>
+          serviceInfo.reduce(
             (acc, info) => {
               const ind = acc.findIndex((i) => i.hash === info.hash);
               if (ind != -1) {
@@ -52,8 +53,8 @@ export const serviceInfoRouter = createTRPCRouter({
               createdAt: Date;
               updatedAt: Date;
             }[],
-          );
-        }),
+          ),
+        ),
     ),
   getCount: publicProcedure.query(async ({ ctx }) => {
     return ctx.db.serviceInformation
@@ -81,12 +82,29 @@ export const serviceInfoRouter = createTRPCRouter({
         ...busNames.map((name) => name.replace(/^\d+\s+/, "")),
         ...busNames.map((name) => `${name.replace(/^\d+\s+/, "")} Shuttle`), // Campus Connection Shuttle can be mentioned as Campus Connection
       ];
+      // New service info reference the bus id directly
+      const rawBusNumber = _.uniq(
+        input
+          .map((i) => i.buses.map((b) => z.number().safeParse(b.trim())))
+          .flat()
+          .filter((b) => b.success)
+          .map((b) => b.data),
+      );
       const busIds = await ctx.db.bus
         .findMany({
           where: {
-            name: {
-              in: busNamesToSearch,
-            },
+            OR: [
+              {
+                name: {
+                  in: busNamesToSearch,
+                },
+              },
+              {
+                id: {
+                  in: rawBusNumber,
+                },
+              },
+            ],
           },
           select: {
             name: true,
@@ -97,6 +115,7 @@ export const serviceInfoRouter = createTRPCRouter({
           buses.reduce(
             (acc, bus) => {
               acc[bus.name] = bus.id;
+              acc[bus.id.toString()] = bus.id; // Add the raw number as a string
               if (bus.name.endsWith(" Shuttle"))
                 acc[bus.name.replace(" Shuttle", "")] = bus.id; // Add the name without Shuttle
               return acc;
@@ -104,20 +123,24 @@ export const serviceInfoRouter = createTRPCRouter({
             {} as Record<string, number>,
           ),
         );
+
       const mut = await Promise.allSettled(
         input
           .map((serviceInfo) =>
             serviceInfo.buses.map(async (busName) => {
-              let sanitizedBusName = busName.replace(/^\d+\s+/, "").trim();
-              if (sanitizedBusName.endsWith("shuttle")) {
-                sanitizedBusName = sanitizedBusName.replace("shuttle", "");
-              }
-              const busId = busIds[busName.replace(/^\d+\s+/, "")];
-              if (busId === undefined) {
-                console.error(
-                  `Bus ${busName.replace(/^\d+\s+/, "")} not found for service info with hash ${serviceInfo.hash}`,
-                );
-                return;
+              let busId = busIds[busName.trim()];
+              if (busId == undefined) {
+                let sanitizedBusName = busName.replace(/^\d+\s+/, "").trim();
+                if (sanitizedBusName.endsWith("shuttle")) {
+                  sanitizedBusName = sanitizedBusName.replace("shuttle", "");
+                }
+                busId = busIds[busName.replace(/^\d+\s+/, "")];
+                if (busId === undefined) {
+                  console.error(
+                    `Bus ${busName.replace(/^\d+\s+/, "")} not found for service info with hash ${serviceInfo.hash}`,
+                  );
+                  return;
+                }
               }
               const newInfo = {
                 title: serviceInfo.title,

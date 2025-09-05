@@ -1,4 +1,9 @@
 onlyBuiltDependencies:
+  - '@clerk/shared'
   - '@prisma/client'
   - '@prisma/engines'
+  - '@tailwindcss/oxide'
+  - core-js
   - prisma
+  - sharp
+  - unrs-resolver

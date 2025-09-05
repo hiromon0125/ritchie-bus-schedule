@@ -97,13 +97,12 @@ model BusOperatingDay {
 }
 
 model ServiceInformation {
+  id        Int      @id @default(autoincrement())
   content   String
-  busId     Int
+  busId     Int?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   hash      String
   title     String
-  bus       Bus      @relation(fields: [busId], references: [id], onDelete: Cascade)
-
-  @@id([hash, busId])
+  bus       Bus?     @relation(fields: [busId], references: [id], onDelete: Cascade)
 }
