@@ -44,7 +44,9 @@ export async function updateServiceInfo() {
   }
   try {
     const res = await api.serviceinfo.createServiceInfo(parsed.data.data);
-    const rejectedItems = res.filter((r) => r.status === "rejected");
+    const rejectedItems = res.filter(
+      (result): result is PromiseRejectedResult => result.status === "rejected",
+    ) as PromiseRejectedResult[]; // Dont ask me why this is needed but lint just yells at me.
     if (rejectedItems.length > 0) {
       return new Response(
         `Failed to create service info: ${rejectedItems.map((r) => r.reason as unknown).join(", ")}`,

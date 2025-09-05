@@ -104,5 +104,6 @@ model ServiceInformation {
   updatedAt DateTime @updatedAt
   hash      String
   title     String
+  isNew     Boolean  @default(true)
   bus       Bus?     @relation(fields: [busId], references: [id], onDelete: Cascade)
 }

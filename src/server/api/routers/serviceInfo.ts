@@ -1,7 +1,12 @@
-import { type Bus } from "@prisma/client";
+import type { Bus, ServiceInformation } from "@prisma/client";
 import _ from "lodash";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+
+type MergedServiceInfo = Omit<ServiceInformation, "busId"> & {
+  buses?: Bus[];
+  busIds: Bus["id"][];
+};
 
 export const serviceInfoRouter = createTRPCRouter({
   getAll: publicProcedure
@@ -13,8 +18,8 @@ export const serviceInfoRouter = createTRPCRouter({
         })
         .optional(),
     )
-    .query(({ ctx, input }) =>
-      ctx.db.serviceInformation
+    .query(async ({ ctx, input }) => {
+      const savedServiceInfo = await ctx.db.serviceInformation
         .findMany({
           where: {
             busId: input?.busId,
@@ -24,38 +29,32 @@ export const serviceInfoRouter = createTRPCRouter({
             createdAt: "desc",
           },
         })
-        .then((serviceInfo) =>
-          serviceInfo.reduce(
-            (acc, info) => {
-              const ind = acc.findIndex((i) => i.hash === info.hash);
-              if (ind != -1) {
-                if (input?.includeRelatedBus) acc[ind]!.buses!.push(info.bus);
-                acc[ind]!.busIds.push(info.busId);
-                return acc;
-              }
-              acc.push({
-                title: info.title,
-                content: info.content,
-                hash: info.hash,
-                busIds: [info.busId],
-                ...(input?.includeRelatedBus ? { buses: [info.bus] } : {}),
-                createdAt: info.createdAt,
-                updatedAt: info.updatedAt,
-              });
+        .then((serviceInfo) => _.groupBy(serviceInfo, "hash"));
+      const serviceInfos = Object.entries(savedServiceInfo).map(([_, info]) => {
+        const buses = info
+          .map((i) => ({ bus: i.bus, id: i.busId }))
+          .reduce(
+            (acc, bus) => {
+              acc.buses.push(bus.bus);
+              acc.busIds.push(bus.id);
               return acc;
             },
-            [] as {
-              title: string;
-              content: string;
-              hash: string;
-              busIds: number[];
-              buses?: Bus[];
-              createdAt: Date;
-              updatedAt: Date;
-            }[],
-          ),
-        ),
-    ),
+            { buses: [], busIds: [] } as {
+              buses: (Bus | null)[];
+              busIds: (Bus["id"] | null)[];
+            },
+          );
+        const fin: Partial<(typeof info)[0]> & MergedServiceInfo = {
+          ...info[0]!,
+          busIds: buses.busIds.filter((i) => i != null),
+          buses: buses.buses.filter((i) => i != null),
+        };
+        delete fin.bus;
+        if (!input?.includeRelatedBus) delete fin.buses;
+        return fin as MergedServiceInfo;
+      });
+      return serviceInfos;
+    }),
   getCount: publicProcedure.query(async ({ ctx }) => {
     return ctx.db.serviceInformation
       .findMany({
@@ -77,6 +76,17 @@ export const serviceInfoRouter = createTRPCRouter({
       ),
     )
     .mutation(async ({ ctx, input }) => {
+      if (input.every((i) => !i.isNew)) {
+        return await Promise.allSettled([
+          ctx.db.serviceInformation
+            .updateMany({
+              data: {
+                isNew: false,
+              },
+            })
+            .then((res) => res.count),
+        ]);
+      }
       const busNames = input.map((i) => i.buses).flat();
       const busNamesToSearch = [
         ...busNames.map((name) => name.replace(/^\d+\s+/, "")),
@@ -124,60 +134,33 @@ export const serviceInfoRouter = createTRPCRouter({
           ),
         );
 
-      const mut = await Promise.allSettled(
-        input
-          .map((serviceInfo) =>
-            serviceInfo.buses.map(async (busName) => {
+      const mut = await Promise.allSettled([
+        ctx.db.serviceInformation.createManyAndReturn({
+          data: input.map((serviceInfo) => ({
+            ...serviceInfo,
+            buses: undefined,
+            busIds: serviceInfo.buses.map((busName) => {
               let busId = busIds[busName.trim()];
               if (busId == undefined) {
                 let sanitizedBusName = busName.replace(/^\d+\s+/, "").trim();
-                if (sanitizedBusName.endsWith("shuttle")) {
+                if (sanitizedBusName.endsWith("shuttle"))
                   sanitizedBusName = sanitizedBusName.replace("shuttle", "");
-                }
                 busId = busIds[busName.replace(/^\d+\s+/, "")];
-                if (busId === undefined) {
-                  console.error(
-                    `Bus ${busName.replace(/^\d+\s+/, "")} not found for service info with hash ${serviceInfo.hash}`,
-                  );
-                  return;
-                }
               }
-              const newInfo = {
-                title: serviceInfo.title,
-                content: serviceInfo.content,
-                hash: serviceInfo.hash,
-                createdAt: new Date(serviceInfo.timestamp),
-                busId,
-              };
-              return await ctx.db.serviceInformation.upsert({
-                where: {
-                  hash_busId: {
-                    hash: serviceInfo.hash,
-                    busId: busId,
-                  },
-                },
-                create: newInfo,
-                update: newInfo,
-              });
+              return busId;
             }),
-          )
-          .flat(),
-      );
-      const errors = mut.filter((i) => i.status === "rejected");
-      if (errors.length > 0) {
-        throw new Error(
-          "Failed to create service info: " +
-            errors.reduce((acc, err) => acc + "\n" + err.reason, ""),
-        );
-      }
-      // Remove any old service info that is not in the new data
-      await ctx.db.serviceInformation.deleteMany({
-        where: {
-          hash: {
-            notIn: input.map((i) => i.hash),
-          },
-        },
-      });
+          })),
+        }),
+        ctx.db.serviceInformation
+          .deleteMany({
+            where: {
+              hash: {
+                notIn: input.map((i) => i.hash),
+              },
+            },
+          })
+          .then((res) => res.count),
+      ]);
 
       return mut;
     }),
