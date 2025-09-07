@@ -95,7 +95,7 @@ export const serviceInfoRouter = createTRPCRouter({
       // New service info reference the bus id directly
       const rawBusNumber = _.uniq(
         input
-          .map((i) => i.buses.map((b) => z.number().safeParse(b.trim())))
+          .map((i) => i.buses.map((b) => z.coerce.number().safeParse(b.trim())))
           .flat()
           .filter((b) => b.success)
           .map((b) => b.data),
@@ -136,20 +136,24 @@ export const serviceInfoRouter = createTRPCRouter({
 
       const mut = await Promise.allSettled([
         ctx.db.serviceInformation.createManyAndReturn({
-          data: input.map((serviceInfo) => ({
-            ...serviceInfo,
-            buses: undefined,
-            busIds: serviceInfo.buses.map((busName) => {
-              let busId = busIds[busName.trim()];
-              if (busId == undefined) {
-                let sanitizedBusName = busName.replace(/^\d+\s+/, "").trim();
-                if (sanitizedBusName.endsWith("shuttle"))
-                  sanitizedBusName = sanitizedBusName.replace("shuttle", "");
-                busId = busIds[busName.replace(/^\d+\s+/, "")];
-              }
-              return busId;
-            }),
-          })),
+          data: input
+            .map((serviceInfo) =>
+              serviceInfo.buses.length === 0
+                ? {
+                    title: serviceInfo.title,
+                    content: serviceInfo.content,
+                    hash: serviceInfo.hash,
+                    isNew: true,
+                  }
+                : serviceInfo.buses.map((b) => ({
+                    title: serviceInfo.title,
+                    content: serviceInfo.content,
+                    hash: serviceInfo.hash,
+                    isNew: true,
+                    busId: busIds[b.trim()],
+                  })),
+            )
+            .flat(),
         }),
         ctx.db.serviceInformation
           .deleteMany({
