@@ -29,7 +29,7 @@ export const serviceInfoRouter = createTRPCRouter({
             createdAt: "desc",
           },
         })
-        .then((serviceInfo) => _.groupBy(serviceInfo, "hash"));
+        .then((serviceInfo) => _.groupBy(serviceInfo, "title"));
       const serviceInfos = Object.entries(savedServiceInfo).map(([_, info]) => {
         const buses = info
           .map((i) => ({ bus: i.bus, id: i.busId }))
@@ -58,7 +58,7 @@ export const serviceInfoRouter = createTRPCRouter({
   getCount: publicProcedure.query(async ({ ctx }) => {
     return ctx.db.serviceInformation
       .findMany({
-        distinct: "hash",
+        distinct: "title",
       })
       .then((l) => l.length);
   }),
