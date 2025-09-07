@@ -73,8 +73,8 @@ export function ServiceInfoProvider({
             </div>
           ) : (
             <div className="flex flex-col gap-2 p-3 pb-0">
-              {data.map((alert) => (
-                <div key={alert.hash} className="flex flex-col gap-2">
+              {data.map((alert, i) => (
+                <div key={i} className="flex flex-col gap-2">
                   <div className="flex flex-row items-center justify-between">
                     <p className="text-lg font-semibold">{alert.title}</p>
                     <p className="text-sm font-semibold text-gray-500">
