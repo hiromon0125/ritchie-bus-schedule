@@ -12,6 +12,7 @@ import { dark } from "@clerk/themes";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "t/react";
 import { Toaster } from "~/components/ui/sonner";
+import { HydrateClient } from "~/trpc/server";
 import { APPCONFIG } from "../appconfig";
 import { AlertNavBtn } from "./_components/alertNavigationBtn";
 
@@ -42,17 +43,19 @@ export default async function RootLayout({
       <PostHogProvider>
         <TRPCReactProvider cookies={cookie.toString()}>
           <ServiceInfoProvider>
-            <html
-              lang="en"
-              className={cookie.get("theme")?.value === "dark" ? "dark" : ""}
-            >
-              <body className={`font-sans ${inter.variable}`}>
-                <Header serviceNavigation={<AlertNavBtn />} />
-                {children}
-                <Footer />
-                <Toaster />
-              </body>
-            </html>
+            <HydrateClient>
+              <html
+                lang="en"
+                className={cookie.get("theme")?.value === "dark" ? "dark" : ""}
+              >
+                <body className={`font-sans ${inter.variable}`}>
+                  <Header serviceNavigation={<AlertNavBtn />} />
+                  {children}
+                  <Footer />
+                  <Toaster />
+                </body>
+              </html>
+            </HydrateClient>
           </ServiceInfoProvider>
         </TRPCReactProvider>
       </PostHogProvider>

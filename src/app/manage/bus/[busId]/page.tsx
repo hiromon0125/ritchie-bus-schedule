@@ -7,7 +7,7 @@ import { z } from "zod";
 async function Page(props: { params: Promise<{ busId: string }> }) {
   const params = await props.params;
   const busIdNumber = z.coerce.number().parse(params.busId);
-  await api.bus.getByID.prefetch({
+  void api.bus.getByID.prefetch({
     id: busIdNumber,
     isVisible: undefined,
   });
