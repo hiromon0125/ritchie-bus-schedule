@@ -43,12 +43,12 @@ export default function TimeTable({
       <div className="flex flex-row items-stretch border-b">
         <div className="relative flex h-auto flex-col pt-2">
           <div className="h-1 w-5 bg-(--bus-color)" />
-          <div className="mx-[6px] w-2 flex-1 bg-(--bus-color)" />
+          <div className="mx-1.5 w-2 flex-1 bg-(--bus-color)" />
         </div>
         <div className="flex flex-row gap-1">
-          <p className="mr-1 w-[74px] pt-2 text-center font-bold">Arrival</p>
+          <p className="mr-1 w-18.5 pt-2 text-center font-bold">Arrival</p>
           <p className="py-2 pr-2">-</p>
-          <p className="w-[74px] pt-2 font-bold">Departure</p>
+          <p className="w-18.5 pt-2 font-bold">Departure</p>
         </div>
       </div>
       {route.map((r, i) => {
@@ -60,22 +60,22 @@ export default function TimeTable({
             key={r.id}
             className={`group ${currentStatus?.isMoving ?? "irrelevant"} relative ${currentStatus?.isMoving === "stopped" && "border-accent rounded-lg border-4"}`}
           >
-            <div className="group-[.moving]:bg-accent absolute top-[-2px] left-0 z-10 hidden h-1 w-full rounded-full bg-amber-500 group-[.moving]:block group-[.starting]:block" />
+            <div className="group-[.moving]:bg-accent absolute -top-0.5 left-0 z-10 hidden h-1 w-full rounded-full bg-amber-500 group-[.moving]:block group-[.starting]:block" />
             <div className="flex flex-row items-stretch gap-1 border-b">
               <div className="relative h-auto">
-                <div className="group-[.moving]:border-accent group-[.moving]:bg-accent absolute top-[-6px] left-1/2 hidden aspect-square w-3 -translate-x-1/2 rounded-full border-[3px] border-amber-500 bg-amber-500 group-[.moving]:block group-[.starting]:block" />
-                <div className="mx-[6px] h-full w-2 bg-(--bus-color)" />
+                <div className="group-[.moving]:border-accent group-[.moving]:bg-accent absolute -top-1.5 left-1/2 hidden aspect-square w-3 -translate-x-1/2 rounded-full border-[3px] border-amber-500 bg-amber-500 group-[.moving]:block group-[.starting]:block" />
+                <div className="mx-1.5 h-full w-2 bg-(--bus-color)" />
                 <div className="bg-item-background absolute top-1/2 left-1/2 aspect-square w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-slate-700 dark:border-slate-50" />
               </div>
-              <p className="w-[74px] py-2">{formatToTimeString(arriTime)}</p>
+              <p className="w-18.5 py-2">{formatToTimeString(arriTime)}</p>
               <p className="py-2 pr-2">-</p>
-              <p className="w-[74px] py-2">{formatToTimeString(r.deptTime)}</p>
+              <p className="w-18.5 py-2">{formatToTimeString(r.deptTime)}</p>
             </div>
           </div>
         );
       })}
       <div className="relative flex h-4 flex-col pb-2">
-        <div className="mx-[6px] w-2 flex-1 bg-(--bus-color)" />
+        <div className="mx-1.5 w-2 flex-1 bg-(--bus-color)" />
         <div className="h-1 w-5 bg-(--bus-color)" />
       </div>
     </div>
@@ -84,7 +84,7 @@ export default function TimeTable({
 
 function ErrorTimeTable() {
   return (
-    <div className="bg-item-background max-h-[500px] rounded-md">
+    <div className="bg-item-background max-h-125 rounded-md">
       <h3 className="text-2xl font-bold">Times not found</h3>
     </div>
   );

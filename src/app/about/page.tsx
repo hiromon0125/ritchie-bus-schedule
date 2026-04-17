@@ -30,7 +30,7 @@ function KeyScrollTitle() {
 function Page() {
   return (
     <>
-      <div className="flex h-[30vh] max-h-[600px] w-screen flex-col items-center justify-center overflow-hidden bg-[#E1ECF7] md:h-[70vh]">
+      <div className="flex h-[30vh] max-h-150 w-screen flex-col items-center justify-center overflow-hidden bg-[#E1ECF7] md:h-[70vh]">
         <Image
           src="/ritches-bus-schedule-banner-uiux.png"
           alt={APPCONFIG.APP_NAME}
@@ -44,7 +44,7 @@ function Page() {
           <div className="hidden flex-1 items-center justify-center p-3 md:flex">
             <Image
               src="/images/station-stations.gif"
-              className="m-6 aspect-square w-[25vw] max-w-[480px]"
+              className="m-6 aspect-square w-[25vw] max-w-120"
               alt="Waiting for a bus ;-;"
               width={480}
               height={480}
@@ -83,7 +83,7 @@ function Page() {
           </div>
         </div>
       </div>
-      <div className="-mt-32 h-[80vh] max-h-[400px] w-screen overflow-clip pb-10 md:mt-0">
+      <div className="-mt-32 h-[80vh] max-h-100 w-screen overflow-clip pb-10 md:mt-0">
         <div className="z-0 h-[200vh] w-[150vw] translate-x-[-70vw] translate-y-60 rotate-12 bg-[#2A609B] md:translate-x-[-30vw]">
           <Image
             className={aboutStyles.bus}
@@ -95,7 +95,7 @@ function Page() {
         </div>
       </div>
       <div className="z-10 w-screen bg-[#2A609B] text-white">
-        <div className="m-auto mb-[-5rem] max-w-(--breakpoint-lg) translate-y-[-5rem]">
+        <div className="m-auto -mb-20 max-w-(--breakpoint-lg) -translate-y-20">
           <Subtitle white>Key Features</Subtitle>
           <div className="mx-6 flex flex-col gap-4 lg:flex-row">
             <div className="flex flex-1 flex-col gap-4">
@@ -197,63 +197,63 @@ function Page() {
         </div>
         <div className="mt-6 bg-slate-800">
           <div className="relative m-auto flex max-w-(--breakpoint-lg) flex-row flex-wrap justify-around gap-6 py-8">
-            <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center rounded-lg">
+            <div className="flex min-w-75 flex-1 flex-row items-center justify-center rounded-lg">
               <Image
-                className={`${aboutStyles.logo} h-[40px]`}
+                className={`${aboutStyles.logo} h-10`}
                 src="/logo/nextjs.svg"
                 alt="next js"
                 width={(394 / 80) * 150}
                 height={150}
               />
             </div>
-            <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
+            <div className="flex min-w-75 flex-1 flex-row items-center justify-center">
               <Image
-                className={` ${aboutStyles.logo} h-[50px]`}
+                className={` ${aboutStyles.logo} h-12.5`}
                 src="/logo/react.svg"
                 alt="react js"
                 width={150}
                 height={150}
               />
             </div>
-            <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
+            <div className="flex min-w-75 flex-1 flex-row items-center justify-center">
               <Image
-                className={`${aboutStyles.logo} h-[50px]`}
+                className={`${aboutStyles.logo} h-12.5`}
                 src="/logo/tailwindtype.svg"
                 alt="tailwind"
                 width={(263 / 34) * 150}
                 height={150}
               />
             </div>
-            <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
+            <div className="flex min-w-75 flex-1 flex-row items-center justify-center">
               <Image
-                className={`${aboutStyles.logo} h-[50px]`}
+                className={`${aboutStyles.logo} h-12.5`}
                 src="/logo/supabase.svg"
                 alt="supabase"
                 width={(581 / 113) * 150}
                 height={150}
               />
             </div>
-            <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center pt-[6px]">
+            <div className="flex min-w-75 flex-1 flex-row items-center justify-center pt-1.5">
               <Image
-                className={`${aboutStyles.logo} h-[50px]`}
+                className={`${aboutStyles.logo} h-12.5`}
                 src="/logo/drizzle.svg"
                 alt="drizzle"
                 width={(732 / 80) * 150}
                 height={150}
               />
             </div>
-            <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
+            <div className="flex min-w-75 flex-1 flex-row items-center justify-center">
               <Image
-                className={`${aboutStyles.logo} h-[50px]`}
+                className={`${aboutStyles.logo} h-12.5`}
                 src="/logo/trpc.svg"
                 alt="trpc"
                 width={(429 / 128) * 150}
                 height={150}
               />
             </div>
-            <div className="flex min-w-[300px] flex-1 flex-row items-center justify-center">
+            <div className="flex min-w-75 flex-1 flex-row items-center justify-center">
               <Image
-                className={`${aboutStyles.logo} h-[45px]`}
+                className={`${aboutStyles.logo} h-11.25`}
                 src="/logo/vercel.svg"
                 alt="vercel"
                 width={(4438 / 1000) * 150}
@@ -316,40 +316,40 @@ function Page() {
                 contributions from users.
               </p>
             </div>
-            <div className="relative mt-[60px] ml-[1.5px] h-0 w-full">
-              <div className="absolute mt-1 flex h-[50vh] w-[51px] -translate-y-full flex-col bg-[#1FCF33] lg:hidden" />
-              <div className="absolute flex h-[55vh] w-[51px] flex-col bg-[#1FCF33]">
-                <div className="top-[20vh] z-20 m-auto ml-[-2px]pt-[10vh] flex flex-col items-center gap-2">
+            <div className="relative mt-15 ml-[1.5px] h-0 w-full">
+              <div className="absolute mt-1 flex h-[50vh] w-12.75 -translate-y-full flex-col bg-[#1FCF33] lg:hidden" />
+              <div className="absolute flex h-[55vh] w-12.75 flex-col bg-[#1FCF33]">
+                <div className="ml-[-2px]pt-[10vh] top-[20vh] z-20 m-auto flex flex-col items-center gap-2">
                   <div className="flex flex-col gap-0">
-                    <div className="bg-background before:bg-background h-7 w-3 translate-x-[-5px] -rotate-45 before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 motion-safe:animate-pulse" />
-                    <div className="bg-background before:bg-background motion-safe:animation-delay-500 h-7 w-3 translate-x-[-5px] -rotate-45 before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 motion-safe:animate-pulse" />
-                    <div className="bg-background before:bg-background motion-safe:animation-delay-1000 h-7 w-3 translate-x-[-5px] -rotate-45 before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 motion-safe:animate-pulse" />
+                    <div className="bg-background before:bg-background h-7 w-3 -translate-x-1.25 -rotate-45 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
+                    <div className="bg-background before:bg-background motion-safe:animation-delay-500 h-7 w-3 -translate-x-1.25 -rotate-45 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
+                    <div className="bg-background before:bg-background motion-safe:animation-delay-1000 h-7 w-3 -translate-x-1.25 -rotate-45 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
                   </div>
                   <div className="bg-background m-auto h-9 w-9 rounded-full" />
                 </div>
               </div>
-              <div className="absolute top-[55vh] h-[100px] w-[100px] rounded-bl-full bg-[#1FCF33]">
-                <div className="bg-background float-end h-[50px] w-[49px] rounded-bl-full" />
+              <div className="absolute top-[55vh] h-25 w-25 rounded-bl-full bg-[#1FCF33]">
+                <div className="bg-background float-end h-12.5 w-12.25 rounded-bl-full" />
               </div>
-              <div className="absolute top-[55vh] mt-[50px] h-[100px] w-full">
-                <div className="mx-[100px] flex h-[50px] flex-row bg-[#1FCF33]">
+              <div className="absolute top-[55vh] mt-12.5 h-25 w-full">
+                <div className="mx-25 flex h-12.5 flex-row bg-[#1FCF33]">
                   <div className="m-auto flex flex-row items-center gap-4">
-                    <div className="flex flex-row gap-4 pt-[12px]">
-                      <div className="bg-background before:bg-background h-7 w-3 -rotate-[135deg] before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 motion-safe:animate-pulse" />
-                      <div className="bg-background before:bg-background motion-safe:animation-delay-500 h-7 w-3 -rotate-[135deg] before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 motion-safe:animate-pulse" />
-                      <div className="bg-background before:bg-background motion-safe:animation-delay-1000 h-7 w-3 -rotate-[135deg] before:block before:h-7 before:w-3 before:translate-x-[8px] before:translate-y-[8px] before:rotate-90 motion-safe:animate-pulse" />
+                    <div className="flex flex-row gap-4 pt-3">
+                      <div className="bg-background before:bg-background h-7 w-3 -rotate-135 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
+                      <div className="bg-background before:bg-background motion-safe:animation-delay-500 h-7 w-3 -rotate-135 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
+                      <div className="bg-background before:bg-background motion-safe:animation-delay-1000 h-7 w-3 -rotate-135 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
                     </div>
                     <div className="bg-background h-9 w-9 rounded-full" />
                   </div>
                 </div>
-                <div className="float-end mt-[-50px] flex h-[100px] w-[100px] items-end justify-start rounded-tr-full bg-[#1FCF33]">
-                  <div className="bg-background h-[50px] w-[50px] rounded-tr-full"></div>
+                <div className="float-end -mt-12.5 flex h-25 w-25 items-end justify-start rounded-tr-full bg-[#1FCF33]">
+                  <div className="bg-background h-12.5 w-12.5 rounded-tr-full"></div>
                 </div>
-                <div className="absolute right-0 bottom-0 mt-[50px] h-[150px] w-[50px] translate-y-full bg-[#1FCF33]"></div>
+                <div className="absolute right-0 bottom-0 mt-12.5 h-37.5 w-12.5 translate-y-full bg-[#1FCF33]"></div>
               </div>
             </div>
             <svg
-              className={` ${aboutStyles.pipe} absolute top-52 z-10 translate-x-[-273px]`}
+              className={` ${aboutStyles.pipe} absolute top-52 z-10 -translate-x-68.25`}
               width="327"
               height="542"
               viewBox="0 0 327 542"
@@ -376,7 +376,7 @@ function Page() {
               <div className="absolute right-6 bottom-2 flex flex-row items-center gap-4 md:right-32">
                 <Link
                   href="/"
-                  className="before:bg-background after:bg-background rounded-tr-full rounded-bl-full bg-red-500 p-2 px-6 text-lg text-white duration-300 ease-in-out before:absolute before:block before:h-20 before:w-5 before:-translate-x-20 before:-translate-y-6 before:-rotate-[20deg] before:opacity-50 before:duration-500 before:ease-in-out after:absolute after:block after:h-20 after:w-3 after:-translate-x-[6.5rem] after:-translate-y-14 after:-rotate-[20deg] after:opacity-50 after:duration-500 after:ease-in-out hover:scale-105 hover:bg-red-400 hover:before:translate-x-[14.5rem] hover:after:translate-x-52 active:bg-red-600 md:p-4 md:px-12 md:text-2xl"
+                  className="before:bg-background after:bg-background rounded-tr-full rounded-bl-full bg-red-500 p-2 px-6 text-lg text-white duration-300 ease-in-out before:absolute before:block before:h-20 before:w-5 before:-translate-x-20 before:-translate-y-6 before:-rotate-20 before:opacity-50 before:duration-500 before:ease-in-out after:absolute after:block after:h-20 after:w-3 after:-translate-x-26 after:-translate-y-14 after:-rotate-20 after:opacity-50 after:duration-500 after:ease-in-out hover:scale-105 hover:bg-red-400 hover:before:translate-x-58 hover:after:translate-x-52 active:bg-red-600 md:p-4 md:px-12 md:text-2xl"
                 >
                   Use the App &gt;
                 </Link>

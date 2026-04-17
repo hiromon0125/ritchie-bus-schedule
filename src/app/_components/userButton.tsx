@@ -52,7 +52,7 @@ export default function ProfileButton() {
               className={cn(
                 "flex flex-row items-center justify-center",
                 serviceInfoCount &&
-                  "m-[-4px] h-6 rounded-full border bg-red-500 text-white",
+                  "-m-1 h-6 rounded-full border bg-red-500 text-white",
               )}
             >
               <MdOutlineBusAlert className="scale-125" />

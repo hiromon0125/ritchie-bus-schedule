@@ -1,7 +1,7 @@
 "use client";
 
-import type { Stops } from "@prisma/client";
 import dynamic from "next/dynamic";
+import type { Stops } from "~/prisma/client";
 
 export const DotMap = dynamic(() => import("./DotMap"), { ssr: false });
 

@@ -12,7 +12,7 @@ async function AlertNavigation() {
       <div className="relative">
         <p>Alert</p>
         {count > 0 && (
-          <div className="absolute top-[-5px] right-[-8px] flex aspect-square h-4 flex-row items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
+          <div className="absolute -top-1.25 -right-2 flex aspect-square h-4 flex-row items-center justify-center rounded-full bg-red-500 text-sm font-bold text-white">
             <p>{count}</p>
           </div>
         )}

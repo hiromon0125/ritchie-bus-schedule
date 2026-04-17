@@ -10,7 +10,6 @@ import ClickableTooltip from "@/infobtn";
 import { ServiceInfoContentDecorator } from "@/serviceinfo";
 import { BusTag, StopTag } from "@/tags";
 import { currentUser } from "@clerk/nextjs/server";
-import type { Bus, Stops } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
@@ -21,6 +20,7 @@ import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import { IoMdInformationCircle } from "react-icons/io";
 import { api } from "t/server";
+import type { Bus, Stops } from "~/prisma/client";
 import { APPCONFIG } from "../../../appconfig";
 type Props = {
   params: Promise<{ busId: string }>;

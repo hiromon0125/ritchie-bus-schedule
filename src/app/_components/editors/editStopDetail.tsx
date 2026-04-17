@@ -47,7 +47,7 @@ export default function EditStopDetail({ stop }: { stop: DetailedStop }) {
         }
       />
       <div className="bg-item-background border-primary mt-4 rounded-md border-2 p-2">
-        <h2 className="bg-item-background border-primary mt-[-22px] ml-2 w-min rounded-md border-2 px-2 text-lg">
+        <h2 className="bg-item-background border-primary -mt-5.5 ml-2 w-min rounded-md border-2 px-2 text-lg">
           Buses
         </h2>
         <div className="flex flex-row flex-wrap gap-1 pt-2">
@@ -120,7 +120,7 @@ function EditLocation({
   setLocation: (loc: { lat: number; lon: number }) => void;
 }) {
   return (
-    <div className="border-primary h-[403px] w-full overflow-clip rounded-md border-2">
+    <div className="border-primary h-100.75 w-full overflow-clip rounded-md border-2">
       <Map
         defaultCenter={[RIT_CENTER.lat, RIT_CENTER.lng]}
         zoom={14}

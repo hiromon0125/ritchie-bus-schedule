@@ -16,7 +16,7 @@ export default function ScrollToTopButton({
         onClick={() => scrollTo({ left: 0, top: 0, behavior: "smooth" })}
         style={{ backgroundColor: bgColor }}
       >
-        <div className="translate-y-[-2px]">
+        <div className="-translate-y-0.5">
           <IoIosArrowUp size={48} />
         </div>
       </button>

@@ -25,7 +25,7 @@ export default function Header({
         <div className="top-0 m-auto flex h-full w-full max-w-(--breakpoint-lg) flex-row items-center gap-4">
           <Link
             href="/"
-            className="bg-item-background flex h-full flex-1 flex-row items-center gap-4 rounded-xl p-[10px]"
+            className="bg-item-background flex h-full flex-1 flex-row items-center gap-4 rounded-xl p-2.5"
           >
             <Image
               src="/icons/bus-512x512.png"
@@ -40,7 +40,7 @@ export default function Header({
             </TitleTag>
           </Link>
           <nav
-            className="hidden h-full flex-row items-center gap-[5px] rounded-xl bg-neutral-500/60 p-[5px] text-xl not-dark:shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex dark:bg-slate-950/60"
+            className="hidden h-full flex-row items-center gap-1.25 rounded-xl bg-neutral-500/60 p-1.25 text-xl not-dark:shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] md:flex dark:bg-slate-950/60"
             style={
               // This is a workaround because I couldn't get the opacity to work with the tailwind var classes
               {
@@ -70,7 +70,7 @@ export default function Header({
             </Link>
             {serviceNavigation}
           </nav>
-          <div className="h-14 w-[2px] rounded-full bg-neutral-700 dark:bg-neutral-300" />
+          <div className="h-14 w-0.5 rounded-full bg-neutral-700 dark:bg-neutral-300" />
           <div className="bg-item-background flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
             <ProfileBtnComponent />
           </div>

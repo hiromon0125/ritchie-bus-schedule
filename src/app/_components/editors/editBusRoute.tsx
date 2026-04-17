@@ -1,5 +1,4 @@
 "use client";
-import type { Bus, Routes, Stops } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
@@ -11,6 +10,7 @@ import {
   MdInfoOutline,
   MdOutlineClear,
 } from "react-icons/md";
+import type { Bus, Routes, Stops } from "~/prisma/client";
 
 import type { MultiValue } from "react-select";
 import { Tooltip } from "react-tooltip";

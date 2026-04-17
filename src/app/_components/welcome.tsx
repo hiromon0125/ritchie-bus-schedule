@@ -34,9 +34,9 @@ export default function WelcomePopup() {
     <Dialog open={isWelcomeOpen} onOpenChange={setState}>
       <DialogContent className="bg-item-background rounded-3xl border-4 border-blue-500">
         <div>
-          <div className="relative flex h-[200px] w-full flex-col items-center bg-[rgba(225,236,247,100)]">
+          <div className="relative flex h-50 w-full flex-col items-center bg-[rgba(225,236,247,100)]">
             <Image
-              className="h-[200px] object-contain"
+              className="h-50 object-contain"
               src="/ritches-bus-schedule-banner.png"
               alt="banner"
               height={1201}

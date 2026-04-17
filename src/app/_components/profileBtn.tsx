@@ -4,15 +4,16 @@ import ProfileButton from "./userButton";
 
 export default function ProfileBtn() {
   return (
-    <div className="has-[div#loggedout]:border-accent flex h-full w-full flex-none flex-col items-center justify-center rounded-lg text-lg has-[div#loggedout]:border-2">
+    <div className="flex h-full w-full flex-none flex-col items-center justify-center rounded-lg text-lg">
       <Show when="signed-out">
-        <div id="loggedout" className="hidden" />
-        <SignInButton>
-          <div className="flex flex-col items-center justify-center gap-1">
-            <TbLogin2 size={24} color="var(--color-accent)" />
-            <button className="text-accent xs:text-sm text-base">Login</button>
-          </div>
-        </SignInButton>
+        <div className="border-accent flex h-full w-full flex-none flex-col items-center justify-center rounded-lg border-2 text-lg">
+          <SignInButton>
+            <span className="flex flex-col items-center justify-center gap-1">
+              <TbLogin2 size={24} color="var(--color-accent)" />
+              <span className="text-accent xs:text-sm text-base">Login</span>
+            </span>
+          </SignInButton>
+        </div>
       </Show>
       <Show when="signed-in">
         <div className="flex h-12 w-12 flex-col items-center justify-center rounded-full">

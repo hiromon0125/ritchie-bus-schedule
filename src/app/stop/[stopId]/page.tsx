@@ -11,7 +11,6 @@ import StopMap from "@/Map";
 import { BusTag, StopTag } from "@/tags";
 import TimeTable from "@/timeTable";
 import { currentUser } from "@clerk/nextjs/server";
-import type { Bus } from "@prisma/client";
 import { TRPCClientError } from "@trpc/client";
 import _ from "lodash";
 import { type Metadata } from "next";
@@ -22,6 +21,7 @@ import { IoMdInformationCircle } from "react-icons/io";
 import { MdDirectionsBus } from "react-icons/md";
 import type { RouterOutputs } from "t/react";
 import { api } from "t/server";
+import type { Bus } from "~/prisma/client";
 import { APPCONFIG } from "../../../appconfig";
 type Props = {
   params: Promise<{ stopId: string }>;
@@ -117,7 +117,7 @@ export default async function Page(props: Props) {
         </div>
         {_.sortBy(currentStop.buses, ["id"]).map((bus, i) => (
           <div
-            className="min-w-[calc(100vw-48px)] flex-1 md:w-auto md:max-w-[calc(50%-5px)] md:min-w-[300px] lg:min-w-[calc(50%-12px)]"
+            className="min-w-[calc(100vw-48px)] flex-1 md:w-auto md:max-w-[calc(50%-5px)] md:min-w-75 lg:min-w-[calc(50%-12px)]"
             key={i}
           >
             <Suspense fallback={<BusInfoSkeleton />}>

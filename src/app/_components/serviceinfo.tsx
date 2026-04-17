@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { api } from "t/react";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -17,7 +18,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
-import { Button } from "../../components/ui/button";
 import { BusTag } from "./tags";
 import { splitByKeywords } from "./util";
 
@@ -49,9 +49,9 @@ export function ServiceInfoProvider({
       <Dialog open={state} onOpenChange={setState}>
         <DialogContent className="bg-background rounded-3xl border-4 border-orange-500">
           <DialogHeader>
-            <div className="to-background relative flex h-[140px] w-full flex-col items-center justify-center bg-linear-to-b from-orange-500/40">
+            <div className="to-background relative flex h-35 w-full flex-col items-center justify-center bg-linear-to-b from-orange-500/40">
               <Image
-                className="mt-2 h-[100px] object-contain"
+                className="mt-2 h-25 object-contain"
                 src="/service-info-icon.png"
                 alt="alert"
                 height={100}
@@ -101,7 +101,7 @@ export function ServiceInfoProvider({
                   <div className="text-base">
                     <ServiceInfoContentDecorator content={alert.content} />
                   </div>
-                  <div className="h-[2px] w-full rounded-full bg-slate-600 dark:bg-slate-300" />
+                  <div className="h-0.5 w-full rounded-full bg-slate-600 dark:bg-slate-300" />
                 </div>
               ))}
             </div>
