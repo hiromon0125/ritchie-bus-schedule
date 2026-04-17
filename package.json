@@ -27,9 +27,9 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.99.0",
-    "@trpc/client": "11.1.2",
-    "@trpc/react-query": "11.1.2",
-    "@trpc/server": "11.1.2",
+    "@trpc/client": "^11.1.2",
+    "@trpc/react-query": "^11.1.2",
+    "@trpc/server": "^11.1.2",
     "@types/lodash": "^4.17.24",
     "@uidotdev/usehooks": "^2.4.1",
     "@upstash/redis": "^1.37.0",
@@ -45,9 +45,9 @@
     "pg": "^8.20.0",
     "pigeon-maps": "^0.22.1",
     "posthog-js": "^1.369.2",
-    "react": "19.2.5",
+    "react": "^19.2.5",
     "react-day-picker": "^9.14.0",
-    "react-dom": "19.2.5",
+    "react-dom": "^19.2.5",
     "react-icons": "^5.6.0",
     "react-select": "^5.10.2",
     "react-share": "^5.3.0",
@@ -64,7 +64,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "16.2.4",
+    "@next/eslint-plugin-next": "^16.2.4",
     "@tailwindcss/postcss": "^4.2.2",
     "@tanstack/eslint-plugin-query": "^5.99.0",
     "@types/eslint": "^8.56.12",
@@ -72,13 +72,13 @@
     "@types/luxon": "^3.7.1",
     "@types/node": "^25.6.0",
     "@types/pg": "^8.20.0",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.58.2",
     "@typescript-eslint/parser": "^8.58.2",
     "dotenv": "^17.4.2",
     "eslint": "^9.39.4",
-    "eslint-config-next": "16.2.4",
+    "eslint-config-next": "^16.2.4",
     "postcss": "^8.5.10",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.6.14",
@@ -89,11 +89,5 @@
   "ct3aMetadata": {
     "initVersion": "7.25.0"
   },
-  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977",
-  "pnpm": {
-    "overrides": {
-      "@types/react": "19.2.14",
-      "@types/react-dom": "19.2.3"
-    }
-  }
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }
