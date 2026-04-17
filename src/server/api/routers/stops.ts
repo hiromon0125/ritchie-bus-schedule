@@ -1,5 +1,5 @@
-import type { PrismaClient, Stops } from "@prisma/client";
 import { z } from "zod";
+import type { PrismaClient, Stops } from "~/prisma/client";
 import {
   createTRPCRouter,
   privateProcedure,

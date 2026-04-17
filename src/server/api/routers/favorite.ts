@@ -1,8 +1,8 @@
 import type { PartialKey } from "@/types";
-import type { FavoriteBus, FavoriteStop } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import _ from "lodash";
 import { z } from "zod";
+import type { FavoriteBus, FavoriteStop } from "~/prisma/client";
 import {
   createTRPCRouter,
   privateProcedure,

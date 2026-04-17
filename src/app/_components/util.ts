@@ -1,6 +1,6 @@
-import { type Bus } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
+import { type Bus } from "~/prisma/client";
 import type { BusRoute, Status } from "./types";
 
 export function getRelative(now: Date, time: Date) {

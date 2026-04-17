@@ -152,13 +152,13 @@ function EditBusList() {
               </button>
               <button
                 onClick={() => handleDelete(bus)}
-                className="m-2 ml-[-12px] rounded-sm border border-red-500 px-2 py-1 text-red-500 hover:bg-red-100"
+                className="m-2 -ml-3 rounded-sm border border-red-500 px-2 py-1 text-red-500 hover:bg-red-100"
               >
                 Delete
               </button>
             </div>
             {index !== data.length - 1 && (
-              <hr className="border-primary border-1" />
+              <hr className="border-primary border" />
             )}
           </div>
         ))}

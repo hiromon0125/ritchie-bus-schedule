@@ -1,11 +1,11 @@
 "use client";
 
-import type { BusOperatingDay } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useMemo, useState } from "react";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
 import "react-day-picker/style.css";
+import type { BusOperatingDay } from "~/prisma/client";
 import { cn } from "../../../lib/utils";
 
 type EditedOperatingDay = Partial<BusOperatingDay> &

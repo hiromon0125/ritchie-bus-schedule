@@ -1,5 +1,5 @@
-import type { Bus, Stops } from "@prisma/client";
 import type { JSX } from "react";
+import type { Bus, Stops } from "~/prisma/client";
 import { cn } from "../../lib/utils";
 
 type TagSize = "sm" | "md" | "lg";

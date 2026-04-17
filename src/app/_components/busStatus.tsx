@@ -1,10 +1,10 @@
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { Show, SignInButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
-import type { Bus } from "@prisma/client";
 import Link from "next/link";
 import React, { Suspense } from "react";
 import { type RouterOutputs } from "t/react";
 import { api } from "t/server";
+import type { Bus } from "~/prisma/client";
 import { AnimatedDoubleList, ClickEventBlocker } from "./animatedList";
 import BusStatusString, { BusStatusStringBig } from "./busStatusString";
 import { SpecificFavBtn } from "./favBtn";
@@ -112,7 +112,7 @@ export function SkeletonBusStatusString() {
 
 export function BusInfoSkeleton() {
   return (
-    <div className="relative -z-0">
+    <div className="relative z-0">
       <div
         className="bg-item-background border-bg-item-backgroundrder-white relative box-border flex h-full w-full flex-row items-stretch rounded-xl p-2"
         style={{ "--bus-color": "gray" } as React.CSSProperties}
@@ -151,12 +151,12 @@ export async function BusList() {
       favoritedBusKeys={favBusesId.map((favBus) => favBus.toString())}
       emptySection={
         <>
-          <SignedIn>
+          <Show when="signed-in">
             <div className="flex h-28 w-full flex-row items-center justify-center rounded-md p-2 text-lg font-bold">
               Favorite some buses from below to see them here!
             </div>
-          </SignedIn>
-          <SignedOut>
+          </Show>
+          <Show when="signed-out">
             <div className="bg-item-background flex h-28 w-full flex-row items-center justify-center gap-1 rounded-md p-2 text-lg font-bold">
               <SignInButton>
                 <u className="text-blue-600 underline dark:text-blue-400">
@@ -165,7 +165,7 @@ export async function BusList() {
               </SignInButton>
               <p>to add your favorite buses.</p>
             </div>
-          </SignedOut>
+          </Show>
         </>
       }
       locked={!user}

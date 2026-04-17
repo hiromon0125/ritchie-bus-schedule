@@ -1,10 +1,10 @@
 "use client";
 
-import type { Bus } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { useEffect, useState } from "react";
 import { api, type RouterOutputs } from "t/react";
+import type { Bus } from "~/prisma/client";
 import type { BusRoute } from "./types";
 import { evalStatusFromRoute, getCurrentTime } from "./util";
 

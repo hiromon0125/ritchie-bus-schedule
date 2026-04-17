@@ -1,5 +1,5 @@
 "use client";
-import { SignedOut, SignInButton } from "@clerk/nextjs";
+import { Show, SignInButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -34,9 +34,9 @@ export default function WelcomePopup() {
     <Dialog open={isWelcomeOpen} onOpenChange={setState}>
       <DialogContent className="bg-item-background rounded-3xl border-4 border-blue-500">
         <div>
-          <div className="relative flex h-[200px] w-full flex-col items-center bg-[rgba(225,236,247,100)]">
+          <div className="relative flex h-50 w-full flex-col items-center bg-[rgba(225,236,247,100)]">
             <Image
-              className="h-[200px] object-contain"
+              className="h-50 object-contain"
               src="/ritches-bus-schedule-banner.png"
               alt="banner"
               height={1201}
@@ -60,13 +60,13 @@ export default function WelcomePopup() {
                 </Button>
               </DialogClose>
               <DialogClose asChild>
-                <SignedOut>
+                <Show when="signed-out">
                   <SignInButton>
                     <div className="w-full rounded-md border-2 border-blue-500 p-1 text-center text-base text-blue-500 transition-all hover:shadow-lg hover:shadow-blue-100">
                       Create an account
                     </div>
                   </SignInButton>
-                </SignedOut>
+                </Show>
               </DialogClose>
             </div>
           </DialogHeader>

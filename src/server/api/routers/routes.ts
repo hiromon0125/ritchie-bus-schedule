@@ -1,8 +1,8 @@
 import { getCurrentTimeServer, NEWYORK_TIMEZONE } from "@/util";
-import { type PrismaClient, type Routes } from "@prisma/client";
 import _ from "lodash";
 import { DateTime } from "luxon";
 import { z } from "zod";
+import { type PrismaClient, type Routes } from "~/prisma/client";
 import {
   createTRPCRouter,
   privateProcedure,

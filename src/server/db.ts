@@ -1,4 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "~/prisma/client";
 
 import { Redis } from "@upstash/redis";
 import { env } from "~/env";
@@ -9,8 +10,12 @@ const createRedisClient = () =>
     token: env.UPSTASH_REDIS_REST_TOKEN,
   });
 
+const adapter = new PrismaPg({
+  connectionString: env.DATABASE_URL,
+});
 const createPrismaClient = () =>
   new PrismaClient({
+    adapter,
     log:
       env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   });

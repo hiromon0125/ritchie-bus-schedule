@@ -128,7 +128,7 @@ export default function Footer() {
         <div className="bg-border-background/60 mx-auto h-(--mobile-bottom-nav-height) justify-center rounded-3xl border-slate-700 p-3 shadow-md backdrop-blur-md dark:border">
           <div className="top-0 m-auto flex h-full w-full max-w-(--breakpoint-lg) flex-row items-center gap-4">
             <div
-              className="flex h-full flex-1 flex-row items-center gap-1 rounded-xl bg-neutral-500/60 p-[5px] text-base shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] dark:bg-slate-950/60 dark:shadow-none"
+              className="flex h-full flex-1 flex-row items-center gap-1 rounded-xl bg-neutral-500/60 p-1.25 text-base shadow-[0px_2px_2px_-1px_var(--black-shadow-color)_inset,0px_-2px_4px_-1px_var(--white-shadow-color)_inset,0px_1px_1px_0px_var(--white-highlight-color)] dark:bg-slate-950/60 dark:shadow-none"
               style={
                 // This is a workaround because I couldn't get the opacity to work with the tailwind var classes
                 {
@@ -167,7 +167,7 @@ export default function Footer() {
               </Link>
               <ServiceInfoBtn />
             </div>
-            <div className="max-xs:hidden h-14 w-[2px] bg-neutral-700" />
+            <div className="max-xs:hidden h-14 w-0.5 bg-neutral-700" />
             <div className="bg-item-background max-xs:hidden flex aspect-square h-full items-center justify-center rounded-xl shadow-md">
               <Suspense>
                 <ProfileBtnComponent />
@@ -203,7 +203,7 @@ async function AlertNavigation() {
       <div className="relative">
         <p>Alert</p>
         {count > 0 && (
-          <div className="absolute top-[-5px] right-[-8px] flex aspect-square h-4 flex-row items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+          <div className="absolute -top-1.25 -right-2 flex aspect-square h-4 flex-row items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
             <p>{count}</p>
           </div>
         )}

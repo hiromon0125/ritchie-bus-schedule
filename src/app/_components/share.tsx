@@ -9,8 +9,8 @@ import {
   LinkedinShareButton,
   RedditIcon,
   RedditShareButton,
-  TwitterShareButton,
   XIcon,
+  XShareButton,
 } from "react-share";
 import { APPCONFIG } from "../../appconfig";
 export function Share() {
@@ -27,14 +27,14 @@ export function Share() {
       >
         <RedditIcon round size={36} />
       </RedditShareButton>
-      <TwitterShareButton
+      <XShareButton
         title={title}
         url={url}
         hashtags={hashtags}
         aria-label="Share on X"
       >
         <XIcon round size={36} />
-      </TwitterShareButton>
+      </XShareButton>
       <FacebookShareButton
         url={url}
         title={title}
