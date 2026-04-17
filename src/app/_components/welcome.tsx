@@ -1,5 +1,5 @@
 "use client";
-import { SignedOut, SignInButton } from "@clerk/nextjs";
+import { Show, SignInButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -60,13 +60,13 @@ export default function WelcomePopup() {
                 </Button>
               </DialogClose>
               <DialogClose asChild>
-                <SignedOut>
+                <Show when="signed-out">
                   <SignInButton>
                     <div className="w-full rounded-md border-2 border-blue-500 p-1 text-center text-base text-blue-500 transition-all hover:shadow-lg hover:shadow-blue-100">
                       Create an account
                     </div>
                   </SignInButton>
-                </SignedOut>
+                </Show>
               </DialogClose>
             </div>
           </DialogHeader>

@@ -1,5 +1,5 @@
-import type { Bus, PrismaClient } from "@prisma/client";
 import { z } from "zod";
+import type { Bus, PrismaClient } from "~/prisma/client";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { LONG_CACHE_TIME_OPTION, type ThenArg } from "../cacheUtil";
 
