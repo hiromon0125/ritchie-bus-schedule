@@ -322,8 +322,8 @@ function Page() {
                 <div className="ml-[-2px]pt-[10vh] top-[20vh] z-20 m-auto flex flex-col items-center gap-2">
                   <div className="flex flex-col gap-0">
                     <div className="bg-background before:bg-background h-7 w-3 -translate-x-1.25 -rotate-45 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
-                    <div className="bg-background before:bg-background motion-safe:animation-delay-500 h-7 w-3 -translate-x-1.25 -rotate-45 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
-                    <div className="bg-background before:bg-background motion-safe:animation-delay-1000 h-7 w-3 -translate-x-1.25 -rotate-45 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
+                    <div className="bg-background before:bg-background h-7 w-3 -translate-x-1.25 -rotate-45 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse motion-safe:delay-500" />
+                    <div className="bg-background before:bg-background h-7 w-3 -translate-x-1.25 -rotate-45 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse motion-safe:delay-1000" />
                   </div>
                   <div className="bg-background m-auto h-9 w-9 rounded-full" />
                 </div>
@@ -336,8 +336,8 @@ function Page() {
                   <div className="m-auto flex flex-row items-center gap-4">
                     <div className="flex flex-row gap-4 pt-3">
                       <div className="bg-background before:bg-background h-7 w-3 -rotate-135 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
-                      <div className="bg-background before:bg-background motion-safe:animation-delay-500 h-7 w-3 -rotate-135 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
-                      <div className="bg-background before:bg-background motion-safe:animation-delay-1000 h-7 w-3 -rotate-135 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse" />
+                      <div className="bg-background before:bg-background h-7 w-3 -rotate-135 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse motion-safe:delay-500" />
+                      <div className="bg-background before:bg-background h-7 w-3 -rotate-135 before:block before:h-7 before:w-3 before:translate-x-2 before:translate-y-2 before:rotate-90 motion-safe:animate-pulse motion-safe:delay-1000" />
                     </div>
                     <div className="bg-background h-9 w-9 rounded-full" />
                   </div>

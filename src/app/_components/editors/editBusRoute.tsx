@@ -149,7 +149,7 @@ function savedRouteToInput(
       arriTime: route.arriTime ?? undefined,
     })),
     "index",
-  ) as RoutesArr;
+  );
 }
 
 function savedRouteToDateInput(data: {

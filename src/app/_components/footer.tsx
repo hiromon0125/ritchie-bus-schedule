@@ -15,7 +15,7 @@ import { Share } from "./share";
 export default function Footer() {
   return (
     <>
-      <div className="mb-[calc(var(--mobile-footer-space)*-1)] w-full bg-slate-800 pb-(--mobile-footer-space) text-start text-base text-white [--mobile-footer-space:calc(var(--mobile-bottom-nav-height)+var(--mobile-bottom-nav-margin))] md:pb-0">
+      <div className="-mb-(--mobile-footer-space) w-full bg-slate-800 pb-(--mobile-footer-space) text-start text-base text-white [--mobile-footer-space:calc(var(--mobile-bottom-nav-height)+var(--mobile-bottom-nav-margin))] md:pb-0">
         <div className="m-auto flex w-full max-w-(--breakpoint-lg) flex-col">
           <div className="flex flex-col justify-between gap-3 px-3 pt-3 sm:px-6 sm:pt-6 md:flex-row md:items-end md:gap-8">
             <div className="flex flex-row items-center md:gap-2 md:pb-6">

@@ -11,7 +11,7 @@ export default function BusPageListSkeleton() {
           <div className="flex flex-1 flex-col gap-2">
             <div className="flex w-full flex-row items-center gap-2">
               <div className="aspect-square w-10 animate-pulse rounded-md bg-slate-400" />
-              <div className="animation-delay-150 h-5 w-full animate-pulse overflow-clip rounded-md bg-slate-400 text-lg font-bold text-nowrap text-ellipsis" />
+              <div className="h-5 w-full animate-pulse overflow-clip rounded-md bg-slate-400 text-lg font-bold text-nowrap text-ellipsis delay-150" />
             </div>
             <div className="h-5 w-8/12 animate-pulse rounded-md bg-slate-400"></div>
           </div>

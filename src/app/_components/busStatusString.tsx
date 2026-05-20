@@ -40,7 +40,7 @@ export default function BusStatusString({
       </div>
       <div className="flex h-full w-full flex-col justify-center pl-4">
         {isMoving === "loading" ? (
-          <div className="animation-delay-100 h-4 w-9/12 animate-pulse rounded-sm bg-slate-300" />
+          <div className="h-4 w-9/12 animate-pulse rounded-sm bg-slate-300 delay-100" />
         ) : (
           <p className="text-left text-sm">{statusMessage}</p>
         )}
@@ -49,7 +49,7 @@ export default function BusStatusString({
           (stopObj ? (
             <p className="m-0 text-left text-sm">{stopObj?.name}</p>
           ) : (
-            <div className="animation-delay-150 mt-1 h-4 w-3/6 animate-pulse rounded-sm bg-slate-300" />
+            <div className="mt-1 h-4 w-3/6 animate-pulse rounded-sm bg-slate-300 delay-150" />
           ))}
       </div>
     </div>
@@ -108,10 +108,10 @@ function StatusBlob({ status }: { status?: BusMovingStatus }) {
       {status && ACTIVE_STATUS.includes(status) ? (
         <>
           <div className="h-3 w-3 animate-ping rounded-full bg-(--status-color)" />
-          <div className="animation-delay-100 absolute top-0 left-0 h-3 w-3 animate-pulse rounded-full bg-(--status-color)" />
+          <div className="absolute top-0 left-0 h-3 w-3 animate-pulse rounded-full bg-(--status-color) delay-100" />
         </>
       ) : (
-        <div className="animation-delay-100 h-3 w-3 rounded-full bg-(--status-color)" />
+        <div className="h-3 w-3 rounded-full bg-(--status-color) delay-100" />
       )}
     </div>
   );

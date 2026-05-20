@@ -51,7 +51,7 @@ export const serviceInfoRouter = createTRPCRouter({
         };
         delete fin.bus;
         if (!input?.includeRelatedBus) delete fin.buses;
-        return fin as MergedServiceInfo;
+        return fin;
       });
       return serviceInfos;
     }),

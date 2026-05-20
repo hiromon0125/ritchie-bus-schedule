@@ -20,7 +20,7 @@ export function TimeTableSkeleton() {
           </div>
           <div className="m-auto mx-0 mr-3 h-3 w-15.5 animate-pulse rounded-sm bg-gray-400 py-2" />
           <p className="py-2 pr-2">-</p>
-          <div className="animation-delay-100 m-auto mx-0 h-3 w-18.5 animate-pulse rounded-sm bg-gray-400 py-2" />
+          <div className="m-auto mx-0 h-3 w-18.5 animate-pulse rounded-sm bg-gray-400 py-2 delay-100" />
         </div>
       ))}
       <div className="relative flex h-4 flex-col pb-2">
