@@ -101,10 +101,10 @@ export function SkeletonBusStatusString() {
   return (
     <div className="flex h-12 flex-row items-center">
       <div className="relative ml-5 h-3 w-3">
-        <div className="animation-delay-100 absolute top-0 left-0 h-3 w-3 rounded-full bg-slate-400" />
+        <div className="absolute top-0 left-0 h-3 w-3 rounded-full bg-slate-400 delay-100" />
       </div>
       <div className="relative flex h-full w-full flex-col justify-center pl-4">
-        <div className="animation-delay-100 h-5 w-9/12 animate-pulse rounded-sm bg-slate-300" />
+        <div className="h-5 w-9/12 animate-pulse rounded-sm bg-slate-300 delay-100" />
       </div>
     </div>
   );
