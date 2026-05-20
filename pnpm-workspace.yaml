@@ -1,23 +1,23 @@
 allowBuilds:
-  '@clerk/shared': set this to true or false
-  '@prisma/engines': set this to true or false
-  bufferutil: set this to true or false
-  core-js: set this to true or false
-  prisma: set this to true or false
-  protobufjs: set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
-  utf-8-validate: set this to true or false
+  "@clerk/shared": true
+  "@prisma/engines": true
+  bufferutil: true
+  core-js: true
+  prisma: true
+  protobufjs: true
+  sharp: true
+  unrs-resolver: true
+  utf-8-validate: true
 minimumReleaseAgeExclude:
-  - '@types/node@25.9.1'
-  - '@types/react@19.2.15'
+  - "@types/node@25.9.1"
+  - "@types/react@19.2.15"
   - postcss@8.5.15
   - styled-components@6.4.2
 onlyBuiltDependencies:
-  - '@clerk/shared'
-  - '@prisma/client'
-  - '@prisma/engines'
-  - '@tailwindcss/oxide'
+  - "@clerk/shared"
+  - "@prisma/client"
+  - "@prisma/engines"
+  - "@tailwindcss/oxide"
   - core-js
   - prisma
   - protobufjs
