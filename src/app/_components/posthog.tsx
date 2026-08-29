@@ -2,32 +2,62 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 
+import { useUser } from "@clerk/nextjs";
 import posthog from "posthog-js";
 import { PostHogProvider as PHProvider } from "posthog-js/react";
 import { env } from "../../env";
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
+  const [isInitialized, setIsInitialized] = useState(false);
+
   useEffect(() => {
     if (env.NEXT_PUBLIC_POSTHOG_KEY == undefined) {
       return;
     }
     posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com",
+      ui_host: "https://us.i.posthog.com",
+      defaults: "2026-05-30",
       person_profiles: "always", // or 'always' to create profiles for anonymous users as well
       capture_pageview: false, // Disable automatic pageview capture, as we capture manually
       capture_pageleave: true, // Capture pageleave events
       capture_dead_clicks: true, // Capture dead clicks
     });
+    setIsInitialized(true);
   }, []);
 
   return (
     <PHProvider client={posthog}>
-      <SuspendedPostHogPageView />
+      {isInitialized && <SuspendedPostHogPageView />}
+      {isInitialized && <PostHogUserIdentifier />}
       {children}
     </PHProvider>
   );
+}
+
+/** Identifies the current Clerk user without rendering any UI. */
+function PostHogUserIdentifier() {
+  const { isLoaded, user } = useUser();
+  const posthog = usePostHog();
+
+  useEffect(() => {
+    if (!isLoaded || !posthog) {
+      return;
+    }
+
+    if (user) {
+      posthog.identify(user.id, {
+        email: user.primaryEmailAddress?.emailAddress,
+      });
+      return;
+    }
+
+    posthog.reset();
+  }, [isLoaded, posthog, user]);
+
+  return null;
 }
 
 function PostHogPageView() {
