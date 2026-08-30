@@ -18,7 +18,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     }
     posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com",
-      ui_host: "https://us.posthog.com",
+      ui_host: "https://us.i.posthog.com",
       defaults: "2026-05-30",
       person_profiles: "always", // or 'always' to create profiles for anonymous users as well
       capture_pageview: false, // Disable automatic pageview capture, as we capture manually
