@@ -14,6 +14,9 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (env.NEXT_PUBLIC_POSTHOG_KEY == undefined) {
+      console.warn(
+        "PostHog is disabled because NEXT_PUBLIC_POSTHOG_KEY is missing from this browser build.",
+      );
       return;
     }
     posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
@@ -24,6 +27,9 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       capture_pageview: false, // Disable automatic pageview capture, as we capture manually
       capture_pageleave: true, // Capture pageleave events
       capture_dead_clicks: true, // Capture dead clicks
+      on_request_error: () => {
+        console.error("PostHog request failed");
+      },
     });
     setIsInitialized(true);
   }, []);
@@ -72,11 +78,9 @@ function PostHogPageView() {
       if (searchParams.toString()) {
         url = url + "?" + searchParams.toString();
       }
-
       posthog.capture("$pageview", { $current_url: url });
     }
   }, [pathname, searchParams, posthog]);
-
   return null;
 }
 

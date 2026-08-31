@@ -1,6 +1,5 @@
 import { createEnv } from "@t3-oss/env-nextjs";
-import process from "process";
-import { z } from "zod";
+import * as z from "zod";
 
 export const env = createEnv({
   /**
@@ -56,11 +55,9 @@ export const env = createEnv({
       })
       .optional(), // This is not actually optional, but during load on client side the entire env object is empty which makes this throw an error that we can't do anything about.
     NEXT_PUBLIC_POSTHOG_KEY: z
-      .string({ message: "PostHog Key missing" })
-      .optional(),
+      .string({ message: "PostHog Key missing" }).optional(),
     NEXT_PUBLIC_POSTHOG_HOST: z
-      .string({ message: "PostHog Host Link missing" })
-      .optional(),
+      .string({ message: "PostHog Host Link missing" }).optional(),
   },
 
   /**
