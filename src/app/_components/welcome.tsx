@@ -68,6 +68,11 @@ export default function WelcomePopup() {
                   </SignInButton>
                 </Show>
               </DialogClose>
+              <p className="text-xs text-gray-500">
+                We use cookies to keep this website working properly and to
+                understand how it's used. By continuing, you agree to our use of
+                cookies.
+              </p>
             </div>
           </DialogHeader>
           <DialogFooter>
