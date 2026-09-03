@@ -59,8 +59,6 @@ function PostHogUserIdentifier() {
       });
       return;
     }
-
-    posthog.reset();
   }, [isLoaded, posthog, user]);
 
   return null;
