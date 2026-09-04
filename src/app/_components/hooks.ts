@@ -2,7 +2,7 @@
 
 import _ from "lodash";
 import { DateTime } from "luxon";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { api, type RouterOutputs } from "t/react";
 import type { Bus } from "~/prisma/client";
 import type { BusRoute } from "./types";
@@ -72,7 +72,10 @@ export function useBusStatus(
     hasNextPage,
     isFetching,
   } = useRouteByBus(busId, stopId, serverGuessedRoute);
-  const fetchedRoutes = _.flatMap(routes?.pages, (page) => page.data);
+  const fetchedRoutes = useMemo(
+    () => _.flatMap(routes?.pages, (page) => page.data),
+    [routes?.pages],
+  );
   const nextRoute = fetchedRoutes[index] ?? serverGuessedRoute;
   const status = useStatusFromRoute(
     nextRoute,
@@ -85,15 +88,18 @@ export function useBusStatus(
     if (hasNextPage && !isFetching && index >= fetchedRoutes.length - 2) {
       fetchNextPage()?.catch((e) => console.error(e));
     }
-    if (nextRoute) {
+    if (nextRoute && index < fetchedRoutes.length) {
       const now = getCurrentTime().dt;
       const dept = DateTime.fromJSDate(nextRoute.deptTime, {
         zone: "utc",
       });
       const updateTime = dept.diff(now);
-      const timeout = setTimeout(() => {
-        setIndex((i) => i + 1);
-      }, updateTime.milliseconds);
+      const timeout = setTimeout(
+        () => {
+          setIndex((i) => i + 1);
+        },
+        Math.max(updateTime.milliseconds, 0),
+      );
       return () => clearTimeout(timeout);
     }
   }, [
@@ -116,7 +122,10 @@ function useStatusFromRoute(
   firstRouteIndex?: number,
 ) {
   const [currentTime, setCurrentTime] = useState(getCurrentTime());
-  const status = evalStatusFromRoute(nextRoute, currentTime, firstRouteIndex);
+  const status = useMemo(
+    () => evalStatusFromRoute(nextRoute, currentTime, firstRouteIndex),
+    [nextRoute, currentTime, firstRouteIndex],
+  );
   useEffect(() => {
     if (!isOperating || isRouteCompleted) return;
     const interval = setTimeout(() => {
