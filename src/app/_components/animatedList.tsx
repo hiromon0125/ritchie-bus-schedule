@@ -7,6 +7,11 @@ type ChildDataProp = {
   "data-bus-id"?: string;
 };
 
+function haveSameKeys(a: ReactElement[], b: ReactElement[]) {
+  if (a.length !== b.length) return false;
+  return a.every((el, i) => el.key === b[i]?.key);
+}
+
 export function AnimatedDoubleList({
   children,
   emptySection,
@@ -37,8 +42,8 @@ export function AnimatedDoubleList({
       else unfav.push(child);
     }
 
-    setFavoritedChildren(fav);
-    setUnfavoritedChildren(unfav);
+    setFavoritedChildren((prev) => (haveSameKeys(prev, fav) ? prev : fav));
+    setUnfavoritedChildren((prev) => (haveSameKeys(prev, unfav) ? prev : unfav));
   }, [children, favoritedBusKeys]);
 
   return (
