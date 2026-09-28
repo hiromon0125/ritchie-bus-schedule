@@ -13,6 +13,7 @@ minimumReleaseAgeExclude:
   - "@types/react@19.2.15"
   - postcss@8.5.15
   - styled-components@6.4.2
+  - posthog-js@1.434.16
 onlyBuiltDependencies:
   - "@clerk/shared"
   - "@prisma/client"
