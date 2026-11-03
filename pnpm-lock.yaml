@@ -206,11 +206,11 @@ importers:
         specifier: ^5.102.8
         version: 5.105.2(@types/react@19.3.0)(react@19.3.1)
       '@trpc/client':
-        specifier: ^11.18.0
-        version: 11.22.1(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2)
+        specifier: ^11.23.0
+        version: 11.23.0(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2)
       '@trpc/react-query':
         specifier: ^11.23.0
-        version: 11.23.0(@tanstack/react-query@5.105.2(@types/react@19.3.0)(react@19.3.1))(@trpc/client@11.22.1(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2))(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(react@19.3.1)(typescript@7.0.2)
+        version: 11.23.0(@tanstack/react-query@5.105.2(@types/react@19.3.0)(react@19.3.1))(@trpc/client@11.23.0(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2))(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(react@19.3.1)(typescript@7.0.2)
       '@trpc/server':
         specifier: ^11.23.0
         version: 11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2)
@@ -1568,11 +1568,10 @@ packages:
       '@types/react':
         optional: true
 
-  '@trpc/client@11.22.1':
-    resolution: {integrity: sha512-flkAwF8bzzNCVJ5xcTMS+Az6Go/XK30ZIOGT94UJBYAmMq1w2tY7gk7+CIMiRUdvHzOYAVPitX2H+20qcIIomA==}
-    hasBin: true
+  '@trpc/client@11.23.0':
+    resolution: {integrity: sha512-61qMX0YY8FDrFuAScBFMzeAPbH9l3p7fEa2YGY6wKhGlOcgCiJOVxSw8P5JdHVJEV6sw81HPPXlSWI51byxkXA==}
     peerDependencies:
-      '@trpc/server': 11.22.1
+      '@trpc/server': 11.23.0
       typescript: '>=5.7.2'
 
   '@trpc/react-query@11.23.0':
@@ -5483,15 +5482,15 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  '@trpc/client@11.22.1(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2)':
+  '@trpc/client@11.23.0(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2)':
     dependencies:
       '@trpc/server': 11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2)
       typescript: 7.0.2
 
-  '@trpc/react-query@11.23.0(@tanstack/react-query@5.105.2(@types/react@19.3.0)(react@19.3.1))(@trpc/client@11.22.1(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2))(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(react@19.3.1)(typescript@7.0.2)':
+  '@trpc/react-query@11.23.0(@tanstack/react-query@5.105.2(@types/react@19.3.0)(react@19.3.1))(@trpc/client@11.23.0(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2))(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(react@19.3.1)(typescript@7.0.2)':
     dependencies:
       '@tanstack/react-query': 5.105.2(@types/react@19.3.0)(react@19.3.1)
-      '@trpc/client': 11.22.1(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2)
+      '@trpc/client': 11.23.0(@trpc/server@11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2))(typescript@7.0.2)
       '@trpc/server': 11.23.0(next@16.4.4(@babel/core@7.29.7(supports-color@8.1.1))(@types/node@26.6.6)(babel-plugin-macros@3.1.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2)
       react: 19.3.1
       typescript: 7.0.2
