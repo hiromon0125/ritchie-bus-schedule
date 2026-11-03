@@ -201,7 +201,7 @@ importers:
         version: 1.4.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.11
-        version: 0.13.11(arktype@2.2.9)(typescript@7.0.2)(valibot@1.4.2(typescript@7.0.2))(zod@3.25.76)
+        version: 0.13.11(arktype@2.2.9)(typescript@7.0.2)(valibot@1.4.2(typescript@7.0.2))(zod@4.6.7)
       '@tanstack/react-query':
         specifier: ^5.102.8
         version: 5.105.2(@types/react@19.3.0)(react@19.3.1)
@@ -302,8 +302,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(react@19.3.1)
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.6.6
+        version: 4.6.7
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.7
@@ -4292,8 +4292,8 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
-  zod@3.25.76:
-    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+  zod@4.6.7:
+    resolution: {integrity: sha512-g8W2D2kU6a8untc053fX1uVBKzM7yqAxW/3zwk83+6RyF2+SKOuV+c0wBDhUwzV1PaGapmZH+rmcUzPf+3CGwg==}
 
 snapshots:
 
@@ -5377,21 +5377,21 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@t3-oss/env-core@0.13.11(arktype@2.2.9)(typescript@7.0.2)(valibot@1.4.2(typescript@7.0.2))(zod@3.25.76)':
+  '@t3-oss/env-core@0.13.11(arktype@2.2.9)(typescript@7.0.2)(valibot@1.4.2(typescript@7.0.2))(zod@4.6.7)':
     optionalDependencies:
       arktype: 2.2.9
       typescript: 7.0.2
       valibot: 1.4.2(typescript@7.0.2)
-      zod: 3.25.76
+      zod: 4.6.7
 
-  '@t3-oss/env-nextjs@0.13.11(arktype@2.2.9)(typescript@7.0.2)(valibot@1.4.2(typescript@7.0.2))(zod@3.25.76)':
+  '@t3-oss/env-nextjs@0.13.11(arktype@2.2.9)(typescript@7.0.2)(valibot@1.4.2(typescript@7.0.2))(zod@4.6.7)':
     dependencies:
-      '@t3-oss/env-core': 0.13.11(arktype@2.2.9)(typescript@7.0.2)(valibot@1.4.2(typescript@7.0.2))(zod@3.25.76)
+      '@t3-oss/env-core': 0.13.11(arktype@2.2.9)(typescript@7.0.2)(valibot@1.4.2(typescript@7.0.2))(zod@4.6.7)
     optionalDependencies:
       arktype: 2.2.9
       typescript: 7.0.2
       valibot: 1.4.2(typescript@7.0.2)
-      zod: 3.25.76
+      zod: 4.6.7
 
   '@tailwindcss/node@4.3.3':
     dependencies:
@@ -6645,8 +6645,8 @@ snapshots:
       '@babel/parser': 7.29.8
       eslint: 10.14.0(jiti@2.7.0)(supports-color@8.1.1)
       hermes-parser: 0.25.1
-      zod: 3.25.76
-      zod-validation-error: 4.0.2(zod@3.25.76)
+      zod: 4.6.7
+      zod-validation-error: 4.0.2(zod@4.6.7)
     transitivePeerDependencies:
       - supports-color
 
@@ -8236,8 +8236,8 @@ snapshots:
       grammex: 3.1.13
       graphmatch: 1.1.1
 
-  zod-validation-error@4.0.2(zod@3.25.76):
+  zod-validation-error@4.0.2(zod@4.6.7):
     dependencies:
-      zod: 3.25.76
+      zod: 4.6.7
 
-  zod@3.25.76: {}
+  zod@4.6.7: {}
