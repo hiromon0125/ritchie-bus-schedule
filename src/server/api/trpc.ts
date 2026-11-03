@@ -13,8 +13,8 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import type { SetCommandOptions } from "@upstash/redis";
-import { captureServerEvent } from "~/server/posthog";
 import { cache, db } from "~/server/db";
+import { captureServerEvent } from "~/server/posthog";
 
 /**
  * 1. CONTEXT
@@ -197,3 +197,12 @@ export const privateProcedure = t.procedure
       },
     });
   });
+
+export const adminProcedure = privateProcedure.use(async ({ ctx, next }) => {
+  if (!ctx.session.has({ role: "org:admin" })) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+    });
+  }
+  return next();
+});

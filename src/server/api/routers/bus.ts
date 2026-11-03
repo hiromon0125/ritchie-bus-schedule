@@ -1,6 +1,10 @@
 import { z } from "zod";
 import type { Bus, PrismaClient } from "~/prisma/client";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+  adminProcedure,
+  createTRPCRouter,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { LONG_CACHE_TIME_OPTION, type ThenArg } from "../cacheUtil";
 
 type UsersWithPosts = ThenArg<ReturnType<typeof getBusById>>;
@@ -110,7 +114,7 @@ export const busRouter = createTRPCRouter({
       });
       return await ctx.cacheSetReturn(cacheKey, bus, LONG_CACHE_TIME_OPTION);
     }),
-  addBus: publicProcedure
+  addBus: adminProcedure
     .input(
       z.object({
         id: z.number(),
@@ -127,7 +131,7 @@ export const busRouter = createTRPCRouter({
       const caches = [`bus:all:*`, `bus:${input.id}:*`];
       await ctx.cacheDel(caches);
     }),
-  editBus: publicProcedure
+  editBus: adminProcedure
     .input(
       z.object({
         id: z.number(),
@@ -168,7 +172,7 @@ export const busRouter = createTRPCRouter({
       await ctx.cacheDel(caches);
       return res;
     }),
-  deleteBus: publicProcedure
+  deleteBus: adminProcedure
     .input(
       z.object({
         id: z.number(),
