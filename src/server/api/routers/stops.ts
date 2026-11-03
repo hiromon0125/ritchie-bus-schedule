@@ -1,8 +1,8 @@
 import { z } from "zod";
 import type { PrismaClient, Stops } from "~/prisma/client";
 import {
+  adminProcedure,
   createTRPCRouter,
-  privateProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
 import type { ThenArg } from "../cacheUtil";
@@ -158,7 +158,7 @@ export const stopsRouter = createTRPCRouter({
     });
     return await ctx.cacheSetReturn(cacheKey, stops);
   }),
-  addBusStop: privateProcedure
+  addBusStop: adminProcedure
     .input(
       z.object({
         id: z.number().optional(),
@@ -185,7 +185,7 @@ export const stopsRouter = createTRPCRouter({
       const caches = [`stops:all:*`, `stops:coor`, `stops:${input.id}:*`];
       await ctx.cacheDel(caches);
     }),
-  editBusStop: privateProcedure
+  editBusStop: adminProcedure
     .input(
       z.object({
         id: z.number(),
@@ -206,7 +206,7 @@ export const stopsRouter = createTRPCRouter({
       const caches = [`stops:all:*`, `stops:coor`, `stops:${input.id}:*`];
       await ctx.cacheDel(caches);
     }),
-  deleteBusStop: privateProcedure
+  deleteBusStop: adminProcedure
     .input(
       z.object({
         id: z.number(),

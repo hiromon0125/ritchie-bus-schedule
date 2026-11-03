@@ -4,8 +4,8 @@ import { DateTime } from "luxon";
 import { z } from "zod";
 import { type PrismaClient, type Routes } from "~/prisma/client";
 import {
+  adminProcedure,
   createTRPCRouter,
-  privateProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
 import { LONG_CACHE_TIME_OPTION, type ThenArg } from "../cacheUtil";
@@ -99,7 +99,7 @@ export const routesRouter = createTRPCRouter({
         LONG_CACHE_TIME_OPTION,
       );
     }),
-  updateRoutes: privateProcedure
+  updateRoutes: adminProcedure
     .input(
       z.object({
         busId: z.number(),
