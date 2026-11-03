@@ -1,5 +1,6 @@
 {
-  "eslint.useFlatConfig": false,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "eslint.useFlatConfig": true,
   "files.associations": {
     "*css": "tailwindcss"
   }
