@@ -5,9 +5,50 @@ import { usePostHog } from "posthog-js/react";
 import { Suspense, useEffect, useState } from "react";
 
 import { useUser } from "@clerk/nextjs";
-import posthog from "posthog-js";
+import posthog, { type CaptureResult } from "posthog-js";
 import { PostHogProvider as PHProvider } from "posthog-js/react";
 import { env } from "../../env";
+
+/** App bundles are served from this path; third-party frames never are. */
+const FIRST_PARTY_PATH = "/_next/static/";
+
+interface ExceptionFrame {
+  filename?: string;
+}
+
+interface ExceptionListItem {
+  stacktrace?: { frames?: ExceptionFrame[] };
+}
+
+/**
+ * Returns true when any stack frame points at this app's own code. Browser
+ * extensions and the host browser inject scripts whose frames are the
+ * document URL, a vendor CDN, or absent, so an exception with no first-party
+ * frame did not come from this app and cannot be acted on.
+ */
+function hasFirstPartyFrame(event: CaptureResult): boolean {
+  const exceptions = event.properties.$exception_list as
+    | ExceptionListItem[]
+    | undefined;
+  return (exceptions ?? []).some((exception) =>
+    (exception.stacktrace?.frames ?? []).some((frame) =>
+      frame.filename?.includes(FIRST_PARTY_PATH),
+    ),
+  );
+}
+
+/**
+ * Drops `$exception` events that carry no first-party frame, so wallet
+ * extensions, Dark Reader, host-browser injections, and cross-origin
+ * "Script error." noise stay out of error tracking. Every other event and
+ * genuine app exceptions pass through untouched.
+ */
+function dropThirdPartyExceptions(event: CaptureResult | null) {
+  if (event?.event === "$exception" && !hasFirstPartyFrame(event)) {
+    return null;
+  }
+  return event;
+}
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   const [isInitialized, setIsInitialized] = useState(false);
@@ -27,6 +68,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       capture_pageview: false, // Disable automatic pageview capture, as we capture manually
       capture_pageleave: true, // Capture pageleave events
       capture_dead_clicks: true, // Capture dead clicks
+      before_send: dropThirdPartyExceptions,
       on_request_error: () => {
         console.error("PostHog request failed");
       },
