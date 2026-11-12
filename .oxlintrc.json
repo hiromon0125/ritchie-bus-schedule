@@ -18,10 +18,13 @@
   "ignorePatterns": [
     ".next/**",
     "node_modules/**",
-    "eslint.config.mjs",
     "postcss.config.cjs"
   ],
   "rules": {
+    "no-var": "error",
+    "prefer-const": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
     "no-array-constructor": "error",
     "no-unused-expressions": "error",
     "no-unused-vars": [
@@ -113,6 +116,7 @@
     "typescript/prefer-function-type": "error",
     "typescript/prefer-includes": "error",
     "typescript/prefer-nullish-coalescing": "error",
+    "typescript/prefer-optional-chain": "error",
     "typescript/prefer-regexp-exec": "error",
     "typescript/prefer-string-starts-ends-with": "error",
     "typescript/consistent-type-imports": [
