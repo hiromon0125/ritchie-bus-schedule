@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+/* oxlint-disable nextjs/no-img-element */
 import fs from "fs/promises";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";

@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 
-/* eslint-disable @next/next/no-img-element */
+/* oxlint-disable nextjs/no-img-element */
 export function StopQRCode({
   req,
   stopId,
