@@ -7,14 +7,14 @@
  * need to use are documented accordingly near the end.
  */
 import { auth } from "@clerk/nextjs/server";
-import { TRPCError, initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import { type NextRequest } from "next/server";
 import superjson from "superjson";
-import { ZodError } from "zod";
+import { z, ZodError } from "zod";
 
 import type { SetCommandOptions } from "@upstash/redis";
-import { captureServerEvent } from "~/server/posthog";
 import { cache, db } from "~/server/db";
+import { captureServerEvent } from "~/server/posthog";
 
 /**
  * 1. CONTEXT
@@ -81,7 +81,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       data: {
         ...shape.data,
         zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
+          error.cause instanceof ZodError ? z.flattenError(error.cause) : null,
       },
     };
   },
@@ -197,3 +197,12 @@ export const privateProcedure = t.procedure
       },
     });
   });
+
+export const adminProcedure = privateProcedure.use(async ({ ctx, next }) => {
+  if (!ctx.session.has({ role: "org:admin" })) {
+    throw new TRPCError({
+      code: "FORBIDDEN",
+    });
+  }
+  return next();
+});

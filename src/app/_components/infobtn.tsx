@@ -43,7 +43,7 @@ export default function ClickableTooltip({
           <TooltipTrigger asChild onClick={() => setOpen(!open)}>
             <Button
               variant="ghost"
-              className=" aspect-square p-0 py-0 hover:bg-slate-300"
+              className="aspect-square p-0 py-0 hover:bg-slate-300"
             >
               {children}
             </Button>
