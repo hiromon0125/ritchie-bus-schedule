@@ -137,7 +137,7 @@ export const favoriteRouter = createTRPCRouter({
       return stop != null;
     }),
   reorderBus: privateProcedure
-    .input(z.object({ priority: z.record(z.number()) }))
+    .input(z.object({ priority: z.record(z.string(), z.number()) }))
     .mutation(async ({ ctx, input }) => {
       const buses = await ctx.db.favoriteBus.findMany({
         where: {
@@ -225,7 +225,7 @@ export const favoriteRouter = createTRPCRouter({
       });
     }),
   reorderStop: privateProcedure
-    .input(z.object({ priority: z.record(z.number()) }))
+    .input(z.object({ priority: z.record(z.string(), z.number()) }))
     .mutation(async ({ ctx, input }) => {
       const stops = await ctx.db.favoriteStop.findMany({
         where: {

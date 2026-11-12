@@ -14,7 +14,7 @@ export default async function Page(props: {
   });
   if (stop == null) {
     return (
-      <div className=" w-full max-w-(--breakpoint-lg)">
+      <div className="w-full max-w-(--breakpoint-lg)">
         <h1>Stop not found</h1>
         <p>Stop ID: {params.stopId}</p>
         <Link href="/manage/stop">

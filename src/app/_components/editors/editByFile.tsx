@@ -69,11 +69,9 @@ export default function EditRoutesByFile({
         new URL("../../_workers/parseCSV.worker.ts", import.meta.url),
       );
 
-      workerRef.current.onmessage = (event: MessageEvent) => {
-        if (event.data instanceof Error) {
-          setStatus({ status: "error", message: event.data.message });
-          return;
-        }
+      workerRef.current.onmessage = (
+        event: MessageEvent<Record<string, string>[]>,
+      ) => {
         setStatus({ status: "success" });
         onParse(event.data);
       };

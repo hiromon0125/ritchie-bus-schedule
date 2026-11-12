@@ -8,34 +8,30 @@ export const env = createEnv({
    */
   server: {
     DATABASE_URL: z
-      .string()
       .url()
       .refine(
         (str) => !str.includes("YOUR_MYSQL_URL_HERE"),
         "You forgot to change the default URL",
       ),
-    DIRECT_URL: z.string({ message: "Direct URL Missing" }).url().optional(),
+    DIRECT_URL: z.url({ error: "Direct URL Missing" }).optional(),
     CLERK_SECRET_KEY: z.string({
-      message: "Please provide a valid Clerk secret key.",
+      error: "Please provide a valid Clerk secret key.",
     }),
-    SERVICE_INFO_LINK: z
-      .string({ message: "Service Info link missing" })
-      .url()
-      .optional(),
+    SERVICE_INFO_LINK: z.url({ error: "Service Info link missing" }).optional(),
     SERVICE_INFO_SECRET_KEY: z
-      .string({ message: "Service Info key missing" })
+      .string({ error: "Service Info key missing" })
       .optional(),
-    UPSTASH_REDIS_REST_URL: z.string().url({
-      message:
+    UPSTASH_REDIS_REST_URL: z.url({
+      error:
         "Upstash Redis token missing. Go to https://upstash.com/docs/introduction to get one.",
     }),
     UPSTASH_REDIS_REST_TOKEN: z.string({
-      message:
+      error:
         "Upstash Redis token missing. Go to https://upstash.com/docs/introduction to get one.",
     }),
     CRON_SECRET: z.string().optional(),
     NEXT_SERVICE_INFO_SECRET_KEY: z.string({
-      message: "Service Info key missing",
+      error: "Service Info key missing",
     }),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -50,14 +46,15 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z
       .string({
-        message:
-          "Clerk Publishable key is missing. This is a required variable",
+        error: "Clerk Publishable key is missing. This is a required variable",
       })
       .optional(), // This is not actually optional, but during load on client side the entire env object is empty which makes this throw an error that we can't do anything about.
     NEXT_PUBLIC_POSTHOG_KEY: z
-      .string({ message: "PostHog Key missing" }).optional(),
+      .string({ error: "PostHog Key missing" })
+      .optional(),
     NEXT_PUBLIC_POSTHOG_HOST: z
-      .string({ message: "PostHog Host Link missing" }).optional(),
+      .string({ error: "PostHog Host Link missing" })
+      .optional(),
   },
 
   /**
